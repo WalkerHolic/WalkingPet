@@ -1,1 +1,22 @@
-spring.application.name=WalkingPet
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    include: secret, dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000  # select 배치 조회 크기
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+server:
+  servlet:
+    context-path: '/api'
