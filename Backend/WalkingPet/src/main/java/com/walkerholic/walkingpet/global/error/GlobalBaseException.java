@@ -1,15 +1,25 @@
 package com.walkerholic.walkingpet.global.error;
 
-public class GlobalBaseException extends RuntimeException {
-    private final GlobalErrorCode errorCode;
+import lombok.Getter;
 
-    public GlobalBaseException(GlobalErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+@Getter
+public class GlobalBaseException extends RuntimeException{
+    GlobalErrorCode globalErrorCode;
+
+    public GlobalBaseException(GlobalErrorCode globalErrorCode) {
+        this.globalErrorCode = globalErrorCode;
     }
-
-    public GlobalErrorCode getErrorCode() {
-        return errorCode;
-    }
-
 }
+//public class GlobalBaseException extends RuntimeException {
+//    private final GlobalErrorCode errorCode;
+//
+//    public GlobalBaseException(GlobalErrorCode errorCode) {
+//        super(errorCode.getMessage());
+//        this.errorCode = errorCode;
+//    }
+//
+//    public GlobalErrorCode getErrorCode() {
+//        return errorCode;
+//    }
+//
+//}
