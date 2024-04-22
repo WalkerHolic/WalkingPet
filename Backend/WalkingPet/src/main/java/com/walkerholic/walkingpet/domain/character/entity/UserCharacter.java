@@ -20,6 +20,9 @@ public class UserCharacter {
     @Column(name = "level")
     private Integer level;
 
+    @Column(name = "upgrade")
+    private Integer upgrade;
+
     @Column(name = "stat_point")
     private Integer statPoint;
 
@@ -35,6 +38,7 @@ public class UserCharacter {
     @Column(name = "defense")
     private Integer defense;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users user;
@@ -47,6 +51,7 @@ public class UserCharacter {
         this.character = character;
         this.user = user;
         this.level = 1;
+        this.upgrade = 0;
         this.experience = 0;
         this.statPoint = 0;
         this.health = character.getFixHealth();
