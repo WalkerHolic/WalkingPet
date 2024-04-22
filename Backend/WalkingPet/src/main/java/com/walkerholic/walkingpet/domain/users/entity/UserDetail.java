@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.users.entity;
 
+import com.walkerholic.walkingpet.domain.character.entity.Character;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,8 +27,17 @@ public class UserDetail {
 
     //0: 초기화 안함, 1: 초기화 함
     @Column(name = "init_status", columnDefinition = "TINYINT(1)")
-    private boolean initStatus;
+    private byte  initStatus;
 
     @Column(name = "battle_count")
     private byte battleCount;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    private Character selectCharacter;
+
 }
