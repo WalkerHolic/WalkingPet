@@ -42,6 +42,9 @@ public class Users {
     @OneToOne(mappedBy = "user")
     private UserDetail userDetail;
 
+    @OneToOne(mappedBy = "user")
+    private UserStep userStep;
+
     @OneToMany(mappedBy = "user")
     private List<UserCharacter> userCharacters = new ArrayList<>();
 
