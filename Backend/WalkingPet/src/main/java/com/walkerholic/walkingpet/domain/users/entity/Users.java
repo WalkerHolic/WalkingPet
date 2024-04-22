@@ -40,6 +40,6 @@ public class Users {
     private Integer role;
 
     @OneToMany(mappedBy = "user")
-    private List<UserCharacter> userCharacters = new ArrayList<>();
+    private List<Users> users = new ArrayList<>();
 
 }
