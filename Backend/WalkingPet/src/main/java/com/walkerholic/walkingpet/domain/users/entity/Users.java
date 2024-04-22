@@ -39,7 +39,10 @@ public class Users {
     @Column(name = "role")
     private Integer role;
 
+    @OneToOne(mappedBy = "user")
+    private UserDetail userDetail;
+
     @OneToMany(mappedBy = "user")
-    private List<Users> users = new ArrayList<>();
+    private List<UserCharacter> userCharacters = new ArrayList<>();
 
 }
