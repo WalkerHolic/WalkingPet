@@ -29,11 +29,11 @@ public class UserCharacter {
     @Column(name = "health")
     private Integer health;
 
-    @Column(name = "defense")
-    private Integer defense;
-
     @Column(name = "power")
     private Integer power;
+
+    @Column(name = "defense")
+    private Integer defense;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -43,4 +43,15 @@ public class UserCharacter {
     @JoinColumn(name = "character_id")
     private Character character;
 
+    public UserCharacter(Character character, Users user){
+        this.character = character;
+        this.user = user;
+        this.level = 1;
+        this.experience = 0;
+        this.statPoint = 0;
+        this.health = character.getFixHealth();
+        this.power = character.getFixPower();
+        this.defense = character.getFixDefense();
+
+    }
 }
