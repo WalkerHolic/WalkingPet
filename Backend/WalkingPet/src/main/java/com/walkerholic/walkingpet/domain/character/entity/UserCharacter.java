@@ -1,45 +1,46 @@
 package com.walkerholic.walkingpet.domain.character.entity;
 
+import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
-@Table(name = "user_character")
 @Getter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user_character")
 public class UserCharacter {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_character_id")
-    private Integer userCharacterId; // 유저의 캐릭터 식별번호
+    @Column(nullable = false)
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    private Character character;
+
 
     @Column(name = "character_level")
-    private Integer characterLevel; // 캐릭터 레벨
+    private Integer characterLevel;
 
-    @Column(name = "stat_point")
-    private Integer statPoint; // 스탯
+    @Column(name = "stat_point", nullable = false)
+    private Integer statPoint;
 
-    @Column(name = "experience")
-    private Integer experience; // 경험치
+    @Column(nullable = false)
+    private Integer experience;
 
-    @Column(name = "health")
-    private Integer health; // 체력
+    @Column(nullable = false)
+    private Integer health;
 
-    @Column(name = "defense")
-    private Integer defense; // 방어력
+    @Column(nullable = false)
+    private Integer defense;
 
-    @Column(name = "power")
-    private Integer power; // 방어력
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "character_id")
-//    private Character character;
+    @Column(nullable = false)
+    private Integer power;
 }
