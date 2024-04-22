@@ -38,6 +38,4 @@ public class Character {
     @OneToMany(mappedBy = "character")
     private List<UserCharacter> userCharacters = new ArrayList<>();
 
-    @OneToOne(mappedBy = "selectCharacter")
-    private UserDetail userDetail;
 }
