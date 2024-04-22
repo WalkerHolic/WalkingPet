@@ -1,6 +1,5 @@
 package com.walkerholic.walkingpet.domain.character.entity;
 
-import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -43,8 +42,5 @@ public class UserCharacter {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
     private Character character;
-
-    @OneToOne(mappedBy = "selectCharacter")
-    private UserDetail userDetail;
 
 }

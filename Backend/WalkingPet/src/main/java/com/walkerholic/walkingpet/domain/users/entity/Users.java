@@ -3,7 +3,6 @@ package com.walkerholic.walkingpet.domain.users.entity;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,12 +38,6 @@ public class Users {
 
     @Column(name = "role")
     private Integer role;
-
-    @OneToOne(mappedBy = "user")
-    private UserDetail userDetail;
-
-    @OneToOne(mappedBy = "user")
-    private UserStep userStep;
 
     @OneToMany(mappedBy = "user")
     private List<UserCharacter> userCharacters = new ArrayList<>();
