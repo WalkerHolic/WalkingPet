@@ -14,8 +14,26 @@ public class UserCharacter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Integer id;
+    @Column(name = "user_character_id")
+    private Integer userCharacterId;
+
+    @Column(name = "level")
+    private Integer level;
+
+    @Column(name = "stat_point")
+    private Integer statPoint;
+
+    @Column(name = "experience")
+    private Integer experience;
+
+    @Column(name = "health")
+    private Integer health;
+
+    @Column(name = "defense")
+    private Integer defense;
+
+    @Column(name = "power")
+    private Integer power;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -25,22 +43,4 @@ public class UserCharacter {
     @JoinColumn(name = "character_id")
     private Character character;
 
-
-    @Column(name = "character_level")
-    private Integer characterLevel;
-
-    @Column(name = "stat_point", nullable = false)
-    private Integer statPoint;
-
-    @Column(nullable = false)
-    private Integer experience;
-
-    @Column(nullable = false)
-    private Integer health;
-
-    @Column(nullable = false)
-    private Integer defense;
-
-    @Column(nullable = false)
-    private Integer power;
 }
