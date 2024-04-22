@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.character.entity;
 
+import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,5 +36,8 @@ public class Character {
     private Integer fixDefense;
 
     @OneToMany(mappedBy = "character")
-    private List<Character> characters = new ArrayList<>();
+    private List<UserCharacter> userCharacters = new ArrayList<>();
+
+    @OneToOne(mappedBy = "selectCharacter")
+    private UserDetail userDetail;
 }
