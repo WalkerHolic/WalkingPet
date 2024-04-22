@@ -2,7 +2,6 @@ package com.walkerholic.walkingpet.domain.character.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Table(name = "character")
 public class Character {
 
@@ -21,20 +19,20 @@ public class Character {
     @Column(name = "character_id")
     private Integer characterId;
 
-    @Column(name = "character_name")
-    private String characterName;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "grade")
     private Integer grade;
 
-    @Column(name = "character_health")
-    private Integer characterHealth;
+    @Column(name = "fix_health")
+    private Integer fixHealth;
 
-    @Column(name = "character_power")
-    private Integer characterPower;
+    @Column(name = "fix_power")
+    private Integer fixPower;
 
-    @Column(name = "character_defense")
-    private Integer characterDefense;
+    @Column(name = "fix_defense")
+    private Integer fixDefense;
 
     @OneToMany(mappedBy = "character")
     private List<Character> characters = new ArrayList<>();
