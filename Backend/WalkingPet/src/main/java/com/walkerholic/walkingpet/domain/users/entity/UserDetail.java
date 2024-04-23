@@ -20,12 +20,6 @@ public class UserDetail {
     @Column(name = "battle_rating")
     private Integer battleRating;
 
-    @Column(name = "normal_box_count")
-    private Integer normalBoxCount;
-
-    @Column(name = "luxury_box_count")
-    private Integer luxuryBoxCount;
-
     //0: 초기화 안함, 1: 초기화 함
     @Column(name = "init_status", columnDefinition = "TINYINT(1)")
     private byte  initStatus;
