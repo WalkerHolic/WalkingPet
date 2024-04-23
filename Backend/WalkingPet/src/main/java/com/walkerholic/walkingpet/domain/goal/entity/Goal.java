@@ -20,8 +20,8 @@ public class Goal {
     @Column(name = "daily_goal")
     private Integer dailyGoal;
 
-    @Column(name = "weekly_ogal")
-    private Integer weeklyGgal;
+    @Column(name = "weekly_goal")
+    private Integer weeklyGoal;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
