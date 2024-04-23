@@ -1,8 +1,6 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
   profiles:
-    include: secret, dev
+    include: secret
   servlet:
     multipart:
       max-file-size: 50MB
@@ -16,7 +14,3 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-
-server:
-  servlet:
-    context-path: '/api'
