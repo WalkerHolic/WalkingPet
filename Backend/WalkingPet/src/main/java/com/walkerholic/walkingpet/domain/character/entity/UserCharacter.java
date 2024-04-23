@@ -59,4 +59,8 @@ public class UserCharacter {
         this.defense = character.getFixDefense();
 
     }
+
+    public void setUpgrade(int i) {
+        this.upgrade = i;
+    }
 }
