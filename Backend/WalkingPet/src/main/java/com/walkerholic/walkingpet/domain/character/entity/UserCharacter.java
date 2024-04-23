@@ -1,45 +1,62 @@
 package com.walkerholic.walkingpet.domain.character.entity;
 
+import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
-@Table(name = "user_character")
 @Getter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user_character")
 public class UserCharacter {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_character_id")
-    private Integer userCharacterId; // 유저의 캐릭터 식별번호
+    private Integer userCharacterId;
 
-    @Column(name = "character_level")
-    private Integer characterLevel; // 캐릭터 레벨
+    @Column(name = "level")
+    private Integer level;
+
+    @Column(name = "upgrade")
+    private Integer upgrade;
 
     @Column(name = "stat_point")
-    private Integer statPoint; // 스탯
+    private Integer statPoint;
 
     @Column(name = "experience")
-    private Integer experience; // 경험치
+    private Integer experience;
 
     @Column(name = "health")
-    private Integer health; // 체력
-
-    @Column(name = "defense")
-    private Integer defense; // 방어력
+    private Integer health;
 
     @Column(name = "power")
-    private Integer power; // 방어력
+    private Integer power;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @Column(name = "defense")
+    private Integer defense;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "character_id")
-//    private Character character;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    private Character character;
+
+    public UserCharacter(Character character, Users user){
+        this.character = character;
+        this.user = user;
+        this.level = 1;
+        this.upgrade = 0;
+        this.experience = 0;
+        this.statPoint = 0;
+        this.health = character.getFixHealth();
+        this.power = character.getFixPower();
+        this.defense = character.getFixDefense();
+
+    }
 }
