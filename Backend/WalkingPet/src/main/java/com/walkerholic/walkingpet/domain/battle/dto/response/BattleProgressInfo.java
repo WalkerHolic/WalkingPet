@@ -5,7 +5,7 @@ import lombok.*;
 @Builder
 @ToString
 @Getter
-public class RewardItem {
-    private int expItem;
-    private String box;
+public class BattleProgressInfo {
+    private int[] attackDamage;
+    private int[] recieveDamage;
 }

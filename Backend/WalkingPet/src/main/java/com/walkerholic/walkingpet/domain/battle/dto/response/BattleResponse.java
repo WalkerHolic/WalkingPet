@@ -1,13 +1,12 @@
 package com.walkerholic.walkingpet.domain.battle.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
+@ToString
+@Getter
 public class BattleResponse {
-    private int[] attackDamage;
-    private int[] recieveDamage;
-
+    private BattleProgressInfo battleProgressInfo;
+    private EnemyInfo enemyInfo;
     private BattleResult battleResult;
 }
