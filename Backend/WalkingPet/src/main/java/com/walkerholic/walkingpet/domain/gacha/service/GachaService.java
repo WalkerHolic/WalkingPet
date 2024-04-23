@@ -1,16 +1,25 @@
 package com.walkerholic.walkingpet.domain.gacha.service;
 
+import com.walkerholic.walkingpet.domain.character.entity.Character;
+import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
+import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
+import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.gacha.dto.response.GachaCountResponse;
+import com.walkerholic.walkingpet.domain.gacha.dto.response.GachaResultResponse;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
+import com.walkerholic.walkingpet.domain.users.entity.Users;
+import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.USER_CHARACTER_NOT_FOUND;
 
@@ -20,22 +29,53 @@ import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.USER_CHARA
 public class GachaService {
 
     private final UserItemRepository userItemRepository;
-    public GachaCountResponse getGachaCount(int userId){
+    private final CharacterRepository characterRepository;
+    private final UsersRepository usersRepository;
+    private final UserCharacterRepository userCharacterRepository;
 
-        List<UserItem> userItems = userItemRepository.findByItemItemIdAndUserUserIdIn(Arrays.asList(1, 2), userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+    @Transactional
+    public GachaResultResponse getGachaResult(String boxType, int userId) {
 
-        int normalBoxCount = 0;
-        int luxuryBoxCount = 0;
-
-        for (UserItem userItem : userItems) {
-            if (userItem.getItem().getItemId() == 1) {
-                normalBoxCount += userItem.getQuantity();
-            } else if (userItem.getItem().getItemId() == 2) {
-                luxuryBoxCount += userItem.getQuantity();
-            }
+        int randomNumber = new Random(System.currentTimeMillis()).nextInt(100) + 1;
+        int grade;
+        if (boxType.equals("luxury")) {
+            grade = (randomNumber <= 90) ? 2 : 3;
+        } else {
+            grade = (randomNumber <= 70) ? 1 : 2;
         }
 
-        return GachaCountResponse.from(normalBoxCount, luxuryBoxCount);
+        Character character = characterRepository.findRandomByGrade(grade)
+                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+        Users user = usersRepository.findUsersByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+
+        UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(user,character);
+
+        if (userCharacter!=null) {
+            userCharacter.setUpgrade(userCharacter.getUpgrade() + 1);
+            userCharacterRepository.save(userCharacter);
+        } else {
+            userCharacterRepository.save(new UserCharacter(character,user));
+        }
+
+        return  GachaResultResponse.from(character);
+    }
+
+    public GachaCountResponse getGachaCount(int userId){
+
+       List<UserItem> userItems = userItemRepository.findByUserIdWithUserFetch(userId)
+                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+
+        int normalBoxCount = userItems.stream()
+                .filter(item -> item.getItem().getItemId() == 1)
+                .mapToInt(UserItem::getQuantity)
+                .sum();
+
+        int luxuryBoxCount = userItems.stream()
+                .filter(item -> item.getItem().getItemId() == 2)
+                .mapToInt(UserItem::getQuantity)
+                .sum();
+
+        return GachaCountResponse.from(normalBoxCount,luxuryBoxCount);
     }
 }
