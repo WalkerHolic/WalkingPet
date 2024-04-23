@@ -24,7 +24,7 @@ public class UserCharacterResponse {
         return UserCharacterResponse.builder()
                 .nickname("test")
                 .characterId(userCharacter.getUserCharacterId())
-                .level(userCharacter.getCharacterLevel())
+                .level(userCharacter.getLevel())
                 .experience(userCharacter.getExperience())
                 .maxExperience(userCharacter.getExperience())
                 .health(userCharacter.getHealth())
