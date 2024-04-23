@@ -1,6 +1,5 @@
 package com.walkerholic.walkingpet.domain.battle.dto.response;
 
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterResponse;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import lombok.*;
@@ -8,7 +7,7 @@ import lombok.*;
 @Builder
 @Getter
 @ToString
-public class EnemyInfoResponse {
+public class EnemyInfo {
     private String nickname;
     private int characterId;
     private int rating;
@@ -16,8 +15,8 @@ public class EnemyInfoResponse {
     private int power;
     private int defense;
 
-    public static EnemyInfoResponse from(UserCharacter userCharacter, UserDetail userDetail){
-        return EnemyInfoResponse.builder()
+    public static EnemyInfo from(UserCharacter userCharacter, UserDetail userDetail){
+        return EnemyInfo.builder()
                 .nickname(userCharacter.getUser().getNickname())
                 .characterId(userCharacter.getUserCharacterId())
                 .rating(userDetail.getBattleRating())
