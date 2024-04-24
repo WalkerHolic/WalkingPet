@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.domain.team.dto;
+package com.walkerholic.walkingpet.domain.team.dto.response;
 
 import com.walkerholic.walkingpet.domain.team.entity.Team;
 import lombok.Builder;
