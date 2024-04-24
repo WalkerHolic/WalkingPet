@@ -17,7 +17,8 @@ public enum GlobalErrorCode {
     USER_NOT_FOUND(400, "U300", "해당 id에 해당하는 사용자가 없습니다."),
     DUPLICATE_NICKNAME(400, "U300", "이미 존재하는 닉네임입니다."),
 
-    USER_CHARACTER_NOT_FOUND(404, "C400", "유저의 해당 캐릭터를 찾을 수 없습니다.");
+    USER_CHARACTER_NOT_FOUND(404, "C400", "유저의 해당 캐릭터를 찾을 수 없습니다."),
+    TEAM_NOT_FOUND(404, "C400", "해당 팀을 찾을 수 없습니다.");
 
     private final int status;
     private final String code;
