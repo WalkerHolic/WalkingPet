@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.team.entity;
 
+import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,4 +44,13 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private List<TeamUser> teamUsers = new ArrayList<>();
+
+    @Builder
+    public Team(String name, String explanation, String password, Users user) {
+        this.name = name;
+        this.explanation = explanation;
+        this.password = password;
+        this.user = user;
+    }
+
 }
