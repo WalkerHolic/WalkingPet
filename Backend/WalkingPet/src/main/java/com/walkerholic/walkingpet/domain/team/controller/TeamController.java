@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.team.controller;
 
-import com.walkerholic.walkingpet.domain.team.dto.TeamResponse;
+import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
+import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
 import com.walkerholic.walkingpet.domain.team.service.TeamService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -10,10 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,5 +46,14 @@ public class TeamController {
     public ResponseEntity<CommonResponseEntity> getSearchTeams(@RequestParam("content") String content){
         List<TeamResponse> searchTeams = teamService.getSearchTeams(content);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,searchTeams);
+    }
+
+    @Operation(summary = "그룹 가입", description = "groupId를 가지고 그룹에 가입하기")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 가입 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 그룹 가입 실패")
+    @PostMapping("/join")
+    public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest){
+        teamService.joinGroup(joinGroupRequest,1);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 }
