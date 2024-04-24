@@ -1,6 +1,6 @@
 package com.walkerholic.walkingpet.domain.team.controller;
 
-import com.walkerholic.walkingpet.domain.team.dto.AllTeamResponse;
+import com.walkerholic.walkingpet.domain.team.dto.TeamResponse;
 import com.walkerholic.walkingpet.domain.team.service.TeamService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -20,7 +20,13 @@ public class TeamController {
     private final TeamService teamService;
     @GetMapping("/all")
     public ResponseEntity<CommonResponseEntity> getAllTeam(){
-        List<AllTeamResponse> allTeam = teamService.getAllTeam();
+        List<TeamResponse> allTeam = teamService.getAllTeam();
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
+    }
+
+    @GetMapping("/belong")
+    public ResponseEntity<CommonResponseEntity> getUserTeams(){
+        List<TeamResponse> allTeam = teamService.getUserTeams(1);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
     }
 }

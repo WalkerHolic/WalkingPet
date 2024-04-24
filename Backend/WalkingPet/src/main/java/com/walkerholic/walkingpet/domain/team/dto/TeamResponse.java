@@ -8,7 +8,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-public class AllTeamResponse {
+public class TeamResponse {
 
     private Integer teamId;
     private String teamName;
@@ -16,8 +16,8 @@ public class AllTeamResponse {
     private Integer teamPoint;
     private Integer userCount;
 
-    public static AllTeamResponse from(Team team, Integer userCount){
-        return AllTeamResponse.builder()
+    public static TeamResponse from(Team team, Integer userCount){
+        return TeamResponse.builder()
                 .teamId(team.getTeamId())
                 .teamName(team.getName())
                 .explain(team.getExplanation())
