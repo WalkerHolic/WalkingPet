@@ -63,4 +63,12 @@ public class UserCharacter {
     public void setUpgrade(int i) {
         this.upgrade = i;
     }
+
+    public void useStatPoint(int statPoint) { this.statPoint -= statPoint;}
+
+    public void raisePower() { this.power++; }
+
+    public void raiseDefense() { this.defense++; }
+
+    public void raiseHealth() { this.health++; }
 }
