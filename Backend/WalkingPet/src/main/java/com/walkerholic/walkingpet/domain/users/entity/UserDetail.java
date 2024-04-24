@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.users.entity;
 
+import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -32,7 +33,12 @@ public class UserDetail {
     private Users user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_character_id",nullable = false)
+    @JoinColumn(name = "character_id")
+    private Character selectCharacter;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_character_id", nullable = false)
     private UserCharacter selectUserCharacter;
 
+    public void changeUserCharacter(UserCharacter character) { this.selectUserCharacter = character;}
 }

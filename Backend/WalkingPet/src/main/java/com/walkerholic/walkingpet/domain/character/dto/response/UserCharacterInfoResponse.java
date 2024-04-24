@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class UserCharacterResponse {
+public class UserCharacterInfoResponse {
     private String nickname;
     private int characterId;
     private int level;
@@ -18,8 +18,8 @@ public class UserCharacterResponse {
     private int defense;
     private int statPoint;
 
-    public static UserCharacterResponse from(UserCharacter userCharacter){
-        return UserCharacterResponse.builder()
+    public static UserCharacterInfoResponse from(UserCharacter userCharacter){
+        return UserCharacterInfoResponse.builder()
                 .nickname("test")
                 .characterId(userCharacter.getUserCharacterId())
                 .level(userCharacter.getLevel())

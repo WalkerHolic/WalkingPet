@@ -14,7 +14,7 @@ public enum GlobalErrorCode {
 
     ACCESS_DENIED(401, "G400", "허용되지 않은 사용자입니다"),
     TOKEN_EXPIRED(401, "G500", "토큰이 만료되었습니다."),
-    USER_NOT_FOUND(400, "U300", "해당 id에 해당하는 사용자가 없습니다."),
+    USER_NOT_FOUND(400, "U300", "id에 해당하는 사용자가 없습니다."),
     DUPLICATE_NICKNAME(400, "U300", "이미 존재하는 닉네임입니다."),
 
     // 캐릭터 관련
