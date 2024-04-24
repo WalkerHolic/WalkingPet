@@ -4,10 +4,8 @@ package com.walkerholic.walkingpet.domain.character.dto.response;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 @Builder
-@ToString
 @Getter
 public class UserCharacterResponse {
     private String nickname;

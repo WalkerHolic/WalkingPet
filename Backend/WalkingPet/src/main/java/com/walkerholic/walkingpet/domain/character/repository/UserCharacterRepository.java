@@ -9,9 +9,6 @@ import java.util.Optional;
 
 public interface UserCharacterRepository extends JpaRepository<UserCharacter, Integer> {
     Optional<UserCharacter> findByUserCharacterId(int userCharacterId);
-
-    Optional<UserCharacter> findUserCharacterByUser(Users users);
-
     UserCharacter findByUserAndCharacter(Users user, Character character);
 
 }
