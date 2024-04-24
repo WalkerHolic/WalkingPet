@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface TeamRepository extends JpaRepository<Team, Integer> {
     Optional<List<Team>> findByNameContaining(String name);
+
+    Optional<Team> findByTeamId(Integer teamId);
 }
