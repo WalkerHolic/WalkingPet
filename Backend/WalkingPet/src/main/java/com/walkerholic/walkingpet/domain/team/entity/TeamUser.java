@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.domain.group.entity;
+package com.walkerholic.walkingpet.domain.team.entity;
 
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "group_user")
-public class GroupUser {
+@Table(name = "team_user")
+public class TeamUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_user_id")
+    @Column(name = "team_user_id")
     private Integer groupUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

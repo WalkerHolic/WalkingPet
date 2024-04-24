@@ -1,6 +1,5 @@
-package com.walkerholic.walkingpet.domain.group.entity;
+package com.walkerholic.walkingpet.domain.team.entity;
 
-import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,19 +11,19 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "group")
-public class Group {
+@Table(name = "team")
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_id")
-    private Integer groupId;
+    @Column(name = "team_id")
+    private Integer teamId;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "explain")
-    private String explain;
+    @Column(name = "explanation")
+    private String explanation;
 
     @Column(name = "status")
     private byte status;
@@ -42,6 +41,6 @@ public class Group {
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "group")
-    private List<GroupUser> groupUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "team")
+    private List<TeamUser> teamUsers = new ArrayList<>();
 }
