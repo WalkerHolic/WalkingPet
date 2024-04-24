@@ -3,5 +3,6 @@ spring:
     url: jdbc:mysql://localhost:3306/walkingpet
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+#      ddl-auto: update
 
