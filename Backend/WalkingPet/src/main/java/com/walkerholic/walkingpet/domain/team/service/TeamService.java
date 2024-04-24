@@ -48,6 +48,13 @@ public class TeamService {
         return getTeamResponses(teams);
 
     }
+    @Transactional
+    public List<TeamResponse> getSearchTeams(String content) {
+        List<Team> searchTeams = teamRepository.findByNameContaining(content)
+                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+
+        return getTeamResponses(searchTeams);
+    }
 
     private List<TeamResponse> getTeamResponses(List<Team> teams) {
         return teams.stream()
