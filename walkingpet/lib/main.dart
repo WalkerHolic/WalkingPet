@@ -20,8 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Waking Pet',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto', // 글꼴 전역 설정
+        fontFamily: 'DungGeunMo', // 글꼴 전역 설정
       ),
       initialRoute: '/login',
       routes: {
