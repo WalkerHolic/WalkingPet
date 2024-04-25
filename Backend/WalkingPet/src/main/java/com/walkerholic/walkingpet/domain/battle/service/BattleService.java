@@ -6,8 +6,11 @@ import com.walkerholic.walkingpet.domain.battle.dto.response.*;
 import com.walkerholic.walkingpet.domain.battle.function.BattleFunction;
 import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
+import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunction;
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
+import com.walkerholic.walkingpet.domain.character.service.LevelUpService;
+import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.domain.item.entity.Item;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
@@ -41,6 +44,8 @@ public class BattleService {
     private final BattleFunction battleFunction;
     private final UserItemRepository userItemRepository;
     private final ItemRepository itemRepository;
+    private final UserCharacterFunction userCharacterFunction;
+    private final LevelUpService levelUpService;
 
     //1. 내 배틀 정보 확인
     public UserBattleInfo getUserBattleInfo(Integer userId){
@@ -143,6 +148,7 @@ public class BattleService {
         //배틀을 통해 얻은 상자 아이템 데이터를 저장한다.
         String box = battleResult.getBattleReward().getBox();
         if(box != null){
+            System.out.println("박스 획득했어요!");
             UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, box)
                     .orElseThrow(()-> new GlobalBaseException(USER_ITEM_NOT_FOUND_BOX));
             userItem.addItemQuantity(1);
@@ -153,7 +159,13 @@ public class BattleService {
 
         //배틀을 통해 얻은 경험치 업데이트
         userCharacter.addExperience(battleResult.getExperience());
-        userCharacterRepository.save(userCharacter);
+        if(userCharacter.getExperience() >= userCharacterFunction.getMaxExperience(userCharacter.getLevel())){
+            String levelup = levelUpService.levelUp(userCharacter);
+            System.out.println(levelup);
+        }
+        else{
+            userCharacterRepository.save(userCharacter);
+        }
 
         //배틀을 통해 얻은 레이팅 업데이트
         userDetail.updateBattleRating(battleResult.getRating());
