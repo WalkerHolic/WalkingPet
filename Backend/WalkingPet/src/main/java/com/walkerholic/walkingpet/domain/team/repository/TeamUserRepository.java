@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface TeamUserRepository extends JpaRepository<TeamUser, Integer> {
     @Query("SELECT COUNT(tu) FROM TeamUser tu WHERE tu.team.teamId = :teamId")
-    Optional<Integer> countByTeamId(@Param("teamId") Integer teamId);
+    Integer countByTeamId(@Param("teamId") Integer teamId);
 
     @Query("SELECT COUNT(tu) FROM TeamUser tu WHERE tu.user = :user")
     Integer countByUser(@Param("user") Users user);
@@ -20,5 +20,8 @@ public interface TeamUserRepository extends JpaRepository<TeamUser, Integer> {
     @Query("SELECT tu.team FROM TeamUser tu WHERE tu.user = :user")
     List<Team> findTeamsByUser(@Param("user") Users user);
 
-    boolean existsByUserAndTeam(Users user, Team team);
+    @Query("SELECT tu FROM TeamUser tu WHERE tu.team = :team")
+    List<TeamUser> findByTeam(@Param("team") Team team);
+
+    boolean existsByTeamAndUser(Team team, Users user);
 }
