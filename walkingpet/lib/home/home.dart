@@ -37,7 +37,10 @@ class Home extends StatelessWidget {
                 height: 40,
               ),
               const MainFontStyle(size: 48, text: "걸음수"),
-              const MainFontStyle(size: 100, text: "16384"),
+              Transform.translate(
+                offset: const Offset(0, -20),
+                child: const MainFontStyle(size: 100, text: "16384"),
+              ),
               const SizedBox(
                 height: 80,
               ),
