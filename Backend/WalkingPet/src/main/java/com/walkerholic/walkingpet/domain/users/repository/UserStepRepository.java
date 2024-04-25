@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface UserStepRepository extends JpaRepository<UserStep, Integer> {
     Optional<UserStep> findUserStepByUser(Users user);
 
-    Optional<UserStep> findByUserUserId(Integer userId);
+    Optional<UserStep> findUserStepByUserUserId(Integer userId);
 }

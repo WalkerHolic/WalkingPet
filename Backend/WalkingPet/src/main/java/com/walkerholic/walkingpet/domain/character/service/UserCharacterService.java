@@ -116,17 +116,23 @@ public class UserCharacterService {
         UserStep userStep = userStepRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
 
+        // 휴대폰이 재부팅 될 때를 가정
         if (frontStep < userStep.getDailyStep()) {
             return UserStepResponse.from(userStep.getDailyStep(), true);
         } else {
             return UserStepResponse.from(frontStep, false);
         }
-        /** < 휴대폰이 재부팅 될 때를 가정 >
-         * (1. db에 저장된 값이 0이면은 그대로 ui에 0 반영)
-         * 2. ui에 표시된 값이 db에 저장된 값보다 작으면 db에 저장된 값을 ui에 반영
-         * 3. ui에 표시된 값이 db에 저장된 값도가 크면 ui에 표시된 값으로 반영
-         * 즉, 프론트는 앱 첫 실행시 걸음수를 백엔드로 보내고 백엔드에서 보내주는 걸음수로 표시하면 됨.
-         */
+    }
+
+    /**
+     * 유저의 걸음수 저장
+     */
+    @Transactional(readOnly = false)
+    public void saveUserStep(int userId, int frontStep) {
+        UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+
+        userStep.updateDailyStep(frontStep);
     }
 
     /**

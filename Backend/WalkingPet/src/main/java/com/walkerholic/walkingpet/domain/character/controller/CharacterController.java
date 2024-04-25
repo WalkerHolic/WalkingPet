@@ -91,6 +91,7 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CommonResponseEntity> test() {
         log.info("통신 테스트");
+        userCharacterService.saveUserStep(1, 1234);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트");
     }
 
