@@ -4,6 +4,7 @@ import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,37 +21,37 @@ public class Team {
     @Column(name = "team_id")
     private Integer teamId;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "explanation")
+    @Column(name = "explanation", nullable = false)
     private String explanation;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private byte status;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "point")
+    @Column(name = "point", nullable = false)
     private Integer point;
 
-    @Column(name = "create_date")
+    @CreationTimestamp
+    @Column(name = "create_date",nullable = false)
     private LocalDateTime createDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @OneToMany(mappedBy = "team")
-    private List<TeamUser> teamUsers = new ArrayList<>();
-
     @Builder
-    public Team(String name, String explanation, String password, Users user) {
+    public Team(String name, String explanation, String password, byte status, Users user) {
         this.name = name;
         this.explanation = explanation;
         this.password = password;
         this.user = user;
+        this.status = status;
+        this.point = 0;
     }
 
 }

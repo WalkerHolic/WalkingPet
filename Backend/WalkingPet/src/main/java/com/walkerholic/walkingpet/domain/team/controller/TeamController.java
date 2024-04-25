@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.team.controller;
 
+import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
 import com.walkerholic.walkingpet.domain.team.service.TeamService;
@@ -35,7 +36,7 @@ public class TeamController {
     @ApiResponse(responseCode = "404", description = "C400 - 유저가 소속된 그룹들 조회 실패")
     @GetMapping("/belong")
     public ResponseEntity<CommonResponseEntity> getUserTeams(){
-        List<TeamResponse> allTeam = teamService.getUserTeams(1);
+        List<TeamResponse> allTeam = teamService.getUserTeams(4);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
     }
 
@@ -54,6 +55,15 @@ public class TeamController {
     @PostMapping("/join")
     public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest){
         teamService.joinGroup(joinGroupRequest,1);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+    }
+
+    @Operation(summary = "그룹 생성", description = "새로운 그룹 생성하기")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 생성 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 그룹 생성 실패")
+    @PostMapping("/create")
+    public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest){
+        teamService.createGroup(createGroupRequest,4);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 }

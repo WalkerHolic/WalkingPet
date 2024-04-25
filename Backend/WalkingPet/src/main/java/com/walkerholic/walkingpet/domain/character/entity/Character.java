@@ -20,22 +20,19 @@ public class Character {
     @Column(name = "character_id")
     private Integer characterId;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "grade")
+    @Column(name = "grade", nullable = false)
     private Integer grade;
 
-    @Column(name = "fix_health")
+    @Column(name = "fix_health", nullable = false)
     private Integer fixHealth;
 
-    @Column(name = "fix_power")
+    @Column(name = "fix_power", nullable = false)
     private Integer fixPower;
 
-    @Column(name = "fix_defense")
+    @Column(name = "fix_defense", nullable = false)
     private Integer fixDefense;
-
-    @OneToMany(mappedBy = "character")
-    private List<UserCharacter> userCharacters = new ArrayList<>();
 
 }

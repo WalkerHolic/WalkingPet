@@ -17,22 +17,22 @@ public class UserDetail {
     @Column(name = "user_detail_id")
     private Integer userDetailId;
 
-    @Column(name = "battle_rating")
+    @Column(name = "battle_rating", nullable = false, columnDefinition = "INT DEFAULT 1000")
     private Integer battleRating;
 
     //0: 초기화 안함, 1: 초기화 함
-    @Column(name = "init_status", columnDefinition = "TINYINT(1)")
+    @Column(name = "init_status", columnDefinition = "TINYINT(1)", nullable = false)
     private byte  initStatus;
 
-    @Column(name = "battle_count")
+    @Column(name = "battle_count", nullable = false)
     private byte battleCount;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "character_id")
+    @JoinColumn(name = "character_id", nullable = false)
     private Character selectCharacter;
 
 }

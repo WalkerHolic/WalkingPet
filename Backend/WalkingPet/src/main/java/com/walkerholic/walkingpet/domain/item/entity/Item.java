@@ -16,10 +16,10 @@ public class Item {
     @Column(name = "item_id")
     private Integer itemId;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "detail")
+    @Column(name = "detail", nullable = false)
     private String detail;
 
 }
