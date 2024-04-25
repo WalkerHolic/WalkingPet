@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.users.entity;
 
+import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,4 +39,10 @@ public class UserDetail {
     public void changeUserCharacter(UserCharacter character) { this.selectUserCharacter = character;}
 
     public void changeInitStatus() {this.initStatus = 1; };
+
+    public void battleCountDeduction(){
+        this.battleCount--;
+    }
+
+    public void updateBattleRating(int ratingScore){this.battleRating += ratingScore;}
 }
