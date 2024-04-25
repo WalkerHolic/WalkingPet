@@ -122,22 +122,23 @@ public class BattleService {
         //배틀의 결과로 얻은 보상 데이터 저장
 
         System.out.println("배틀 결과로 얻은 데이터 저장");
-        Item expItem = itemRepository.findItemByItemName("경험치 아이템")
-                .orElseThrow(() -> new GlobalBaseException(USER_ITEM_NOT_FOUND_EXP));
-
-        int expItemRewardQuantity = battleResult.getBattleReward().getExpItem();
-        System.out.println("exp 아이템의 양 = " + expItemRewardQuantity);
-
         //배틀을 통해 얻은 경험치 아이템 데이터를 저장한다.
-        Optional<UserItem> userExpItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, expItem.getName());
-        if(userExpItem.isPresent()){
-            userExpItem.get().addItemQuantity(expItemRewardQuantity);
-            userItemRepository.save(userExpItem.get());
-        }
-        else{
-            UserItem userItem = new UserItem(users, expItem, expItemRewardQuantity);
-            userItemRepository.save(userItem);
-        }
+        //추후 업데이트 될 경험치 아이템
+//        Item expItem = itemRepository.findItemByItemName("경험치 아이템")
+//                .orElseThrow(() -> new GlobalBaseException(USER_ITEM_NOT_FOUND_EXP));
+//
+//        int expItemRewardQuantity = battleResult.getBattleReward().getExpItem();
+//        System.out.println("exp 아이템의 양 = " + expItemRewardQuantity);
+
+//        Optional<UserItem> userExpItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, expItem.getName());
+//        if(userExpItem.isPresent()){
+//            userExpItem.get().addItemQuantity(expItemRewardQuantity);
+//            userItemRepository.save(userExpItem.get());
+//        }
+//        else{
+//            UserItem userItem = new UserItem(users, expItem, expItemRewardQuantity);
+//            userItemRepository.save(userItem);
+//        }
 
         //배틀을 통해 얻은 상자 아이템 데이터를 저장한다.
         String box = battleResult.getBattleReward().getBox();
