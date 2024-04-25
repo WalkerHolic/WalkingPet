@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Home(),
         '/goal': (context) => const Goal(),
         '/ranking': (context) => const Ranking(),
-        '/characterInfo': (context) => const CharacterInfo(),
+        '/characterinfo': (context) => const CharacterInfo(),
         '/gacha': (context) => const Gacha(),
         '/battle': (context) => const Battle(),
         '/group': (context) => const Group(),
