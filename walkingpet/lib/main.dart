@@ -7,7 +7,7 @@ import 'package:walkingpet/group/group.dart';
 import 'package:walkingpet/home/home.dart';
 import 'package:walkingpet/login/login.dart';
 import 'package:walkingpet/ranking/ranking.dart';
-//import 'package:nes_ui/nes_ui.dart';
+// import 'package:nes_ui/nes_ui.dart';
 import 'package:flutter/services.dart'; // SystemChrome을 사용하기 위해 필요
 
 void main() {
