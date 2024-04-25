@@ -41,6 +41,7 @@ flutter:
     - assets/backgrounds/day.png
     - assets/backgrounds/goal.png
     - assets/icons/
+    - assets/animals/cow/
     - assets/animals/
     - assets/animals/cow/
     - assets/buttons/brown_button.png
