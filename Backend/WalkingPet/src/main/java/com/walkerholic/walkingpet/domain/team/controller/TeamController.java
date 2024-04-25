@@ -34,9 +34,9 @@ public class TeamController {
     @Operation(summary = "소속된 그룹 확인", description = "유저의 userId로 소속된 그룹 정보 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저가 소속된 그룹들 조회 성공", content = @Content(schema = @Schema(implementation = TeamResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저가 소속된 그룹들 조회 실패")
-    @GetMapping("/belong")
-    public ResponseEntity<CommonResponseEntity> getUserTeams(){
-        List<TeamResponse> allTeam = teamService.getUserTeams(4);
+    @GetMapping("/belong/{userId}")
+    public ResponseEntity<CommonResponseEntity> getUserTeams(@PathVariable int userId){
+        List<TeamResponse> allTeam = teamService.getUserTeams(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
     }
 
@@ -52,18 +52,18 @@ public class TeamController {
     @Operation(summary = "그룹 가입", description = "groupId를 가지고 그룹에 가입하기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 가입 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 가입 실패")
-    @PostMapping("/join")
-    public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest){
-        teamService.joinGroup(joinGroupRequest,1);
+    @PostMapping("/join/{userId}")
+    public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest,@PathVariable int userId){
+        teamService.joinGroup(joinGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 
     @Operation(summary = "그룹 생성", description = "새로운 그룹 생성하기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 생성 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 생성 실패")
-    @PostMapping("/create")
-    public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest){
-        teamService.createGroup(createGroupRequest,4);
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest,@PathVariable int userId){
+        teamService.createGroup(createGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 }
