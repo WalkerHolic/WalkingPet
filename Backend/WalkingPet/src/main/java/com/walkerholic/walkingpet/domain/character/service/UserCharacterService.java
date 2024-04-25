@@ -1,8 +1,11 @@
 package com.walkerholic.walkingpet.domain.character.service;
 
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
+import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
+import com.walkerholic.walkingpet.domain.character.dto.response.ResetStatResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterStatResponse;
+import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
@@ -15,18 +18,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserCharacterService {
 
-    private static final int REDUCE_STAT_POINT = 5; // 스탯 사용시 줄어 드는 스탯 포인트
+    private static final int REDUCE_STAT_POINT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
+    private static final int ADD_STAT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
 
     private final UserCharacterRepository userCharacterRepository;
     private final UserDetailRepository userDetailRepository;
+    private final CharacterRepository characterRepository;
 
     /**
      * 사용자의 캐릭터 정보 가져오기(api)
@@ -43,7 +46,7 @@ public class UserCharacterService {
      */
     @Transactional(readOnly = false)
     public UserCharacterStatResponse addStatPoint(int userCharacterId, String value) {
-        //TODO: 인가 처리
+        //TODO: 인가 처리 -> userId 값도 받아야할듯
         UserCharacter userCharacterInfo = getUserCharacter(userCharacterId);
 
         if (userCharacterInfo.getStatPoint() < REDUCE_STAT_POINT) {
@@ -52,25 +55,49 @@ public class UserCharacterService {
 
         userCharacterInfo.useStatPoint(REDUCE_STAT_POINT);
         if (value.equals("health")) {
-            userCharacterInfo.raiseHealth();
+            userCharacterInfo.raiseHealth(ADD_STAT);
         } else if (value.equals("defense")) {
-            userCharacterInfo.raiseDefense();
+            userCharacterInfo.raiseDefense(ADD_STAT);
         } else if (value.equals("power")) {
-            userCharacterInfo.raisePower();
+            userCharacterInfo.raisePower(ADD_STAT);
         }
 
         return UserCharacterStatResponse.from(userCharacterInfo);
     }
 
+    /**
+     * 사용자의 캐릭터 변경 메서드
+     */
     @Transactional(readOnly = false)
-    public void changeUserCharacter(int userId, ChangeUserCharacterIdRequest userCharacter) {
+    public void changeUserCharacter(int userId, ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
         //TODO: 인가처리
         UserDetail userDetail = userDetailRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
-        UserCharacter userCharacterInfo = getUserCharacter(userCharacter.getUserCharacterId());
+        UserCharacter userCharacterInfo = getUserCharacter(changeUserCharacterIdRequest.getUserCharacterId());
 
         userDetail.changeUserCharacter(userCharacterInfo);
+    }
+
+    @Transactional(readOnly = false)
+    public ResetStatResponse resetInitStatus(ResetInitStatusRequest resetInitStatusRequest) {
+        UserCharacter userCharacterInfo = getUserCharacter(resetInitStatusRequest.getUserCharacterId());
+        Character character = characterRepository.findByCharacterId(userCharacterInfo.getCharacter().getCharacterId())
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.CHARACTER_NOT_FOUND));
+        UserDetail userDetail = userDetailRepository.findBySelectUserCharacterUserCharacterId(resetInitStatusRequest.getUserCharacterId())
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
+
+        int resetStatPoint = userCharacterInfo.getStatPoint();
+        resetStatPoint += userCharacterInfo.getPower() - character.getFixPower();
+        resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth();
+        resetStatPoint += userCharacterInfo.getDefense() - character.getFixDefense();
+
+//        System.out.println("이전의 스탯값: " + userCharacterInfo.getStatPoint() + "  초기화된 스탯값: " + resetStatPoint);
+
+        userCharacterInfo.resetStat(resetStatPoint, character.getFixPower(), character.getFixDefense(), character.getFixHealth());
+        userDetail.changeInitStatus();
+
+        return ResetStatResponse.from(userCharacterInfo);
     }
 
     /**

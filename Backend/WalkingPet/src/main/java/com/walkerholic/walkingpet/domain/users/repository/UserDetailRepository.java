@@ -12,7 +12,9 @@ import java.util.Optional;
 public interface UserDetailRepository extends JpaRepository<UserDetail, Integer> {
     Optional<UserDetail> findUserDetailByUser(Users user);
 
-    Optional<UserDetail> findByUserUserId(int userId);
+    Optional<UserDetail> findByUserUserId(Integer userId);
+
+    Optional<UserDetail> findBySelectUserCharacterUserCharacterId(Integer userCharacterId);
 
     @Modifying
     @Query("UPDATE UserDetail ud SET ud.selectUserCharacter.userCharacterId = :userCharacterId WHERE ud.user.userId = :userId")
