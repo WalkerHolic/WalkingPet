@@ -1,7 +1,9 @@
 package com.walkerholic.walkingpet.domain.team.service;
 
 import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
+import com.walkerholic.walkingpet.domain.team.dto.request.ExitGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
+import com.walkerholic.walkingpet.domain.team.dto.response.TeamDetailResponse;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamUsersResponse;
 import com.walkerholic.walkingpet.domain.team.entity.Team;
@@ -44,7 +46,9 @@ public class TeamService {
 
     @Transactional
     public List<TeamResponse> getAllTeam() {
+
         List<Team> teams = teamRepository.findAll();
+
         if (teams.isEmpty()) {
             // 현재 등록된 그룹이 없으면 빈 배열 반환
             return Collections.emptyList();
@@ -75,7 +79,7 @@ public class TeamService {
         List<Team> teams = teamRepository.findByNameContaining(content);
 
         if (teams.isEmpty()) {
-            // 검색 결과에 맞는 팀이 없으면 빈 배열 반환
+            // 검색 결과에 맞는 그룹이 없으면 빈 배열 반환
             return Collections.emptyList();
         } else {
             return getTeamResponses(teams);
@@ -84,6 +88,7 @@ public class TeamService {
 
     // Team 객체에 userCount를 추가해서 TeamResponse 형식에 맞추는 메소드
     private List<TeamResponse> getTeamResponses(List<Team> teams) {
+
         return teams.stream()
                 .map(team -> {
                     Integer userCount = teamUserRepository.countByTeamId(team.getTeamId());
@@ -93,9 +98,38 @@ public class TeamService {
     }
 
     @Transactional
+    public TeamDetailResponse getTeamDetail(int teamId) {
+
+        Team team = teamRepository.findByTeamId(teamId)
+                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+
+        Integer userCount = teamUserRepository.countByTeamId(team.getTeamId());
+
+        TeamResponse teamResponse = TeamResponse.from(team,userCount);
+
+        List<TeamUser> teamUsers = teamUserRepository.findByTeam(team);
+
+        List<TeamUsersResponse> teamUsersResponses = new ArrayList<>();
+
+        for (TeamUser teamUser : teamUsers) {
+
+            Users user = teamUser.getUser();
+
+            UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
+                    .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+
+            UserStep userStep = userStepRepository.findUserStepByUser(user)
+                    .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+
+            TeamUsersResponse teamUsersResponse = TeamUsersResponse.from(user,userDetail,userStep);
+            teamUsersResponses.add(teamUsersResponse);
+        }
+
+        return TeamDetailResponse.from(teamResponse, teamUsersResponses);
+    }
+    @Transactional
     public void joinGroup(JoinGroupRequest joinGroupRequest,int userId) {
 
-        // 사용자 검색 및 없을 경우 예외 발생
         Users user = usersRepository.findUsersByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
@@ -105,7 +139,6 @@ public class TeamService {
             throw new GlobalBaseException(USER_NOT_FOUND);
         }
 
-        // 그룹 검색 및 없을 경우 예외 발생
         Team team = teamRepository.findByTeamId(joinGroupRequest.getTeamId())
                 .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
 
@@ -135,11 +168,10 @@ public class TeamService {
     @Transactional
     public void createGroup(CreateGroupRequest createGroupRequest, int userId) {
 
-        // 사용자를 검색하고 찾을 수 없다면 예외를 던집니다.
         Users user = usersRepository.findUsersByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
-        // 사용자의 팀 수가 허용된 최대 팀 수를 초과하는지 확인합니다.
+        // 사용자의 그룹 수가 허용된 최대 그룹 수를 초과하는지 확인합니다.
         int currentUserTeams = teamUserRepository.countByUser(user);
         if (currentUserTeams >= MAX_ALLOWED_TEAMS) {
             throw new GlobalBaseException(USER_NOT_FOUND);
@@ -148,7 +180,7 @@ public class TeamService {
         // 비밀번호 존재 여부에 따라 상태를 결정합니다.
         byte status = createGroupRequest.getPassword().isEmpty() ? (byte) 0 : (byte) 1;
 
-        // 새 팀을 생성하고 저장합니다.
+        // 새 그룹을 생성하고 저장합니다.
         Team team = Team.builder()
                 .name(createGroupRequest.getTeamName())
                 .explanation(createGroupRequest.getExplanation())
@@ -158,7 +190,7 @@ public class TeamService {
                 .build();
         teamRepository.save(team);
 
-        // 새 팀-사용자 연결을 생성하고 저장합니다.
+        // 새 그룹-사용자 연결을 생성하고 저장합니다.
         TeamUser teamUser = TeamUser.builder()
                 .team(team)
                 .user(user)
@@ -169,7 +201,6 @@ public class TeamService {
 
     public List<TeamUsersResponse> getGroupMembersInfo(int teamId) {
 
-        // 팀을 검색하고 찾을 수 없다면 예외를 던집니다.
         Team team = teamRepository.findByTeamId(teamId)
                 .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
 
@@ -184,7 +215,6 @@ public class TeamService {
             UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
                     .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
-
             UserStep userStep = userStepRepository.findUserStepByUser(user)
                     .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
@@ -194,4 +224,8 @@ public class TeamService {
 
         return teamUsersResponses;
     }
+
+
+
+
 }
