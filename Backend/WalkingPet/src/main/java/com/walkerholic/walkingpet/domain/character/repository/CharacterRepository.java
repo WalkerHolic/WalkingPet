@@ -10,5 +10,7 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
     @Query("SELECT c FROM Character c WHERE c.grade = :grade ORDER BY RAND() LIMIT 1")
     Optional<Character> findRandomByGrade(Integer grade);
 
+    Optional<Character> findByCharacterId(Integer characterId);
+
     Optional<Character> findCharacterByCharacterId(Integer characterId);
 }
