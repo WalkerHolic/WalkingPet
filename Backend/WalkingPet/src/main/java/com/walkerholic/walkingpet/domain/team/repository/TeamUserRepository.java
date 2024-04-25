@@ -24,4 +24,8 @@ public interface TeamUserRepository extends JpaRepository<TeamUser, Integer> {
     List<TeamUser> findByTeam(@Param("team") Team team);
 
     boolean existsByTeamAndUser(Team team, Users user);
+
+    Optional<TeamUser> findByUserAndTeam(Users user, Team team);
+
+    void deleteByTeam(Team team);
 }
