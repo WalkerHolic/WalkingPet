@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
-      theme: ThemeData(),
+      theme: ThemeData(fontFamily: "DungGeunMo"),
       initialRoute: '/home',
       routes: {
         '/login': (context) => const Login(),
