@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 
 class Home extends StatelessWidget {
@@ -26,7 +27,12 @@ class Home extends StatelessWidget {
                   TopRightIconWithText(icon: "ranking", text: "랭킹"),
                   TopRightIconWithText(icon: "goal", text: "목표"),
                 ],
-              )
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              MainFontStyle(size: 48, text: "걸음수"),
+              MainFontStyle(size: 100, text: "16384"),
             ],
           ),
         ),
