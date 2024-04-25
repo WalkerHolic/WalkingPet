@@ -5,6 +5,7 @@ import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRe
 import com.walkerholic.walkingpet.domain.character.dto.response.ResetStatResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterStatResponse;
+import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
 import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -62,13 +63,28 @@ public class CharacterController {
 
     @PostMapping("/change")
     @Operation(summary = "캐릭터 변경", description = "유저의 현재 캐릭터 변경")
+    @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 변경 성공")
     public ResponseEntity<CommonResponseEntity> changeUserCharacter(@RequestBody ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
         int userId = 1;
-        log.info("CharacterController statDistribution - userId: {}, userCharacter: {}", userId, changeUserCharacterIdRequest.getUserCharacterId());
+        log.info("CharacterController changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getUserCharacterId());
         userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
+
+    @GetMapping("/checkstep")
+    @Operation(summary = "사용자의 걸음수 측정", description = "앱 시작시 걸음수 측정")
+    @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
+    public ResponseEntity<CommonResponseEntity> getUserStep() {
+        int userId = 1;
+        int frontStep = 100;
+        log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
+
+        UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userStepResponse);
+    }
+
+
 
     @GetMapping("/test")
     @Operation(summary = "통신 테스트", description = "통신 테스트")
