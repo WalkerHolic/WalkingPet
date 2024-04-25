@@ -34,4 +34,8 @@ public class UserItem {
         this.user = user;
         this.quantity = quantity;
     }
+
+    public void addItemQuantity(int quantity){
+        this.quantity += quantity;
+    }
 }
