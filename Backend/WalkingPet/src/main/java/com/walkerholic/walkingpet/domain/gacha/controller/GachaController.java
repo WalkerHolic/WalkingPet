@@ -7,10 +7,7 @@ import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,15 +16,15 @@ public class GachaController {
 
     private final GachaService gachaService;
 
-    @GetMapping("/count")
-    public ResponseEntity<CommonResponseEntity> getGachaCount(){
-        GachaCountResponse gachaCount = gachaService.getGachaCount(2);
+    @GetMapping("/count/{userId}")
+    public ResponseEntity<CommonResponseEntity> getGachaCount(@PathVariable int userId){
+        GachaCountResponse gachaCount = gachaService.getGachaCount(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, gachaCount);
     }
 
-    @GetMapping("/result")
-    public ResponseEntity<CommonResponseEntity> getGachaResult(@RequestParam("box") String boxType){
-        GachaResultResponse gachaResult = gachaService.getGachaResult(boxType, 1);
+    @GetMapping("/result/{userId}")
+    public ResponseEntity<CommonResponseEntity> getGachaResult(@PathVariable int userId, @RequestParam("box") String boxType){
+        GachaResultResponse gachaResult = gachaService.getGachaResult(boxType, userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,gachaResult);
     }
 }
