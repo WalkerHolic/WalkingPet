@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
-        '/battle': (context) => const Battle(),
+        '/home': (context) => const Home(),
+        '/goal': (context) => const Goal(),
+        '/ranking': (context) => const Ranking(),
         '/characterInfo': (context) => const CharacterInfo(),
         '/gacha': (context) => const Gacha(),
-        '/goal': (context) => const Goal(),
+        '/battle': (context) => const Battle(),
         '/group': (context) => const Group(),
-        '/ranking': (context) => const Ranking(),
-        '/home': (context) => const Home(),
       },
     );
   }
