@@ -17,34 +17,34 @@ public class UserCharacter {
     @Column(name = "user_character_id")
     private Integer userCharacterId;
 
-    @Column(name = "level")
+    @Column(name = "level", nullable = false)
     private Integer level;
 
-    @Column(name = "upgrade")
+    @Column(name = "upgrade", nullable = false)
     private Integer upgrade;
 
-    @Column(name = "stat_point")
+    @Column(name = "stat_point", nullable = false)
     private Integer statPoint;
 
-    @Column(name = "experience")
+    @Column(name = "experience", nullable = false)
     private Integer experience;
 
-    @Column(name = "health")
+    @Column(name = "health", nullable = false)
     private Integer health;
 
-    @Column(name = "power")
+    @Column(name = "power", nullable = false)
     private Integer power;
 
-    @Column(name = "defense")
+    @Column(name = "defense", nullable = false)
     private Integer defense;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "character_id")
+    @JoinColumn(name = "character_id", nullable = false)
     private Character character;
 
     public UserCharacter(Character character, Users user){

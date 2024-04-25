@@ -17,14 +17,14 @@ public class Goal {
     @Column(name = "goal_id")
     private Integer goalId;
 
-    @Column(name = "daily_goal")
+    @Column(name = "daily_goal", nullable = false)
     private Integer dailyGoal;
 
-    @Column(name = "weekly_goal")
+    @Column(name = "weekly_goal", nullable = false)
     private Integer weeklyGoal;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
 }
