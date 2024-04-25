@@ -88,5 +88,12 @@ public class TeamController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,membersInfo);
     }
 
-
+    @Operation(summary = "그룹 나가기", description = "특정 teamId에 해당하는 그룹에서 나가기")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 나가기 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 그룹 나가기 실패")
+    @PostMapping("/exit/{userId}")
+    public ResponseEntity<CommonResponseEntity> exitGroup(@RequestBody ExitGroupRequest exitGroupRequest, @PathVariable int userId){
+        teamService.exitGroup(exitGroupRequest, userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+    }
 }
