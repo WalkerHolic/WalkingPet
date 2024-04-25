@@ -113,7 +113,7 @@ public class UserCharacterService {
      * 유저의 일일 걸음수 가져오기
      */
     public UserStepResponse checkUserStep(int userId, int frontStep) {
-        UserStep userStep = userStepRepository.findByUserUserId(userId)
+        UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
 
         // 휴대폰이 재부팅 될 때를 가정
