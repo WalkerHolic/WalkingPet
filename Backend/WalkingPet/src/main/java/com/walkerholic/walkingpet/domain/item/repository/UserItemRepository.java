@@ -1,6 +1,8 @@
 package com.walkerholic.walkingpet.domain.item.repository;
 
+import com.walkerholic.walkingpet.domain.item.entity.Item;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
+import com.walkerholic.walkingpet.domain.users.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
