@@ -225,7 +225,27 @@ public class TeamService {
         return teamUsersResponses;
     }
 
+    @Transactional
+    public void exitGroup(ExitGroupRequest exitGroupRequest, int userId) {
 
+        Users user = usersRepository.findUsersByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
+        Team team = teamRepository.findByTeamId(exitGroupRequest.getTeamId())
+                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+
+        TeamUser teamUser = teamUserRepository.findByUserAndTeam(user,team)
+                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+
+        // 팀의 생성자가 현재 사용자인 경우
+        if(team.getUser().getUserId()==userId){
+            // 해당 팀에 속한 모든 TeamUser 엔티티를 삭제하고 팀 정보 자체도 삭제
+            teamUserRepository.deleteByTeam(team);
+            teamRepository.delete(team);
+        }else {
+            // 팀의 생성자가 아니면 해당 사용자만 팀에서 제거
+            teamUserRepository.delete(teamUser);
+        }
+    }
 
 }
