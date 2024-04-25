@@ -78,4 +78,6 @@ public class UserCharacter {
         this.defense = defense;
         this.health = health;
     }
+
+    public void addExperience(int experience) {this.experience += experience;}
 }
