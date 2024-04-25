@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'DungGeunMo', // 글꼴 전역 설정
       ),
-      initialRoute: '/login',
+      initialRoute: '/goal',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
