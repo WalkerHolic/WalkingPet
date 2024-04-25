@@ -3,8 +3,10 @@ package com.walkerholic.walkingpet.domain.users.entity;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,25 +23,34 @@ public class Users {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Integer status;
 
-    @Column(name = "reg_date")
-    private LocalDateTime registDate;
+    @CreationTimestamp
+    @Column(name = "reg_date", nullable = false)
+    private LocalDateTime regDate;
 
     @Column(name = "del_date")
-    private LocalDateTime deleteDate;
+    private LocalDateTime delDate;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Integer role;
 
     @OneToMany(mappedBy = "user")
     private List<UserCharacter> userCharacters = new ArrayList<>();
+
+    @Builder
+    public Users(String email, String nickname) {
+        this.email = email;
+        this.nickname = nickname;
+        this.status = 1;
+        this.role = 0;
+    }
 
 }

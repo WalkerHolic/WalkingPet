@@ -16,20 +16,20 @@ public class UserStep {
     @Column(name = "user_step_id")
     private Integer userStepId;
 
-    @Column(name = "battle_rating")
+    @Column(name = "battle_rating", nullable = false)
     private Integer battleRating;
 
-    @Column(name = "yesterday_step")
+    @Column(name = "yesterday_step", nullable = false)
     private Integer yesterdayStep;
 
-    @Column(name = "daily_step")
+    @Column(name = "daily_step", nullable = false)
     private Integer dailyStep;
 
-    @Column(name = "accumulation_step")
+    @Column(name = "accumulation_step", nullable = false)
     private Integer accumulationStep;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
 }
