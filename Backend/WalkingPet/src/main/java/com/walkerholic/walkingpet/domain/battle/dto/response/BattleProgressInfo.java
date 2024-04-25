@@ -2,10 +2,14 @@ package com.walkerholic.walkingpet.domain.battle.dto.response;
 
 import lombok.*;
 
+import java.util.List;
+
 @Builder
 @ToString
 @Getter
 public class BattleProgressInfo {
-    private int[] attackDamage;
-    private int[] recieveDamage;
+    private List<Integer> userAttackDamage;
+    private List<Integer> enemyAttackDamage;
+    private List<Integer> userHealth;
+    private List<Integer> enemyHealth;
 }

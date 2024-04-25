@@ -6,7 +6,7 @@ import lombok.*;
 @ToString
 @Getter
 public class BattleResponse {
-    private BattleProgressInfo battleProgressInfo;
     private EnemyInfo enemyInfo;
+    private BattleProgressInfo battleProgressInfo;
     private BattleResult battleResult;
 }
