@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.team.controller;
 import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
+import com.walkerholic.walkingpet.domain.team.dto.response.TeamUsersResponse;
 import com.walkerholic.walkingpet.domain.team.service.TeamService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -65,5 +66,14 @@ public class TeamController {
     public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest,@PathVariable int userId){
         teamService.createGroup(createGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+    }
+
+    @Operation(summary = "그룹원 정보 조회", description = "그룹원들의 상세정보 조회")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹원 정보 조회 성공", content = @Content(schema = @Schema(implementation = TeamUsersResponse.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 그룹원 정보 조회 실패")
+    @GetMapping("/members/{teamId}")
+    public ResponseEntity<CommonResponseEntity> getGroupMembersInfo(@PathVariable int teamId){
+        List<TeamUsersResponse> membersInfo = teamService.getGroupMembersInfo(teamId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,membersInfo);
     }
 }

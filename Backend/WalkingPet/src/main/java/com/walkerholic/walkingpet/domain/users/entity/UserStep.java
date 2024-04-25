@@ -16,9 +16,6 @@ public class UserStep {
     @Column(name = "user_step_id")
     private Integer userStepId;
 
-    @Column(name = "battle_rating", nullable = false)
-    private Integer battleRating;
-
     @Column(name = "yesterday_step", nullable = false)
     private Integer yesterdayStep;
 
