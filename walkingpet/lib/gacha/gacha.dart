@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/bottom_nav_bar.dart';
 
 class Gacha extends StatelessWidget {
   const Gacha({super.key});
@@ -16,6 +17,9 @@ class Gacha extends StatelessWidget {
           },
           child: const Text('Go Back to Home Page'),
         ),
+      ),
+      bottomNavigationBar: const BottomNavBar(
+        selectedIndex: 1,
       ),
     );
   }

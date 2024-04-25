@@ -7,7 +7,7 @@ import 'package:walkingpet/group/group.dart';
 import 'package:walkingpet/home/home.dart';
 import 'package:walkingpet/login/login.dart';
 import 'package:walkingpet/ranking/ranking.dart';
-import 'package:nes_ui/nes_ui.dart';
+//import 'package:nes_ui/nes_ui.dart';
 import 'package:flutter/services.dart'; // SystemChrome을 사용하기 위해 필요
 
 void main() {
@@ -23,7 +23,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
-      theme: ThemeData(fontFamily: "DungGeunMo"),
+      theme: ThemeData(
+        fontFamily: "DungGeunMo",
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.black,
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.orange,
+        ),
+      ),
       initialRoute: '/home',
       routes: {
         '/login': (context) => const Login(),
