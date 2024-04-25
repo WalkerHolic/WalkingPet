@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.USER_CHARACTER_NOT_FOUND;
 
@@ -44,14 +45,22 @@ public class GachaService {
         Users user = usersRepository.findUsersByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
-        UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(user,character);
+        Optional<UserCharacter> userCharacter = userCharacterRepository.findByUserAndCharacter(user,character);
 
-        if (userCharacter!=null) {
-            userCharacter.setUpgrade(userCharacter.getUpgrade() + UPGRADE_INCREMENT);
-            userCharacterRepository.save(userCharacter);
-        } else {
+        if(userCharacter.isPresent()){
+            userCharacter.get().setUpgrade(userCharacter.get().getUpgrade() + UPGRADE_INCREMENT);
+            userCharacterRepository.save(userCharacter.get());
+        }
+        else{
             userCharacterRepository.save(new UserCharacter(character,user));
         }
+
+//        if (userCharacter!=null) {
+//            userCharacter.setUpgrade(userCharacter.getUpgrade() + UPGRADE_INCREMENT);
+//            userCharacterRepository.save(userCharacter);
+//        } else {
+//            userCharacterRepository.save(new UserCharacter(character,user));
+//        }
 
         return  GachaResultResponse.from(character);
     }
