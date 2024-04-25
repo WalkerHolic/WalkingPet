@@ -80,4 +80,10 @@ public class UserCharacter {
     }
 
     public void addExperience(int experience) {this.experience += experience;}
+
+    public void levelUp(int experience){
+        this.experience = experience;
+        this.statPoint += 5;
+        this.level += 1;
+    }
 }
