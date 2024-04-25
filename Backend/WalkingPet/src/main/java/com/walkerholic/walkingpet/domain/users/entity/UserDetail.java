@@ -32,7 +32,10 @@ public class UserDetail {
     private Users user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_character_id",nullable = false)
+    @JoinColumn(name = "user_character_id", nullable = false)
     private UserCharacter selectUserCharacter;
 
+    public void changeUserCharacter(UserCharacter character) { this.selectUserCharacter = character;}
+
+    public void changeInitStatus() {this.initStatus = 1; };
 }

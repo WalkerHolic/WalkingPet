@@ -1,6 +1,9 @@
 package com.walkerholic.walkingpet.domain.character.controller;
 
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterResponse;
+import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
+import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
+import com.walkerholic.walkingpet.domain.character.dto.response.ResetStatResponse;
+import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterStatResponse;
 import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -12,10 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,16 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/character")
 public class CharacterController {
 
-    private final UserCharacterService characterService;
+    private final UserCharacterService userCharacterService;
 
     @GetMapping
     @Operation(summary = "캐릭터 정보 확인", description = "유저의 userCharacterId로  캐릭터 정보 가져오기")
-    @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterResponse.class)))
+    @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getUserCharacterInfo(@RequestParam("userCharacterId") int userCharacterId) {
         log.info("CharacterController getUserCharacterInfo - userCharacterId: {}", userCharacterId);
 
-        UserCharacterResponse userCharacterInfo = characterService.getUserCharacterInfo(userCharacterId);
+        UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userCharacterId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfo);
     }
 
@@ -45,8 +45,28 @@ public class CharacterController {
     public ResponseEntity<CommonResponseEntity> statDistribution(@RequestParam("userCharacterId") int userCharacterId, @RequestParam("value") String value) {
         log.info("CharacterController statDistribution - userCharacterId: {}, value: {}", userCharacterId, value);
 
-        UserCharacterStatResponse userCharacterStatInfo = characterService.addStatPoint(userCharacterId, value);
+        UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userCharacterId, value);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterStatInfo);
+    }
+
+    @PostMapping("/stat/reset")
+    @Operation(summary = "스탯 분배 초기화", description = "유저의 캐릭터 스탯을 분배 초기화")
+    @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 초기화 성공", content = @Content(schema = @Schema(implementation = ResetStatResponse.class)))
+    public ResponseEntity<CommonResponseEntity> resetStatDistribution(@RequestBody ResetInitStatusRequest resetInitStatusRequest) {
+        log.info("CharacterController resetStatDistribution - userCharacterId: {}", resetInitStatusRequest);
+
+        ResetStatResponse resetStatResponse = userCharacterService.resetInitStatus(resetInitStatusRequest);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, resetStatResponse);
+    }
+
+    @PostMapping("/change")
+    @Operation(summary = "캐릭터 변경", description = "유저의 현재 캐릭터 변경")
+    public ResponseEntity<CommonResponseEntity> changeUserCharacter(@RequestBody ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
+        int userId = 1;
+        log.info("CharacterController statDistribution - userId: {}, userCharacter: {}", userId, changeUserCharacterIdRequest.getUserCharacterId());
+        userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 
     @GetMapping("/test")

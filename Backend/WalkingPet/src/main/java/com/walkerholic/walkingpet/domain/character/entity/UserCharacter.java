@@ -66,9 +66,16 @@ public class UserCharacter {
 
     public void useStatPoint(int statPoint) { this.statPoint -= statPoint;}
 
-    public void raisePower() { this.power++; }
+    public void raisePower(int statPoint) { this.power += statPoint; }
 
-    public void raiseDefense() { this.defense++; }
+    public void raiseDefense(int statPoint) { this.defense += statPoint; }
 
-    public void raiseHealth() { this.health++; }
+    public void raiseHealth(int statPoint) { this.health += statPoint; }
+
+    public void resetStat(int statPoint, int power, int defense, int health) {
+        this.statPoint = statPoint;
+        this.power = power;
+        this.defense = defense;
+        this.health = health;
+    }
 }
