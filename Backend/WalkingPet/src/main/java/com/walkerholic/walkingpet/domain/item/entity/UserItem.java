@@ -35,6 +35,10 @@ public class UserItem {
         this.quantity = quantity;
     }
 
+    public void setQuantity(int i) {
+        this.quantity = i;
+    }
+
     public void addItemQuantity(int quantity){
         this.quantity += quantity;
     }
