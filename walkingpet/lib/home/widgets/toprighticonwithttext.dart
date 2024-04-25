@@ -31,7 +31,6 @@ class TopRightIconWithText extends StatelessWidget {
           child: Text(
             text,
             style: const TextStyle(
-              fontFamily: "DungGeunMo",
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,

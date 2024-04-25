@@ -23,10 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
-      theme: ThemeData(
-        fontFamily: 'DungGeunMo', // 글꼴 전역 설정
-      ),
-      initialRoute: '/login',
+      theme: ThemeData(fontFamily: "DungGeunMo"),
+      initialRoute: '/home',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
