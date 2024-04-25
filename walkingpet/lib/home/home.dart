@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
@@ -16,27 +17,40 @@ class Home extends StatelessWidget {
             fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             children: [
-              SizedBox(
-                height: 40,
+              const SizedBox(
+                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TopRightIconWithText(icon: "ranking", text: "랭킹"),
-                  TopRightIconWithText(icon: "goal", text: "목표"),
+                  Transform.translate(
+                    offset: const Offset(10, 0),
+                    child:
+                        const TopRightIconWithText(icon: "ranking", text: "랭킹"),
+                  ),
+                  const TopRightIconWithText(icon: "goal", text: "목표"),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
-              MainFontStyle(size: 48, text: "걸음수"),
-              MainFontStyle(size: 100, text: "16384"),
+              const MainFontStyle(size: 48, text: "걸음수"),
+              const MainFontStyle(size: 100, text: "16384"),
+              const SizedBox(
+                height: 80,
+              ),
+              Image.asset(
+                'assets/animals/cow/cow_run.gif',
+              ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: const BottomNavBar(
+        selectedIndex: 2,
       ),
     );
   }

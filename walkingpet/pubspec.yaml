@@ -19,6 +19,7 @@ dependencies:
   pixelarticons: ^0.4.0
   flutter_svg: ^2.0.1
   nes_ui:
+  motion_tab_bar: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -39,3 +40,5 @@ flutter:
     - assets/backgrounds/day.png
     - assets/backgrounds/goal.png
     - assets/icons/
+    - assets/animals/
+    - assets/animals/cow/
