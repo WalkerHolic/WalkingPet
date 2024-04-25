@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/bottom_nav_bar.dart';
 
 class Group extends StatelessWidget {
   const Group({super.key});
@@ -16,6 +17,9 @@ class Group extends StatelessWidget {
           },
           child: const Text('Go Back to Home Page'),
         ),
+      ),
+      bottomNavigationBar: const BottomNavBar(
+        selectedIndex: 4,
       ),
     );
   }

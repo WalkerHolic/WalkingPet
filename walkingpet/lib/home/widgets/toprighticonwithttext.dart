@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TopRightIconWithText extends StatelessWidget {
@@ -27,7 +26,7 @@ class TopRightIconWithText extends StatelessWidget {
           ),
         ),
         Transform.translate(
-          offset: const Offset(0, -10),
+          offset: const Offset(0, -15),
           child: Text(
             text,
             style: const TextStyle(
