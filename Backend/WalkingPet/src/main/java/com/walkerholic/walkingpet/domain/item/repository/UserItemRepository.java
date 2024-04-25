@@ -14,4 +14,6 @@ public interface UserItemRepository extends JpaRepository<UserItem, Long> {
 
     @Query("select ui from UserItem ui join fetch ui.item where ui.user.userId = :userId and ui.item.name = :itemName")
     Optional<UserItem> findByUserItemWithUserAndItemFetch(Integer userId, String itemName);
+
+    Optional<UserItem> findByUserAndItem(Users users, Item item);
 }
