@@ -2,11 +2,9 @@ package com.walkerholic.walkingpet.domain.team.entity;
 
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@ToString
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
