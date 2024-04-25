@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
