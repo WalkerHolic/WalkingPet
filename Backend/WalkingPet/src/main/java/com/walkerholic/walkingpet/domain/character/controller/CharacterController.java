@@ -52,6 +52,7 @@ public class CharacterController {
     @PostMapping("/stat/reset")
     @Operation(summary = "스탯 분배 초기화", description = "유저의 캐릭터 스탯을 분배 초기화")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 초기화 성공", content = @Content(schema = @Schema(implementation = ResetStatResponse.class)))
+    @ApiResponse(responseCode = "400", description = "C400 - 이미 스탯 초기화 버튼 누름")
     public ResponseEntity<CommonResponseEntity> resetStatDistribution(@RequestBody ResetInitStatusRequest resetInitStatusRequest) {
         log.info("CharacterController resetStatDistribution - userCharacterId: {}", resetInitStatusRequest);
 

@@ -21,6 +21,7 @@ public enum GlobalErrorCode {
     USER_CHARACTER_NOT_FOUND(404, "C400", "유저의 해당 캐릭터를 찾을 수 없습니다."),
     CHARACTER_NOT_FOUND(404, "C400", "존재 하지 않는 캐릭터입니다."),
     INSUFFICIENT_STAT_POINT(403, "C400", "유저의 해당 캐릭터 스탯 포인트가 부족합니다."),
+    STAT_INIT_LIMIT_EXCEEDED(400, "C400", "이미 스탯 초기화를 수행했습니다. 하루에 한 번만 초기화할 수 있습니다."),
 
     // 팀 관련
     TEAM_NOT_FOUND(404, "C400", "해당 팀을 찾을 수 없습니다."),

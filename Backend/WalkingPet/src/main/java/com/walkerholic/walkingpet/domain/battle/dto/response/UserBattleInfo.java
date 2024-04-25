@@ -19,7 +19,7 @@ public class UserBattleInfo {
     public static UserBattleInfo from(UserCharacter userCharacter, UserDetail userDetail){
         return UserBattleInfo.builder()
                 .nickname(userDetail.getUser().getNickname())
-                .characterId(userDetail.getSelectCharacter().getCharacterId())
+                .characterId(userDetail.getSelectUserCharacter().getUserCharacterId())
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
