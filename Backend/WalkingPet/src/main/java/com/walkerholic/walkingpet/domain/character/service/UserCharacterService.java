@@ -5,12 +5,15 @@ import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRe
 import com.walkerholic.walkingpet.domain.character.dto.response.ResetStatResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterStatResponse;
+import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
 import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
+import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
+import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class UserCharacterService {
     private final UserCharacterRepository userCharacterRepository;
     private final UserDetailRepository userDetailRepository;
     private final CharacterRepository characterRepository;
+    private final UserStepRepository userStepRepository;
 
     /**
      * 사용자의 캐릭터 정보 가져오기(api)
@@ -79,6 +83,9 @@ public class UserCharacterService {
         userDetail.changeUserCharacter(userCharacterInfo);
     }
 
+    /**
+     * 스탯 초기화 버튼 클릭
+     */
     @Transactional(readOnly = false)
     public ResetStatResponse resetInitStatus(ResetInitStatusRequest resetInitStatusRequest) {
         UserCharacter userCharacterInfo = getUserCharacter(resetInitStatusRequest.getUserCharacterId());
@@ -96,12 +103,30 @@ public class UserCharacterService {
         resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth();
         resetStatPoint += userCharacterInfo.getDefense() - character.getFixDefense();
 
-//        System.out.println("이전의 스탯값: " + userCharacterInfo.getStatPoint() + "  초기화된 스탯값: " + resetStatPoint);
-
         userCharacterInfo.resetStat(resetStatPoint, character.getFixPower(), character.getFixDefense(), character.getFixHealth());
         userDetail.changeInitStatus();
 
         return ResetStatResponse.from(userCharacterInfo);
+    }
+
+    /**
+     * 유저의 일일 걸음수 가져오기
+     */
+    public UserStepResponse checkUserStep(int userId, int frontStep) {
+        UserStep userStep = userStepRepository.findByUserUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+
+        if (frontStep < userStep.getDailyStep()) {
+            return UserStepResponse.from(userStep.getDailyStep(), true);
+        } else {
+            return UserStepResponse.from(frontStep, false);
+        }
+        /** < 휴대폰이 재부팅 될 때를 가정 >
+         * (1. db에 저장된 값이 0이면은 그대로 ui에 0 반영)
+         * 2. ui에 표시된 값이 db에 저장된 값보다 작으면 db에 저장된 값을 ui에 반영
+         * 3. ui에 표시된 값이 db에 저장된 값도가 크면 ui에 표시된 값으로 반영
+         * 즉, 프론트는 앱 첫 실행시 걸음수를 백엔드로 보내고 백엔드에서 보내주는 걸음수로 표시하면 됨.
+         */
     }
 
     /**
