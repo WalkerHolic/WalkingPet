@@ -51,7 +51,7 @@ public class BattleService {
         UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
                 .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
 
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectCharacter().getUserCharacterId())
+        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getUserCharacterId())
                 .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
         UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
@@ -81,7 +81,7 @@ public class BattleService {
                 .rating(userDetail.getBattleRating())
                 .build();
 
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectCharacter().getUserCharacterId())
+        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getUserCharacterId())
                 .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
         UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
@@ -173,7 +173,7 @@ public class BattleService {
         UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
                 .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
 
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectCharacter().getUserCharacterId())
+        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getUserCharacterId())
                 .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
         UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
