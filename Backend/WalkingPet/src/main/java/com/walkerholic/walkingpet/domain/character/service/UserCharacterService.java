@@ -87,6 +87,10 @@ public class UserCharacterService {
         UserDetail userDetail = userDetailRepository.findBySelectUserCharacterUserCharacterId(resetInitStatusRequest.getUserCharacterId())
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
+        if (userDetail.getInitStatus() == 1) {
+            throw new GlobalBaseException(GlobalErrorCode.STAT_INIT_LIMIT_EXCEEDED);
+        }
+
         int resetStatPoint = userCharacterInfo.getStatPoint();
         resetStatPoint += userCharacterInfo.getPower() - character.getFixPower();
         resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth();
