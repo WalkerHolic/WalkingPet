@@ -6,15 +6,20 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('로그인 Page'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
-          child: const Text('Go Back to Home Page'),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/backgrounds/대낮.png"), // 이미지 파일 경로 지정
+            fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
+          ),
+        ),
+        child: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/home');
+            },
+            child: const Text('Go Back to Home Page'),
+          ),
         ),
       ),
     );

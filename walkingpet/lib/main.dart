@@ -20,19 +20,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Waking Pet',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto', // 글꼴 전역 설정
+        fontFamily: 'DungGeunMo', // 글꼴 전역 설정
       ),
       initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
-        '/battle': (context) => const Battle(),
-        '/characterInfo': (context) => const CharacterInfo(),
-        '/gacha': (context) => const Gacha(),
-        '/goal': (context) => const Goal(),
-        '/group': (context) => const Group(),
-        '/ranking': (context) => const Ranking(),
         '/home': (context) => const Home(),
+        '/goal': (context) => const Goal(),
+        '/ranking': (context) => const Ranking(),
+        '/characterinfo': (context) => const CharacterInfo(),
+        '/gacha': (context) => const Gacha(),
+        '/battle': (context) => const Battle(),
+        '/group': (context) => const Group(),
       },
     );
   }
