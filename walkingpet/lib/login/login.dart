@@ -52,7 +52,7 @@ class Login extends StatelessWidget {
               ),
 
               const SizedBox(
-                height: 240,
+                height: 200,
               ),
               // 걷는 캐릭터
               Image.asset(
