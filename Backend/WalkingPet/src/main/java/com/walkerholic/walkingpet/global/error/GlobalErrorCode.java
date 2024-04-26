@@ -41,7 +41,10 @@ public enum GlobalErrorCode {
     USER_DETAIL_NOT_FOUND(404, "D400", "유저의 상세정보를 찾을 수 없습니다."),
 
     // 유저 걸음수 관련(user_step)
-    USER_STEP_NOT_FOUND(404, "S400", "유저의 걸음수 정보를 찾을 수 없습니다.");
+    USER_STEP_NOT_FOUND(404, "S400", "유저의 걸음수 정보를 찾을 수 없습니다."),
+
+    //목표 관련(goal)
+    USER_GOAL_NOT_FOUND(404, "G400", "유저의 목표 정보를 찾을 수 없습니다.");
 
     // 정의하지 않은 그 외의 에러
 
