@@ -10,8 +10,6 @@ import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunctio
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.character.service.LevelUpService;
-import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
-import com.walkerholic.walkingpet.domain.item.entity.Item;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
@@ -27,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
