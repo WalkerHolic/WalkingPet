@@ -43,3 +43,9 @@ flutter:
     - assets/icons/
     - assets/animals/
     - assets/animals/cow/
+    - assets/buttons/brown_button.png
+    - assets/buttons/brown_button.svg
+    - assets/buttons/brown_button_pushed.png
+    - assets/buttons/brown_button_pushed.svg
+    - assets/buttons/weekly_plain.png
+    - assets/buttons/weekly_stamped.png
