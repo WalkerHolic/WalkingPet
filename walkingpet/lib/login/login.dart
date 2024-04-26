@@ -17,16 +17,11 @@ class Login extends StatelessWidget {
         child: const Center(
           child: Column(
             children: [
-              Row(
-                children: [
-                  Column(
-                    children: [Icon(Pixel.calendarcheck), Text("목표")],
-                  ),
-                  Column(
-                    children: [Icon(Pixel.trophy), Text("랭킹")],
-                  )
-                ],
-              )
+              // 워킹펫 문구 크게
+
+              // 걷는 캐릭터
+
+              // 카카오 로그인
             ],
           ),
         ),
