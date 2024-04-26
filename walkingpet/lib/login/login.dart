@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pixelarticons/pixelarticons.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -53,7 +52,7 @@ class Login extends StatelessWidget {
               ),
 
               const SizedBox(
-                height: 220,
+                height: 240,
               ),
               // 걷는 캐릭터
               Image.asset(
