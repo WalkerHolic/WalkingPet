@@ -11,18 +11,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+/**
+ * 추후 수정할 최적화할 예정
+ */
 public class LevelUpService {
     private final UserCharacterRepository userCharacterRepository;
     private final UserItemRepository userItemRepository;
     private final UserCharacterFunction userCharacterFunction;
-
-    public static final int LEVEL_UP_STAT_POINT = 5;
-    public static final int LEVEL_UP_INCREASE_MAX_EXP = 5;
 
     //경험치가 maxExperience를 초과한 상태에서 넘어올거임
     public String levelUp(UserCharacter userCharacter){
@@ -34,12 +35,24 @@ public class LevelUpService {
         userCharacterRepository.save(userCharacter);
 
         if(nowLevel + 1 % 5 == 0){
-            System.out.println("고급 상자 획득~");
-            UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, "고급상자")
+            System.out.println("일반 상자 획득~");
+            System.out.println("고급 상자 추가 획득~");
+            List<UserItem> userItemList = userItemRepository.findByUserIdWithUserFetch(userId)
                     .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_ITEM_NOT_FOUND_BOX));
 
-            userItem.addItemQuantity(1);
-            userItemRepository.save(userItem);
+            UserItem userNormalBox = null;
+            UserItem userLuxuryBox = null;
+            for(UserItem userItem : userItemList){
+                if(userItem.getItem().getName().equals("일반상자"))
+                    userNormalBox = userItem;
+                else if(userItem.getItem().getName().equals("고급상자"))
+                    userLuxuryBox = userItem;
+            }
+
+            userNormalBox.addItemQuantity(1);
+            userItemRepository.save(userNormalBox);
+            userLuxuryBox.addItemQuantity(1);
+            userItemRepository.save(userLuxuryBox);
             
         }
         else{
