@@ -27,4 +27,11 @@ public class Goal {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
+    public void setWeeklyGoal(int weeklyGoal){
+        this.weeklyGoal = weeklyGoal;
+    }
+
+    public void setDailyGoal(int dailyGoal){
+        this.dailyGoal = dailyGoal;
+    }
 }
