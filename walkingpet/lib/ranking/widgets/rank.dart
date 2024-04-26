@@ -28,13 +28,13 @@ class Rank extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 7),
-          Image.asset(
-            'assets/animals/cow/cow_walk.gif',
-            // characterId
-            height: 40,
-            // scale: 0.3,
-          ),
-          const SizedBox(width: 7),
+          // Image.asset(
+          //   'assets/animals/cow/cow_walk.gif',
+          //   // characterId
+          //   height: 40,
+          //   // scale: 0.3,
+          // ),
+          // const SizedBox(width: 7),
           Text(
             nickname,
             style: const TextStyle(
