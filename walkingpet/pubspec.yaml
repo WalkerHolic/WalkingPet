@@ -37,6 +37,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/backgrounds/
     - assets/backgrounds/day.png
     - assets/backgrounds/goal.png
     - assets/icons/
