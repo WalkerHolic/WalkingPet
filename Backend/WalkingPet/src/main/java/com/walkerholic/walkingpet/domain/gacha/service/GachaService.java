@@ -65,30 +65,17 @@ public class GachaService {
             userCharacterRepository.save(new UserCharacter(character,user));
         }
 
-//        if (userCharacter!=null) {
-//            userCharacter.setUpgrade(userCharacter.getUpgrade() + UPGRADE_INCREMENT);
-//            userCharacterRepository.save(userCharacter);
-//        } else {
-//            userCharacterRepository.save(new UserCharacter(character,user));
-//        }
-
         return  GachaResultResponse.from(character);
     }
 
+    @Transactional
     public GachaCountResponse getGachaCount(int userId){
 
         List<UserItem> userItems = userItemRepository.findByUserIdWithUserFetch(userId)
                 .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
-        int normalBoxCount = userItems.stream()
-                .filter(item -> item.getItem().getItemId() == NORMAL_BOX_ID)
-                .mapToInt(UserItem::getQuantity)
-                .sum();
-
-        int luxuryBoxCount = userItems.stream()
-                .filter(item -> item.getItem().getItemId() == LUXURY_BOX_ID)
-                .mapToInt(UserItem::getQuantity)
-                .sum();
+        int normalBoxCount = countItems(userItems, NORMAL_BOX_ID);
+        int luxuryBoxCount = countItems(userItems, LUXURY_BOX_ID);
 
         return GachaCountResponse.from(normalBoxCount,luxuryBoxCount);
     }
@@ -96,42 +83,36 @@ public class GachaService {
     // 상자 타입에 따라 확률 계산을 해준 뒤, 몇 성의 캐릭터를 뽑아야할지 Return 하는 함수
     public int decideGrade(Users user,String boxType){
 
+        int itemId = boxType.equals("normal") ? 1 : 2;
+        decreaseItemQuantity(user, itemId, 1);
         int randomNumber = new Random(System.currentTimeMillis()).nextInt(100) + 1;
-        int grade;
 
-        if (boxType.equals("normal")) {
-
-            Item item = itemRepository.findById(1)
-                    .orElseThrow(() -> new RuntimeException("Item not found"));
-            UserItem userItem = userItemRepository.findByUserAndItem(user, item)
-                    .orElseThrow(() -> new RuntimeException("UserItem not found"));
-
-            if (userItem.getQuantity() > 0) {
-                userItem.setQuantity(userItem.getQuantity() - 1); // 수량 감소
-                userItemRepository.save(userItem); // 변경 사항 저장
-            } else {
-                throw new GlobalBaseException(TEAM_NOT_FOUND);
-            }
-
-            grade = (randomNumber <= GRADE2_APPEAR_PERCENTAGE) ? GRADE2 : GRADE3;
-
-        } else {
-
-            Item item = itemRepository.findById(2)
-                    .orElseThrow(() -> new RuntimeException("Item not found"));
-            UserItem userItem = userItemRepository.findByUserAndItem(user, item)
-                    .orElseThrow(() -> new RuntimeException("UserItem not found"));
-
-            if (userItem.getQuantity() > 0) {
-                userItem.setQuantity(userItem.getQuantity() - 1);
-                userItemRepository.save(userItem);
-            } else {
-                throw new GlobalBaseException(TEAM_NOT_FOUND);
-            }
-
-            grade = (randomNumber <= GRADE1_APPEAR_PERCENTAGE) ? GRADE1 : GRADE2;
-
-        }
-        return grade;
+        return boxType.equals("normal") ?
+                (randomNumber <= GRADE2_APPEAR_PERCENTAGE ? GRADE2 : GRADE3) :
+                (randomNumber <= GRADE1_APPEAR_PERCENTAGE ? GRADE1 : GRADE2);
     }
+
+    // 주어진 사용자 항목 목록에서 특정 아이템 ID에 해당하는 아이템의 수량을 계산합니다.
+    public int countItems(List<UserItem> userItems, int itemId) {
+        return userItems.stream()
+                .filter(item -> item.getItem().getItemId() == itemId)
+                .mapToInt(UserItem::getQuantity)
+                .sum();
+    }
+
+    // 사용자의 아이템 수량을 감소시킵니다.
+    public void decreaseItemQuantity(Users user, int itemId, int decreaseAmount) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+        UserItem userItem = userItemRepository.findByUserAndItem(user, item)
+                .orElseThrow(() -> new RuntimeException("UserItem not found"));
+
+        if (userItem.getQuantity() >= decreaseAmount) {
+            userItem.setQuantity(userItem.getQuantity() - decreaseAmount);
+            userItemRepository.save(userItem);
+        } else {
+            throw new GlobalBaseException(TEAM_NOT_FOUND);
+        }
+    }
+
 }

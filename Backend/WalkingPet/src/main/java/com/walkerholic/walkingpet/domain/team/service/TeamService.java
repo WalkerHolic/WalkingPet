@@ -37,6 +37,9 @@ public class TeamService {
 
     private static final int MAX_ALLOWED_TEAMS  = 3;
     private static final int MAX_TEAM_PEOPLE  = 6;
+    private static final byte STATUS_NO_PASSWORD = 0;
+    private static final byte STATUS_WITH_PASSWORD = 1;
+
 
     private final TeamRepository teamRepository;
     private final TeamUserRepository teamUserRepository;
@@ -60,8 +63,7 @@ public class TeamService {
     @Transactional
     public List<TeamResponse> getUserTeams(int userId) {
 
-        Users user = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        Users user = getUserById(userId);
 
         List<Team> teams = teamUserRepository.findTeamsByUser(user);
 
@@ -91,7 +93,7 @@ public class TeamService {
 
         return teams.stream()
                 .map(team -> {
-                    Integer userCount = teamUserRepository.countByTeamId(team.getTeamId());
+                    Integer userCount = getUserCountByTeamId(team.getTeamId());
                     return TeamResponse.from(team, userCount);
                 })
                 .collect(Collectors.toList());
@@ -100,28 +102,17 @@ public class TeamService {
     @Transactional
     public TeamDetailResponse getTeamDetail(int teamId) {
 
-        Team team = teamRepository.findByTeamId(teamId)
-                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+        Team team = getTeamById(teamId);
 
-        Integer userCount = teamUserRepository.countByTeamId(team.getTeamId());
+        Integer userCount = getUserCountByTeamId(team.getTeamId());
 
         TeamResponse teamResponse = TeamResponse.from(team,userCount);
 
-        List<TeamUser> teamUsers = teamUserRepository.findByTeam(team);
+        List<TeamUser> teamUsers = getTeamUsersByTeam(team);
 
         List<TeamUsersResponse> teamUsersResponses = new ArrayList<>();
-
         for (TeamUser teamUser : teamUsers) {
-
-            Users user = teamUser.getUser();
-
-            UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
-                    .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
-
-            UserStep userStep = userStepRepository.findUserStepByUser(user)
-                    .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
-
-            TeamUsersResponse teamUsersResponse = TeamUsersResponse.from(user,userDetail,userStep);
+            TeamUsersResponse teamUsersResponse = createTeamUsersResponse(teamUser);
             teamUsersResponses.add(teamUsersResponse);
         }
 
@@ -130,22 +121,18 @@ public class TeamService {
     @Transactional
     public void joinGroup(JoinGroupRequest joinGroupRequest,int userId) {
 
-        Users user = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        Users user = getUserById(userId);
 
         // 사용자가 가입할 수 있는 최대 그룹 수를 초과했다면 예외처리
-        int currentUserTeams = teamUserRepository.countByUser(user);
+        int currentUserTeams = getCurrentUserTeamCount(user);
         if (currentUserTeams >= MAX_ALLOWED_TEAMS) {
             throw new GlobalBaseException(USER_NOT_FOUND);
         }
 
-        Team team = teamRepository.findByTeamId(joinGroupRequest.getTeamId())
-                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
-
-        List<TeamUser> teamUsers = teamUserRepository.findByTeam(team);
+        Team team = getTeamById(joinGroupRequest.getTeamId());
 
         // 해당 그룹의 사용자 리스트를 불러와 정원 확인
-        int currentTeamMembers = teamUserRepository.countByTeamId(team.getTeamId());
+        int currentTeamMembers = getUserCountByTeamId(team.getTeamId());
         if(currentTeamMembers>=MAX_TEAM_PEOPLE){
             throw new GlobalBaseException(TEAM_NOT_FOUND);
         }
@@ -162,23 +149,21 @@ public class TeamService {
                 .user(user)
                 .build();
         teamUserRepository.save(teamUser);
-
     }
 
     @Transactional
     public void createGroup(CreateGroupRequest createGroupRequest, int userId) {
 
-        Users user = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        Users user = getUserById(userId);
 
         // 사용자의 그룹 수가 허용된 최대 그룹 수를 초과하는지 확인합니다.
-        int currentUserTeams = teamUserRepository.countByUser(user);
+        int currentUserTeams = getCurrentUserTeamCount(user);
         if (currentUserTeams >= MAX_ALLOWED_TEAMS) {
             throw new GlobalBaseException(USER_NOT_FOUND);
         }
 
         // 비밀번호 존재 여부에 따라 상태를 결정합니다.
-        byte status = createGroupRequest.getPassword().isEmpty() ? (byte) 0 : (byte) 1;
+        byte status = createGroupRequest.getPassword().isEmpty() ? STATUS_NO_PASSWORD : STATUS_WITH_PASSWORD;
 
         // 새 그룹을 생성하고 저장합니다.
         Team team = Team.builder()
@@ -201,24 +186,13 @@ public class TeamService {
 
     public List<TeamUsersResponse> getGroupMembersInfo(int teamId) {
 
-        Team team = teamRepository.findByTeamId(teamId)
-                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+        Team team = getTeamById(teamId);
 
-        List<TeamUser> teamUsers = teamUserRepository.findByTeam(team);
+        List<TeamUser> teamUsers = getTeamUsersByTeam(team);
 
         List<TeamUsersResponse> teamUsersResponses = new ArrayList<>();
-
         for (TeamUser teamUser : teamUsers) {
-
-            Users user = teamUser.getUser();
-
-            UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
-                    .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
-
-            UserStep userStep = userStepRepository.findUserStepByUser(user)
-                    .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
-
-            TeamUsersResponse teamUsersResponse = TeamUsersResponse.from(user,userDetail,userStep);
+            TeamUsersResponse teamUsersResponse = createTeamUsersResponse(teamUser);
             teamUsersResponses.add(teamUsersResponse);
         }
 
@@ -228,11 +202,9 @@ public class TeamService {
     @Transactional
     public void exitGroup(ExitGroupRequest exitGroupRequest, int userId) {
 
-        Users user = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        Users user = getUserById(userId);
 
-        Team team = teamRepository.findByTeamId(exitGroupRequest.getTeamId())
-                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+        Team team = getTeamById(exitGroupRequest.getTeamId());
 
         TeamUser teamUser = teamUserRepository.findByUserAndTeam(user,team)
                 .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
@@ -247,5 +219,44 @@ public class TeamService {
             teamUserRepository.delete(teamUser);
         }
     }
+
+    // 주어진 사용자 ID에 해당하는 사용자를 데이터베이스에서 검색합니다.
+    public Users getUserById(int userId) {
+        return usersRepository.findUsersByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+    }
+
+    // 주어진 팀 ID에 해당하는 팀의 사용자 수를 반환합니다.
+    public int getUserCountByTeamId(int teamId) {
+        return teamUserRepository.countByTeamId(teamId);
+    }
+
+    // 주어진 팀 ID에 해당하는 팀을 데이터베이스에서 검색합니다.
+    public Team getTeamById(int teamId) {
+        return teamRepository.findByTeamId(teamId)
+                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+    }
+
+    // 주어진 팀에 속한 사용자 목록을 데이터베이스에서 검색합니다.
+    public List<TeamUser> getTeamUsersByTeam(Team team) {
+        return teamUserRepository.findByTeam(team);
+    }
+
+    // 현재 사용자가 속한 팀의 수를 반환합니다.
+    public int getCurrentUserTeamCount(Users user) {
+        return teamUserRepository.countByUser(user);
+    }
+
+
+    // 주어진 TeamUser 객체에서 사용자의 세부 정보와 단계 정보를 검색하여 TeamUsersResponse 객체를 생성합니다
+    private TeamUsersResponse createTeamUsersResponse(TeamUser teamUser) {
+        Users user = teamUser.getUser();
+        UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
+                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        UserStep userStep = userStepRepository.findUserStepByUser(user)
+                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        return TeamUsersResponse.from(user, userDetail, userStep);
+    }
+
 
 }
