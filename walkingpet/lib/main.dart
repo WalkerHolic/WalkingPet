@@ -25,13 +25,8 @@ class MyApp extends StatelessWidget {
       title: 'Waking Pet',
       theme: ThemeData(
         fontFamily: "DungGeunMo",
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Colors.black,
-          unselectedItemColor: Colors.white,
-          selectedItemColor: Colors.orange,
-        ),
       ),
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),

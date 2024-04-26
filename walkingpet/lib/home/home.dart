@@ -42,9 +42,6 @@ class Home extends StatelessWidget {
                 offset: const Offset(0, -20),
                 child: const MainFontStyle(size: 100, text: "16384"),
               ),
-              const SizedBox(
-                height: 80,
-              ),
               Image.asset(
                 'assets/animals/cow/cow_run.gif',
               ),
