@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.TEAM_NOT_FOUND;
-import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.USER_CHARACTER_NOT_FOUND;
+import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,12 +47,12 @@ public class GachaService {
     public GachaResultResponse getGachaResult(String boxType, int userId) {
 
         Users user = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
         int grade = decideGrade(user,boxType);
 
         Character character = characterRepository.findRandomByGrade(grade)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalBaseException(CHARACTER_NOT_FOUND));
 
         Optional<UserCharacter> userCharacter = userCharacterRepository.findByUserAndCharacter(user,character);
 
@@ -72,7 +71,7 @@ public class GachaService {
     public GachaCountResponse getGachaCount(int userId){
 
         List<UserItem> userItems = userItemRepository.findByUserIdWithUserFetch(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalBaseException(USER_ITEM_NOT_FOUND_BOX));
 
         int normalBoxCount = countItems(userItems, NORMAL_BOX_ID);
         int luxuryBoxCount = countItems(userItems, LUXURY_BOX_ID);
@@ -103,15 +102,15 @@ public class GachaService {
     // 사용자의 아이템 수량을 감소시킵니다.
     public void decreaseItemQuantity(Users user, int itemId, int decreaseAmount) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new GlobalBaseException(ITEM_NOT_FOUND));
         UserItem userItem = userItemRepository.findByUserAndItem(user, item)
-                .orElseThrow(() -> new RuntimeException("UserItem not found"));
+                .orElseThrow(() -> new GlobalBaseException(USER_ITEM_NOT_FOUND_BOX));
 
         if (userItem.getQuantity() >= decreaseAmount) {
             userItem.setQuantity(userItem.getQuantity() - decreaseAmount);
             userItemRepository.save(userItem);
         } else {
-            throw new GlobalBaseException(TEAM_NOT_FOUND);
+            throw new GlobalBaseException(USER_ITEM_NOT_EXIST);
         }
     }
 
