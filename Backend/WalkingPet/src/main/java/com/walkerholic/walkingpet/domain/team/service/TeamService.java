@@ -27,8 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.TEAM_NOT_FOUND;
-import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.USER_NOT_FOUND;
+import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -126,7 +125,7 @@ public class TeamService {
         // 사용자가 가입할 수 있는 최대 그룹 수를 초과했다면 예외처리
         int currentUserTeams = getCurrentUserTeamCount(user);
         if (currentUserTeams >= MAX_ALLOWED_TEAMS) {
-            throw new GlobalBaseException(USER_NOT_FOUND);
+            throw new GlobalBaseException(JOIN_TEAMS_EXCEEDED);
         }
 
         Team team = getTeamById(joinGroupRequest.getTeamId());
@@ -134,13 +133,13 @@ public class TeamService {
         // 해당 그룹의 사용자 리스트를 불러와 정원 확인
         int currentTeamMembers = getUserCountByTeamId(team.getTeamId());
         if(currentTeamMembers>=MAX_TEAM_PEOPLE){
-            throw new GlobalBaseException(TEAM_NOT_FOUND);
+            throw new GlobalBaseException(TEAM_MEMBER_EXCEEDED);
         }
 
         // 이미 그룹에 가입한 사용자인지 확인
         boolean isAlreadyMember = teamUserRepository.existsByTeamAndUser(team, user);
         if (isAlreadyMember) {
-            throw new GlobalBaseException(TEAM_NOT_FOUND);
+            throw new GlobalBaseException(ALREADY_JOINED_GROUP);
         }
 
         // 그룹에 사용자를 추가하고 저장
@@ -159,7 +158,7 @@ public class TeamService {
         // 사용자의 그룹 수가 허용된 최대 그룹 수를 초과하는지 확인합니다.
         int currentUserTeams = getCurrentUserTeamCount(user);
         if (currentUserTeams >= MAX_ALLOWED_TEAMS) {
-            throw new GlobalBaseException(USER_NOT_FOUND);
+            throw new GlobalBaseException(JOIN_TEAMS_EXCEEDED);
         }
 
         // 비밀번호 존재 여부에 따라 상태를 결정합니다.
@@ -207,15 +206,15 @@ public class TeamService {
         Team team = getTeamById(exitGroupRequest.getTeamId());
 
         TeamUser teamUser = teamUserRepository.findByUserAndTeam(user,team)
-                .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
+                .orElseThrow(() -> new GlobalBaseException(TEAM_USER_NOT_FOUND));
 
-        // 팀의 생성자가 현재 사용자인 경우
+        // 그룹의 생성자가 현재 사용자인 경우
         if(team.getUser().getUserId()==userId){
-            // 해당 팀에 속한 모든 TeamUser 엔티티를 삭제하고 팀 정보 자체도 삭제
+            // 해당 그룹에 속한 모든 TeamUser 엔티티를 삭제하고 그룹 정보 자체도 삭제
             teamUserRepository.deleteByTeam(team);
             teamRepository.delete(team);
         }else {
-            // 팀의 생성자가 아니면 해당 사용자만 팀에서 제거
+            // 그룹의 생성자가 아니면 해당 사용자만 그룹에서 제거
             teamUserRepository.delete(teamUser);
         }
     }
@@ -226,23 +225,23 @@ public class TeamService {
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
     }
 
-    // 주어진 팀 ID에 해당하는 팀의 사용자 수를 반환합니다.
+    // 주어진 그룹 ID에 해당하는 그룹의 사용자 수를 반환합니다.
     public int getUserCountByTeamId(int teamId) {
         return teamUserRepository.countByTeamId(teamId);
     }
 
-    // 주어진 팀 ID에 해당하는 팀을 데이터베이스에서 검색합니다.
+    // 주어진 teamId에 해당하는 그룹을 데이터베이스에서 검색합니다.
     public Team getTeamById(int teamId) {
         return teamRepository.findByTeamId(teamId)
                 .orElseThrow(() -> new GlobalBaseException(TEAM_NOT_FOUND));
     }
 
-    // 주어진 팀에 속한 사용자 목록을 데이터베이스에서 검색합니다.
+    // 주어진 그룹에 속한 사용자 목록을 데이터베이스에서 검색합니다.
     public List<TeamUser> getTeamUsersByTeam(Team team) {
         return teamUserRepository.findByTeam(team);
     }
 
-    // 현재 사용자가 속한 팀의 수를 반환합니다.
+    // 현재 사용자가 속한 그룹의 수를 반환합니다.
     public int getCurrentUserTeamCount(Users user) {
         return teamUserRepository.countByUser(user);
     }
@@ -252,9 +251,9 @@ public class TeamService {
     private TeamUsersResponse createTeamUsersResponse(TeamUser teamUser) {
         Users user = teamUser.getUser();
         UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
         UserStep userStep = userStepRepository.findUserStepByUser(user)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalBaseException(USER_STEP_NOT_FOUND));
         return TeamUsersResponse.from(user, userDetail, userStep);
     }
 
