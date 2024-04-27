@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:nes_ui/nes_ui.dart';
+import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/ranking/widgets/nes_tab.dart';
+// import 'package:nes_ui/nes_ui.dart';
+// import 'package:walkingpet/ranking/widgets/nes_tab.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
 
@@ -43,33 +45,6 @@ class Ranking extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // NesTab(
-                //   tab: NesTabItem(
-                //     label: '개인',
-                //   ),
-                //   selected: true,
-                // ),
-                // NesTab(
-                //   tab: const NesTabItem(
-                //       label: 'Home'), // child 매개변수 제거, label만 사용
-                //   selected: true, // 선택된 상태를 가정 (이 부분은 선택적)
-                //   onPressed: () {
-                //     print("Home tab pressed!");
-                //   },
-                //   onClosed: () {
-                //     print("Home tab closed!");
-                //   },
-                // ),
-                // NesTab(
-                //   tab: NesTabItem(label: 'Home'), // 탭에 표시될 레이블
-                //   selected: true, // 현재 탭이 선택된 상태
-                //   onPressed: () {
-                //     print("Home tab pressed!");
-                //   },
-                //   onClosed: () {
-                //     print("Home tab closed!");
-                //   },
-                // ),
                 // 3-1. 랭킹
                 Text('랭킹 & X버튼'),
 
