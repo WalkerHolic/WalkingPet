@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 
@@ -75,26 +76,17 @@ class CharacterInfo extends StatelessWidget {
               ),
 
               // 3. 변경 버튼
-              Image.asset('assets/icons/character_change_button.png'),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/characterinfo');
+                },
+                child: Image.asset(
+                  'assets/icons/character_change_button.png',
+                  scale: 0.85,
+                ),
+              ),
 
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.pushNamed(context, '/characterinfo');
-              //   },
-              //   child: const Text('변경버튼'),
-              // ),
-
-              // DottedButton(
-              //   onTap: () {
-              //     print('도트 버튼 클릭!');
-              //   },
-              //   label: '클릭',
-              //   dotSize: 6.0,
-              //   dotColor: Colors.blue,
-              //   textColor: Colors.blue,
-              //   numberOfDots: 20,
-              // ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               // 4. 레벨 & 경험치 바
               Row(
@@ -103,7 +95,7 @@ class CharacterInfo extends StatelessWidget {
                   const Text(
                     'Lv. 7',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 23,
                     ),
                   ),
                   const SizedBox(
@@ -116,7 +108,7 @@ class CharacterInfo extends StatelessWidget {
                       children: [
                         const SizedBox(
                           width: 185,
-                          height: 20,
+                          height: 19,
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             child: LinearProgressIndicator(
@@ -127,18 +119,11 @@ class CharacterInfo extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   width: 10,
-                        //   Image.asset(
-                        //     'assets/icons/character_change_button.png',
-                        //     height: 30,
-                        //   ),
-                        // ),
                         Positioned(
                           right: 0,
                           child: SizedBox(
                             width: 200,
-                            height: 20,
+                            height: 23,
                             child: Image.asset(
                               'assets/icons/character_bar.png',
                             ),
@@ -185,17 +170,17 @@ class CharacterInfo extends StatelessWidget {
                           fontSize: 30,
                         ),
                       ),
+
                       // 7. 초기화 버튼
-                      Image.asset(
-                        'assets/icons/character_reset_button.png',
-                        height: 30,
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/characterinfo');
+                        },
+                        child: Image.asset(
+                          'assets/icons/character_reset_button.png',
+                          scale: 0.85,
+                        ),
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     Navigator.pushNamed(context, '/characterinfo');
-                      //   },
-                      //   child: const Text('초기화'),
-                      // ),
                     ],
                   ),
                 ],
