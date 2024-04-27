@@ -33,7 +33,7 @@ public enum GlobalErrorCode {
 
     // 아이템 관련
     ITEM_NOT_FOUND(404, "I400", "해당 아이템을 찾을 수 없습니다."),
-    USER_ITEM_NOT_EXIST(403, "I401", "유저의 해당 아이템 보유 개수가 0개입니다."),
+    USER_ITEM_NOT_EXIST(403, "I401", "유저의 해당 아이템 보유 정보를 확인할 수 없습니다."),
     USER_ITEM_NOT_FOUND_EXP(404, "I402", "경험치 아이템을 가진 유저를 확인할 수 없습니다."),
     USER_ITEM_NOT_FOUND_BOX(404, "I403", "박스 아이템을 가진 유저를 확인할 수 없습니다."),
 
