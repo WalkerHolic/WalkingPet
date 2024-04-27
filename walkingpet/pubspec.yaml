@@ -19,6 +19,7 @@ dependencies:
   pixelarticons: ^0.4.0
   flutter_svg: ^2.0.1
   nes_ui:
+  provider: ^6.1.2
   motion_tab_bar: ^2.0.4
 
 dev_dependencies:
@@ -43,7 +44,6 @@ flutter:
     - assets/icons/
     - assets/animals/cow/
     - assets/animals/
-    - assets/animals/cow/
     - assets/buttons/brown_button.png
     - assets/buttons/brown_button.svg
     - assets/buttons/brown_button_pushed.png
