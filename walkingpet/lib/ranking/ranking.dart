@@ -45,15 +45,15 @@ class Ranking extends StatelessWidget {
           // ),
 
           // 2. 투명 레이어 (Top10 영역)
-          Positioned(
-            left: screenWidth * 0.07,
-            top: screenHeight * 0.55,
-            child: Container(
-              width: screenWidth * 0.85,
-              height: screenHeight * 0.35,
-              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
-            ),
-          ),
+          // Positioned(
+          //   left: screenWidth * 0.07,
+          //   top: screenHeight * 0.55,
+          //   child: Container(
+          //     width: screenWidth * 0.85,
+          //     height: screenHeight * 0.35,
+          //     color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
+          //   ),
+          // ),
 
           // 3. 내용
           // 전체적으로 padding 지정
