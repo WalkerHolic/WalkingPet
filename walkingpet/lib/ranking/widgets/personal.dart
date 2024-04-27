@@ -61,7 +61,7 @@ class PersonalRanking extends StatelessWidget {
             child: Rank(
               ranking: '897',
               characterId: '1',
-              nickname: '하이빅싸피야',
+              nickname: '하이빅싸피',
               step: '226,254',
             ),
           ),
