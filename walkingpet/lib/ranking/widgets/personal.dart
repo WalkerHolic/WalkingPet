@@ -56,13 +56,14 @@ class PersonalRanking extends StatelessWidget {
           ),
 
           // 3. 유저의 랭킹 표시
+          // 유진이 피드백: 나의 랭킹 897위 (226,254걸음 이런식으로 하면 어떨까?)
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Rank(
               ranking: '897',
               characterId: '1',
               nickname: '하이빅싸피',
-              step: '226,254',
+              step: '1,000',
             ),
           ),
 
