@@ -16,7 +16,11 @@ public class UserCharacterInfoResponse {
     private int health;
     private int power;
     private int defense;
+    private int basicHealth;
+    private int basicPower;
+    private int basicDefense;
     private int statPoint;
+    private int upgrade;
 
     public static UserCharacterInfoResponse from(UserCharacter userCharacter){
         return UserCharacterInfoResponse.builder()
@@ -29,6 +33,10 @@ public class UserCharacterInfoResponse {
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
                 .statPoint(userCharacter.getStatPoint())
+                .basicHealth(userCharacter.getHealth() - userCharacter.getUpgrade())
+                .basicPower(userCharacter.getPower() - userCharacter.getUpgrade())
+                .basicDefense(userCharacter.getDefense() - userCharacter.getUpgrade())
+                .upgrade(userCharacter.getUpgrade())
                 .build();
     }
 }
