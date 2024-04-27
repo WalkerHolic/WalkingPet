@@ -1,6 +1,8 @@
 package com.walkerholic.walkingpet.domain.ranking.service;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRankingResponse;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +29,16 @@ public class RankingService {
 //        System.out.println("----------------------------");
 //    }
 
-    public List<AccStepRankingResponse> getAccStepRanking() {
+    public PersonalStepRankingResponse getAccStepRanking() {
         //TODO: 동점 순위 일경우 가입 시간순으로
-        int rankLimit = 10;
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
-
 
         List<AccStepRankingResponse> accStepRankingList = new ArrayList<>();
         for (UserStep test : topUsers) {
             accStepRankingList.add(AccStepRankingResponse.from(test));
         }
-        return accStepRankingList;
+
+        UserPersonalStepRankingResponse test = new UserPersonalStepRankingResponse();
+        return PersonalStepRankingResponse.from(test, accStepRankingList);
     }
 }
