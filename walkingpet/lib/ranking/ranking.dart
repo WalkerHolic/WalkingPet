@@ -75,6 +75,17 @@ class Ranking extends StatelessWidget {
                         ' X ',
                         style: TextStyle(fontSize: 30),
                       ),
+                      // X버튼 관련 고민
+                      // IconButton(
+                      //   onPressed: () {
+                      //     Navigator.popUntil(context, ModalRoute.withName('/'));
+                      //   },
+                      //   icon: Icon(Icons.close),
+                      // ),
+                      // ElevatedButton(
+                      //   // onPressed: Navigator.pushNamed(context, '/home'),
+                      //   child: Text('data'),
+                      // ),
                     ],
                   ),
                 ),
