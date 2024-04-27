@@ -14,9 +14,6 @@ class Ranking extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('랭킹'),
-      // ),
       body: Stack(
         children: [
           // 1. 배경 이미지
@@ -27,38 +24,83 @@ class Ranking extends StatelessWidget {
             ),
           ),
 
-          // 2. 투명 레이어
+          // 2. 투명 레이어 (전체 영역)
           Positioned(
-            left: screenWidth * 0.04,
-            top: screenHeight * 0.1,
             child: Container(
-              width: screenWidth * 0.92,
-              height: screenHeight * 0.8,
+              width: screenWidth,
+              height: screenHeight,
+              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.4),
+            ),
+          ),
+
+          // // 2. 투명 레이어 (특정 영역만)
+          // Positioned(
+          //   left: screenWidth * 0.04,
+          //   top: screenHeight * 0.16,
+          //   child: Container(
+          //     width: screenWidth * 0.92,
+          //     height: screenHeight * 0.82,
+          //     color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
+          //   ),
+          // ),
+
+          // 2. 투명 레이어 (Top10 영역)
+          Positioned(
+            left: screenWidth * 0.07,
+            top: screenHeight * 0.55,
+            child: Container(
+              width: screenWidth * 0.85,
+              height: screenHeight * 0.35,
               color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
             ),
           ),
 
           // 3. 내용
-          // const Text(
-          //   '랭킹',
-          //   style: TextStyle(fontSize: 30),
-          // ),
-          const NesTabView(
-            tabs: [
-              NesTabItem(
-                child: YesterdayRanking(),
-                label: '개인',
-              ),
-              NesTabItem(
-                child: GroupRanking(),
-                label: '그룹',
-              ),
-              NesTabItem(
-                child: BattleRanking(),
-                label: '배틀',
-              ),
-            ],
-          ),
+          // 전체적으로 padding 지정
+          const Padding(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              children: [
+                // 3-1. 랭킹 & X버튼
+                Padding(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '랭킹',
+                        style: TextStyle(fontSize: 30),
+                      ),
+                      Text(
+                        ' X ',
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // 3-2. Tab : 개인(personal) / 그룹(Group) / 배틀(Battle)
+                Expanded(
+                  child: NesTabView(
+                    tabs: [
+                      NesTabItem(
+                        child: PersonalRanking(),
+                        label: '개인랭킹',
+                      ),
+                      NesTabItem(
+                        child: GroupRanking(),
+                        label: '그룹랭킹',
+                      ),
+                      NesTabItem(
+                        child: BattleRanking(),
+                        label: '배틀랭킹',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
