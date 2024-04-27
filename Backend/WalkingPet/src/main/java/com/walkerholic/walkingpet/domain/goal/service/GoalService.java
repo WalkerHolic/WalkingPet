@@ -82,7 +82,7 @@ public class GoalService {
 
     public UserItem getUserItemByUserIdAndItemName(int userId, String itemName){
         return userItemRepository.findByUserItemWithUserAndItemFetch(userId, itemName)
-                .orElseThrow(()-> new GlobalBaseException(USER_ITEM_NOT_FOUND));
+                .orElseThrow(()-> new GlobalBaseException(USER_ITEM_NOT_EXIST));
     }
 
     public UserDetail getUserDetailByUsers(Users user){

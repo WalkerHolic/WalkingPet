@@ -1,6 +1,5 @@
 package com.walkerholic.walkingpet.domain.users.entity;
 
-import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -88,10 +88,12 @@ public class UserCharacterService {
      */
     @Transactional(readOnly = false)
     public ResetStatResponse resetInitStatus(ResetInitStatusRequest resetInitStatusRequest) {
+        //TODO: userId 를 받아서 인가처리
         UserCharacter userCharacterInfo = getUserCharacter(resetInitStatusRequest.getUserCharacterId());
         Character character = characterRepository.findByCharacterId(userCharacterInfo.getCharacter().getCharacterId())
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.CHARACTER_NOT_FOUND));
-        UserDetail userDetail = userDetailRepository.findBySelectUserCharacterUserCharacterId(resetInitStatusRequest.getUserCharacterId())
+//        UserDetail userDetail = userDetailRepository.findBySelectUserCharacterUserCharacterId(resetInitStatusRequest.getUserCharacterId())
+        UserDetail userDetail = userDetailRepository.findUserDetailByUser(userCharacterInfo.getUser())
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
         if (userDetail.getInitStatus() == 1) {
