@@ -12,6 +12,9 @@ public class UserGoalInfo {
     public static final int WEEKLY_GOAL_COUNT = 7;
 
     private int step;
+
+    @Builder.Default
     private boolean[] dailyGoal = new boolean[DAILY_GOAL_COUNT];
+    @Builder.Default
     private boolean[] weeklyGoal = new boolean[WEEKLY_GOAL_COUNT];
 }
