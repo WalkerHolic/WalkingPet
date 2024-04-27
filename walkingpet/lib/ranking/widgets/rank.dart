@@ -16,43 +16,57 @@ class Rank extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 10,
+        vertical: 5,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            ranking,
-            style: const TextStyle(
-              fontSize: 23,
+          // 1. 순위
+          SizedBox(
+            width: 45,
+            child: Text(
+              ranking,
+              style: const TextStyle(
+                fontSize: 23,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(width: 7),
-          // Image.asset(
-          //   'assets/animals/cow/cow_walk.gif',
-          //   // characterId
-          //   height: 40,
-          //   // scale: 0.3,
-          // ),
-          // const SizedBox(width: 7),
-          Text(
-            nickname,
-            style: const TextStyle(
-              fontSize: 20,
+
+          // 2. 닉네임
+          SizedBox(
+            width: 130,
+            child: Text(
+              nickname,
+              style: const TextStyle(
+                fontSize: 17,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(width: 10),
-          Text(
-            step,
-            style: const TextStyle(
-              fontSize: 30,
-            ),
-          ),
-          const SizedBox(width: 3),
-          const Text(
-            '걸음',
-            style: TextStyle(
-              fontSize: 20,
+
+          // 3. 걸음 수
+          SizedBox(
+            width: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  step,
+                  style: const TextStyle(
+                    fontSize: 23,
+                    color: Color.fromARGB(255, 241, 86, 9),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                const Text(
+                  '걸음',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+                const SizedBox(width: 10),
+              ],
             ),
           ),
         ],
