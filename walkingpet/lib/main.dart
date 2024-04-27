@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battle.dart';
 import 'package:walkingpet/character/characterinfo.dart';
 import 'package:walkingpet/gacha/gacha.dart';
