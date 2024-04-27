@@ -18,7 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   pixelarticons: ^0.4.0
   flutter_svg: ^2.0.1
-  nes_ui:
+  nes_ui: ^0.20.0
   provider: ^6.1.2
   motion_tab_bar: ^2.0.4
 
@@ -42,6 +42,7 @@ flutter:
     - assets/backgrounds/day.png
     - assets/backgrounds/goal.png
     - assets/icons/
+    - assets/animals/
     - assets/animals/cow/
     - assets/animals/
     - assets/buttons/brown_button.png
