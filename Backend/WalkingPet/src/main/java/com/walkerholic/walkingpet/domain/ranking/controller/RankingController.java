@@ -4,6 +4,7 @@ import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop10RankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -41,7 +42,6 @@ public class RankingController {
     @GetMapping("/person/top10")
     @Operation(summary = "개인 랭킹 top 10 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 10 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = AccStepTop10RankingResponse.class)))
-//    @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
         log.info("개인 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
@@ -52,11 +52,22 @@ public class RankingController {
     @GetMapping("/person/top3")
     @Operation(summary = "개인 랭킹 top 3 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 3 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = AccStepTop3RankingResponse.class)))
-//    @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop3(@RequestParam("value") String value) {
         log.info("개인 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", value);
 
         AccStepTop3RankingResponse accStepRankingTop3 = rankingService.getAccStepRankingTop3();
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingTop3);
+    }
+
+    @GetMapping("/person/myrank")
+    @Operation(summary = "개인 랭킹 나의 순위 조회", description = "어제/누적/실시간 유저의 개인 랭킹 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 나의 순위 조회 성공", content = @Content(schema = @Schema(implementation = UserPersonalStepRankingResponse.class)))
+//    @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
+    public ResponseEntity<CommonResponseEntity> getMyPersonalRanking(@RequestParam("value") String value) {
+        int userId = 1;
+        log.info("개인 랭킹 나의 순위 조회 getMyPersonalRanking - value: {}, userId: {}", value, userId);
+
+        UserPersonalStepRankingResponse userAccStepRanking = rankingService.getUserAccStepRanking(userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);
     }
 }
