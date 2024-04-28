@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 
@@ -86,60 +85,73 @@ class CharacterInfo extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 15),
+              // 4. 레벨 & 경험치 바 & 경험치 아이템 사용 버튼 (+버튼)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: SizedBox(
+                  width: screenWidth * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // 4-1. 레벨
+                      const Text(
+                        'Lv. 7',
+                        style: TextStyle(
+                          fontSize: 23,
+                        ),
+                      ),
 
-              // 4. 레벨 & 경험치 바
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Lv. 7',
-                    style: TextStyle(
-                      fontSize: 23,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  SizedBox(
-                    width: 200,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 185,
-                          height: 19,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            child: LinearProgressIndicator(
-                              value: 0.7,
-                              backgroundColor: Colors.grey,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.green),
+                      // 4-2. 경험치 바
+                      SizedBox(
+                        width: 200,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 185,
+                              height: 19,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: LinearProgressIndicator(
+                                  value: 0.7,
+                                  backgroundColor: Colors.grey,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.green),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: SizedBox(
-                            width: 200,
-                            height: 23,
-                            child: Image.asset(
-                              'assets/icons/character_bar.png',
+                            Positioned(
+                              right: 0,
+                              child: SizedBox(
+                                width: 200,
+                                height: 23,
+                                child: Image.asset(
+                                  'assets/icons/character_bar.png',
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+
+                      // 4-3. 경험치 아이템 사용 버튼 (+버튼)
+                      SizedBox(
+                        width: 30,
+                        child: Image.asset(
+                          'assets/icons/yellow_plus_button.png',
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-              const SizedBox(height: 10),
 
+              // 5. 능력치 & 남은 능력치 포인트 & 초기화 버튼
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 5. 능력치: 체력, 공격력, 방어력
+                  // 5-1. 능력치: 체력, 공격력, 방어력
                   const Column(
                     children: [
                       CharacterInfoStat(
@@ -150,14 +162,10 @@ class CharacterInfo extends StatelessWidget {
                           statname: '방어력', point: 12, fix: 10, upgrade: 2),
                     ],
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
 
-                  // 6. & 7. 남은 능력치 포인트 & 초기화 버튼
                   Column(
                     children: [
-                      // 6. 남은 능력치 포인트
+                      // 5-2. 남은 능력치 포인트
                       const Text(
                         '남은 포인트',
                         style: TextStyle(
@@ -171,7 +179,7 @@ class CharacterInfo extends StatelessWidget {
                         ),
                       ),
 
-                      // 7. 초기화 버튼
+                      // 5-3. 초기화 버튼
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/characterinfo');
