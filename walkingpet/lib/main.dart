@@ -41,6 +41,12 @@ class MyApp extends StatelessWidget {
 
     // 2. TextTheme 생성하고, 모든 텍스트 스타일에 DungGeunMo 글꼴 적용!
     final TextTheme textTheme = baseTheme.textTheme.copyWith(
+      titleLarge:
+          baseTheme.textTheme.titleLarge?.copyWith(fontFamily: 'DungGeunMo'),
+      titleMedium:
+          baseTheme.textTheme.titleMedium?.copyWith(fontFamily: 'DungGeunMo'),
+      titleSmall:
+          baseTheme.textTheme.titleSmall?.copyWith(fontFamily: 'DungGeunMo'),
       headlineLarge:
           baseTheme.textTheme.headlineLarge?.copyWith(fontFamily: 'DungGeunMo'),
       headlineMedium: baseTheme.textTheme.headlineMedium
@@ -53,6 +59,14 @@ class MyApp extends StatelessWidget {
           baseTheme.textTheme.bodyMedium?.copyWith(fontFamily: 'DungGeunMo'),
       bodySmall:
           baseTheme.textTheme.bodySmall?.copyWith(fontFamily: 'DungGeunMo'),
+      labelLarge:
+          baseTheme.textTheme.labelLarge?.copyWith(fontFamily: 'DungGeunMo'),
+      labelMedium:
+          baseTheme.textTheme.labelMedium?.copyWith(fontFamily: 'DungGeunMo'),
+      labelSmall:
+          baseTheme.textTheme.labelSmall?.copyWith(fontFamily: 'DungGeunMo'),
+      displayLarge:
+          baseTheme.textTheme.displayLarge?.copyWith(fontFamily: 'DungGeunMo'),
     );
 
     // 3. 수정된 TextTheme + 기존 테마 (결합) => 새 테마 생성
