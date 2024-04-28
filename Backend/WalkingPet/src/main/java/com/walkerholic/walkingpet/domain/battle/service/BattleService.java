@@ -9,10 +9,15 @@ import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunction;
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
-import com.walkerholic.walkingpet.domain.character.service.LevelUpService;
+import com.walkerholic.walkingpet.domain.character.service.TestLevelUpService;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
+import com.walkerholic.walkingpet.domain.levelup.dto.CharacterLevelExperienceInfo;
+import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpInfo;
+import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
+import com.walkerholic.walkingpet.domain.levelup.function.LevelUpFunction;
+import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
@@ -42,7 +47,9 @@ public class BattleService {
     private final UserItemRepository userItemRepository;
     private final ItemRepository itemRepository;
     private final UserCharacterFunction userCharacterFunction;
+    private final TestLevelUpService testLevelUpService;
     private final LevelUpService levelUpService;
+    private final LevelUpFunction levelUpFunction;
 
     //1. 내 배틀 정보 확인
     public UserBattleInfo getUserBattleInfo(Integer userId){
@@ -155,14 +162,7 @@ public class BattleService {
         }
 
         //배틀을 통해 얻은 경험치 업데이트
-        userCharacter.addExperience(battleResult.getExperience());
-        if(userCharacter.getExperience() >= userCharacterFunction.getMaxExperience(userCharacter.getLevel())){
-            String levelup = levelUpService.levelUp(userCharacter);
-            System.out.println(levelup);
-        }
-        else{
-            userCharacterRepository.save(userCharacter);
-        }
+        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponse(userId, battleResult.getExperience());
 
         //배틀을 통해 얻은 레이팅 업데이트
         userDetail.updateBattleRating(battleResult.getRating());
@@ -172,6 +172,7 @@ public class BattleService {
                 .enemyInfo(enemyInfo)
                 .battleProgressInfo(battleProgressInfo)
                 .battleResult(battleResult)
+                .levelUpResponse(levelUpResponse)
                 .build();
     }
 
