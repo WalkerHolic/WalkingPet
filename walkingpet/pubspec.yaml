@@ -38,8 +38,9 @@ flutter:
 
   assets:
     - assets/
-    - assets/backgrounds/
-    - assets/icons/
     - assets/animals/
     - assets/animals/cow/
+    - assets/backgrounds/
     - assets/buttons/
+    - assets/icons/
+    - assets/images/
