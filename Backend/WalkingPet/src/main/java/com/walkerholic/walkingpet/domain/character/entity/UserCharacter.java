@@ -86,4 +86,10 @@ public class UserCharacter {
         this.statPoint += 5;
         this.level += 1;
     }
+
+    public void updateLevelUp(int level, int experience, int statPoint){
+        this.level = level;
+        this.experience = experience;
+        this.statPoint = statPoint;
+    }
 }
