@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 
@@ -214,6 +215,17 @@ class CharacterInfo extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+
+          // 4. (임시 코드) levelup 관련
+          Positioned(
+            bottom: 0,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/levelup');
+              },
+              child: const Text('Level UP Preview'),
             ),
           ),
         ],
