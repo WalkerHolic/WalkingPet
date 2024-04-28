@@ -15,13 +15,13 @@ class CharacterInfoStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // 1. 아이콘
           SizedBox(
-            width: 20,
+            width: 25,
             // height: 20,
             child: Image.asset(_getImagePath(statname)),
           ),
@@ -42,11 +42,11 @@ class CharacterInfoStat extends StatelessWidget {
 
           // 2. 체력 / 공격력 / 방어력
           SizedBox(
-            width: 65,
+            width: 70,
             child: Text(
               statname,
               style: const TextStyle(
-                fontSize: 17,
+                fontSize: 20,
               ),
               textAlign: TextAlign.center,
             ),
@@ -54,14 +54,14 @@ class CharacterInfoStat extends StatelessWidget {
 
           // 3. 능력치
           SizedBox(
-            width: 85,
+            width: 95,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   point.toString(),
                   style: const TextStyle(
-                    fontSize: 17,
+                    fontSize: 20,
                   ),
                 ),
                 const Text(
@@ -102,9 +102,10 @@ class CharacterInfoStat extends StatelessWidget {
 
           // 4. '+' 버튼
           SizedBox(
-            width: 30,
+            // width: 30,
             child: Image.asset(
-              'assets/icons/yellow_plus_button.png',
+              'assets/buttons/yellow_plus_button.png',
+              scale: 0.8,
             ),
             // child: Icon(
             //   Icons.add_box_sharp,
