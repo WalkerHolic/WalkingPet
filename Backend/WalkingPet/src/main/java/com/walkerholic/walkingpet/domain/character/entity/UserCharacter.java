@@ -87,8 +87,8 @@ public class UserCharacter {
         this.level += 1;
     }
 
-    public void updateLevelUp(int level, int experience, int statPoint){
-        this.level = level;
+    public void updateLevelUp(int nextLevel, int experience, int statPoint){
+        this.level = nextLevel;
         this.experience = experience;
         this.statPoint = statPoint;
     }
