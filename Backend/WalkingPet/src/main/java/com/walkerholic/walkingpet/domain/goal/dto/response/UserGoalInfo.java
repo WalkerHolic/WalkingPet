@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.goal.dto.response;
 
+import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,4 +18,6 @@ public class UserGoalInfo {
     private boolean[] dailyGoal = new boolean[DAILY_GOAL_COUNT];
     @Builder.Default
     private boolean[] weeklyGoal = new boolean[WEEKLY_GOAL_COUNT];
+
+    private LevelUpInfo levelUpInfo;
 }
