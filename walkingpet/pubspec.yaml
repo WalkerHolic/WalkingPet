@@ -40,7 +40,9 @@ flutter:
     - assets/
     - assets/animals/
     - assets/animals/cow/
+    - assets/animals/dragons/red/
     - assets/backgrounds/
     - assets/buttons/
     - assets/icons/
     - assets/images/
+    - assets/items/
