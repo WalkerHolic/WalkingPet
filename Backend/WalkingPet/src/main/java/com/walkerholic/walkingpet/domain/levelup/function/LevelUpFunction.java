@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.levelup.function;
 
+import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunction;
 import com.walkerholic.walkingpet.domain.levelup.dto.CharacterLevelExperienceInfo;
 import com.walkerholic.walkingpet.domain.levelup.dto.LevelUpReward;
@@ -58,9 +59,11 @@ public class LevelUpFunction {
                 .build();
     }
 
-    //레벨업이 되었을 때 얻게되는 보상의 정보
 
     /**
+     * 레벨업이 되었을 때 얻게되는 보상의 정보
+     * @param nowLevel 현재레벨
+     * @param nextLevel 다음레벨
      * @return 레벨업으로 받게 되는 스탯포인트, 얻게되는 상자와 수량
      */
     public LevelUpReward getLevelUpReward(int nowLevel, int nextLevel){
@@ -91,5 +94,17 @@ public class LevelUpFunction {
                 .statPoint((nextLevel - nowLevel)*LEVEL_UP_GET_STAT_POINT)
                 .itemReward(itemReward)
                 .build();
+    }
+
+    /**
+     * 현재 유저캐릭터의 상태가 레벨업을 할 수 있는 상태인지 체크해주는 함수
+     * @param nowLevel 현재 레벨
+     * @param nowExperience 현재 경험치
+     * @return 레벨업이 가능하다면 true, 못하면 false
+     */
+    public boolean checkLevelUpStatus(int nowLevel, int nowExperience){
+        if(nowExperience >= userCharacterFunction.getMaxExperience(nowLevel))
+            return true;
+        else return false;
     }
 }
