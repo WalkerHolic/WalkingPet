@@ -13,11 +13,14 @@ public class GachaResultResponse {
     private String characterName;
     private Integer grade;
 
-    public static GachaResultResponse from(Character character){
+    private boolean duplication;
+
+    public static GachaResultResponse from(Character character, boolean duplication){
         return GachaResultResponse.builder()
                 .characterId(character.getCharacterId())
                 .characterName(character.getName())
                 .grade(character.getGrade())
+                .duplication(duplication)
                 .build();
     }
 }
