@@ -29,7 +29,7 @@ public class GoalController {
     }
 
     @GetMapping("/reward")
-    public ResponseEntity<CommonResponseEntity> getGoalReward(@RequestParam(name = "userId")int userId, @RequestParam(name = "step")int goalStep){
+    public ResponseEntity<CommonResponseEntity> getGoalReward(@RequestParam(name = "userId")int userId, @RequestParam(name = "goalStep")int goalStep){
         UserGoalInfo userGoalInfo = goalService.getGoalReward(userId, goalStep);
         log.info("GaolController userGoalInfo - userId: {}", userId);
 
