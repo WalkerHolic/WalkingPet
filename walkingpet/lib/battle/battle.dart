@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
+import 'package:walkingpet/common/star.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class Battle extends StatelessWidget {
@@ -32,13 +33,13 @@ class Battle extends StatelessWidget {
                 child: Column(
                   children: [
                     MainFontStyle(size: 40, text: "오리빠따죠"),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        MainFontStyle(size: 30, text: "점수:"),
-                        MainFontStyle(size: 50, text: "1357")
-                      ],
-                    )
+                    MainFontStyle(size: 30, text: "점수: 1357"),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Star(
+                      count: 3,
+                    ),
                   ],
                 ),
               ),
