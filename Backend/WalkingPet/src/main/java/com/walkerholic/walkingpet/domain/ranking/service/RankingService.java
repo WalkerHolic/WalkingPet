@@ -21,7 +21,7 @@ import java.util.List;
 public class RankingService {
     private final UserStepRepository userStepRepository;
 
-    /**
+    /*
      * 누적 걸음수 랭킹 가져오기
      */
     public PersonalStepRankingResponse getAccStepRanking() {
@@ -38,7 +38,7 @@ public class RankingService {
         return PersonalStepRankingResponse.from(userAccStepRanking, accStepRankingList);
     }
 
-    /**
+    /*
      * 누적 걸음수 기준으로 top 10 랭킹 가져오기
      */
     public AccStepTop10RankingResponse getAccStepRankingTop10() {
@@ -53,7 +53,7 @@ public class RankingService {
         return AccStepTop10RankingResponse.from(accStepRankingList);
     }
 
-    /**
+    /*
      * 누적 걸음수 기준으로 top 3 개인 랭킹 가져오기
      */
     public AccStepTop3RankingResponse getAccStepRankingTop3() {
@@ -68,7 +68,7 @@ public class RankingService {
         return AccStepTop3RankingResponse.from(accStepRankingList);
     }
 
-    /**
+    /*
      * 누적 걸음수 기준으로 개인 랭킹에서 해당 유저의 랭킹 가져오기
      */
     public UserPersonalStepRankingResponse getUserAccStepRanking(int userId) {
@@ -78,5 +78,20 @@ public class RankingService {
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
 
         return UserPersonalStepRankingResponse.from(userRanking, userStep.getAccumulationStep());
+    }
+
+    /*
+    사용자들의 누적 걸음수 데이터 가져오기
+    userId, nickname, step
+     */
+    public List<AccStepTop10Ranking> getUserAccStepList() {
+        //TODO: Redis 데이터로 변경
+        List<UserStep> userStepList = userStepRepository.findUserStepList();
+
+        List<AccStepTop10Ranking> accStepRankingList = new ArrayList<>();
+        for (UserStep userStep : userStepList) {
+            accStepRankingList.add(AccStepTop10Ranking.from(userStep));
+        }
+        return accStepRankingList;
     }
 }
