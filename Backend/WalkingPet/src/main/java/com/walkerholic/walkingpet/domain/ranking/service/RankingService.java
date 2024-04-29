@@ -1,8 +1,8 @@
 package com.walkerholic.walkingpet.domain.ranking.service;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop10Ranking;
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop10RankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRankingResponse;
@@ -28,9 +28,9 @@ public class RankingService {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
-        List<AccStepTop10Ranking> accStepRankingList = new ArrayList<>();
+        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
         for (UserStep userStep : topUsers) {
-            accStepRankingList.add(AccStepTop10Ranking.from(userStep));
+            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
         }
 
         int userId = 1;
@@ -41,16 +41,16 @@ public class RankingService {
     /*
      * 누적 걸음수 기준으로 top 10 랭킹 가져오기
      */
-    public AccStepTop10RankingResponse getAccStepRankingTop10() {
+    public AccStepRankingResponse getAccStepRankingTop10() {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
-        List<AccStepTop10Ranking> accStepRankingList = new ArrayList<>();
+        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
         for (UserStep userStep : topUsers) {
-            accStepRankingList.add(AccStepTop10Ranking.from(userStep));
+            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
         }
 
-        return AccStepTop10RankingResponse.from(accStepRankingList);
+        return AccStepRankingResponse.from(accStepRankingList);
     }
 
     /*
@@ -84,13 +84,13 @@ public class RankingService {
     사용자들의 누적 걸음수 데이터 가져오기
     userId, nickname, step
      */
-    public List<AccStepTop10Ranking> getUserAccStepList() {
+    public List<AccStepRankingInfo> getUserAccStepList() {
         //TODO: Redis 데이터로 변경
         List<UserStep> userStepList = userStepRepository.findUserStepList();
 
-        List<AccStepTop10Ranking> accStepRankingList = new ArrayList<>();
+        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
         for (UserStep userStep : userStepList) {
-            accStepRankingList.add(AccStepTop10Ranking.from(userStep));
+            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
         }
         return accStepRankingList;
     }

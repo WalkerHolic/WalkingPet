@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.global.config;
 
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,49 +26,25 @@ public class RedisConfig {
         return new LettuceConnectionFactory(host, port);
     }
 
-//    @Bean
-//    public RedisTemplate<String, Integer> redisTemplateForStepCount() {
-//        RedisTemplate<String, Integer> redisTemplate = new RedisTemplate<>();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory());
-//        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Integer.class));
-//        redisTemplate.setEnableTransactionSupport(true);
-//        return redisTemplate;
-//    }
-
+    // 데이터 저장 가능
     @Bean
-    public RedisTemplate<String, Integer> redisTemplateForStepCount() {
-        RedisTemplate<String, Integer> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+    public RedisTemplate<String, AccStepRankingInfo> accStepRankingList(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, AccStepRankingInfo> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Integer.class));
-        redisTemplate.setEnableTransactionSupport(true);
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(AccStepRankingInfo.class));
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 
-//    @Bean
-//    public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate) {
-//        return redisTemplate.opsForZSet();
-//    }
-
-//    @Bean
-//    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory);
-//        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
-//        redisTemplate.setEnableTransactionSupport(true);
-//        return redisTemplate;
-//    }
     @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+    public RedisTemplate<String, Object> redisTemplateObject(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
-    }
-    @Bean
-    public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate) {
-        return redisTemplate.opsForZSet();
     }
 
 }
