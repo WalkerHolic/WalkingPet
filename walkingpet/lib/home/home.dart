@@ -4,9 +4,30 @@ import 'package:walkingpet/common/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
+import 'package:walkingpet/services/character/checkstep.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    initStepData(); // 위젯이 로드될 때 fetchData 호출
+  }
+
+  Future<void> initStepData() async {
+    try {
+      var jsonData = await checkStep();
+      print(jsonData);
+    } catch (e) {
+      print('Failed to load data: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

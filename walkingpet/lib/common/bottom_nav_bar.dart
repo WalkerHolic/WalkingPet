@@ -81,7 +81,7 @@ void _onItemTapped(BuildContext context, int index, int selectedIndex) {
       Navigator.pushReplacementNamed(context, '/home');
       break;
     case 3:
-      Navigator.pushReplacementNamed(context, '/battle');
+      Navigator.pushReplacementNamed(context, '/battleready');
       break;
     case 4:
       Navigator.pushReplacementNamed(context, '/group');
