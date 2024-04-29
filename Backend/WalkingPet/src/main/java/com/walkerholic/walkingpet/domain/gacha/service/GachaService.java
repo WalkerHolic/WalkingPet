@@ -50,6 +50,7 @@ public class GachaService {
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
         int grade = decideGrade(user,boxType);
+        boolean duplication = false;
 
         Character character = characterRepository.findRandomByGrade(grade)
                 .orElseThrow(() -> new GlobalBaseException(CHARACTER_NOT_FOUND));
@@ -59,12 +60,13 @@ public class GachaService {
         if(userCharacter.isPresent()){
             userCharacter.get().setUpgrade(userCharacter.get().getUpgrade() + UPGRADE_INCREMENT);
             userCharacterRepository.save(userCharacter.get());
+            duplication = true;
         }
         else{
             userCharacterRepository.save(new UserCharacter(character,user));
         }
 
-        return  GachaResultResponse.from(character);
+        return  GachaResultResponse.from(character,duplication);
     }
 
     @Transactional
