@@ -29,17 +29,59 @@ class Battle extends StatelessWidget {
                 color: Colors.white.withOpacity(0.6), // 투명한 흰색 배경 추가
                 borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 처리
               ),
-              child: const Center(
+              child: Center(
                 child: Column(
                   children: [
-                    MainFontStyle(size: 40, text: "오리빠따죠"),
-                    MainFontStyle(size: 30, text: "점수: 1357"),
-                    SizedBox(
+                    const MainFontStyle(size: 40, text: "오리빠따죠"),
+                    const MainFontStyle(size: 30, text: "점수: 1357"),
+                    const SizedBox(
                       height: 100,
                     ),
-                    Star(
-                      count: 3,
+                    Transform.translate(
+                      offset: const Offset(0, 60),
+                      child: const Star(
+                        count: 2,
+                      ),
                     ),
+                    Image.asset(
+                      'assets/animals/cow/cow_idle.gif',
+                    ),
+                    Transform.translate(
+                      offset: const Offset(0, -20),
+                      child: const MainFontStyle(size: 30, text: "Lv.47"),
+                    ),
+                    Transform.translate(
+                      offset: const Offset(0, -15),
+                      child: Image.asset(
+                        'assets/buttons/character_change_button.png',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Stack(
+                      children: [
+                        Image.asset('assets/buttons/battle_start_button.png'),
+                        const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Battle Start!",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                "일일 남은 횟수: 5/10",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
