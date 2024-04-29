@@ -30,7 +30,7 @@ import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GoalService {
+public class    GoalService {
     private final GoalRepository goalRepository;
     private final UsersRepository usersRepository;
     private final UserStepRepository userStepRepository;
@@ -69,13 +69,11 @@ public class GoalService {
     }
 
     public Users getUserByUserId(int userId){
-
         return usersRepository.findUsersByUserId(userId)
                 .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
     }
 
     public Goal getUserGoalByUser(Users user){
-
         return goalRepository.findGoalByUser(user)
                 .orElseThrow(()->new GlobalBaseException(USER_GOAL_NOT_FOUND));
     }

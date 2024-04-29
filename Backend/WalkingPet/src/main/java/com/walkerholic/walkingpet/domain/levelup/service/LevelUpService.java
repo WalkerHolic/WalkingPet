@@ -35,7 +35,7 @@ public class LevelUpService {
 
         if(levelUpFunction.checkLevelUp(characterLevelExperienceInfo,getExperience)){
             return LevelUpResponse.builder()
-                    .isLevelUp(false)
+                    .isLevelUp(true)
                     .levelUpInfo(getLevelUpInfo(userId, userCharacter, getExperience))
                     .build();
         }
@@ -60,6 +60,7 @@ public class LevelUpService {
 
         //1. 캐릭터 정보 업데이트하기
         userCharacter.updateLevelUp(updateCharacterInfo.getNowLevel(), updateCharacterInfo.getNowExperience(), levelUpReward.getStatPoint());
+        userCharacter.addStatPoint(levelUpReward.getStatPoint());
         userCharacterRepository.save(userCharacter);
 
         //2. 레벨업 보상 업데이트하기
@@ -68,6 +69,7 @@ public class LevelUpService {
             userItem.addItemQuantity(levelUpReward.getItemReward().get(itemName));
             userItemRepository.save(userItem);
         }
+
 
         return LevelUpInfo.builder()
                 .nowLevel(characterInfo.getNowLevel())

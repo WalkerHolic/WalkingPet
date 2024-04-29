@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ import java.util.Optional;
 /**
  * 추후 수정할 최적화할 예정
  */
-public class LevelUpService {
+public class TestLevelUpService {
     private final UserCharacterRepository userCharacterRepository;
     private final UserItemRepository userItemRepository;
     private final UserCharacterFunction userCharacterFunction;

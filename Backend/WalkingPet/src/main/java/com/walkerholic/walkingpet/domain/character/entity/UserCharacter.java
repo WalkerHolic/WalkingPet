@@ -92,4 +92,8 @@ public class UserCharacter {
         this.experience = experience;
         this.statPoint = statPoint;
     }
+
+    public void addStatPoint(int statPoint){
+        this.statPoint += statPoint;
+    }
 }
