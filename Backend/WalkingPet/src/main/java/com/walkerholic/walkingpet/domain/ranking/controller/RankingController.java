@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.ranking.controller;
 
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop10Ranking;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop10RankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
@@ -8,6 +9,7 @@ import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRa
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
+import com.walkerholic.walkingpet.global.redis.service.RedisRankingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,12 +22,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/ranking")
 public class RankingController {
     private final RankingService rankingService;
+    private final RedisRankingService redisRankingService;
 
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
@@ -69,5 +76,34 @@ public class RankingController {
 
         UserPersonalStepRankingResponse userAccStepRanking = rankingService.getUserAccStepRanking(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);
+    }
+
+    @GetMapping("/redis")
+    @Operation(summary = "redis test", description = "")
+    public ResponseEntity<CommonResponseEntity> redisTest() {
+        log.info("redis test redisTest");
+
+        List<AccStepTop10Ranking> userAccStepList = rankingService.getUserAccStepList();
+
+//        Map<String, AccStepTop10Ranking> userStepsInfo = new HashMap<>();
+//        for (AccStepTop10Ranking stepInfo: userAccStepList) {
+//            userStepsInfo.put("user_step", stepInfo);
+//        }
+//        for (AccStepTop10Ranking stepInfo: userAccStepList) {
+//            userStepsInfo.put(stepInfo.getNickname(), stepInfo.getStep());
+////            redisRankingService.saveUserSteps(userStepsInfo);
+//        }
+
+//        Map<String, UserStep> userSteps = new HashMap<>();
+//        userSteps.put("user1", new UserStep("user1", "John", 1000));
+//        userSteps.put("user2", new UserStep("user2", "Alice", 1500));
+//        userSteps.put("user3", new UserStep("user3", "Bob", 800));
+
+        // 사용자 정보를 Redis에 저장
+//        Map<String, Integer> userStepsInfo = new HashMap<>();
+//        userStepsInfo.put("test", 1234);
+//        redisRankingService.saveUserSteps(userStepsInfo);
+        redisRankingService.saveUserStepsTest();
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 }
