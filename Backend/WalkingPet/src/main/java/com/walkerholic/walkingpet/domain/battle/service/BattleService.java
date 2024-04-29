@@ -13,8 +13,6 @@ import com.walkerholic.walkingpet.domain.character.service.TestLevelUpService;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
-import com.walkerholic.walkingpet.domain.levelup.dto.CharacterLevelExperienceInfo;
-import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpInfo;
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import com.walkerholic.walkingpet.domain.levelup.function.LevelUpFunction;
 import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;

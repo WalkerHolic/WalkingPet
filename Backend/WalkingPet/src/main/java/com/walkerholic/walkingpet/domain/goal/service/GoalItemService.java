@@ -7,13 +7,10 @@ import com.walkerholic.walkingpet.domain.goal.entity.Goal;
 import com.walkerholic.walkingpet.domain.goal.repository.GoalRepository;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
-import com.walkerholic.walkingpet.domain.levelup.dto.LevelUpReward;
-import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpInfo;
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import com.walkerholic.walkingpet.domain.levelup.function.LevelUpFunction;
 import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
-import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
@@ -33,12 +30,14 @@ import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfo.W
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
 /**
- * 보상으로 경험치를 그냥 주는 GoalService
+ * 보상으로 경험치 아이템을 지급할때 사용하는 GoalService
+ * 이 경우에 UserGoalInfo에는 LevelUpResponse가 없어야함
  */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GoalService {
+public class GoalItemService {
     private final GoalRepository goalRepository;
     private final UsersRepository usersRepository;
     private final UserStepRepository userStepRepository;
@@ -72,10 +71,6 @@ public class GoalService {
                 .step(userStep)
                 .dailyGoal(getDailyGoalStatus(goal.getDailyGoal()))
                 .weeklyGoal(getWeeklyGoalStatus(goal.getWeeklyGoal()))
-                .levelUpResponse(LevelUpResponse.builder()
-                        .isLevelUp(false)
-                        .levelUpInfo(null)
-                        .build())
                 .build();
     }
 
@@ -94,7 +89,6 @@ public class GoalService {
                 .step(userStep)
                 .dailyGoal(getDailyGoalStatus(goal.getDailyGoal()))
                 .weeklyGoal(getWeeklyGoalStatus(goal.getWeeklyGoal()))
-                .levelUpResponse(updateDailyGoalStatus(userId, goal, goalStep))
                 .build();
     }
 
@@ -163,96 +157,61 @@ public class GoalService {
      * @param userId 유저 아이디
      * @param goal 목표
      * @param step 걸음 수
-     * return 경험치를 얻었는데 레벨업이 되었다면 true 반환
      */
-    public LevelUpResponse updateDailyGoalStatus(int userId, Goal goal, int step){
+    public void updateDailyGoalStatus(int userId, Goal goal, int step){
         UserDetail userDetail = getUserDetailByUserId(userId);
         UserCharacter userCharacter = getUserCharacterByUserDetail(userDetail);
 
         //int로 저장되어있는 일일 목표 값을 달성여부 boolean형 배열로 변환
         boolean[] dailyGoalStatus = getDailyGoalStatus(goal.getDailyGoal());
         System.out.println("원본 일일목표" +dailyGoalStatus.length);
-        //아이템기능이 들어왔을 때 사용할 코드(이하 I)
         HashMap<String, Integer> reward = new HashMap<>();
         try {
             if(step == 0){
                 System.out.println("0보");
                 dailyGoalStatus[0] = true;
-                //보상 정보 저장(경험치 3)
-                updateGoalRewardExp(userCharacter,GOAL_REWARD_EXP_ATTENDANCE);
-//                I
-//                reward.put("경험치 아이템", 1);
+                reward.put("경험치 아이템", 1);
             }
             else if(step == 3000){
                 System.out.println("3000보");
                 dailyGoalStatus[1] = true;
-                //보상 정보 저장(경험치 5)
-                updateGoalRewardExp(userCharacter,GOAL_REWARD_EXP_NORMAL);
-//                I
-//                reward.put("경험치 아이템", 2);
+                reward.put("경험치 아이템", 2);
             }
             else if(step == 5000){
                 System.out.println("5000보");
                 dailyGoalStatus[2] = true;
-                //보상 정보 저장(경험치 5)
-                updateGoalRewardExp(userCharacter,GOAL_REWARD_EXP_NORMAL);
                 //주간목표 달성 기준
                 updateWeeklyGoalStatus(goal);
-
-//                I
-//                reward.put("경험치 아이템", 2);
+                reward.put("경험치 아이템", 2);
             }
             else if(step == 7000){
                 System.out.println("7000보");
                 dailyGoalStatus[3] = true;
-                //보상 정보 저장(일반상자, 경험치 5)
-                updateGoalRewardExp(userCharacter,GOAL_REWARD_EXP_NORMAL);
-                getGoalRewardBox(userId, NORMAL_BOX);
-//                I
-//                reward.put("경험치 아이템", 2);
-//                reward.put("일반 상자", 1);
+                reward.put("경험치 아이템", 2);
+                reward.put("일반 상자", 1);
             }
             else if(step == 10000){
                 System.out.println("10000보");
                 dailyGoalStatus[4] = true;
-                //보상 정보 저장(고급상자 경험치 5)
-                updateGoalRewardExp(userCharacter,GOAL_REWARD_EXP_NORMAL);
-                getGoalRewardBox(userId, LUXURY_BOX);
-//                I
-//                reward.put("경험치 아이템", 2);
-//                reward.put("고급 상자", 1);
+                reward.put("경험치 아이템", 2);
+                reward.put("고급 상자", 1);
             }
             else{
                 throw new Exception("보상에 해당하지 않는 걸음수가 입력값으로 들어왔습니다.");
             }
 
             System.out.println("일일목표 적용 결과 : " + Arrays.toString(dailyGoalStatus));
-
+            
+            //일일 목표 업데이트
             int resultDailyGoalValue = booleanArrayStatusToInt(dailyGoalStatus);
             goal.setDailyGoal(resultDailyGoalValue);
             goalRepository.save(goal);
 
-            System.out.println("변경후 일일목표" + goal.getDailyGoal().toString());
+            //보상으로 받은 정보 저장하기
+            getGoalRewardBox(userId, reward);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
-        }
-
-        //레벨업 여부 판단
-        int nowLevel = userCharacter.getLevel();
-        int nowExperience = userCharacter.getExperience();
-        //레벨업
-        if(levelUpFunction.checkLevelUpStatus(nowLevel, nowExperience)){
-            return LevelUpResponse.builder()
-                    .isLevelUp(true)
-                    .levelUpInfo(levelUpService.updateLevelUpStatus(userId))
-                    .build();
-        }
-        else{
-            return LevelUpResponse.builder()
-                    .isLevelUp(false)
-                    .levelUpInfo(null)
-                    .build();
         }
     }
 
@@ -270,34 +229,23 @@ public class GoalService {
 
         int resultWeeklyGoalValue = booleanArrayStatusToInt(weeklyGoalStatus);
 
+        //어짜피 데일리 목표를 업데이트 하면서 주간 목표를 업데이트 함.
+        //골에는 데일리와 주간 동시에 가지고 있으므로 어짜피 데일리 마지막에서 save해줄거라면 굳이 여기서 안해줘도 됨
         goal.setWeeklyGoal(resultWeeklyGoalValue);
-        //어짜피 데일리 목표를 업데이트 하면서 주간 목표를 업데이트 하는거임!
-        //골에는 데일리와 주간 동시에 가지고 있으므로 어짜피 데일리 마지막에서 save해줄거라면 굳이 여기서 안해줘도 될것 같다는 생각.
-        //goalRepository.save(goal);
     }
 
     /**
      * 보상으로 받은 박스 아이템 저장
-     * @param userId 유저의 아이디
-     * @param itemName 아이템 이름
+     * @param userId 유저 아이디
+     * @param reward 보상으로 받은 아이템 정보
      */
-    public void getGoalRewardBox(int userId, String itemName){
-        UserItem userItem = getUserItemByUserIdAndItemName(userId,itemName);
-        userItem.addItemQuantity(GOAL_REWARD_BOX_QUANTITY);
-        userItemRepository.save(userItem);
+    public void getGoalRewardBox(int userId, HashMap<String, Integer> reward){
+        for(String itemName : reward.keySet()){
+            UserItem userItem = getUserItemByUserIdAndItemName(userId,itemName);
+            userItem.addItemQuantity(reward.get(userItem));
+            userItemRepository.save(userItem);
+        }
     }
-
-    /**
-     * 보상으로 받은 경험치 유저캐릭터에 저장
-     * @param userCharacter 경험치 결과를 저장할 userCharacter
-     * @param rewardExp 보상으로 받은 경험치 양
-     */
-    public void updateGoalRewardExp(UserCharacter userCharacter, int rewardExp){
-        userCharacter.addExperience(rewardExp);
-        userCharacterRepository.save(userCharacter);
-    }
-
-    //boolean형 배열을 정수값으로 만들기
 
     /**
      * true false로 이루어진 배열을 2진수로 바꿔서 정수로 표현해주는 함수
