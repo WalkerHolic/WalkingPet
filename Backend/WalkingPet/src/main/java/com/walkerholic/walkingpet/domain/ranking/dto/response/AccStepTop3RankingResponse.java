@@ -1,6 +1,5 @@
 package com.walkerholic.walkingpet.domain.ranking.dto.response;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop10Ranking;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
 import lombok.Builder;
 import lombok.Getter;
