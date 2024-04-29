@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.goal.dto.response;
 
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpInfo;
+import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,5 +20,6 @@ public class UserGoalInfo {
     @Builder.Default
     private boolean[] weeklyGoal = new boolean[WEEKLY_GOAL_COUNT];
 
-    private LevelUpInfo levelUpInfo;
+    //나중에 경험치가 아이템으로 바뀌면 지움!
+    private LevelUpResponse levelUpResponse;
 }
