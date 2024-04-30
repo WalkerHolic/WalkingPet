@@ -17,6 +17,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  SystemChannels.navigation.setMethodCallHandler((MethodCall call) async {
+    if (call.method == 'popRoute') {
+      return Future.value(false); // 뒤로 가기 이벤트를 무시합니다.
+    }
+    return Future.value(true);
+  });
 
   _requestPermissions();
 }
