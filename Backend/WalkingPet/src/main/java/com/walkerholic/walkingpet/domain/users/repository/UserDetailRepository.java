@@ -19,4 +19,6 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
     @Modifying
     @Query("UPDATE UserDetail ud SET ud.selectUserCharacter.userCharacterId = :userCharacterId WHERE ud.user.userId = :userId")
     void updateUserCharacterIdByUserId(Integer userId, Integer userCharacterId);
+
+    int findBattleRatingByUserUserId(Integer userId);
 }
