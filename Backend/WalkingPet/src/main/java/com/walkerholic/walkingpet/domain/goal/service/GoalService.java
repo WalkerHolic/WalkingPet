@@ -109,6 +109,10 @@ public class GoalService {
         String dailyGoalString = String.format("%05d", Integer.parseInt(Integer.toBinaryString(dailyGoal)));
         System.out.println("dailyGoalString == " + dailyGoalString);
 
+        System.out.println();
+        System.out.println(dailyGoalString);
+        System.out.println();
+
         for(int i = DAILY_GOAL_COUNT-1 ; i >= 0 ; i--){
             try{
                 if(dailyGoalString.charAt(i) == '1'){
@@ -296,8 +300,6 @@ public class GoalService {
         userCharacter.addExperience(rewardExp);
         userCharacterRepository.save(userCharacter);
     }
-
-    //boolean형 배열을 정수값으로 만들기
 
     /**
      * true false로 이루어진 배열을 2진수로 바꿔서 정수로 표현해주는 함수
