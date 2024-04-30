@@ -137,6 +137,14 @@ public class UserCharacterService {
         userStep.updateDailyStep(frontStep);
     }
 
+    /*
+        사용자의 캐릭터 정보 가져오기
+     */
+    @Transactional(readOnly = true)
+    public void getUserCharacterInfoList(int userId) {
+
+    }
+
     /**
      * 사용자의 캐릭터 정보 가져오기(내부 메서드)
      */
