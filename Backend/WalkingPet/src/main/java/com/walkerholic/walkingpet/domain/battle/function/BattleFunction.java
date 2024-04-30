@@ -4,8 +4,6 @@ import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.CharacterInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.UserRatingDTO;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleProgressInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResult;
-import com.walkerholic.walkingpet.domain.battle.dto.response.EnemyInfo;
-import com.walkerholic.walkingpet.domain.battle.dto.response.RewardItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +26,6 @@ public class BattleFunction {
     static final int LOSE_RATING = -5;
 
     static boolean win = true;
-
-    private final RewardFunction rewardFunction;
 
     // 수가 비슷한 유저와 매칭시키는 함수
     public int matchingBattleUser(UserRatingDTO userRatingDTO, List<UserRatingDTO> userRatingList){
@@ -167,21 +163,17 @@ public class BattleFunction {
 
     public BattleResult getBattleResult(Integer userId){
         if(win){
-            RewardItem rewardItem = rewardFunction.getRewardItem(win);
             return BattleResult.builder()
                     .battleResult(win)
                     .experience(WIN_EXP)
                     .rating(WIN_RATING)
-                    .battleReward(rewardItem)
                     .build();
         }
         else{
-            RewardItem rewardItem = rewardFunction.getRewardItem(win);
             return BattleResult.builder()
                     .battleResult(win)
                     .experience(LOSE_EXP)
                     .rating(LOSE_RATING)
-                    .battleReward(rewardItem)
                     .build();
         }
     }
