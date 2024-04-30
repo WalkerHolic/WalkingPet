@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.battle.service;
 
+import com.walkerholic.walkingpet.domain.battle.dto.response.UserBattleInfoDTO;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
@@ -20,6 +21,13 @@ public class TestBattleService {
     private final UserCharacterRepository userCharacterRepository;
     private final UserDetailRepository userDetailRepository;
 
+    //1. 사용자의 배틀 정보 반환
+//    public UserBattleInfoDTO getUserBattleInfo(int userId){
+//
+//        return
+//    }
+
+    //2. 배틀 결과 반환
 
 
 
