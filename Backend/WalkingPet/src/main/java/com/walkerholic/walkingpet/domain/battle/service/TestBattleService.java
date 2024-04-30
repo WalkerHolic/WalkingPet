@@ -28,6 +28,9 @@ public class TestBattleService {
 //    }
 
     //2. 배틀 결과 반환
+    public String testNickname(int userId){
+        return usersRepository.findNicknameByUserId(userId);
+    }
 
 
 
