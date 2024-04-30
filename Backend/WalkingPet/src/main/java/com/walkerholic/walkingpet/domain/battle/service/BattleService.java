@@ -63,15 +63,10 @@ public class BattleService {
 
     //3. 배틀 시작
     public BattleResponse startBattle(int userId){
-        Users users = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
-
-        System.out.println(users.toString());
+        Users users = getUser(userId);
 
         UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
                 .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
-
-        System.out.println(userDetail.toString());
 
         //배틀횟수 1회 차감 --> 만약 배틀횟수가 0회일때 여기서 예외처리 해줘야함!
         userDetail.battleCountDeduction();
@@ -160,7 +155,7 @@ public class BattleService {
     }
 
     private Users getUser(int userId){
-        return usersRepository.findUsersByUserId(userId)
+        return usersRepository.findById(userId)
             .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
     }
 

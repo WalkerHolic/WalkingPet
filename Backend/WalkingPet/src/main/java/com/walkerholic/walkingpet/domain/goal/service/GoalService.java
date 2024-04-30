@@ -317,7 +317,7 @@ public class GoalService {
     }
 
     public Users getUserByUserId(int userId){
-        return usersRepository.findUsersByUserId(userId)
+        return usersRepository.findById(userId)
                 .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
     }
 
