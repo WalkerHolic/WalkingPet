@@ -16,9 +16,9 @@ public class UserCharacterInfoResponse {
     private int health;
     private int power;
     private int defense;
-    private int basicHealth;
-    private int basicPower;
-    private int basicDefense;
+    private int addHealth;
+    private int addPower;
+    private int addDefense;
     private int statPoint;
     private int upgrade;
 
@@ -33,9 +33,9 @@ public class UserCharacterInfoResponse {
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
                 .statPoint(userCharacter.getStatPoint())
-                .basicHealth(userCharacter.getHealth() - userCharacter.getUpgrade())
-                .basicPower(userCharacter.getPower() - userCharacter.getUpgrade())
-                .basicDefense(userCharacter.getDefense() - userCharacter.getUpgrade())
+                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth())
+                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
+                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
                 .upgrade(userCharacter.getUpgrade())
                 .build();
     }
