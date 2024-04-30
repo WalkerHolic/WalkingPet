@@ -62,12 +62,12 @@ class CharacterChange extends StatelessWidget {
             children: [
               // 3-1. 캐릭터 선택 박스
               const SizedBox(
-                height: 80,
+                height: 70,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: SizedBox(
-                  height: 300,
+                  height: screenHeight * 0.37,
                   width: screenWidth * 0.7,
                   child: GridView.builder(
                     gridDelegate:

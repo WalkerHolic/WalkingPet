@@ -26,7 +26,7 @@ class GachaBox extends StatelessWidget {
             Image.asset(
               boxImage,
               width: 100,
-              height: 150,
+              height: 95, // 상자 넘쳐서 150 -> 95로 줄임
             ),
             Positioned(
               top: 0,
