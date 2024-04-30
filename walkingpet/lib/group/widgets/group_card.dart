@@ -45,7 +45,7 @@ class GroupCard extends StatelessWidget {
                   Text(
                     groupName,
                     style: const TextStyle(
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -55,7 +55,7 @@ class GroupCard extends StatelessWidget {
                   Text(
                     description,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       backgroundColor: Colors.white.withOpacity(0.6),
                     ),
                   ),
