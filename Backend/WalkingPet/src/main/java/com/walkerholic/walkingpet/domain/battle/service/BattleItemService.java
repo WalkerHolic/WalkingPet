@@ -60,7 +60,7 @@ public class BattleItemService {
     //1. 내 배틀 정보 확인
     public UserBattleInfo getUserBattleInfo(Integer userId){
 
-        Users users = usersRepository.findUsersByUserId(userId)
+        Users users = usersRepository.findById(userId)
                 .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
 
         UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
@@ -78,8 +78,7 @@ public class BattleItemService {
 
     //3. 배틀 시작
     public BattleResponse startBattle(int userId){
-        Users users = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
+        Users users = getUser(userId);
 
         System.out.println(users.toString());
 
@@ -188,7 +187,7 @@ public class BattleItemService {
     }
 
     private Users getUser(int userId){
-        return usersRepository.findUsersByUserId(userId)
+        return usersRepository.findById(userId)
             .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
     }
 
