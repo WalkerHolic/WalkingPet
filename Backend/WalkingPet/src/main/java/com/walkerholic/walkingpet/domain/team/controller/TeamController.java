@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/team")
 public class TeamController {
 
@@ -31,6 +33,7 @@ public class TeamController {
     @GetMapping("/all")
     public ResponseEntity<CommonResponseEntity> getAllTeam(){
         List<TeamResponse> allTeam = teamService.getAllTeam();
+        log.info("전체 그룹 확인 getAllTeam");
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
     }
 
@@ -40,6 +43,7 @@ public class TeamController {
     @GetMapping("/belong/{userId}")
     public ResponseEntity<CommonResponseEntity> getUserTeams(@PathVariable int userId){
         List<TeamResponse> allTeam = teamService.getUserTeams(userId);
+        log.info("소속된 그룹 확인 getUserTeams -  userId: {}", userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
     }
 
@@ -49,6 +53,7 @@ public class TeamController {
     @GetMapping("/search")
     public ResponseEntity<CommonResponseEntity> getSearchTeams(@RequestParam("content") String content){
         List<TeamResponse> searchTeams = teamService.getSearchTeams(content);
+        log.info("그룹 검색 getSearchTeams -  content: {}", content);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,searchTeams);
     }
 
@@ -58,6 +63,7 @@ public class TeamController {
     @GetMapping("/detail/{teamId}")
     public ResponseEntity<CommonResponseEntity> getSearchTeams(@PathVariable int teamId){
         TeamDetailResponse teamDetail = teamService.getTeamDetail(teamId);
+        log.info("그룹 상세보기 teamDetail -  teamId: {}", teamId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,teamDetail);
     }
 
@@ -67,6 +73,7 @@ public class TeamController {
     @PostMapping("/join/{userId}")
     public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest,@PathVariable int userId){
         teamService.joinGroup(joinGroupRequest,userId);
+        log.info("그룹 가입 joinGroup -  joinGroupRequest: {}, userId:{}", joinGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 
@@ -76,6 +83,7 @@ public class TeamController {
     @PostMapping("/create/{userId}")
     public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest,@PathVariable int userId){
         teamService.createGroup(createGroupRequest,userId);
+        log.info("그룹 생성 createGroup - createGroupRequest: {}, userId: {}", createGroupRequest, userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 
@@ -85,6 +93,7 @@ public class TeamController {
     @GetMapping("/members/{teamId}")
     public ResponseEntity<CommonResponseEntity> getGroupMembersInfo(@PathVariable int teamId){
         List<TeamUsersResponse> membersInfo = teamService.getGroupMembersInfo(teamId);
+        log.info("그룹원 정보 조회 getGroupMembersInfo - teamId:{}", teamId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,membersInfo);
     }
 
@@ -94,6 +103,7 @@ public class TeamController {
     @PostMapping("/exit/{userId}")
     public ResponseEntity<CommonResponseEntity> exitGroup(@RequestBody ExitGroupRequest exitGroupRequest, @PathVariable int userId){
         teamService.exitGroup(exitGroupRequest, userId);
+        log.info("그룹 나가기 exitGroup - exitGroupRequest:{}, userId:{}", exitGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 }
