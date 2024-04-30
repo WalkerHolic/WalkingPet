@@ -10,7 +10,6 @@ import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunctio
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.character.service.TestLevelUpService;
-import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
@@ -31,6 +30,9 @@ import java.util.List;
 
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
+/**
+ * 배틀 보상으로 일반 경험치를 줄 때 사용하는 코드
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -52,18 +54,9 @@ public class BattleService {
     //1. 내 배틀 정보 확인
     public UserBattleInfo getUserBattleInfo(Integer userId){
 
-        Users users = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
+        UserDetail userDetail = getUserDetail(userId);
 
-        UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
-                .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
-
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getUserCharacterId())
-                .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
-
-        UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
-
+        UserCharacter userCharacter = getUserCharacter(userDetail.getSelectUserCharacter().getUserCharacterId());
 
         return UserBattleInfo.from(userCharacter, userDetail);
     }
@@ -88,7 +81,7 @@ public class BattleService {
                 .rating(userDetail.getBattleRating())
                 .build();
 
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getUserCharacterId())
+        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
         UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
@@ -126,45 +119,16 @@ public class BattleService {
         System.out.println("배틀 결과 저장하기");
         BattleResult battleResult = battleFunction.getBattleResult(userId);
 
-        //배틀의 결과로 얻은 보상 데이터 저장
-
-        System.out.println("배틀 결과로 얻은 데이터 저장");
-        //배틀을 통해 얻은 경험치 아이템 데이터를 저장한다.
-        //추후 업데이트 될 경험치 아이템
-//        Item expItem = itemRepository.findItemByItemName("경험치 아이템")
-//                .orElseThrow(() -> new GlobalBaseException(USER_ITEM_NOT_FOUND_EXP));
-//
-//        int expItemRewardQuantity = battleResult.getBattleReward().getExpItem();
-//        System.out.println("exp 아이템의 양 = " + expItemRewardQuantity);
-
-//        Optional<UserItem> userExpItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, expItem.getName());
-//        if(userExpItem.isPresent()){
-//            userExpItem.get().addItemQuantity(expItemRewardQuantity);
-//            userItemRepository.save(userExpItem.get());
-//        }
-//        else{
-//            UserItem userItem = new UserItem(users, expItem, expItemRewardQuantity);
-//            userItemRepository.save(userItem);
-//        }
-
-        //배틀을 통해 얻은 상자 아이템 데이터를 저장한다.
-        String box = battleResult.getBattleReward().getBox();
-        if(box != null){
-            System.out.println("박스 획득했어요!");
-            UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, box)
-                    .orElseThrow(()-> new GlobalBaseException(USER_ITEM_NOT_FOUND_BOX));
-            userItem.addItemQuantity(1);
-        }
-        else{
-            System.out.println("박스 획득 실패");
-        }
-
-        //배틀을 통해 얻은 경험치 업데이트
-        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponse(userId, battleResult.getExperience());
 
         //배틀을 통해 얻은 레이팅 업데이트
         userDetail.updateBattleRating(battleResult.getRating());
         userDetailRepository.save(userDetail);
+
+        userCharacter.addExperience(battleResult.getExperience());
+        userCharacterRepository.save(userCharacter);
+
+        //레벨업 response
+        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResult.getExperience());
 
         return BattleResponse.builder()
                 .enemyInfo(enemyInfo)
@@ -174,23 +138,40 @@ public class BattleService {
                 .build();
     }
 
-    //상대 배틀 정보 가져오기
-    public EnemyInfo getEnemyBattleInfo(int userId){
-        Users users = usersRepository.findUsersByUserId(userId)
-                .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
+    /**
+     * 상대의 배틀 정보 가져오기
+     * @param enemyUserId 상대 유저 아이디
+     * @return 닉네임, 캐릭터 아이디, 레이팅, 체력, 힘, 방어력
+     */
+    public EnemyInfo getEnemyBattleInfo(int enemyUserId){
+        Users enemyUser = getUser(enemyUserId);
+        int userCharacterId = getUserDetail(enemyUserId).getSelectUserCharacter().getUserCharacterId();
+        UserCharacter enemyUserCharacter = getUserCharacter(userCharacterId);
+        UserDetail userDetail = getUserDetail(enemyUserId);
 
-        UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
-                .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
-
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getUserCharacterId())
-                .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
-
-        UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
-
-        return EnemyInfo.from(userCharacter, userDetail);
+        return EnemyInfo.builder()
+            .nickname(enemyUser.getNickname())
+            .characterId(enemyUserCharacter.getCharacter().getCharacterId())
+            .rating(userDetail.getBattleRating())
+            .health(enemyUserCharacter.getHealth())
+            .power(enemyUserCharacter.getPower())
+            .defense(enemyUserCharacter.getDefense())
+            .build();
     }
 
-    //배틀로 얻은 보상 저장하기
-//    public void updateUserItem()
+    private Users getUser(int userId){
+        return usersRepository.findUsersByUserId(userId)
+            .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
+    }
+
+    private UserDetail getUserDetail(int userId){
+        return userDetailRepository.findByUserUserId(userId)
+            .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
+
+    }
+
+    private UserCharacter getUserCharacter(int userCharacterId){
+        return userCharacterRepository.findByUserCharacterId(userCharacterId)
+            .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+    }
 }
