@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/levelup/levelup.dart';
@@ -79,7 +80,23 @@ class CharacterInfo extends StatelessWidget {
                 // 3. 변경 버튼
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/characterinfo');
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Container(
+                            width: screenWidth,
+                            height: screenHeight * 0.6,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: const CharacterChange(),
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: Image.asset(
                     'assets/buttons/character_change_button.png',
