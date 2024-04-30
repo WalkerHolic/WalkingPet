@@ -221,7 +221,7 @@ public class TeamService {
 
     // 주어진 사용자 ID에 해당하는 사용자를 데이터베이스에서 검색합니다.
     public Users getUserById(int userId) {
-        return usersRepository.findUsersByUserId(userId)
+        return usersRepository.findById(userId)
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
     }
 

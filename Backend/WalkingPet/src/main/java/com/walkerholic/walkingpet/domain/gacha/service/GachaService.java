@@ -46,7 +46,7 @@ public class GachaService {
     @Transactional
     public GachaResultResponse getGachaResult(String boxType, int userId) {
 
-        Users user = usersRepository.findUsersByUserId(userId)
+        Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
         int grade = decideGrade(user,boxType);
