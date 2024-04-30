@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class MainFontStyle extends StatelessWidget {
+class ResultFontStyle extends StatelessWidget {
   final double size;
   final String text;
   final Color color;
 
-  const MainFontStyle({
+  const ResultFontStyle({
     super.key,
     required this.size,
     required this.text,
-    this.color = Colors.white,
+    required this.color,
   });
 
   @override
@@ -23,22 +23,22 @@ class MainFontStyle extends StatelessWidget {
           Shadow(
             // 외곽선 색상 및 오프셋 설정
             offset: Offset(-1.5, -1.5),
-            color: Colors.black,
+            color: Colors.white,
             blurRadius: 1,
           ),
           Shadow(
             offset: Offset(1.5, -1.5),
-            color: Colors.black,
+            color: Colors.white,
             blurRadius: 1,
           ),
           Shadow(
             offset: Offset(1.5, 1.5),
-            color: Colors.black,
+            color: Colors.white,
             blurRadius: 1,
           ),
           Shadow(
             offset: Offset(-1.5, 1.5),
-            color: Colors.black,
+            color: Colors.white,
             blurRadius: 1,
           ),
         ],
