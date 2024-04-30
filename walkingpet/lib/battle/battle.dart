@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/battle/battleside.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class Battle extends StatelessWidget {
   const Battle({super.key});
@@ -22,23 +21,29 @@ class Battle extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   BattleSide(
-                      health: 100,
-                      power: 5,
-                      defense: 3,
-                      rating: 1357,
-                      characterId: 1,
-                      userCharacterLevel: 15,
-                      nickname: "현승이",
-                      isLeft: true),
+                    health: 100,
+                    power: 5,
+                    defense: 3,
+                    rating: 1357,
+                    characterId: 1,
+                    userCharacterLevel: 15,
+                    nickname: "현승이",
+                    isLeft: true,
+                    damageRatioList: [0, 0.1, 0, 0.3, 0, 0.4, 0, 0.3], // 입은 데미지
+                    attckDamage: [3, -1, 5, -1, 8, -1, 2, -1],
+                  ),
                   BattleSide(
-                      health: 100,
-                      power: 5,
-                      defense: 3,
-                      rating: 1349,
-                      characterId: 1,
-                      userCharacterLevel: 15,
-                      nickname: "지은이",
-                      isLeft: false),
+                    health: 100,
+                    power: 5,
+                    defense: 3,
+                    rating: 1349,
+                    characterId: 1,
+                    userCharacterLevel: 15,
+                    nickname: "지은이",
+                    isLeft: false,
+                    damageRatioList: [0.3, 0, 0.2, 0, 0.3, 0, 0.1, 0],
+                    attckDamage: [-1, 8, -1, 2, -1, 6, -1, 7],
+                  ),
                 ],
               ),
             ],

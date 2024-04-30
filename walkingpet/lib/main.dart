@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
 import 'package:walkingpet/battle/battle.dart';
+import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/character/characterinfo.dart';
 import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
@@ -95,6 +96,7 @@ class MyApp extends StatelessWidget {
         '/gacha': (context) => const Gacha(),
         '/battleready': (context) => const BattleReady(),
         '/battle': (context) => const Battle(),
+        '/battleresult': (context) => const BattleResult(),
         '/group': (context) => const Group(),
         '/levelup': (context) => const LevelUp(),
       },
