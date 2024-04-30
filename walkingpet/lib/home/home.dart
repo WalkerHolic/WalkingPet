@@ -22,8 +22,9 @@ class _HomeState extends State<Home> {
 
   Future<void> initStepData() async {
     try {
-      var jsonData = await checkStep();
-      print(jsonData);
+      var response = await checkStep();
+      print(response);
+      print(response['data']);
     } catch (e) {
       print('Failed to load data: $e');
     }
