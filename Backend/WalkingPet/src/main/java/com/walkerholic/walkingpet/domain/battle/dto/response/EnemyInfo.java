@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 public class EnemyInfo {
     private String nickname;
+    private int level;
     private int characterId;
     private int rating;
     private int health;
