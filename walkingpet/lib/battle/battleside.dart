@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class BattleSide extends StatelessWidget {
   final int health;
@@ -43,11 +44,44 @@ class BattleSide extends StatelessWidget {
             ),
           ],
         ),
-        Image.asset(
-          isLeft
-              ? 'assets/images/health_bar_left.png'
-              : 'assets/images/health_bar_right.png',
-          scale: 1.1,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              isLeft
+                  ? 'assets/images/health_bar_left.png'
+                  : 'assets/images/health_bar_right.png',
+              scale: 1.1,
+            ),
+            Transform.translate(
+              offset: isLeft ? const Offset(15.5, 0) : const Offset(-16, 0),
+              child: LinearPercentIndicator(
+                backgroundColor: Colors.grey,
+                progressColor: Colors.green,
+                width: 130,
+                percent: 1,
+                animation: true,
+                lineHeight: 6,
+                barRadius: const Radius.circular(2),
+              ),
+            ),
+            Transform(
+              alignment: Alignment.center,
+              transform:
+                  isLeft ? Matrix4.rotationY(math.pi) : Matrix4.identity(),
+              child: Transform.translate(
+                offset: isLeft ? const Offset(-15, 0) : const Offset(-16, 0),
+                child: LinearPercentIndicator(
+                  backgroundColor: Colors.transparent,
+                  width: 130,
+                  percent: 0.5,
+                  animation: true,
+                  lineHeight: 6,
+                  barRadius: const Radius.circular(2),
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(
           height: 30,

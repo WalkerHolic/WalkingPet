@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/battle/battleside.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class Battle extends StatelessWidget {
   const Battle({super.key});
