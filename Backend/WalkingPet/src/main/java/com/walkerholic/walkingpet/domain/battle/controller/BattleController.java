@@ -4,6 +4,7 @@ import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResponse;
 import com.walkerholic.walkingpet.domain.battle.dto.response.EnemyInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.UserBattleInfoDTO;
 import com.walkerholic.walkingpet.domain.battle.service.BattleService;
+import com.walkerholic.walkingpet.domain.battle.service.TestBattleService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,11 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class BattleController {
 
     private final BattleService battleService;
+    private final TestBattleService testBattleService;
 
     @GetMapping("/myinfo")
     @Operation(summary = "유저 배틀 정보 확인", description = "유저의 user,userDetail,userCharacter로 유저 배틀 정보 가져오기")
     public ResponseEntity<CommonResponseEntity> getUserBattleInfo(@RequestParam("userId") int userId){
-
+        System.out.println(testBattleService.testNickname(userId));
         UserBattleInfoDTO userBattleInfoDTO = battleService.getUserBattleInfo(userId);
 
         log.info("나의 배틀 정보 확인하기 BattleController getUserBattleInfo - userId: {}", userId);
