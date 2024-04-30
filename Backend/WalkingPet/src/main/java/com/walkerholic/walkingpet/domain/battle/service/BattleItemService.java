@@ -11,7 +11,7 @@ import com.walkerholic.walkingpet.domain.battle.dto.response.BattleProgressInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResponse;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResult;
 import com.walkerholic.walkingpet.domain.battle.dto.response.EnemyInfo;
-import com.walkerholic.walkingpet.domain.battle.dto.response.UserBattleInfo;
+import com.walkerholic.walkingpet.domain.battle.dto.response.UserBattleInfoDTO;
 import com.walkerholic.walkingpet.domain.battle.function.BattleFunction;
 import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
@@ -58,7 +58,7 @@ public class BattleItemService {
     private final LevelUpFunction levelUpFunction;
 
     //1. 내 배틀 정보 확인
-    public UserBattleInfo getUserBattleInfo(Integer userId){
+    public UserBattleInfoDTO getUserBattleInfo(Integer userId){
 
         Users users = usersRepository.findById(userId)
                 .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
@@ -73,7 +73,7 @@ public class BattleItemService {
                 .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
 
 
-        return UserBattleInfo.from(userCharacter, userDetail);
+        return UserBattleInfoDTO.from(userCharacter, userDetail);
     }
 
     //3. 배틀 시작
