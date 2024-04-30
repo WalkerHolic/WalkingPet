@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/gacha/widgets/gacha_box.dart';
 
-
 class Gacha extends StatelessWidget {
   const Gacha({super.key});
 
