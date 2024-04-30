@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @ToString
 @Getter
-public class UserBattleInfo {
+public class UserBattleInfoDTO {
     private String nickname;
     private int characterId;
     private int health;
@@ -16,8 +16,8 @@ public class UserBattleInfo {
     private int rating;
     private int battleCount;
 
-    public static UserBattleInfo from(UserCharacter userCharacter, UserDetail userDetail){
-        return UserBattleInfo.builder()
+    public static UserBattleInfoDTO from(UserCharacter userCharacter, UserDetail userDetail){
+        return UserBattleInfoDTO.builder()
                 .nickname(userDetail.getUser().getNickname())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .health(userCharacter.getHealth())

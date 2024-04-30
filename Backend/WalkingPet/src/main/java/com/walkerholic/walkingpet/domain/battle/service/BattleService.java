@@ -52,13 +52,13 @@ public class BattleService {
     private final LevelUpFunction levelUpFunction;
 
     //1. 내 배틀 정보 확인
-    public UserBattleInfo getUserBattleInfo(Integer userId){
+    public UserBattleInfoDTO getUserBattleInfo(Integer userId){
 
         UserDetail userDetail = getUserDetail(userId);
 
         UserCharacter userCharacter = getUserCharacter(userDetail.getSelectUserCharacter().getUserCharacterId());
 
-        return UserBattleInfo.from(userCharacter, userDetail);
+        return UserBattleInfoDTO.from(userCharacter, userDetail);
     }
 
     //3. 배틀 시작

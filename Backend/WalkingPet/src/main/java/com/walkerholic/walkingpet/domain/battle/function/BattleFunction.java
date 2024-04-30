@@ -93,14 +93,18 @@ public class BattleFunction {
         List<Integer> enemyAttackDamageList = new ArrayList<>();
         List<Integer> userHealthList = new ArrayList<>();
         List<Integer> enemyHealthList = new ArrayList<>();
+        List<Double> userLoseDamage = new ArrayList<>();
+        List<Double> enemyLoseDamage = new ArrayList<>();
 
         int userHealth = userCharacterInfo.getHealth();
         int userPower = userCharacterInfo.getPower();
         int userDefense = userCharacterInfo.getDefense();
+        int userAccumulateDamage = 0;
 
         int enemyHealth = enemyCharacterInfo.getHealth();
         int enemyPower = enemyCharacterInfo.getPower();
         int enemyDefense = enemyCharacterInfo.getDefense();
+        int enemyAccumulateDamage = 0;
 
         boolean strikeFirst = true;
 
@@ -108,15 +112,14 @@ public class BattleFunction {
 
         while(userHealth != 0 && enemyHealth != 0){
             if(strikeFirst){
-                System.out.println("user attack");
                 //나의 공격
                 int attackDamage = getAttackDamage(userPower, enemyDefense);
-                System.out.println("attackDamage = " + attackDamage);
-                //만약 방어력이 너무 높아서 공격하는 데미지가 0이라면 1이라도 주는걸로 하자.
                 enemyHealth -= attackDamage;
+                enemyAccumulateDamage += attackDamage;
                 //받는 데미지가 음수가 되면 체력을 0으로 만들어준다.
                 if(enemyHealth <= 0){
                     enemyHealth = 0;
+                    enemyAccumulateDamage = enemyCharacterInfo.getHealth();
                     win = true;
                 }
 
@@ -124,26 +127,33 @@ public class BattleFunction {
                 enemyAttackDamageList.add(-1);
 
                 userHealthList.add(userHealth);
+                userLoseDamage.add(getPercentage(userCharacterInfo.getHealth(),userAccumulateDamage));
                 enemyHealthList.add(enemyHealth);
+                enemyLoseDamage.add(getPercentage(enemyCharacterInfo.getHealth(),enemyAccumulateDamage));
             }
             else{
-                System.out.println("enemy attack");
                 //상대방의 공격
                 int attackDamage = getAttackDamage(enemyPower, userDefense);
-                System.out.println("attackDamage = " + attackDamage);
-                //만약 방어력이 너무 높아서 공격하는 데미지가 0이라면 1이라도 주는걸로 하자.
                 userHealth -= attackDamage;
+                userAccumulateDamage += attackDamage;
                 //받는 데미지가 음수가 되면 체력을 0으로 만들어준다.
                 if(userHealth <= 0){
                     userHealth = 0;
+                    userAccumulateDamage = userCharacterInfo.getHealth();
                     win = false;
                 }
 
                 enemyAttackDamageList.add(attackDamage);
                 userAttackDamageList.add(-1);
 
+                System.out.println();
+                System.out.println("적이 때린 데미지: " + attackDamage);
+                System.out.println("유저 누적 데미지: " + userAccumulateDamage);
+
                 userHealthList.add(userHealth);
+                userLoseDamage.add(getPercentage(userCharacterInfo.getHealth(),userAccumulateDamage));
                 enemyHealthList.add(enemyHealth);
+                enemyLoseDamage.add(getPercentage(enemyCharacterInfo.getHealth(),enemyAccumulateDamage));
             }
             strikeFirst = !strikeFirst;
         }
@@ -151,14 +161,14 @@ public class BattleFunction {
         System.out.println(userAttackDamageList.toString());
         System.out.println(enemyAttackDamageList.toString());
 
-        BattleProgressInfo battleProgressInfo = BattleProgressInfo.builder()
+        return BattleProgressInfo.builder()
                 .userAttackDamage(userAttackDamageList)
                 .enemyAttackDamage(enemyAttackDamageList)
                 .userHealth(userHealthList)
                 .enemyHealth(enemyHealthList)
+                .userLoseDamage(userLoseDamage)
+                .enemyLoseDamage(enemyLoseDamage)
                 .build();
-
-        return battleProgressInfo;
     }
 
     public BattleResult getBattleResult(Integer userId){
@@ -176,5 +186,11 @@ public class BattleFunction {
                     .rating(LOSE_RATING)
                     .build();
         }
+    }
+
+    public double getPercentage(int maxHealth, int accumulateDamage){
+        double result = (double)accumulateDamage/maxHealth;
+
+        return Math.round(result * 100.0) / 100.0;
     }
 }
