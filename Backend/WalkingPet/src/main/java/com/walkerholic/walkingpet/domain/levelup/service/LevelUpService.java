@@ -58,6 +58,33 @@ public class LevelUpService {
     }
 
     /**
+     * 레벨업 여부 & 레벨업 정보 반환 서비스(현재 레벨, 다음 레벨, 보상 정보), 레벨업 된 정보를 저장한다
+     * @param userCharacter 유저 캐릭터
+     * @param getExperience 획득한 경험치 양
+     * @return 레벨업 여부 & 레벨업 정보 => 현재 레벨, 다음 레벨, 보상 정보
+     */
+    public LevelUpResponse getLevelUpResponseByObject(UserCharacter userCharacter, int getExperience){
+
+        CharacterLevelExperienceInfo characterLevelExperienceInfo = CharacterLevelExperienceInfo.builder()
+            .nowLevel(userCharacter.getLevel())
+            .nowExperience(userCharacter.getExperience())
+            .build();
+
+        if(levelUpFunction.checkLevelUp(characterLevelExperienceInfo,getExperience)){
+            return LevelUpResponse.builder()
+                .isLevelUp(true)
+                .levelUpInfo(getLevelUpInfo(userCharacter.getUser().getUserId(), userCharacter, getExperience))
+                .build();
+        }
+        else{
+            return LevelUpResponse.builder()
+                .isLevelUp(false)
+                .levelUpInfo(null)
+                .build();
+        }
+    }
+
+    /**
      * 레벨업 결과 정보 가져오기, 정보를 가져오면서 캐릭터/아이템 정보를 업데이트한다.
      * @param userId 유저 아이디
      * @param userCharacter 유저가 장착하고 있는 유저캐릭터
