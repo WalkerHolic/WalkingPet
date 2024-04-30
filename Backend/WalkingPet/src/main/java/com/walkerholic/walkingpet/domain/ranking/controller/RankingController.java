@@ -9,6 +9,8 @@ import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import com.walkerholic.walkingpet.global.redis.service.RedisRankingService;
+import com.walkerholic.walkingpet.global.redis.service.TestRedisService;
+import com.walkerholic.walkingpet.global.redis.service.TestRepo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RankingController {
     private final RankingService rankingService;
     private final RedisRankingService redisRankingService;
+    private final TestRedisService testRedisService;
+    private final TestRepo testRepo;
 
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
@@ -47,7 +51,9 @@ public class RankingController {
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
         log.info("개인 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
-        AccStepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
+//        AccStepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
+//        AccStepRankingResponse accStepRankingList = testRedisService.getRedisAccStepRanking(0, 9);
+        AccStepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
 
