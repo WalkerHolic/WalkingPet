@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
+import 'package:walkingpet/battle/battleready.dart';
 import 'package:walkingpet/battle/battle.dart';
+import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/character/characterinfo.dart';
 import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
@@ -16,6 +18,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  SystemChannels.navigation.setMethodCallHandler((MethodCall call) async {
+    if (call.method == 'popRoute') {
+      return Future.value(false); // 뒤로 가기 이벤트를 무시합니다.
+    }
+    return Future.value(true);
+  });
 
   _requestPermissions();
 }
@@ -86,7 +94,9 @@ class MyApp extends StatelessWidget {
         '/ranking': (context) => const Ranking(),
         '/characterinfo': (context) => const CharacterInfo(),
         '/gacha': (context) => const Gacha(),
+        '/battleready': (context) => const BattleReady(),
         '/battle': (context) => const Battle(),
+        '/battleresult': (context) => const BattleResult(),
         '/group': (context) => const Group(),
         '/levelup': (context) => const LevelUp(),
       },

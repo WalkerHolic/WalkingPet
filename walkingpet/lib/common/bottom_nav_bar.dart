@@ -32,7 +32,7 @@ class BottomNavBar extends StatelessWidget {
     return InkWell(
       onTap: () {
         // Navigate
-        _onItemTapped(context, index);
+        _onItemTapped(context, index, selectedIndex);
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -64,7 +64,12 @@ class BottomNavBar extends StatelessWidget {
 }
 
 // 이 함수 내에 네비게이션 로직 추가
-void _onItemTapped(BuildContext context, int index) {
+void _onItemTapped(BuildContext context, int index, int selectedIndex) {
+  if (index == selectedIndex) {
+    // 현재 선택된 인덱스와 동일하므로 아무런 작업도 수행하지 않음
+    return;
+  }
+
   switch (index) {
     case 0:
       Navigator.pushReplacementNamed(context, '/characterinfo');
@@ -76,7 +81,7 @@ void _onItemTapped(BuildContext context, int index) {
       Navigator.pushReplacementNamed(context, '/home');
       break;
     case 3:
-      Navigator.pushReplacementNamed(context, '/battle');
+      Navigator.pushReplacementNamed(context, '/battleready');
       break;
     case 4:
       Navigator.pushReplacementNamed(context, '/group');
