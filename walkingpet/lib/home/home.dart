@@ -75,7 +75,8 @@ class _HomeState extends State<Home> {
                       }),
                     ),
                     Image.asset(
-                      'assets/animals/cow/cow_run.gif',
+                      //'assets/animals/wolf/wolf_run.gif',
+                      'assets/animals/rhino/rhino_attack.gif',
                     ),
                   ],
                 ),
