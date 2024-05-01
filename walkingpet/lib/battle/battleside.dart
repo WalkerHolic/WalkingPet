@@ -137,14 +137,17 @@ class _BattleSideState extends State<BattleSide> {
         ),
         Transform(
           alignment: Alignment.center,
-          transform: widget.isLeft
-              ? Matrix4.identity()
-              : Matrix4.rotationY(math.pi), // π (파이) 각도만큼 Y축을 기준으로 회전
-          child: Image.asset(
-            widget.attckDamage[_sequenceIndex] >= 0
-                ? 'assets/animals/cow/cow_attack.gif'
-                : 'assets/animals/cow/cow_hurt.gif',
-            scale: 1.2,
+          transform:
+              widget.isLeft ? Matrix4.identity() : Matrix4.rotationY(math.pi),
+          // 여기서 올바르게 translate 적용
+          child: Transform.translate(
+            offset: const Offset(58, 0),
+            child: Image.asset(
+              widget.attckDamage[_sequenceIndex] >= 0
+                  ? 'assets/animals/cow/cow_attack.gif'
+                  : 'assets/animals/cow/cow_hurt.gif',
+              scale: 1.2,
+            ),
           ),
         ),
       ],

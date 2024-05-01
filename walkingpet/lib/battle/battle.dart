@@ -21,7 +21,6 @@ class _BattleState extends State<Battle> {
   }
 
   Future<void> initBattleInfo() async {
-    print(widget.myCharacterData);
     try {
       var response = await getBattleInfo();
       setState(() {
