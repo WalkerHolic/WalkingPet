@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -41,7 +43,7 @@ public class RankingController {
         int userId = 1;
         log.info("개인 랭킹 조회 getPersonalRanking - userId: {}, value: {}", userId, value);
 
-        PersonalStepRankingResponse personalStepRanking = rankingService.getAccStepRanking();
+        PersonalStepRankingResponse personalStepRanking = rankingService.getAccStepRanking(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, personalStepRanking);
     }
 
@@ -51,10 +53,13 @@ public class RankingController {
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
         log.info("개인 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
+        AccStepRankingResponse accStepRankingTop10 = rankingService.getAccStepRankingTop10();
+//        List<AccStepRankingInfo> accStepRankingList = rankingService.getUserAccStepList();
+
 //        AccStepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
 //        AccStepRankingResponse accStepRankingList = testRedisService.getRedisAccStepRanking(0, 9);
-        AccStepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
+//        AccStepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingTop10);
     }
 
     @GetMapping("/person/top3")
@@ -76,8 +81,11 @@ public class RankingController {
         log.info("개인 랭킹 나의 순위 조회 getMyPersonalRanking - value: {}, userId: {}", value, userId);
 
 //        UserPersonalStepRankingResponse userAccStepRanking = rankingService.getUserAccStepRanking(userId);
-        AccStepRankingInfo test = new AccStepRankingInfo(1, "test2", 900, 1);
-        int userAccStepRanking = redisRankingService.getUserRanking(test);
+//        AccStepRankingInfo test = new AccStepRankingInfo(1);
+//        AccStepRankingInfo test = new AccStepRankingInfo(1);
+        AccStepRankingInfo test = new AccStepRankingInfo(1, "싸피1기", 2000, 3);
+        int userAccStepRanking = testRepo.getUserRanking(test);
+//        int userAccStepRanking = redisRankingService.getUserRanking(test);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);
     }
 }

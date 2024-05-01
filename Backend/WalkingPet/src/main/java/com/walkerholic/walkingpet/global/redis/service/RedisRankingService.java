@@ -74,8 +74,8 @@ public class RedisRankingService {
 
     public List<AccStepRankingInfo> redisAccStepRankingToDto(Set<AccStepRankingInfo> accStepLankingList) {
         List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-        for (AccStepRankingInfo userStep : accStepLankingList) {
-            accStepRankingList.add(AccStepRankingInfo.redisFrom(userStep));
+        for (AccStepRankingInfo accStepRankingInfo : accStepLankingList) {
+            accStepRankingList.add(AccStepRankingInfo.redisFrom(accStepRankingInfo));
         }
         return accStepRankingList;
     }

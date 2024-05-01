@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.global.redis.controller;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -49,8 +50,7 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> getRedisAccRankingInfo(@RequestParam("userId") int userId) {
         log.info("redis 누적 랭킹 출력 테스트 - redis test getRedisAccRankingInfo");
 
-        AccStepRankingInfo user = redisRankingService.getUser(userId);
-        System.out.println("redis user: " + user);
+//        StepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
@@ -68,7 +68,8 @@ public class RedisController {
 //            System.out.println("redis accStepInfo: " + accStepInfo);
 //        }
         System.out.println("테스트");
+        StepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
 
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
 }
