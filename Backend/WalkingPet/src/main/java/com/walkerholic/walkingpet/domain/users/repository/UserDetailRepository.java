@@ -34,5 +34,6 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
             "WHERE U.userId = :userId")
     Optional<UserDetail> findByJoinFetchByUserId(int userId);
 
+    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.user LEFT JOIN FETCH ud.selectUserCharacter WHERE ud.user.status = :status")
     List<UserDetail> findAllByUserStatus(int status);
 }

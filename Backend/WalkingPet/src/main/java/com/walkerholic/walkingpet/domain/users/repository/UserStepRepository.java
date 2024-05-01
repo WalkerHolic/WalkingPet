@@ -16,12 +16,7 @@ public interface UserStepRepository extends JpaRepository<UserStep, Integer> {
 
     List<UserStep> findTop10ByOrderByAccumulationStepDesc();
 
-    @Query("""
-        SELECT us
-        FROM UserStep us
-        WHERE us.user.status = 1
-        ORDER BY us.accumulationStep DESC
-        """)
+    @Query("SELECT us FROM UserStep us WHERE us.user.status = 1 ORDER BY us.accumulationStep DESC")
     List<UserStep> findUserStepList();
 
     @Query("""

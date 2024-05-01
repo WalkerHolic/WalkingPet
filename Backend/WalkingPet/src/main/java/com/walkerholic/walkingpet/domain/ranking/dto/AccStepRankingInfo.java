@@ -2,7 +2,6 @@ package com.walkerholic.walkingpet.domain.ranking.dto;
 
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
-import com.walkerholic.walkingpet.domain.users.entity.Users;
 import lombok.*;
 
 import java.io.Serializable;
@@ -15,7 +14,7 @@ public class AccStepRankingInfo implements Serializable {
     private int userId;
     private String nickname; // user
     private int step; // user_step
-    private int characterId; // character
+    private int characterId; // user_detail에서 character
 
     @Builder
     public AccStepRankingInfo(int userId, String nickname, int step, int characterId) {
@@ -41,6 +40,11 @@ public class AccStepRankingInfo implements Serializable {
                 .characterId(1)
                 .step(accStepRankingInfo.getStep())
                 .build();
+    }
+
+    public AccStepRankingInfo changeStep(int step) {
+        this.step = step;
+        return this;
     }
 }
 
