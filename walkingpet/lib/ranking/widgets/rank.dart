@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Rank extends StatelessWidget {
-  // final int ranking, characterId, step;
-  final String ranking, characterId, nickname, step;
+  final int ranking, step;
+  final String nickname;
 
-  const Rank({
-    super.key,
-    required this.ranking,
-    required this.characterId,
-    required this.nickname,
-    required this.step,
-  });
+  Rank.fromJson(Map<String, dynamic> json, {super.key})
+      : ranking = json['ranking'],
+        step = json['step'],
+        nickname = json['nickname'];
+
+  // const Rank({
+  //   super.key,
+  //   required this.ranking,
+  //   required this.nickname,
+  //   required this.step,
+  // });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class Rank extends StatelessWidget {
           SizedBox(
             width: 45,
             child: Text(
-              ranking,
+              ranking.toString(),
               style: const TextStyle(
                 fontSize: 23,
               ),
@@ -52,7 +56,7 @@ class Rank extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  step,
+                  step.toString(),
                   style: const TextStyle(
                     fontSize: 23,
                     color: Color.fromARGB(255, 241, 86, 9),
