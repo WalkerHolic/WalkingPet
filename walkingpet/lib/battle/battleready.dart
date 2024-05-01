@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/battle/battle.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/star.dart';
@@ -99,7 +100,13 @@ class _BattleReadyState extends State<BattleReady> {
                       ),
                       InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, '/battle');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Battle(myCharacterData: characterData),
+                              ),
+                            );
                           },
                           child: Stack(
                             children: [
