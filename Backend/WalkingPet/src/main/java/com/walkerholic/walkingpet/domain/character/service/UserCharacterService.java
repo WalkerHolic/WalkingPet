@@ -1,11 +1,9 @@
 package com.walkerholic.walkingpet.domain.character.service;
 
+import com.walkerholic.walkingpet.domain.character.dto.UserCharacterListInfo;
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
 import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
-import com.walkerholic.walkingpet.domain.character.dto.response.ResetStatResponse;
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterStatResponse;
-import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
+import com.walkerholic.walkingpet.domain.character.dto.response.*;
 import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
@@ -20,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -141,8 +142,22 @@ public class UserCharacterService {
         사용자의 캐릭터 정보 가져오기
      */
     @Transactional(readOnly = true)
-    public void getUserCharacterInfoList(int userId) {
+    public UserCharacterListInfoResponse getUserCharacterInfoList(int userId) {
+        List<UserCharacterListInfo> userCharacterListInfos = new ArrayList<>();
 
+        System.out.println("haveCharacterList");
+//        List<Character> userCharcterList = characterRepository.findUserCharcterList(userId);
+        List<UserCharacter> haveCharacterList = userCharacterRepository.findByUserUserId(userId);
+        for (UserCharacter userCharacter : haveCharacterList) {
+            userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter));
+        }
+        System.out.println("notHaveUserCharacterList");
+        List<Character> notHaveUserCharacterList = characterRepository.findNotHaveUserCharacterList(userId);
+        for (Character userCharacter : notHaveUserCharacterList) {
+            userCharacterListInfos.add(UserCharacterListInfo.characterFrom(userCharacter));
+        }
+
+        return UserCharacterListInfoResponse.from(userCharacterListInfos);
     }
 
     /**
