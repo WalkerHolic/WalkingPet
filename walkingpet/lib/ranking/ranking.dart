@@ -57,12 +57,12 @@ class Ranking extends StatelessWidget {
 
           // 3. 내용
           // 전체적으로 padding 지정
-          const Padding(
-            padding: EdgeInsets.all(15),
+          Padding(
+            padding: const EdgeInsets.all(15),
             child: Column(
               children: [
                 // 3-1. 랭킹 & X버튼
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(bottom: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,11 +98,11 @@ class Ranking extends StatelessWidget {
                         child: PersonalRanking(),
                         label: '개인랭킹',
                       ),
-                      NesTabItem(
+                      const NesTabItem(
                         child: GroupRanking(),
                         label: '그룹랭킹',
                       ),
-                      NesTabItem(
+                      const NesTabItem(
                         child: BattleRanking(),
                         label: '배틀랭킹',
                       ),
