@@ -2,10 +2,7 @@ package com.walkerholic.walkingpet.domain.character.controller;
 
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
 import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
-import com.walkerholic.walkingpet.domain.character.dto.response.ResetStatResponse;
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterStatResponse;
-import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
+import com.walkerholic.walkingpet.domain.character.dto.response.*;
 import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -35,6 +32,17 @@ public class CharacterController {
 
         UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userCharacterId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfo);
+    }
+
+    @GetMapping("/list")
+    @Operation(summary = "유저의 캐릭터 정보 가져오기", description = "유저가 보유한 캐릭터와 보유하지 않은 캐릭터 목록 가져오기")
+//    @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 정보 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getUserCharacterListInfo() {
+        int userId = 6;
+        log.info("캐릭터 정보 확인 getUserCharacterInfo - userId: {}", userId);
+
+        UserCharacterListInfoResponse userCharacterInfoList = userCharacterService.getUserCharacterInfoList(userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfoList);
     }
 
     // /api/character/stat?value=power&userCharacterId=3

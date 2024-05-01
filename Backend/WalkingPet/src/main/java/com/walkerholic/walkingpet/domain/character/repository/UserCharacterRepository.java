@@ -7,6 +7,7 @@ import com.walkerholic.walkingpet.domain.users.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserCharacterRepository extends JpaRepository<UserCharacter, Integer> {
@@ -16,4 +17,8 @@ public interface UserCharacterRepository extends JpaRepository<UserCharacter, In
 
     @Query("select uc from UserCharacter uc where uc.user.userId = :userId and uc.userCharacterId = :userCharacterId")
     Optional<UserCharacter> findUserCharacterByUserIdAndUserCharacterId(int userId, int userCharacterId);
+
+    @Query("SELECT uc FROM UserCharacter uc WHERE uc.user.userId = :userId")
+    List<UserCharacter> findByUserUserId(int userId);
+
 }
