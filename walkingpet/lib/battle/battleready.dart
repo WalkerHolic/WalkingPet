@@ -2,9 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/star.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
+import 'package:walkingpet/services/battle/getmyinfo.dart';
 
-class BattleReady extends StatelessWidget {
+class BattleReady extends StatefulWidget {
   const BattleReady({super.key});
+
+  @override
+  State<BattleReady> createState() => _BattleReadyState();
+}
+
+class _BattleReadyState extends State<BattleReady> {
+  @override
+  void initState() {
+    super.initState();
+    initMyInfo(); // 위젯이 로드될 때 fetchData 호출
+  }
+
+  Future<void> initMyInfo() async {
+    try {
+      var response = await getMyInfo();
+      print(response);
+      print(response['data']);
+    } catch (e) {
+      print('Failed to load data: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
