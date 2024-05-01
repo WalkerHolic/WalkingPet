@@ -6,7 +6,9 @@ import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResp
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRankingResponse;
+import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
+import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
@@ -20,21 +22,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RankingService {
     private final UserStepRepository userStepRepository;
+    private final UserDetailRepository userDetailRepository;
 
     /*
      * 누적 걸음수 랭킹 가져오기
      */
-    public PersonalStepRankingResponse getAccStepRanking() {
+    public PersonalStepRankingResponse getAccStepRanking(int userId) {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
         List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-        for (UserStep userStep : topUsers) {
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
+        for (UserStep userStepInfo : topUsers) {
+            UserDetail userDetailInfo = userDetailRepository.findUserDetailByUser(userStepInfo.getUser())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
         }
 
-        int userId = 1;
-        UserPersonalStepRankingResponse userAccStepRanking = getUserAccStepRanking(1);
+        UserPersonalStepRankingResponse userAccStepRanking = getUserAccStepRanking(userId);
         return PersonalStepRankingResponse.from(userAccStepRanking, accStepRankingList);
     }
 
@@ -46,8 +51,11 @@ public class RankingService {
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
         List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-        for (UserStep userStep : topUsers) {
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
+        for (UserStep userStepInfo : topUsers) {
+            UserDetail userDetailInfo = userDetailRepository.findUserDetailByUser(userStepInfo.getUser())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
         }
 
         return AccStepRankingResponse.from(accStepRankingList);
@@ -86,12 +94,22 @@ public class RankingService {
      */
     public List<AccStepRankingInfo> getUserAccStepList() {
         //TODO: Redis 데이터로 변경
-        List<UserStep> userStepList = userStepRepository.findUserStepList();
+//        List<UserStep> userStepList = userStepRepository.findUserStepList();
+//
+//        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
+//        for (UserStep userStep : userStepList) {
+//            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
+//        }
+
+        List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
 
         List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-        for (UserStep userStep : userStepList) {
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
+        for (UserDetail userDetailInfo : allByUser) {
+            UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
         }
+
         return accStepRankingList;
     }
 }

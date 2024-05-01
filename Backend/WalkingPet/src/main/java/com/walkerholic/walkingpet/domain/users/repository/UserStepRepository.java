@@ -17,21 +17,21 @@ public interface UserStepRepository extends JpaRepository<UserStep, Integer> {
     List<UserStep> findTop10ByOrderByAccumulationStepDesc();
 
     @Query("""
-        SELECT US
-        FROM UserStep US
-        WHERE US.user.status = 1
-        ORDER BY US.accumulationStep DESC
+        SELECT us
+        FROM UserStep us
+        WHERE us.user.status = 1
+        ORDER BY us.accumulationStep DESC
         """)
     List<UserStep> findUserStepList();
 
     @Query("""
         SELECT COUNT(*) + 1
-        FROM UserStep US1
-        WHERE US1.accumulationStep >
+        FROM UserStep us1
+        WHERE us1.accumulationStep >
         (
-            SELECT US2.accumulationStep
-            FROM UserStep US2
-            WHERE US2.user.userId = :userId
+            SELECT us2.accumulationStep
+            FROM UserStep us2
+            WHERE us2.user.userId = :userId
         )
         """)
     int findUserPersonalRankingByAccStep(Integer userId);
