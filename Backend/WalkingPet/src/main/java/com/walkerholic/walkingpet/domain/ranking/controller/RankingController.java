@@ -67,13 +67,13 @@ public class RankingController {
 
         StepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            log.info("개인 어제 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+            log.info("개인 어제 걸음수 랭킹 top 3 조회 getPersonalRankingTop10 - value: {}", value);
             accStepRankingList = yesterdayStepRankingRedisService.getRedisAccStepRankingList(0, 3);
         } else if (value.equals("accumulation")) {
-            log.info("개인 누적 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+            log.info("개인 누적 걸음수 랭킹 top 3 조회 getPersonalRankingTop10 - value: {}", value);
             accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 3);
         } else {
-            log.info("개인 실시간 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+            log.info("개인 실시간 걸음수 랭킹 top 3 조회 getPersonalRankingTop10 - value: {}", value);
             accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 3);
         }
 
@@ -87,7 +87,18 @@ public class RankingController {
         int userId = 2;
         log.info("개인 랭킹 나의 순위 조회 getMyPersonalRanking - value: {}, userId: {}", value, userId);
 
-        StepRankingList userAccStepRanking = accStepRankingRedisService.getUserAccStepRanking(userId);
+        StepRankingList userAccStepRanking;
+        if (value.equals("yesterday")) {
+            log.info("개인 어제 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+            userAccStepRanking = yesterdayStepRankingRedisService.getUserYesterdayStepRanking(userId);
+        } else if (value.equals("accumulation")) {
+            log.info("개인 누적 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+            userAccStepRanking = accStepRankingRedisService.getUserAccStepRanking(userId);
+        } else {
+            log.info("개인 실시간 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+            userAccStepRanking = accStepRankingRedisService.getUserAccStepRanking(userId);
+        }
+
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);
     }
 }
