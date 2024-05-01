@@ -4,7 +4,7 @@ class CharacterMap {
     2: 'chicken',
     3: 'cow',
     4: 'crow',
-    5: 'dow',
+    5: 'dog',
     //6: 'dragons',
     6: 'panda',
     7: 'duck',
