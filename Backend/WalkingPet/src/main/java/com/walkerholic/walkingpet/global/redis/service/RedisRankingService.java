@@ -51,30 +51,20 @@ public class RedisRankingService {
 
     public AccStepRankingInfo getUser(int userId) {
         HashOperations<String, Integer, AccStepRankingInfo> hashOperations = rankigRedisTemplate.opsForHash();
-        AccStepRankingInfo accStepRankingInfo = hashOperations.get(RANKING_KEY, userId);
 
-        assert accStepRankingInfo != null;
-        return accStepRankingInfo;
+        return hashOperations.get(RANKING_KEY, userId);
     }
 
     public int getUserRanking(int userId) {
         Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(USERS_KEY, userId);
 
-        if (userRanking != null) {
-            return userRanking.intValue() + 1;
-        } else {
-            return -1;
-        }
+        return (userRanking != null) ? userRanking.intValue() + 1 : -1;
     }
 
     public int test(AccStepRankingInfo stepInfo) {
         Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(USERS_KEY, stepInfo.getUserId());
 
-        if (stepInfo != null) {
-            return userRanking.intValue() + 1;
-        } else {
-            return -1;
-        }
+        return (userRanking != null) ? userRanking.intValue() + 1 : -1;
     }
 
     public List<AccStepRankingInfo> redisAccStepRankingToDto(Set<AccStepRankingInfo> accStepLankingList) {
