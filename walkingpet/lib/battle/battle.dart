@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/battle/battleside.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/services/battle/getbattleinfo.dart';
 
 class Battle extends StatefulWidget {
@@ -23,6 +24,7 @@ class _BattleState extends State<Battle> {
   Future<void> initBattleInfo() async {
     try {
       var response = await getBattleInfo();
+      print(response['data']);
       setState(() {
         battleData = response['data']; // API 응답을 상태에 저장
         isLoading = false;
@@ -46,41 +48,49 @@ class _BattleState extends State<Battle> {
           body: Column(
             children: [
               if (!isLoading)
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     BattleSide(
-                      health: 100,
-                      power: 5,
-                      defense: 3,
-                      rating: 1357,
-                      characterId: 1,
-                      userCharacterLevel: 15,
-                      nickname: "현승이",
-                      isLeft: true,
-                      damageRatioList: [
-                        0,
-                        0.1,
-                        0,
-                        0.3,
-                        0,
-                        0.4,
-                        0,
-                        0.3
-                      ], // 입은 데미지
-                      attckDamage: [3, -1, 5, -1, 8, -1, 2, -1],
+                      health: widget.myCharacterData['health'],
+                      power: widget.myCharacterData['power'],
+                      defense: widget.myCharacterData['defense'],
+                      rating: widget.myCharacterData['rating'],
+                      characterId: widget.myCharacterData['characterId'],
+                      userCharacterLevel: widget.myCharacterData['level'],
+                      nickname: widget.myCharacterData['nickname'],
+                      isLeft: true, // 입은 데미지
+                      attackDamage: battleData['battleProgressInfo']
+                          ['userAttackDamage'],
+                      receivedDamage: battleData['battleProgressInfo']
+                          ['enemyAttackDamage'],
+
+                      userHealth: battleData['battleProgressInfo']
+                          ['userHealth'],
+                      loseDamage: battleData['battleProgressInfo']
+                          ['userLoseDamage'],
+                    ),
+                    Transform.translate(
+                      offset: const Offset(0, 280),
+                      child: const MainFontStyle(size: 16, text: "vs"),
                     ),
                     BattleSide(
-                      health: 100,
-                      power: 5,
-                      defense: 3,
-                      rating: 1349,
-                      characterId: 1,
-                      userCharacterLevel: 15,
-                      nickname: "지은이",
+                      health: battleData['enemyInfo']['health'],
+                      power: battleData['enemyInfo']['power'],
+                      defense: battleData['enemyInfo']['defense'],
+                      rating: battleData['enemyInfo']['rating'],
+                      characterId: battleData['enemyInfo']['characterId'],
+                      userCharacterLevel: battleData['enemyInfo']['level'],
+                      nickname: battleData['enemyInfo']['nickname'],
                       isLeft: false,
-                      damageRatioList: [0.3, 0, 0.2, 0, 0.3, 0, 0.1, 0],
-                      attckDamage: [-1, 8, -1, 2, -1, 6, -1, 7],
+                      attackDamage: battleData['battleProgressInfo']
+                          ['enemyAttackDamage'],
+                      receivedDamage: battleData['battleProgressInfo']
+                          ['userAttackDamage'],
+                      userHealth: battleData['battleProgressInfo']
+                          ['userHealth'],
+                      loseDamage: battleData['battleProgressInfo']
+                          ['enemyLoseDamage'],
                     ),
                   ],
                 ),
