@@ -62,30 +62,28 @@ class Ranking extends StatelessWidget {
             child: Column(
               children: [
                 // 3-1. 랭킹 & X버튼
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 5),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         '랭킹',
                         style: TextStyle(fontSize: 30),
                       ),
-                      Text(
-                        ' X ',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                      // X버튼 관련 고민
-                      // IconButton(
-                      //   onPressed: () {
-                      //     Navigator.popUntil(context, ModalRoute.withName('/'));
-                      //   },
-                      //   icon: Icon(Icons.close),
-                      // ),
-                      // ElevatedButton(
-                      //   // onPressed: Navigator.pushNamed(context, '/home'),
-                      //   child: Text('data'),
-                      // ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                              EdgeInsets.zero), // 버튼의 내부 패딩 제거
+                        ),
+                        child: const Text(
+                          'X',
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        ),
+                      )
                     ],
                   ),
                 ),
