@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
+import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/star.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/services/battle/getmyinfo.dart';
@@ -12,6 +13,9 @@ class BattleReady extends StatefulWidget {
 }
 
 class _BattleReadyState extends State<BattleReady> {
+  Map<String, dynamic> characterData = {};
+  String animal = "";
+
   @override
   void initState() {
     super.initState();
@@ -21,8 +25,14 @@ class _BattleReadyState extends State<BattleReady> {
   Future<void> initMyInfo() async {
     try {
       var response = await getMyInfo();
-      print(response);
-      print(response['data']);
+      setState(() {
+        characterData = response['data']; // API 응답을 상태에 저장
+        int characterId = characterData['characterId']
+            as int; // API에서 characterId가 int 타입이라고 가정
+        animal = CharacterMap.idToAnimal[characterId] ??
+            "Unknown"; // characterId에 해당하는 동물이 없을 경우 "Unknown"을 사용
+      });
+      print(characterData);
     } catch (e) {
       print('Failed to load data: $e');
     }
@@ -54,23 +64,26 @@ class _BattleReadyState extends State<BattleReady> {
               child: Center(
                 child: Column(
                   children: [
-                    const MainFontStyle(size: 40, text: "오리빠따죠"),
-                    const MainFontStyle(size: 30, text: "점수: 1357"),
+                    MainFontStyle(
+                        size: 40, text: characterData['nickname']), // 동적 데이터 사용
+                    MainFontStyle(
+                        size: 30, text: "점수: ${characterData['rating']}"),
                     const SizedBox(
                       height: 100,
                     ),
                     Transform.translate(
                       offset: const Offset(0, 60),
-                      child: const Star(
-                        count: 2,
+                      child: Star(
+                        count: characterData['grade'],
                       ),
                     ),
                     Image.asset(
-                      'assets/animals/cow/cow_idle.gif',
+                      'assets/animals/$animal/${animal}_walk.gif',
                     ),
                     Transform.translate(
                       offset: const Offset(0, -20),
-                      child: const MainFontStyle(size: 30, text: "Lv.47"),
+                      child: MainFontStyle(
+                          size: 30, text: "Lv.${characterData['level']}"),
                     ),
                     Transform.translate(
                       offset: const Offset(0, -15),
@@ -89,20 +102,20 @@ class _BattleReadyState extends State<BattleReady> {
                           children: [
                             Image.asset(
                                 'assets/buttons/battle_start_button.png'),
-                            const Center(
+                            Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Battle Start!",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   Text(
-                                    "일일 남은 횟수: 5/10",
-                                    style: TextStyle(fontSize: 12),
+                                    "일일 남은 횟수: ${characterData['battleCount']}/10",
+                                    style: const TextStyle(fontSize: 12),
                                   ),
                                 ],
                               ),
