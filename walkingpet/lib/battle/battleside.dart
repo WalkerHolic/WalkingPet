@@ -14,8 +14,10 @@ class BattleSide extends StatefulWidget {
   final int userCharacterLevel;
   final String nickname;
   final bool isLeft;
-  final List<double> damageRatioList;
-  final List<double> attckDamage;
+  final List<dynamic> attackDamage;
+  final List<dynamic> receivedDamage;
+  final List<dynamic> userHealth;
+  final List<dynamic> loseDamage;
 
   const BattleSide({
     super.key,
@@ -27,8 +29,10 @@ class BattleSide extends StatefulWidget {
     required this.userCharacterLevel,
     required this.nickname,
     required this.isLeft,
-    required this.damageRatioList,
-    required this.attckDamage,
+    required this.attackDamage,
+    required this.receivedDamage,
+    required this.userHealth,
+    required this.loseDamage,
   });
 
   @override
@@ -44,19 +48,18 @@ class _BattleSideState extends State<BattleSide> {
   @override
   void initState() {
     super.initState();
-    final List<double> damageSequence = widget.damageRatioList;
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    final List<dynamic> damageSequence = widget.loseDamage;
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (_sequenceIndex < damageSequence.length) {
         setState(() {
           // 각 시퀀스 값을 현재 퍼센트에 추가하고, 결과가 1을 초과하지 않도록 합니다.
-          _currentPercent = (_currentPercent + damageSequence[_sequenceIndex])
-              .clamp(0.0, 1.0);
+          _currentPercent = damageSequence[_sequenceIndex].clamp(0.0, 1.0);
 
           if (_sequenceIndex + 1 < damageSequence.length) {
             _sequenceIndex++;
           } else {
             _timer?.cancel();
-            Navigator.pushReplacementNamed(context, '/battleresult');
+            //Navigator.pushReplacementNamed(context, '/battleresult');
           }
         });
       } else {}
@@ -143,10 +146,90 @@ class _BattleSideState extends State<BattleSide> {
           child: Transform.translate(
             offset: const Offset(58, 0),
             child: Image.asset(
-              widget.attckDamage[_sequenceIndex] >= 0
+              widget.attackDamage[_sequenceIndex] >= 0
                   ? 'assets/animals/cow/cow_attack.gif'
                   : 'assets/animals/cow/cow_hurt.gif',
               scale: 1.2,
+            ),
+          ),
+        ),
+        Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.6), // 투명한 흰색 배경 추가
+            borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 처리
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MainFontStyle(
+                        size: 16, text: "Lv.${widget.userCharacterLevel}"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    MainFontStyle(size: 12, text: widget.nickname),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      'assets/icons/icon_health.png', // assets 폴더에 위치한 SVG 파일
+                      height: 20, // 높이 지정
+                      width: 20, // 너비 지정
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    MainFontStyle(size: 16, text: (widget.health).toString()),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      'assets/icons/icon_power.png', // assets 폴더에 위치한 SVG 파일
+                      height: 20, // 높이 지정
+                      width: 20, // 너비 지정
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    MainFontStyle(size: 16, text: (widget.power).toString()),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      'assets/icons/icon_depense.png', // assets 폴더에 위치한 SVG 파일
+                      height: 20, // 높이 지정
+                      width: 20, // 너비 지정
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    MainFontStyle(size: 16, text: (widget.defense).toString()),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
