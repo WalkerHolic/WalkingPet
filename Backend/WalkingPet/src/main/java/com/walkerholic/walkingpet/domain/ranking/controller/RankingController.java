@@ -1,10 +1,7 @@
 package com.walkerholic.walkingpet.domain.ranking.controller;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.*;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -38,7 +35,6 @@ public class RankingController {
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 개인 랭킹과 개인 랭킹 목록 조회 성공", content = @Content(schema = @Schema(implementation = PersonalStepRankingResponse.class)))
-//    @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getPersonalRanking(@RequestParam("value") String value) {
         int userId = 1;
         log.info("개인 랭킹 조회 getPersonalRanking - userId: {}, value: {}", userId, value);
@@ -53,13 +49,13 @@ public class RankingController {
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
         log.info("개인 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
-        AccStepRankingResponse accStepRankingTop10 = rankingService.getAccStepRankingTop10();
+//        AccStepRankingResponse accStepRankingTop10 = rankingService.getAccStepRankingTop10();
 //        List<AccStepRankingInfo> accStepRankingList = rankingService.getUserAccStepList();
 
-//        AccStepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
+        StepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
 //        AccStepRankingResponse accStepRankingList = testRedisService.getRedisAccStepRanking(0, 9);
 //        AccStepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingTop10);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
 
     @GetMapping("/person/top3")
@@ -68,7 +64,7 @@ public class RankingController {
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop3(@RequestParam("value") String value) {
         log.info("개인 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", value);
 
-        AccStepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 3);
+        StepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 3);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
 

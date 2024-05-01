@@ -24,6 +24,7 @@ public class TestRepo {
 
     public void saveUserData(AccStepRankingInfo userData) {
         zSetOperations.add("userdata:steps", userData, userData.getStep());
+//        zSetOperations.add("userdata:steps", userData, userData.getStep());
         redisTemplate.opsForValue().set("userdata:steps:" + userData.getUserId(), userData);
     }
 
