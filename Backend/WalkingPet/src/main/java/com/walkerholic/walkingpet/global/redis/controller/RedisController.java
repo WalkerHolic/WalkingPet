@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.global.redis.controller;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -37,9 +38,7 @@ public class RedisController {
         List<AccStepRankingInfo> userAccStepList = rankingService.getUserAccStepList();
 
         for (AccStepRankingInfo stepInfo : userAccStepList) {
-//            redisRankingService.saveAccStepList(stepInfo);
-//            testRedisService.saveAccStepInfo(stepInfo);
-            testRepo.saveUserData(stepInfo);
+            redisRankingService.saveAccStepList(stepInfo);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
@@ -48,11 +47,11 @@ public class RedisController {
     @GetMapping("/getTest/accStepRanking")
     @Operation(summary = "redis test", description = "")
     public ResponseEntity<CommonResponseEntity> getRedisAccRankingInfo(@RequestParam("userId") int userId) {
-        log.info("redis 누적 랭킹 출력 테스트 - redis test getRedisAccRankingInfo");
+        log.info("redis 사용자 순위 조회 테스트 - redis test getRedisAccRankingInfo");
 
-//        StepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
-
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+        System.out.println("redis controller 테스트");
+        int rank = redisRankingService.getUserRanking(1);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rank);
     }
 
     @GetMapping("/getTest/top10")
@@ -60,15 +59,8 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> getRedisAccRankingTop10() {
         log.info("redis 누적 랭킹 Top 10 출력 테스트 - redis test getRedisAccRankingTop10");
 
-//        List<AccStepRankingInfo> topRankingProjectIdList = redisRankingService.getRedisAccStepRanking();
-//        if (topRankingProjectIdList.isEmpty()) {
-//            System.out.println("누적 랭킹 리스트 비어있음");
-//        }
-//        for (AccStepRankingInfo accStepInfo : topRankingProjectIdList) {
-//            System.out.println("redis accStepInfo: " + accStepInfo);
-//        }
         System.out.println("테스트");
-        StepRankingResponse accStepRankingList = testRepo.getRedisAccStepRanking(0, 9);
+        StepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }

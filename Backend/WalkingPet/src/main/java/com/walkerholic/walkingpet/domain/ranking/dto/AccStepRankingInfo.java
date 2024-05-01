@@ -25,11 +25,6 @@ public class AccStepRankingInfo implements Serializable {
         this.characterId = characterId;
     }
 
-    @Builder
-    public AccStepRankingInfo(int userId) {
-        this.userId = userId;
-    }
-
     public static AccStepRankingInfo entityFrom(UserDetail userDetail, UserStep userStep) {
         return AccStepRankingInfo.builder()
                 .userId(userDetail.getUser().getUserId())
