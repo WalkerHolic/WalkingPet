@@ -143,7 +143,7 @@ class _BattleSideState extends State<BattleSide> {
           child: Image.asset(
             widget.attckDamage[_sequenceIndex] >= 0
                 ? 'assets/animals/cow/cow_attack.gif'
-                : 'assets/animals/cow/cow_damaged.gif',
+                : 'assets/animals/cow/cow_hurt.gif',
             scale: 1.2,
           ),
         ),

@@ -41,8 +41,29 @@ flutter:
   assets:
     - assets/
     - assets/animals/
+    - assets/animals/bunny/
+    - assets/animals/chicken/
     - assets/animals/cow/
-    - assets/animals/dragons/red/
+    - assets/animals/crow/
+    - assets/animals/dog/
+    - assets/animals/dragons/
+    - assets/animals/duck/
+    - assets/animals/ducky/
+    - assets/animals/falcon/
+    - assets/animals/fox/
+    - assets/animals/frog/
+    - assets/animals/lilhedgehog/
+    - assets/animals/lilotter/
+    - assets/animals/mouse/
+    - assets/animals/nutty/
+    - assets/animals/panda/
+    - assets/animals/parrot/
+    - assets/animals/raccoon/
+    - assets/animals/redcrane/
+    - assets/animals/rhino/
+    - assets/animals/squirrel/
+    - assets/animals/turtle/
+    - assets/animals/wolf/
     - assets/backgrounds/
     - assets/buttons/
     - assets/icons/
