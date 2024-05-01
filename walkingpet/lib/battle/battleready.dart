@@ -34,9 +34,7 @@ class _BattleReadyState extends State<BattleReady> {
             "Unknown"; // characterId에 해당하는 동물이 없을 경우 "Unknown"을 사용
         isLoading = false;
       });
-      print(characterData);
     } catch (e) {
-      print('Failed to load data: $e');
       isLoading = false;
     }
   }
