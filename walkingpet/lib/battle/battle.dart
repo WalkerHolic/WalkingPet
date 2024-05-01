@@ -24,7 +24,6 @@ class _BattleState extends State<Battle> {
   Future<void> initBattleInfo() async {
     try {
       var response = await getBattleInfo();
-      print(response['data']);
       setState(() {
         battleData = response['data']; // API 응답을 상태에 저장
         isLoading = false;

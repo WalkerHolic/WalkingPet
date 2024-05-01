@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -40,15 +41,24 @@ class BattleSide extends StatefulWidget {
 }
 
 class _BattleSideState extends State<BattleSide> {
+  String animal = "cow";
+
   double _currentPercent = 0.0;
 
   int _sequenceIndex = 0;
   Timer? _timer;
 
+  int _damageToShow = -1;
+
   @override
   void initState() {
     super.initState();
+    animal = CharacterMap.idToAnimal[widget.characterId] ?? "Unknown";
     final List<dynamic> damageSequence = widget.loseDamage;
+
+    // 여기에 지연 후 실행할 코드를 작성
+    _currentPercent = damageSequence[_sequenceIndex].clamp(0.0, 1.0);
+    _damageToShow = widget.receivedDamage[_sequenceIndex];
     _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (_sequenceIndex < damageSequence.length) {
         setState(() {
@@ -56,10 +66,15 @@ class _BattleSideState extends State<BattleSide> {
           _currentPercent = damageSequence[_sequenceIndex].clamp(0.0, 1.0);
 
           if (_sequenceIndex + 1 < damageSequence.length) {
-            _sequenceIndex++;
+            Timer(const Duration(milliseconds: 500), () {
+              _sequenceIndex++;
+            });
           } else {
             _timer?.cancel();
-            //Navigator.pushReplacementNamed(context, '/battleresult');
+            Timer(const Duration(seconds: 1), () {
+              // 여기에 지연 후 실행할 코드를 작성
+              Navigator.pushReplacementNamed(context, '/battleresult');
+            });
           }
         });
       } else {}
@@ -138,19 +153,33 @@ class _BattleSideState extends State<BattleSide> {
         const SizedBox(
           height: 30,
         ),
-        Transform(
-          alignment: Alignment.center,
-          transform:
-              widget.isLeft ? Matrix4.identity() : Matrix4.rotationY(math.pi),
-          // 여기서 올바르게 translate 적용
-          child: Transform.translate(
-            offset: const Offset(58, 0),
-            child: Image.asset(
-              widget.attackDamage[_sequenceIndex] >= 0
-                  ? 'assets/animals/cow/cow_attack.gif'
-                  : 'assets/animals/cow/cow_hurt.gif',
-              scale: 1.2,
-            ),
+        SizedBox(
+          height: 150,
+          child: Stack(
+            children: [
+              if (widget.attackDamage[_sequenceIndex] < 0)
+                MainFontStyle(
+                  size: 20,
+                  text: "-${widget.receivedDamage[_sequenceIndex]}",
+                  color: Colors.red,
+                ),
+              Transform(
+                alignment: Alignment.center,
+                transform: widget.isLeft
+                    ? Matrix4.identity()
+                    : Matrix4.rotationY(math.pi),
+                // 여기서 올바르게 translate 적용
+                child: Transform.translate(
+                  offset: const Offset(58, 0),
+                  child: Image.asset(
+                    widget.attackDamage[_sequenceIndex] >= 0
+                        ? 'assets/animals/$animal/${animal}_attack.gif'
+                        : 'assets/animals/$animal/${animal}_hurt.gif',
+                    scale: 1.2,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Container(
