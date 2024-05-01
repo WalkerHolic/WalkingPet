@@ -56,7 +56,7 @@ class _BattleSideState extends State<BattleSide> {
 
     // 여기에 지연 후 실행할 코드를 작성
     _currentPercent = damageSequence[_sequenceIndex].clamp(0.0, 1.0);
-    _timer = Timer.periodic(const Duration(milliseconds: 1800), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 2000), (timer) {
       if (_sequenceIndex < damageSequence.length) {
         setState(() {
           // 각 시퀀스 값을 현재 퍼센트에 추가하고, 결과가 1을 초과하지 않도록 합니다.
@@ -141,7 +141,7 @@ class _BattleSideState extends State<BattleSide> {
                   lineHeight: 6,
                   barRadius: const Radius.circular(2),
                   animateFromLastPercent: true,
-                  animationDuration: 100,
+                  animationDuration: 500,
                 ),
               ),
             ),
@@ -152,13 +152,17 @@ class _BattleSideState extends State<BattleSide> {
         ),
         SizedBox(
           height: 150,
+          width: 160,
           child: Stack(
             children: [
               if (widget.attackDamage[_sequenceIndex] < 0)
-                MainFontStyle(
-                  size: 20,
-                  text: "-${widget.receivedDamage[_sequenceIndex]}",
-                  color: Colors.red,
+                Container(
+                  alignment: Alignment.center,
+                  child: MainFontStyle(
+                    size: 20,
+                    text: "-${widget.receivedDamage[_sequenceIndex]}",
+                    color: Colors.red,
+                  ),
                 ),
               Transform(
                 alignment: Alignment.center,
