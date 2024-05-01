@@ -2,6 +2,7 @@ package com.walkerholic.walkingpet.domain.ranking.service;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
+import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
@@ -93,14 +94,6 @@ public class RankingService {
     userId, nickname, step
      */
     public List<AccStepRankingInfo> getUserAccStepList() {
-        //TODO: Redis 데이터로 변경
-//        List<UserStep> userStepList = userStepRepository.findUserStepList();
-//
-//        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-//        for (UserStep userStep : userStepList) {
-//            accStepRankingList.add(AccStepRankingInfo.entityFrom(userStep));
-//        }
-
         List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
 
         List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
@@ -108,6 +101,23 @@ public class RankingService {
             UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
                     .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
             accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
+        }
+
+        return accStepRankingList;
+    }
+
+    /*
+        사용자들의 어제 걸음수 데이터 가져오기
+        yesterdayStep
+     */
+    public List<YesterdayStepRankingInfo> getUserYseterdayStepList() {
+        List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
+
+        List<YesterdayStepRankingInfo> accStepRankingList = new ArrayList<>();
+        for (UserDetail userDetailInfo : allByUser) {
+            UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+            accStepRankingList.add(YesterdayStepRankingInfo.entityFrom(userStepInfo));
         }
 
         return accStepRankingList;
