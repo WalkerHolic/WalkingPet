@@ -30,17 +30,23 @@ public class RedisRankingService {
         rankigRedisTemplate.opsForZSet().add(USERS_KEY, accStepInfo.getUserId(), accStepInfo.getStep());
     }
 
-    public StepRankingResponse getRedisAccStepRanking(int startRanking, int endRanking) {
+    public StepRankingResponse getRedisAccStepRankingList(int startRanking, int endRanking) {
         List<StepRankingList> accStepRankingList = new ArrayList<>();
         Set<Integer> top10users = rankigRedisTemplate.opsForZSet().reverseRange(USERS_KEY, startRanking, endRanking);
+        assert top10users != null;
         for (Integer userId: top10users) {
-            System.out.println("userId: " + userId);
             AccStepRankingInfo userStepInfo = getUser(userId);
             int userRanking = getUserRanking(userId);
             accStepRankingList.add(StepRankingList.from(userStepInfo, userRanking));
         }
 
         return StepRankingResponse.from(accStepRankingList);
+    }
+
+    public StepRankingList getUserAccStepRanking(int userId) {
+        AccStepRankingInfo userStepInfo = getUser(userId);
+        int userRanking = getUserRanking(userId);
+        return StepRankingList.from(userStepInfo, userRanking);
     }
 
     public AccStepRankingInfo getUser(int userId) {
@@ -51,20 +57,20 @@ public class RedisRankingService {
         return accStepRankingInfo;
     }
 
-    public int test(AccStepRankingInfo stepInfo) {
-        Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(USERS_KEY, stepInfo.getUserId());
+    public int getUserRanking(int userId) {
+        Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(USERS_KEY, userId);
 
-        if (stepInfo != null) {
+        if (userRanking != null) {
             return userRanking.intValue() + 1;
         } else {
             return -1;
         }
     }
 
-    public int getUserRanking(int userId) {
-        Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(USERS_KEY, userId);
+    public int test(AccStepRankingInfo stepInfo) {
+        Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(USERS_KEY, stepInfo.getUserId());
 
-        if (userRanking != null) {
+        if (stepInfo != null) {
             return userRanking.intValue() + 1;
         } else {
             return -1;
