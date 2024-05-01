@@ -48,8 +48,6 @@ class _BattleSideState extends State<BattleSide> {
   int _sequenceIndex = 0;
   Timer? _timer;
 
-  int _damageToShow = -1;
-
   @override
   void initState() {
     super.initState();
@@ -58,8 +56,7 @@ class _BattleSideState extends State<BattleSide> {
 
     // 여기에 지연 후 실행할 코드를 작성
     _currentPercent = damageSequence[_sequenceIndex].clamp(0.0, 1.0);
-    _damageToShow = widget.receivedDamage[_sequenceIndex];
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 1800), (timer) {
       if (_sequenceIndex < damageSequence.length) {
         setState(() {
           // 각 시퀀스 값을 현재 퍼센트에 추가하고, 결과가 1을 초과하지 않도록 합니다.
