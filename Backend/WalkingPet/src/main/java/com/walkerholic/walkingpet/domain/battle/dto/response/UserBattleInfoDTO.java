@@ -9,6 +9,8 @@ import lombok.*;
 @Getter
 public class UserBattleInfoDTO {
     private String nickname;
+    private int level;
+    private int grade;
     private int characterId;
     private int health;
     private int power;
@@ -19,6 +21,8 @@ public class UserBattleInfoDTO {
     public static UserBattleInfoDTO from(UserCharacter userCharacter, UserDetail userDetail){
         return UserBattleInfoDTO.builder()
                 .nickname(userDetail.getUser().getNickname())
+                .level(userCharacter.getLevel())
+                .grade(userCharacter.getCharacter().getGrade())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
