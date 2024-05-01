@@ -34,4 +34,7 @@ public class Character {
     @Column(name = "fix_defense", nullable = false)
     private Integer fixDefense;
 
+    @OneToMany(mappedBy = "character", fetch = FetchType.LAZY)
+    private List<UserCharacter> userCharacters;
+
 }
