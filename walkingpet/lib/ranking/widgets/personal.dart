@@ -107,9 +107,9 @@ class PersonalRanking extends StatelessWidget {
                       children: [
                         // Rank.fromJson(json),
                         // Rank(
-                        //   ranking: '1',
-                        //   nickname: '1등 야호',
-                        //   step: '362,254',
+                        //   ranking: 10,
+                        //   nickname: '1등룰루룰루',
+                        //   step: 362254,
                         // ),
                         // Rank(
                         //   ranking: '2',
