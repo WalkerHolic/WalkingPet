@@ -1,7 +1,6 @@
 package com.walkerholic.walkingpet.global.redis.controller;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -31,7 +30,7 @@ public class RedisController {
     private final TestRepo testRepo;
 
     @GetMapping("/saveTest/accStepRanking")
-    @Operation(summary = "redis test", description = "")
+    @Operation(summary = "redis 누적 랭킹 저장 테스트", description = "")
     public ResponseEntity<CommonResponseEntity> saveRedisAccRankingInfo() {
         log.info("redis 누적 랭킹 저장 테스트 - redis test saveRedisAccRankingInfo");
 
@@ -45,7 +44,7 @@ public class RedisController {
     }
 
     @GetMapping("/getTest/accStepRanking")
-    @Operation(summary = "redis test", description = "")
+    @Operation(summary = "redis 사용자 순위 조회 테스트", description = "")
     public ResponseEntity<CommonResponseEntity> getRedisAccRankingInfo(@RequestParam("userId") int userId) {
         log.info("redis 사용자 순위 조회 테스트 - redis test getRedisAccRankingInfo");
 
@@ -55,12 +54,12 @@ public class RedisController {
     }
 
     @GetMapping("/getTest/top10")
-    @Operation(summary = "redis test top10", description = "")
+    @Operation(summary = "redis 누적 랭킹 Top 10 출력 테스트", description = "")
     public ResponseEntity<CommonResponseEntity> getRedisAccRankingTop10() {
         log.info("redis 누적 랭킹 Top 10 출력 테스트 - redis test getRedisAccRankingTop10");
 
         System.out.println("테스트");
-        StepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRanking(0, 9);
+        StepRankingResponse accStepRankingList = redisRankingService.getRedisAccStepRankingList(0, 9);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
