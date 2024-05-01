@@ -95,7 +95,6 @@ class MyApp extends StatelessWidget {
         '/characterinfo': (context) => const CharacterInfo(),
         '/gacha': (context) => const Gacha(),
         '/battleready': (context) => const BattleReady(),
-        '/battle': (context) => const Battle(),
         '/battleresult': (context) => const BattleResult(),
         '/group': (context) => const Group(),
         '/levelup': (context) => const LevelUp(),
