@@ -26,8 +26,9 @@ public class GachaController {
     @Operation(summary = "뽑기 가능 횟수 조회", description = "뽑기 가능 횟수 조회")
     @ApiResponse(responseCode = "200", description = "S200 - 뽑기 가능 횟수 조회 성공", content = @Content(schema = @Schema(implementation = GachaCountResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 뽑기 가능 횟수 조회 실패")
-    @GetMapping("/count/{userId}")
-    public ResponseEntity<CommonResponseEntity> getGachaCount(@PathVariable int userId){
+    @GetMapping("/count")
+    public ResponseEntity<CommonResponseEntity> getGachaCount(){
+        int userId=1;
         GachaCountResponse gachaCount = gachaService.getGachaCount(userId);
         log.info("뽑기 가능 횟수 조회 getGachaCount - userId: {}", userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, gachaCount);
@@ -37,7 +38,8 @@ public class GachaController {
     @ApiResponse(responseCode = "200", description = "S200 - 뽑기 결과 조회 성공", content = @Content(schema = @Schema(implementation = GachaResultResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 뽑기 결과 조회 실패")
     @GetMapping("/result/{userId}")
-    public ResponseEntity<CommonResponseEntity> getGachaResult(@PathVariable int userId, @RequestParam("box") String boxType){
+    public ResponseEntity<CommonResponseEntity> getGachaResult(@RequestParam("box") String boxType){
+        int userId=1;
         GachaResultResponse gachaResult = gachaService.getGachaResult(boxType, userId);
         log.info("뽑기 결과 조회 getGachaResult - boxType: {}, userId: {}", boxType, userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,gachaResult);

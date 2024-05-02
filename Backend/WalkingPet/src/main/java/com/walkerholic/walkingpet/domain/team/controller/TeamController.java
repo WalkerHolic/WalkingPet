@@ -40,8 +40,9 @@ public class TeamController {
     @Operation(summary = "소속된 그룹 확인", description = "유저의 userId로 소속된 그룹 정보 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저가 소속된 그룹들 조회 성공", content = @Content(schema = @Schema(implementation = TeamResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저가 소속된 그룹들 조회 실패")
-    @GetMapping("/belong/{userId}")
-    public ResponseEntity<CommonResponseEntity> getUserTeams(@PathVariable int userId){
+    @GetMapping("/belong")
+    public ResponseEntity<CommonResponseEntity> getUserTeams(){
+        int userId=1;
         List<TeamResponse> allTeam = teamService.getUserTeams(userId);
         log.info("소속된 그룹 확인 getUserTeams -  userId: {}", userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
@@ -60,8 +61,9 @@ public class TeamController {
     @Operation(summary = "그룹 상세보기", description = "특정 teamId를 통해 그룹 정보 상세보기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 상세보기 성공", content = @Content(schema = @Schema(implementation = TeamDetailResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 상세보기 실패")
-    @GetMapping("/detail/{teamId}")
-    public ResponseEntity<CommonResponseEntity> getSearchTeams(@PathVariable int teamId){
+    @GetMapping("/detail")
+    public ResponseEntity<CommonResponseEntity> getSearchTeams(){
+        int teamId=2;
         TeamDetailResponse teamDetail = teamService.getTeamDetail(teamId);
         log.info("그룹 상세보기 teamDetail -  teamId: {}", teamId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,teamDetail);
@@ -70,8 +72,9 @@ public class TeamController {
     @Operation(summary = "그룹 가입", description = "teamId를 가지고 그룹에 가입하기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 가입 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 가입 실패")
-    @PostMapping("/join/{userId}")
-    public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest,@PathVariable int userId){
+    @PostMapping("/join")
+    public ResponseEntity<CommonResponseEntity> joinGroup(@RequestBody JoinGroupRequest joinGroupRequest){
+        int userId=1;
         teamService.joinGroup(joinGroupRequest,userId);
         log.info("그룹 가입 joinGroup -  joinGroupRequest: {}, userId:{}", joinGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
@@ -80,8 +83,9 @@ public class TeamController {
     @Operation(summary = "그룹 생성", description = "새로운 그룹 생성하기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 생성 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 생성 실패")
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest,@PathVariable int userId){
+    @PostMapping("/create")
+    public ResponseEntity<CommonResponseEntity> createGroup(@RequestBody CreateGroupRequest createGroupRequest){
+        int userId=1;
         teamService.createGroup(createGroupRequest,userId);
         log.info("그룹 생성 createGroup - createGroupRequest: {}, userId: {}", createGroupRequest, userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
@@ -90,8 +94,9 @@ public class TeamController {
     @Operation(summary = "그룹원 정보 조회", description = "특정 teamId에 해당하는 그룹원들의 상세정보 조회")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹원 정보 조회 성공", content = @Content(schema = @Schema(implementation = TeamUsersResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹원 정보 조회 실패")
-    @GetMapping("/members/{teamId}")
-    public ResponseEntity<CommonResponseEntity> getGroupMembersInfo(@PathVariable int teamId){
+    @GetMapping("/members")
+    public ResponseEntity<CommonResponseEntity> getGroupMembersInfo(){
+        int teamId=2;
         List<TeamUsersResponse> membersInfo = teamService.getGroupMembersInfo(teamId);
         log.info("그룹원 정보 조회 getGroupMembersInfo - teamId:{}", teamId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,membersInfo);
@@ -100,8 +105,9 @@ public class TeamController {
     @Operation(summary = "그룹 나가기", description = "특정 teamId에 해당하는 그룹에서 나가기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 나가기 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 나가기 실패")
-    @PostMapping("/exit/{userId}")
-    public ResponseEntity<CommonResponseEntity> exitGroup(@RequestBody ExitGroupRequest exitGroupRequest, @PathVariable int userId){
+    @PostMapping("/exit")
+    public ResponseEntity<CommonResponseEntity> exitGroup(@RequestBody ExitGroupRequest exitGroupRequest){
+        int userId=1;
         teamService.exitGroup(exitGroupRequest, userId);
         log.info("그룹 나가기 exitGroup - exitGroupRequest:{}, userId:{}", exitGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
