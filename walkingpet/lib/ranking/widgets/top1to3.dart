@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/character_map.dart';
 
 class Top1to3 extends StatelessWidget {
   final int ranking, step, characterId;
@@ -14,6 +15,8 @@ class Top1to3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 5,
@@ -28,10 +31,9 @@ class Top1to3 extends StatelessWidget {
             ),
           ),
 
-          // 2. 캐릭터 이미지 (현재: gif 파일)
+          // 2. 캐릭터 이미지
           Image.asset(
-            'assets/animals/cow/cow_walk.gif',
-            // characterId
+            'assets/animals/$animal/${animal}_walk.gif',
             height: 90,
           ),
 

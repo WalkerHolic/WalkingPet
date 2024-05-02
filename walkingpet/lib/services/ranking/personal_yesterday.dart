@@ -30,7 +30,7 @@ Future<Map<String, dynamic>> getMyRank() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    print(jsonData);
+    // print(jsonData);
     return jsonData;
   } else {
     print("개인랭킹 어제자 유저순위(my rank) 오류: ${response.statusCode}");
