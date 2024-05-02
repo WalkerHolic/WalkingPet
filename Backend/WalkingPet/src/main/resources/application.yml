@@ -14,6 +14,7 @@ spring:
   data:
     redis:
       host: redis
+#      host: walkingpet.co.kr
       port: 6379
 
 logging:
