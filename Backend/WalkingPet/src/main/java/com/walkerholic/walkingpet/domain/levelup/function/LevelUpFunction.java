@@ -17,15 +17,16 @@ public class LevelUpFunction {
 
     /**
      * 레벨업을 할 수 있는지 체크하는 함수
-     * @param requiredCheckLevelUpInfo 현재레벨과 경험치를 담고있는 객체
+     * @param nowLevel 현재레벨
+     * @param nowExperience 현재 경험치
      * @param getExperience 여러 요소를 통해 얻은 경험치 양
      * @return 레벨업을 할 수 있다면 true, 할 수 없다면 false
      */
-    public boolean checkLevelUp(CharacterLevelExperienceInfo requiredCheckLevelUpInfo, int getExperience){
-        int requiredExperience = userCharacterFunction.getMaxExperience(requiredCheckLevelUpInfo.getNowLevel());
+    public boolean checkLevelUp(int nowLevel, int nowExperience, int getExperience){
+        int requiredExperience = userCharacterFunction.getMaxExperience(nowLevel);
 
         //지금 경험치 + 얻은 경험치 양이 레벨업에 필요한 경험치보다 크다면 레벨업 가능
-        if(requiredCheckLevelUpInfo.getNowExperience() + getExperience >= requiredExperience)
+        if(nowExperience + getExperience >= requiredExperience)
             return true;
         else return false;
     }
