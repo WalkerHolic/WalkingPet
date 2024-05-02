@@ -38,12 +38,7 @@ public class LevelUpService {
         UserDetail userDetail = getUserDetail(userId);
         UserCharacter userCharacter = getUserCharacter(userDetail.getUser().getUserId(), userDetail.getSelectUserCharacter().getUserCharacterId());
 
-        CharacterLevelExperienceInfo characterLevelExperienceInfo = CharacterLevelExperienceInfo.builder()
-                .nowLevel(userCharacter.getLevel())
-                .nowExperience(userCharacter.getExperience())
-                .build();
-
-        if(levelUpFunction.checkLevelUp(characterLevelExperienceInfo,getExperience)){
+        if(levelUpFunction.checkLevelUp(userCharacter.getLevel(), userCharacter.getExperience(), getExperience)){
             return LevelUpResponse.builder()
                     .isLevelUp(true)
                     .levelUpInfo(getLevelUpInfo(userId, userCharacter, getExperience))
@@ -65,12 +60,7 @@ public class LevelUpService {
      */
     public LevelUpResponse getLevelUpResponseByObject(UserCharacter userCharacter, int getExperience){
 
-        CharacterLevelExperienceInfo characterLevelExperienceInfo = CharacterLevelExperienceInfo.builder()
-            .nowLevel(userCharacter.getLevel())
-            .nowExperience(userCharacter.getExperience())
-            .build();
-
-        if(levelUpFunction.checkLevelUp(characterLevelExperienceInfo,getExperience)){
+        if(levelUpFunction.checkLevelUp(userCharacter.getLevel(), userCharacter.getExperience(), getExperience)){
             return LevelUpResponse.builder()
                 .isLevelUp(true)
                 .levelUpInfo(getLevelUpInfo(userCharacter.getUser().getUserId(), userCharacter, getExperience))
