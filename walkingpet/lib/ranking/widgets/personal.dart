@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
-import 'package:walkingpet/services/ranking/personal_top10.dart';
+import 'package:walkingpet/services/ranking/personal.dart';
 
-class PersonalRanking extends StatelessWidget {
-  PersonalRanking({super.key});
+class PersonalRanking extends StatefulWidget {
+  const PersonalRanking({super.key});
 
-  Future<List<Rank>> rankingPersonTop10Yesterday =
-      RankingApiService.getPersonTop10Yesterday();
+  @override
+  State<PersonalRanking> createState() => _PersonalRankingState();
+}
+
+class _PersonalRankingState extends State<PersonalRanking> {
+  // Map<String, dynamic> top10 = {};
+  // List<dynamic> top10 = [];
+  List top10 = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    initTop10();
+  }
+
+  Future<void> initTop10() async {
+    try {
+      var response = await getTop10();
+      setState(() {
+        top10 = response['data']['topRanking'];
+        isLoading = false;
+      });
+    } catch (e) {
+      isLoading = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,16 +96,6 @@ class PersonalRanking extends StatelessWidget {
           ),
 
           // 4. 4~10위 표시
-          FutureBuilder(
-            future: rankingPersonTop10Yesterday,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const Text("There is data!");
-              }
-              return const Text('랭킹 불러오는 중.. 기다려주세요 :D');
-            },
-          ),
-
           Container(
             // 4-1. 영역 표시
             decoration: BoxDecoration(
@@ -89,10 +104,10 @@ class PersonalRanking extends StatelessWidget {
             ),
             margin: const EdgeInsets.symmetric(horizontal: 7),
 
-            child: const Column(
+            child: Column(
               children: [
                 // 4-2. Top 10 텍스트
-                Text(
+                const Text(
                   'Top 10',
                   style: TextStyle(fontSize: 30),
                 ),
@@ -105,57 +120,13 @@ class PersonalRanking extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Rank.fromJson(json),
-                        Rank(
-                          ranking: 10,
-                          nickname: '1등룰루룰루',
-                          step: 362254,
-                        ),
-                        Rank(
-                          ranking: 2,
-                          nickname: '이겜재밌냐',
-                          step: 226254,
-                        ),
-                        Rank(
-                          ranking: 3,
-                          nickname: '나는지은',
-                          step: 160254,
-                        ),
-                        Rank(
-                          ranking: 4,
-                          nickname: '룰루루4등잼',
-                          step: 8254,
-                        ),
-                        Rank(
-                          ranking: 5,
-                          nickname: '우희힇',
-                          step: 7254,
-                        ),
-                        Rank(
-                          ranking: 6,
-                          nickname: '6등 울렐레',
-                          step: 6254,
-                        ),
-                        Rank(
-                          ranking: 7,
-                          nickname: '7등임당',
-                          step: 5254,
-                        ),
-                        Rank(
-                          ranking: 8,
-                          nickname: '난 8등',
-                          step: 3254,
-                        ),
-                        Rank(
-                          ranking: 9,
-                          nickname: '구구구구구',
-                          step: 2254,
-                        ),
-                        Rank(
-                          ranking: 10,
-                          nickname: '10등이군',
-                          step: 1254,
-                        ),
+                        ...top10.map((item) {
+                          return Rank(
+                            ranking: item['ranking'],
+                            nickname: item['nickname'],
+                            step: item['step'],
+                          );
+                        }),
                       ],
                     ),
                   ),
