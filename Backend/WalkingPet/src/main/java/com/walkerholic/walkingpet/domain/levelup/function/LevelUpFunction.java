@@ -33,30 +33,29 @@ public class LevelUpFunction {
 
     /**
      * 레벨업을 했을 때 레벨 몇까지 업하고 남는 경험치는 몇인지 알려주는 함수
-     * @param requiredCheckLevelUpInfo 현재레벨과 경험치를 담고있는 객체
+     * @param nowLevel 현재레벨
+     * @param nowExperience 현재 경험치
      * @param getExperience 여러 요소를 통해 얻은 경험치 양
      * @return 레벨업 이후의 레벨과 경험치
      */
-    public CharacterLevelExperienceInfo getNextLevel(CharacterLevelExperienceInfo requiredCheckLevelUpInfo, int getExperience){
-        //현재 레벨
-        int nowLevel = requiredCheckLevelUpInfo.getNowLevel();
+    public CharacterLevelExperienceInfo getNextLevel(int nowLevel, int nowExperience, int getExperience){
         //경험치를 얻었을 때 가지고 있는 경험치 양
-        int nowExperience = requiredCheckLevelUpInfo.getNowExperience()+getExperience;
+        int resultExperience = nowExperience + getExperience;
         //레벨업이 되기 위해 필요한 경험치 양
         int requiredLevelUpExperience = userCharacterFunction.getMaxExperience(nowLevel);
 
-        while(nowExperience >= requiredLevelUpExperience){
+        while(resultExperience >= requiredLevelUpExperience){
             //1. 레벨업
             nowLevel++;
             //2. 레벨업에 필요한 경험치 양 만큼 현재 경험치에서 깎기
-            nowExperience -= requiredLevelUpExperience;
-            //3. 다음 레벨업에 필요한 경험치 양 갱시낳기
+            resultExperience -= requiredLevelUpExperience;
+            //3. 다음 레벨업에 필요한 경험치 양 갱신하기
             requiredLevelUpExperience = userCharacterFunction.getMaxExperience(nowLevel);
         }
 
         return CharacterLevelExperienceInfo.builder()
                 .nowLevel(nowLevel)
-                .nowExperience(nowExperience)
+                .nowExperience(resultExperience)
                 .build();
     }
 

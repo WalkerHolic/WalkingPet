@@ -30,18 +30,18 @@ public class LevelUpService {
 
     /**
      * 레벨업 여부 & 레벨업 정보 반환 서비스(현재 레벨, 다음 레벨, 보상 정보), 레벨업 된 정보를 저장한다
-     * @param userId 유저 아이디
+     * @param userDetail 유저 디테일
      * @param getExperience 획득한 경험치 양
      * @return 레벨업 여부 & 레벨업 정보 => 현재 레벨, 다음 레벨, 보상 정보
      */
-    public LevelUpResponse getLevelUpResponse(int userId, int getExperience){
-        UserDetail userDetail = getUserDetail(userId);
-        UserCharacter userCharacter = getUserCharacter(userDetail.getUser().getUserId(), userDetail.getSelectUserCharacter().getUserCharacterId());
-
-        if(levelUpFunction.checkLevelUp(userCharacter.getLevel(), userCharacter.getExperience(), getExperience)){
+    public LevelUpResponse getLevelUpResponse(UserDetail userDetail, int getExperience){
+        UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
+        int userId= userDetail.getUser().getUserId();
+        
+        if(levelUpFunction.checkLevelUp(selectUserCharacter.getLevel(), selectUserCharacter.getExperience(), getExperience)){
             return LevelUpResponse.builder()
                     .isLevelUp(true)
-                    .levelUpInfo(getLevelUpInfo(userId, userCharacter, getExperience))
+                    .levelUpInfo(getLevelUpInfo(userId,selectUserCharacter, getExperience))
                     .build();
         }
         else{
@@ -58,12 +58,12 @@ public class LevelUpService {
      * @param getExperience 획득한 경험치 양
      * @return 레벨업 여부 & 레벨업 정보 => 현재 레벨, 다음 레벨, 보상 정보
      */
-    public LevelUpResponse getLevelUpResponseByObject(UserCharacter userCharacter, int getExperience){
+    public LevelUpResponse getLevelUpResponseByObject(int userId, UserCharacter userCharacter, int getExperience){
 
         if(levelUpFunction.checkLevelUp(userCharacter.getLevel(), userCharacter.getExperience(), getExperience)){
             return LevelUpResponse.builder()
                 .isLevelUp(true)
-                .levelUpInfo(getLevelUpInfo(userCharacter.getUser().getUserId(), userCharacter, getExperience))
+                .levelUpInfo(getLevelUpInfo(userId,userCharacter, getExperience))
                 .build();
         }
         else{
@@ -76,24 +76,19 @@ public class LevelUpService {
 
     /**
      * 레벨업 결과 정보 가져오기, 정보를 가져오면서 캐릭터/아이템 정보를 업데이트한다.
-     * @param userId 유저 아이디
-     * @param userCharacter 유저가 장착하고 있는 유저캐릭터
+     * @param selectUserCharacter 유저 캐릭터
      * @param getExperience 획득한 경험치
      * @return 레벨업 정보
      */
-    public LevelUpInfo getLevelUpInfo(int userId, UserCharacter userCharacter, int getExperience){
-        CharacterLevelExperienceInfo characterInfo = CharacterLevelExperienceInfo.builder()
-                .nowLevel(userCharacter.getLevel())
-                .nowExperience(userCharacter.getExperience())
-                .build();
+    public LevelUpInfo getLevelUpInfo(int userId, UserCharacter selectUserCharacter, int getExperience){
 
-        CharacterLevelExperienceInfo updateCharacterInfo = levelUpFunction.getNextLevel(characterInfo, getExperience);
-        LevelUpReward levelUpReward = levelUpFunction.getLevelUpReward(characterInfo.getNowLevel(), updateCharacterInfo.getNowLevel());
+        CharacterLevelExperienceInfo updateCharacterInfo = levelUpFunction.getNextLevel(selectUserCharacter.getLevel(), selectUserCharacter.getExperience(), getExperience);
+        LevelUpReward levelUpReward = levelUpFunction.getLevelUpReward(selectUserCharacter.getLevel(), updateCharacterInfo.getNowLevel());
 
         //1. 캐릭터 정보 업데이트하기
-        userCharacter.updateLevelUp(updateCharacterInfo.getNowLevel(), updateCharacterInfo.getNowExperience(), levelUpReward.getStatPoint());
-        userCharacter.addStatPoint(levelUpReward.getStatPoint());
-        userCharacterRepository.save(userCharacter);
+        selectUserCharacter.updateLevelUp(updateCharacterInfo.getNowLevel(), updateCharacterInfo.getNowExperience(), levelUpReward.getStatPoint());
+        selectUserCharacter.addStatPoint(levelUpReward.getStatPoint());
+        userCharacterRepository.save(selectUserCharacter);
 
         //2. 레벨업 보상 업데이트하기
         for(String itemName : levelUpReward.getItemReward().keySet()){
@@ -104,7 +99,7 @@ public class LevelUpService {
 
 
         return LevelUpInfo.builder()
-                .nowLevel(characterInfo.getNowLevel())
+                .nowLevel(selectUserCharacter.getLevel())
                 .nextLevel(updateCharacterInfo.getNowLevel())
                 .levelUpReward(levelUpReward)
                 .build();
