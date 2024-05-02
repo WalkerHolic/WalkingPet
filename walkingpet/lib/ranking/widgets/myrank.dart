@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/character_map.dart';
 
 class MyRank extends StatelessWidget {
+  // final int ranking, step;
   final int ranking, step, characterId;
   final String nickname;
+  // String animal = "";
 
   const MyRank(
       {super.key,
@@ -10,6 +13,8 @@ class MyRank extends StatelessWidget {
       required this.step,
       required this.nickname,
       required this.characterId});
+
+  // final String animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +28,7 @@ class MyRank extends StatelessWidget {
           // 1. 캐릭터 이미지
           Image.asset(
             'assets/animals/cow/cow_walk.gif',
+            // 'assets/animals/$characterId/${characterId}_walk.gif',
             // characterId
             height: 90,
           ),
@@ -31,7 +37,7 @@ class MyRank extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   // 2. 순위
                   SizedBox(
