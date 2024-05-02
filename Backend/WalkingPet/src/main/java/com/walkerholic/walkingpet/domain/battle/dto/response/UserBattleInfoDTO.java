@@ -10,7 +10,7 @@ import lombok.*;
 public class UserBattleInfoDTO {
     private String nickname;
     private int level;
-    private int grade;
+    private int characterGrade;
     private int characterId;
     private int health;
     private int power;
@@ -18,16 +18,17 @@ public class UserBattleInfoDTO {
     private int rating;
     private int battleCount;
 
-    public static UserBattleInfoDTO from(UserCharacter userCharacter, UserDetail userDetail){
+    public static UserBattleInfoDTO from(UserDetail userDetail){
         return UserBattleInfoDTO.builder()
                 .nickname(userDetail.getUser().getNickname())
                 .rating(userDetail.getBattleRating())
-                .level(userCharacter.getLevel())
-                .grade(userCharacter.getCharacter().getGrade())
+                .level(userDetail.getSelectUserCharacter().getLevel())
+                .level(userDetail.getSelectUserCharacter().getLevel())
+                .characterGrade(userDetail.getSelectUserCharacter().getCharacter().getGrade())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
-                .health(userCharacter.getHealth())
-                .power(userCharacter.getPower())
-                .defense(userCharacter.getDefense())
+                .health(userDetail.getSelectUserCharacter().getHealth())
+                .power(userDetail.getSelectUserCharacter().getPower())
+                .defense(userDetail.getSelectUserCharacter().getDefense())
                 .battleCount(userDetail.getBattleCount())
                 .build();
     }
