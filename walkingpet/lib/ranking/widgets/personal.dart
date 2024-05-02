@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
-import 'package:walkingpet/services/ranking/personal.dart';
+import 'package:walkingpet/services/ranking/personal_yesterday.dart';
 
 class PersonalRanking extends StatefulWidget {
   const PersonalRanking({super.key});
@@ -11,9 +11,10 @@ class PersonalRanking extends StatefulWidget {
 }
 
 class _PersonalRankingState extends State<PersonalRanking> {
-  // Map<String, dynamic> top10 = {};
-  // List<dynamic> top10 = [];
   List top10 = [];
+  Map<String, dynamic> myrank = {};
+  List top3 = [];
+
   bool isLoading = true;
 
   @override
@@ -24,9 +25,14 @@ class _PersonalRankingState extends State<PersonalRanking> {
 
   Future<void> initTop10() async {
     try {
-      var response = await getTop10();
+      var responseTop10 = await getTop10();
+      var responseMyRank = await getMyRank();
+      var responseTop3 = await getTop3();
+
       setState(() {
-        top10 = response['data']['topRanking'];
+        top10 = responseTop10['data']['topRanking'];
+        myrank = responseMyRank['data'];
+        top3 = responseTop3['data']['topRanking'];
         isLoading = false;
       });
     } catch (e) {
@@ -46,7 +52,8 @@ class _PersonalRankingState extends State<PersonalRanking> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                '어제 | 실시간 | 누적',
+                // '어제 | 실시간 | 누적',
+                '어제자',
                 textAlign: TextAlign.right,
               ),
               SizedBox(
@@ -63,36 +70,45 @@ class _PersonalRankingState extends State<PersonalRanking> {
           const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Top1to3(
-                ranking: '2',
-                characterId: '13',
-                nickname: '이겜재밌냐',
-                step: '226,254',
-              ),
-              Top1to3(
-                ranking: '1',
-                characterId: '13',
-                nickname: '1등 야호',
-                step: '362,254',
-              ),
-              Top1to3(
-                ranking: '3',
-                characterId: '13',
-                nickname: '나는지은',
-                step: '160,254',
-              ),
+              ...top3.map((item) {
+                return Top1to3(
+                  ranking: item['ranking'],
+                  characterId: item['characterId'],
+                  nickname: item['nickname'],
+                  step: item['step'],
+                );
+              }),
+
+              // Top1to3(
+              //   ranking: '2',
+              //   characterId: '13',
+              //   nickname: '이겜재밌냐',
+              //   step: '226,254',
+              // ),
+              // Top1to3(
+              //   ranking: '1',
+              //   characterId: '13',
+              //   nickname: '1등 야호',
+              //   step: '362,254',
+              // ),
+              // Top1to3(
+              //   ranking: '3',
+              //   characterId: '13',
+              //   nickname: '나는지은',
+              //   step: '160,254',
+              // ),
             ],
           ),
 
           // 3. 유저의 랭킹 표시
           // 유진이 피드백: 나의 랭킹 897위 (226,254걸음 이런식으로 하면 어떨까?)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            // child: Rank(
-            //   ranking: '897',
-            //   nickname: '하이빅싸피',
-            //   step: '1,000',
-            // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Rank(
+              ranking: myrank['ranking'],
+              nickname: myrank['nickname'],
+              step: myrank['step'],
+            ),
           ),
 
           // 4. 4~10위 표시
