@@ -6,6 +6,7 @@ import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import com.walkerholic.walkingpet.global.redis.service.AccStepRankingRedisService;
+import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
 import com.walkerholic.walkingpet.global.redis.service.YesterdayStepRankingRedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,6 +28,7 @@ public class RankingController {
     private final RankingService rankingService;
     private final AccStepRankingRedisService accStepRankingRedisService;
     private final YesterdayStepRankingRedisService yesterdayStepRankingRedisService;
+    private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
@@ -43,17 +45,15 @@ public class RankingController {
     @Operation(summary = "개인 랭킹 top 10 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 10 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = AccStepRankingResponse.class)))
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
+        log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
         StepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            log.info("개인 어제 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
-            accStepRankingList = yesterdayStepRankingRedisService.getRedisAccStepRankingList(0, 9);
+            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 9);
         } else if (value.equals("accumulation")) {
-            log.info("개인 누적 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
             accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
         } else {
-            log.info("개인 실시간 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
-            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
+            accStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 9);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
@@ -63,18 +63,15 @@ public class RankingController {
     @Operation(summary = "개인 랭킹 top 3 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 3 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = AccStepTop3RankingResponse.class)))
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop3(@RequestParam("value") String value) {
-        log.info("개인 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", value);
+        log.info("개인 걸음수 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", value);
 
         StepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            log.info("개인 어제 걸음수 랭킹 top 3 조회 getPersonalRankingTop10 - value: {}", value);
-            accStepRankingList = yesterdayStepRankingRedisService.getRedisAccStepRankingList(0, 3);
+            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 3);
         } else if (value.equals("accumulation")) {
-            log.info("개인 누적 걸음수 랭킹 top 3 조회 getPersonalRankingTop10 - value: {}", value);
             accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 3);
         } else {
-            log.info("개인 실시간 걸음수 랭킹 top 3 조회 getPersonalRankingTop10 - value: {}", value);
-            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 3);
+            accStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 3);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
@@ -89,14 +86,11 @@ public class RankingController {
 
         StepRankingList userAccStepRanking;
         if (value.equals("yesterday")) {
-            log.info("개인 어제 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
             userAccStepRanking = yesterdayStepRankingRedisService.getUserYesterdayStepRanking(userId);
         } else if (value.equals("accumulation")) {
-            log.info("개인 누적 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
             userAccStepRanking = accStepRankingRedisService.getUserAccStepRanking(userId);
         } else {
-            log.info("개인 실시간 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
-            userAccStepRanking = accStepRankingRedisService.getUserAccStepRanking(userId);
+            userAccStepRanking = realtimeStepRankingRedisService.getUserRealtimeStepRanking(userId);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);

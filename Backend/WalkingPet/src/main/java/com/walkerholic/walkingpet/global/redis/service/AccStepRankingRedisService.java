@@ -16,8 +16,8 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AccStepRankingRedisService {
-    private static final String USERS_KEY = "USER";
-//    private static final String USERS_KEY = "USER_ACC_STEP_RANKING_INFO";
+//    private static final String USERS_KEY = "USER";
+    private static final String USERS_KEY = "USER_ACC_STEP_RANKING_INFO";
     private static final String RANKING_KEY = "RANKING";
 
     @Resource(name = "redisTemplateForStepCount")
