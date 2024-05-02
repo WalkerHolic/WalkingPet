@@ -89,8 +89,8 @@ public class GachaService {
         int randomNumber = new Random(System.currentTimeMillis()).nextInt(100) + 1;
 
         return boxType.equals("normal") ?
-                (randomNumber <= GRADE2_APPEAR_PERCENTAGE ? GRADE2 : GRADE3) :
-                (randomNumber <= GRADE1_APPEAR_PERCENTAGE ? GRADE1 : GRADE2);
+                (randomNumber <= GRADE1_APPEAR_PERCENTAGE ? GRADE1 : GRADE2) :
+                (randomNumber <= GRADE2_APPEAR_PERCENTAGE ? GRADE2 : GRADE3);
     }
 
     // 주어진 사용자 항목 목록에서 특정 아이템 ID에 해당하는 아이템의 수량을 계산합니다.
