@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Top1to3 extends StatelessWidget {
-  final String ranking, characterId, nickname, step;
+  final int ranking, step, characterId;
+  final String nickname;
 
   const Top1to3({
     super.key,
@@ -21,7 +22,7 @@ class Top1to3 extends StatelessWidget {
         children: [
           // 1. 순위 (1~3위)
           Text(
-            ranking,
+            ranking.toString(),
             style: const TextStyle(
               fontSize: 34,
             ),

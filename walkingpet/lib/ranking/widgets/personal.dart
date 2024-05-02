@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
 import 'package:walkingpet/services/ranking/personal_yesterday.dart';
@@ -67,7 +68,7 @@ class _PersonalRankingState extends State<PersonalRanking> {
           ),
 
           // 2. 1~3위 표시
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ...top3.map((item) {
@@ -78,36 +79,34 @@ class _PersonalRankingState extends State<PersonalRanking> {
                   step: item['step'],
                 );
               }),
-
-              // Top1to3(
-              //   ranking: '2',
-              //   characterId: '13',
-              //   nickname: '이겜재밌냐',
-              //   step: '226,254',
-              // ),
-              // Top1to3(
-              //   ranking: '1',
-              //   characterId: '13',
-              //   nickname: '1등 야호',
-              //   step: '362,254',
-              // ),
-              // Top1to3(
-              //   ranking: '3',
-              //   characterId: '13',
-              //   nickname: '나는지은',
-              //   step: '160,254',
-              // ),
             ],
           ),
 
           // 3. 유저의 랭킹 표시
           // 유진이 피드백: 나의 랭킹 897위 (226,254걸음 이런식으로 하면 어떨까?)
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 20),
+          //   child: Rank(
+          //     ranking: myrank['ranking'],
+          //     nickname: myrank['nickname'],
+          //     step: myrank['step'],
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Rank(
-              ranking: myrank['ranking'],
-              nickname: myrank['nickname'],
-              step: myrank['step'],
+            child: Container(
+              decoration: BoxDecoration(
+                color:
+                    const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 7),
+              child: const MyRank(
+                ranking: 1,
+                step: 123,
+                characterId: 1,
+                nickname: '유저의닉네임',
+              ),
             ),
           ),
 
@@ -152,9 +151,9 @@ class _PersonalRankingState extends State<PersonalRanking> {
           ),
 
           // 5. 아래 빈 공간
-          const SizedBox(
-            height: 50,
-          )
+          // const SizedBox(
+          //   height: 50,
+          // )
         ],
       ),
     );
