@@ -1,93 +1,38 @@
 package com.walkerholic.walkingpet.domain.battle.function;
 
-import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.CharacterInfo;
-import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.UserRatingDTO;
+import com.walkerholic.walkingpet.domain.battle.dto.function.CharacterInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleProgressInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResultInfo;
+import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RequiredArgsConstructor
 @Component
 public class BattleFunction {
-    static final int STANDARD_RATING_MATCHING_GAP = 20;    //레이딩 범위 상수
     //데미지 배율
     static final int DAMAGE_SCALE = 5;
     //데미지 최소/최대 값 조정 상수
     static final int DAMAGE_GAP = 3;
     static final int WIN_EXP = 10;
     static final int WIN_RATING = 10;
-
     static final int LOSE_EXP = 5;
     static final int LOSE_RATING = -5;
+    static private boolean battleResult = false;
 
-    static boolean win = true;
-
-    // 수가 비슷한 유저와 매칭시키는 함수
-    public int matchingBattleUser(UserRatingDTO userRatingDTO, List<UserRatingDTO> userRatingList){
-        int userId = userRatingDTO.getUserId();
-        int userRating = userRatingDTO.getRating();
-
-        //1. userDetailRepository로 전부 가져오기
-        List<Integer> matchingUserIdList = new ArrayList<>();   //매칭이 될 유저 아이디 리스트
-
-        //레이딩 범위
-        int ratingGap = STANDARD_RATING_MATCHING_GAP;
-
-        do{
-            for(UserRatingDTO enemyList : userRatingList){
-                int enemyRating = enemyList.getRating();
-                int enemyUserId = enemyList.getUserId();
-
-                //본인을 제외하면서
-                if(enemyUserId != userId){
-                    //레이팅 범위 내라면~
-                    if(userRating-ratingGap <= enemyRating || enemyRating <= userRating + ratingGap)
-                        matchingUserIdList.add(enemyUserId);
-                }
-            }
-
-            //만약 해당 레이팅에 검색된 유저가 없다면 매칭 레이팅 범위를 늘린다.
-            ratingGap += STANDARD_RATING_MATCHING_GAP;
-
-        }while(matchingUserIdList.isEmpty());
-
-        System.out.print("mathcing user Id list =");
-        System.out.println(matchingUserIdList.toString());
-
-        int enemyCount = matchingUserIdList.size();
-        Random random = new Random();
-
-        int enemyUserIdPos = random.nextInt(enemyCount-1);
-
-        return matchingUserIdList.get(enemyUserIdPos);
-    }
-
-
-    /**
-     *
-     * @param power 공격하는 유저의 power값
-     * @param defense 방어하는 유저의 power값
-     * @return 최종적으로 방어하는 유저에게 들어가는 공격 데미지 값
-     */
-    public int getAttackDamage(int power, int defense){
-        int minDamage = power*DAMAGE_SCALE - DAMAGE_GAP;
-        int maxDamage = power*DAMAGE_SCALE + DAMAGE_GAP;
-
-        int originAttackDamage = (int)(Math.random()*(maxDamage-minDamage+1)) + minDamage;
-        System.out.println("originAttackDamage = " + originAttackDamage);
-
-        int resultAttackDamage = 100*originAttackDamage/(100+defense);
-        System.out.println("result Attack damage = " + resultAttackDamage);
-
-        return resultAttackDamage;
-    }
+    private final RewardFunction rewardfunction;
 
     //전투과정 정보 얻는 함수 -> 선공 / 후공
+
+    /**
+     * 전투과정 정보를 얻는 함수
+     * @param userCharacterInfo 유저의 캐릭터 정보(공,방,체)
+     * @param enemyCharacterInfo 적의 캐릭터 정보(공,방,체)
+     * @return 유저/적 이 공격하는 데미지, 유저/적 의 체력 현황, 유저/적 이 받는 데미지의 비율
+     */
     public BattleProgressInfo getBattleProgress(CharacterInfo userCharacterInfo, CharacterInfo enemyCharacterInfo){
         List<Integer> userAttackDamageList = new ArrayList<>();
         List<Integer> enemyAttackDamageList = new ArrayList<>();
@@ -120,16 +65,16 @@ public class BattleFunction {
                 if(enemyHealth <= 0){
                     enemyHealth = 0;
                     enemyAccumulateDamage = enemyCharacterInfo.getHealth();
-                    win = true;
+                    battleResult = true;
                 }
 
                 userAttackDamageList.add(attackDamage);
                 enemyAttackDamageList.add(-1);
 
                 userHealthList.add(userHealth);
-                userLoseDamage.add(getPercentage(userCharacterInfo.getHealth(),userAccumulateDamage));
+                userLoseDamage.add(getDamagePercentage(userCharacterInfo.getHealth(),userAccumulateDamage));
                 enemyHealthList.add(enemyHealth);
-                enemyLoseDamage.add(getPercentage(enemyCharacterInfo.getHealth(),enemyAccumulateDamage));
+                enemyLoseDamage.add(getDamagePercentage(enemyCharacterInfo.getHealth(),enemyAccumulateDamage));
             }
             else{
                 //상대방의 공격
@@ -140,7 +85,7 @@ public class BattleFunction {
                 if(userHealth <= 0){
                     userHealth = 0;
                     userAccumulateDamage = userCharacterInfo.getHealth();
-                    win = false;
+                    battleResult = false;
                 }
 
                 enemyAttackDamageList.add(attackDamage);
@@ -151,15 +96,15 @@ public class BattleFunction {
                 System.out.println("유저 누적 데미지: " + userAccumulateDamage);
 
                 userHealthList.add(userHealth);
-                userLoseDamage.add(getPercentage(userCharacterInfo.getHealth(),userAccumulateDamage));
+                userLoseDamage.add(getDamagePercentage(userCharacterInfo.getHealth(),userAccumulateDamage));
                 enemyHealthList.add(enemyHealth);
-                enemyLoseDamage.add(getPercentage(enemyCharacterInfo.getHealth(),enemyAccumulateDamage));
+                enemyLoseDamage.add(getDamagePercentage(enemyCharacterInfo.getHealth(),enemyAccumulateDamage));
             }
             strikeFirst = !strikeFirst;
         }
 
-        System.out.println(userAttackDamageList.toString());
-        System.out.println(enemyAttackDamageList.toString());
+        System.out.println("유저가 공격하는 데미지 : " + userAttackDamageList.toString());
+        System.out.println("적이 공격하는 데미지 : " + enemyAttackDamageList.toString());
 
         return BattleProgressInfo.builder()
                 .userAttackDamage(userAttackDamageList)
@@ -171,26 +116,57 @@ public class BattleFunction {
                 .build();
     }
 
-    public BattleResultInfo getBattleResult(Integer userId, Integer nowRating){
-        if(win){
+    /**
+     * 상대에게 최종적으로 가하는 공격 데미지 구하는 함수
+     * @param power 공격하는 유저의 power값
+     * @param defense 방어하는 유저의 power값
+     * @return 최종적으로 방어하는 유저에게 들어가는 공격 데미지 값
+     */
+    public int getAttackDamage(int power, int defense){
+        int minDamage = power*DAMAGE_SCALE - DAMAGE_GAP;
+        int maxDamage = power*DAMAGE_SCALE + DAMAGE_GAP;
+
+        int originAttackDamage = (int)(Math.random()*(maxDamage-minDamage+1)) + minDamage;
+        System.out.println("originAttackDamage = " + originAttackDamage);
+
+        int resultAttackDamage = 100*originAttackDamage/(100+defense);
+        System.out.println("result Attack damage = " + resultAttackDamage);
+
+        return resultAttackDamage;
+    }
+
+    /**
+     * 배틀 결과에 따라 얻게되는 보상을 얻는 메소드 / 보상으로 아이템을 주지 않는 메소드
+     * @return 승/패에 따라 다른 보상
+     */
+    public BattleResultInfo getBattleResult(UserDetail userDetail){
+        if(battleResult){
             return BattleResultInfo.builder()
-                    .battleResult(win)
+                    .battleResult(battleResult)
                     .rewardExperience(WIN_EXP)
                     .rewardRating(WIN_RATING)
-                    .resultRating(nowRating+WIN_RATING)
+                    .resultRating(userDetail.getBattleRating() + WIN_RATING)
+                    .rewardItem(rewardfunction.getRewardItem(battleResult))
                     .build();
         }
         else{
             return BattleResultInfo.builder()
-                    .battleResult(win)
+                    .battleResult(battleResult)
                     .rewardExperience(LOSE_EXP)
                     .rewardRating(LOSE_RATING)
-                    .resultRating(nowRating+LOSE_RATING)
+                    .resultRating(userDetail.getBattleRating() + LOSE_EXP)
+                    .rewardItem(rewardfunction.getRewardItem(battleResult))
                     .build();
         }
     }
 
-    public double getPercentage(int maxHealth, int accumulateDamage){
+    /**
+     * 누적 데미지가 현재 체력의 몇퍼센트인지를 얻는 함수
+     * @param maxHealth 최대 체력
+     * @param accumulateDamage 누적 데미지
+     * @return 누적데미지의 퍼센트 비율
+     */
+    public double getDamagePercentage(int maxHealth, int accumulateDamage){
         double result = (double)accumulateDamage/maxHealth;
 
         return Math.round(result * 100.0) / 100.0;
