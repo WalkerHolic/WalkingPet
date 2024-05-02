@@ -4,6 +4,7 @@ import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,17 +30,18 @@ public class UserItem {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    public UserItem(Users user,Item item,int quantity){
-        this.item = item;
-        this.user = user;
-        this.quantity = quantity;
-    }
-
     public void setQuantity(int i) {
         this.quantity = i;
     }
 
     public void addItemQuantity(int quantity){
         this.quantity += quantity;
+    }
+
+    @Builder
+    public UserItem(Users user,Item item){
+        this.item = item;
+        this.user = user;
+        this.quantity = 0;
     }
 }
