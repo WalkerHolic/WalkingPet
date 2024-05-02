@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
@@ -37,8 +36,6 @@ class _PersonalRankingState extends State<PersonalRanking> {
       setState(() {
         top10 = responseTop10['data']['topRanking'];
         myrank = responseMyRank['data'];
-        // int characterId = myrank['characterId'] as int;
-        // animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
         top3 = responseTop3['data']['topRanking'];
         isLoading = false;
       });
