@@ -11,9 +11,16 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 1000  # select 배치 조회 크기
+  data:
+    redis:
+      host: redis
+      port: 6379
+
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+
 #server:
 #  port: 9090
