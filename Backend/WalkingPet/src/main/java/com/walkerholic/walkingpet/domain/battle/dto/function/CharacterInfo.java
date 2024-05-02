@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.domain.battle.dto.functionDTO;
+package com.walkerholic.walkingpet.domain.battle.dto.function;
 
 import lombok.Builder;
 import lombok.Getter;
