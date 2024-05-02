@@ -2,6 +2,7 @@ package com.walkerholic.walkingpet.domain.users.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 @Entity
@@ -30,4 +31,11 @@ public class UserStep {
 
     public void updateDailyStep(int step) { this.dailyStep = step;}
 
+    @Builder
+    public UserStep(Users user){
+        this.yesterdayStep = 0;
+        this.dailyStep = 0;
+        this.accumulationStep = 0;
+        this.user = user;
+    }
 }
