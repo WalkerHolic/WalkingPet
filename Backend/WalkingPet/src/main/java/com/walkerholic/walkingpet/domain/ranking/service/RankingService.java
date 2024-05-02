@@ -2,6 +2,7 @@ package com.walkerholic.walkingpet.domain.ranking.service;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
+import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
@@ -121,5 +122,23 @@ public class RankingService {
         }
 
         return accStepRankingList;
+    }
+
+    /*
+    사용자들의 실시간 걸음수 데이터 가져오기
+    yesterdayStep
+ */
+    public List<ReailtimeStepRankingInfo> getUserRealtimeStepList() {
+        List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
+
+        List<ReailtimeStepRankingInfo> reailtimeStepRankingList = new ArrayList<>();
+        for (UserDetail userDetailInfo : allByUser) {
+            UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+
+            reailtimeStepRankingList.add(ReailtimeStepRankingInfo.entityFrom(userStepInfo));
+        }
+
+        return reailtimeStepRankingList;
     }
 }
