@@ -16,14 +16,14 @@ public class EnemyInfo {
     private int power;
     private int defense;
 
-    public static EnemyInfo from(UserCharacter userCharacter, UserDetail userDetail){
+    public static EnemyInfo from(UserDetail userDetail){
         return EnemyInfo.builder()
-                .nickname(userCharacter.getUser().getNickname())
-                .characterId(userCharacter.getUserCharacterId())
+                .nickname(userDetail.getUser().getNickname())
+                .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .rating(userDetail.getBattleRating())
-                .health(userCharacter.getHealth())
-                .power(userCharacter.getPower())
-                .defense(userCharacter.getDefense())
+                .health(userDetail.getSelectUserCharacter().getHealth())
+                .power(userDetail.getSelectUserCharacter().getPower())
+                .defense(userDetail.getSelectUserCharacter().getDefense())
                 .build();
     }
 }
