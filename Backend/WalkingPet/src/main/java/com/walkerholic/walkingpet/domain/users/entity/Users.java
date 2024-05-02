@@ -42,7 +42,7 @@ public class Users {
     @OneToMany(mappedBy = "user")
     private List<UserCharacter> userCharacters = new ArrayList<>();
 
-    @Builder
+    @Builder //TODO: entity에 Builder는 상의
     public Users(String email, String nickname) {
         this.email = email;
         this.nickname = nickname;
@@ -50,4 +50,16 @@ public class Users {
         this.role = 0;
     }
 
+    public static Users createNewMember(
+            String email,
+            String nickname
+    ){
+        Users users = new Users();
+        users.email = email;
+        users.nickname = nickname;
+        users.role = 0;
+        users.status = 1;
+        users.regDate = LocalDateTime.now();
+        return users;
+    }
 }
