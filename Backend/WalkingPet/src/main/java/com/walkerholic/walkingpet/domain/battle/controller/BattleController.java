@@ -27,32 +27,33 @@ public class BattleController {
 
     @GetMapping("/myinfo")
     @Operation(summary = "유저 배틀 정보 확인", description = "유저의 user,userDetail,userCharacter로 유저 배틀 정보 가져오기")
-    public ResponseEntity<CommonResponseEntity> getUserBattleInfo(@RequestParam("userId") int userId){
-        System.out.println(testBattleService.testNickname(userId));
+    public ResponseEntity<CommonResponseEntity> getUserBattleInfo(){
+        int userId = 1;
+        log.info("나의 배틀 정보 확인하기 BattleController getUserBattleInfo - userId: {}", userId);
         UserBattleInfoDTO userBattleInfoDTO = battleService.getUserBattleInfo(userId);
 
-        log.info("나의 배틀 정보 확인하기 BattleController getUserBattleInfo - userId: {}", userId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userBattleInfoDTO);
     }
 
     @GetMapping("/enemyinfo")
     @Operation(summary = "상대 유저 배틀 정보 확인", description = "상대 유저의 user,userDetail,userCharacter로 유저 배틀 정보 가져오기")
-    public ResponseEntity<CommonResponseEntity> getEnemyBattleInfo(@RequestParam("userId")int userId){
+    public ResponseEntity<CommonResponseEntity> getEnemyBattleInfo(){
 
-        EnemyInfo enemyInfo = battleService.getEnemyBattleInfo(userId);
 
+        int userId = 1;
         log.info("적의 배틀 정보 확인하기 BattleController getEnemyBattleInfo - userId: {}", userId);
+        EnemyInfo enemyInfo = battleService.getEnemyBattleInfo(userId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, enemyInfo);
     }
 
     @GetMapping("/start")
     @Operation(summary = "배틀 전체 과정 출력", description = "배틀 시작, 진행 과정, 결과, 보상 출력")
-    public ResponseEntity<CommonResponseEntity> battleStart(@RequestParam("userId") int userId){
-        BattleResponse battleResponse = battleService.startBattle(userId);
-
+    public ResponseEntity<CommonResponseEntity> battleStart(){
+        int userId = 1;
         log.info("배틀 시작 BattleController battleStart - userId: {}", userId);
+        BattleResponse battleResponse = battleService.startBattle(userId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, battleResponse);
     }

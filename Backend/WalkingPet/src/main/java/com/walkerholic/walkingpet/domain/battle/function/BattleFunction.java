@@ -171,19 +171,21 @@ public class BattleFunction {
                 .build();
     }
 
-    public BattleResultInfo getBattleResult(Integer userId){
+    public BattleResultInfo getBattleResult(Integer userId, Integer nowRating){
         if(win){
             return BattleResultInfo.builder()
                     .battleResult(win)
-                    .experience(WIN_EXP)
-                    .rating(WIN_RATING)
+                    .rewardExperience(WIN_EXP)
+                    .rewardRating(WIN_RATING)
+                    .resultRating(nowRating+WIN_RATING)
                     .build();
         }
         else{
             return BattleResultInfo.builder()
                     .battleResult(win)
-                    .experience(LOSE_EXP)
-                    .rating(LOSE_RATING)
+                    .rewardExperience(LOSE_EXP)
+                    .rewardRating(LOSE_RATING)
+                    .resultRating(nowRating+LOSE_RATING)
                     .build();
         }
     }

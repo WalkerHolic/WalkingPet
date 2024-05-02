@@ -7,7 +7,8 @@ import lombok.*;
 @Getter
 public class BattleResultInfo {
     private boolean battleResult;
-    private int experience;
-    private int rating;
+    private int rewardExperience;
+    private int rewardRating;
+    private int resultRating;
     private RewardItem battleReward;
 }

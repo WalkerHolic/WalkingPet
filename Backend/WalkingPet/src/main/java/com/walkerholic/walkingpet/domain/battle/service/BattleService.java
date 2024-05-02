@@ -112,18 +112,18 @@ public class BattleService {
         System.out.println("배틀 function 진행!");
         BattleProgressInfo battleProgressInfo = battleFunction.getBattleProgress(userCharacterInfo, enemyCharacterInfo);
         System.out.println("배틀 결과 저장하기");
-        BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userId);
+        BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userId, userDetail.getBattleRating());
 
 
         //배틀을 통해 얻은 레이팅 업데이트
-        userDetail.updateBattleRating(battleResultInfo.getRating());
+        userDetail.updateBattleRating(battleResultInfo.getRewardRating());
         userDetailRepository.save(userDetail);
 
-        userCharacter.addExperience(battleResultInfo.getExperience());
+        userCharacter.addExperience(battleResultInfo.getRewardExperience());
         userCharacterRepository.save(userCharacter);
 
         //레벨업 response
-        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResultInfo.getExperience());
+        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResultInfo.getRewardExperience());
 
         return BattleResponse.builder()
                 .enemyInfo(enemyInfo)

@@ -21,6 +21,7 @@ public class UserBattleInfoDTO {
     public static UserBattleInfoDTO from(UserCharacter userCharacter, UserDetail userDetail){
         return UserBattleInfoDTO.builder()
                 .nickname(userDetail.getUser().getNickname())
+                .rating(userDetail.getBattleRating())
                 .level(userCharacter.getLevel())
                 .grade(userCharacter.getCharacter().getGrade())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
