@@ -1,131 +1,74 @@
 package com.walkerholic.walkingpet.domain.battle.service;
 
-import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.CharacterInfo;
-import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.UserRatingDTO;
+import com.walkerholic.walkingpet.domain.battle.dto.function.CharacterInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.*;
 import com.walkerholic.walkingpet.domain.battle.function.BattleFunction;
-import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
-import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunction;
-import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
-import com.walkerholic.walkingpet.domain.character.service.TestLevelUpService;
-import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
-import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
-import com.walkerholic.walkingpet.domain.levelup.function.LevelUpFunction;
 import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
-
+import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
-
-/**
- * 배틀 보상으로 일반 경험치를 줄 때 사용하는 코드
- */
+import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class BattleService {
+    static final int STANDARD_RATING_MATCHING_GAP = 20;    //레이딩 범위 상수
 
+    private final UsersRepository usersRepository;
     private final UserCharacterRepository userCharacterRepository;
     private final UserDetailRepository userDetailRepository;
-    private final UsersRepository usersRepository;
-    private final CharacterRepository characterRepository;
+
     private final BattleFunction battleFunction;
-    private final UserItemRepository userItemRepository;
-    private final ItemRepository itemRepository;
-    private final UserCharacterFunction userCharacterFunction;
-    private final TestLevelUpService testLevelUpService;
     private final LevelUpService levelUpService;
-    private final LevelUpFunction levelUpFunction;
 
-    //1. 내 배틀 정보 확인
-    public UserBattleInfoDTO getUserBattleInfo(Integer userId){
-
+    /**
+     * 사용자의 배틀 정보 반환
+     * @param userId 유저 아이디
+     * @return UserBattleInfo(유저 id, 유저 레이팅, 유저캐릭터 아이디, 캐릭터 아이디)
+     */
+    //1. 사용자의 배틀 정보 반환
+    public UserBattleInfoDTO getUserBattleInfo(int userId){
         UserDetail userDetail = getUserDetail(userId);
 
-        UserCharacter userCharacter = getUserCharacter(userDetail.getSelectUserCharacter().getUserCharacterId());
-
-        return UserBattleInfoDTO.from(userCharacter, userDetail);
+        return UserBattleInfoDTO.from(userDetail);
     }
 
-    //3. 배틀 시작
-    public BattleResponse startBattle(int userId){
-        Users users = getUser(userId);
+    //2. 배틀 결과 반환
+    public BattleResponseDTO getBattleResponse(int userId){
+        UserDetail userDetail = getAllInfoByUserDetail(userId);
+        UserCharacter userCharacter = userDetail.getSelectUserCharacter();
+        List<UserDetail> userDetailList = userDetailRepository.findAll();
+        int enemyUserId = matchingBattleUser(userId, userDetail.getBattleRating(), userDetailList);
+        UserDetail enemyUserDetail = getAllInfoByUserDetail(enemyUserId);
 
-        UserDetail userDetail = userDetailRepository.findUserDetailByUser(users)
-                .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
+        //1. 적 유저 캐릭터 정보
+        EnemyInfo enemyInfo = EnemyInfo.from(enemyUserDetail);
 
-        //배틀횟수 1회 차감 --> 만약 배틀횟수가 0회일때 여기서 예외처리 해줘야함!
-        userDetail.battleCountDeduction();
-
-        UserRatingDTO userRatingDTO = UserRatingDTO.builder()
-                .userId(userDetail.getUser().getUserId())
-                .rating(userDetail.getBattleRating())
-                .build();
-
-        Character character = characterRepository.findCharacterByCharacterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
-                .orElseThrow(()-> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
-
-        UserCharacter userCharacter = userCharacterRepository.findByUserAndCharacter(users,character)
-                .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
-
-        List<UserRatingDTO> userRatingDTOList = new ArrayList<>();
-
-        for(UserDetail ud : userDetailRepository.findAll()){
-            userRatingDTOList.add(UserRatingDTO.builder()
-                    .userId(ud.getUser().getUserId())
-                    .rating(ud.getBattleRating())
-                    .build());
-        }
-
-        int enemyId = battleFunction.matchingBattleUser(userRatingDTO, userRatingDTOList);
-        System.out.println(enemyId);
-        System.out.println("배틀 상대의 캐릭터 정보 가져오기");
-        //배틀 상대의 캐릭터 정보 가져오기
-        EnemyInfo enemyInfo = getEnemyBattleInfo(enemyId);
-
-        CharacterInfo userCharacterInfo = CharacterInfo.builder()
-                .health(userCharacter.getHealth())
-                .power(userCharacter.getPower())
-                .defense(userCharacter.getDefense())
-                .build();
-
-        CharacterInfo enemyCharacterInfo = CharacterInfo.builder()
-                .health(enemyInfo.getHealth())
-                .power(enemyInfo.getPower())
-                .defense(enemyInfo.getDefense())
-                .build();
-
-        System.out.println("배틀 function 진행!");
+        //2. 배틀 전투 과정
+        CharacterInfo userCharacterInfo = getCharacterInfo(userCharacter);
+        CharacterInfo enemyCharacterInfo = getCharacterInfo(enemyUserDetail.getSelectUserCharacter());
         BattleProgressInfo battleProgressInfo = battleFunction.getBattleProgress(userCharacterInfo, enemyCharacterInfo);
-        System.out.println("배틀 결과 저장하기");
-        BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userId, userDetail.getBattleRating());
 
+        //3. 배틀 결과 가져오기
+        BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userDetail);
 
-        //배틀을 통해 얻은 레이팅 업데이트
-        userDetail.updateBattleRating(battleResultInfo.getRewardRating());
-        userDetailRepository.save(userDetail);
-
-        userCharacter.addExperience(battleResultInfo.getRewardExperience());
-        userCharacterRepository.save(userCharacter);
-
-        //레벨업 response
+        //4. 레벨업 여부 확인하기
         LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResultInfo.getRewardExperience());
 
-        return BattleResponse.builder()
+        return BattleResponseDTO.builder()
                 .enemyInfo(enemyInfo)
                 .battleProgressInfo(battleProgressInfo)
                 .battleResultInfo(battleResultInfo)
@@ -134,39 +77,111 @@ public class BattleService {
     }
 
     /**
-     * 상대의 배틀 정보 가져오기
-     * @param enemyUserId 상대 유저 아이디
-     * @return 닉네임, 캐릭터 아이디, 레이팅, 체력, 힘, 방어력
+     * 레이팅이 비슷한 유저와 매칭시키는 함수
+     * @param userId 배틀 시작한 유저 아이디
+     * @param userRating 유저 레이팅 점수
+     * @param userDetailList 유저 상세정보 리스트
+     * @return 매칭이 확정된 유저의 유저아이디
      */
-    public EnemyInfo getEnemyBattleInfo(int enemyUserId){
-        Users enemyUser = getUser(enemyUserId);
-        int userCharacterId = getUserDetail(enemyUserId).getSelectUserCharacter().getUserCharacterId();
-        UserCharacter enemyUserCharacter = getUserCharacter(userCharacterId);
-        UserDetail userDetail = getUserDetail(enemyUserId);
+    public int matchingBattleUser(int userId, int userRating, List<UserDetail> userDetailList){
 
-        return EnemyInfo.builder()
-            .nickname(enemyUser.getNickname())
-            .characterId(enemyUserCharacter.getCharacter().getCharacterId())
-            .rating(userDetail.getBattleRating())
-            .health(enemyUserCharacter.getHealth())
-            .power(enemyUserCharacter.getPower())
-            .defense(enemyUserCharacter.getDefense())
-            .build();
+        //레이딩 범위
+        int ratingGap = STANDARD_RATING_MATCHING_GAP;
+
+        //매칭이 되는 유저의 id 리스트
+        List<Integer> enemyUserIdList = new ArrayList<>();
+
+        do{
+            for(UserDetail enemyList : userDetailList){
+                int enemyRating = enemyList.getBattleRating();
+                int enemyUserId = enemyList.getUser().getUserId();
+
+                //본인을 제외하면서
+                if(enemyUserId != userId){
+                    //레이팅 범위 내라면~
+                    if(userRating-ratingGap <= enemyRating || enemyRating <= userRating + ratingGap)
+                        enemyUserIdList.add(enemyUserId);
+                }
+            }
+
+            //만약 해당 레이팅에 검색된 유저가 없다면 매칭 레이팅 범위를 늘린다.
+            ratingGap += STANDARD_RATING_MATCHING_GAP;
+
+        }while(enemyUserIdList.isEmpty());
+
+        System.out.print("mathcing user Id list =");
+        System.out.println(enemyUserIdList.toString());
+
+        int enemyCount = enemyUserIdList.size();
+        Random random = new Random();
+
+        int enemyUserIdPos = random.nextInt(enemyCount-1);
+
+        //매칭 확정된 적 유저 아이디 반환
+        return enemyUserIdList.get(enemyUserIdPos);
     }
 
-    private Users getUser(int userId){
+    /**
+     * UserCharacter 받아서 전투 과정 정보를 얻기 위해 필요한 체/공/방 반환하는 함수
+     * @param userCharacter 체/공/방을 얻을 유저캐릭터
+     * @return CharacterInfo(유저 캐릭터의 체/공/방)
+     */
+    public CharacterInfo getCharacterInfo(UserCharacter userCharacter){
+        return  CharacterInfo.builder()
+                .health(userCharacter.getHealth())
+                .power(userCharacter.getPower())
+                .defense(userCharacter.getDefense())
+                .build();
+
+    }
+
+    public void saveBattleResult(UserDetail userDetail, BattleResultInfo battleResultInfo){
+        userDetail.updateBattleRating(battleResultInfo.getRewardRating());
+        userDetailRepository.save(userDetail);
+
+        UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
+        selectUserCharacter.addExperience(battleResultInfo.getRewardExperience());
+        userCharacterRepository.save(selectUserCharacter);
+    }
+
+    /**
+     * userId로 Users 가져오는 메소드
+     * @param userId 유저 아이디
+     * @return Users
+     */
+    private Users getUserById(int userId){
         return usersRepository.findById(userId)
-            .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
+            .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
     }
 
+    /**
+     * userId로 UserDetail 찾기
+     * @param userId 유저 아이디
+     * @return UserDetail
+     */
     private UserDetail getUserDetail(int userId){
         return userDetailRepository.findByUserUserId(userId)
-            .orElseThrow(()-> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
-
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
     }
 
-    private UserCharacter getUserCharacter(int userCharacterId){
-        return userCharacterRepository.findByUserCharacterId(userCharacterId)
-            .orElseThrow(() -> new GlobalBaseException(USER_CHARACTER_NOT_FOUND));
+    /**
+     * userId로 UserCharacter 정보를 가지고 있는 UserDetail 가져오는 메소드
+     * @param userId 유저 아이디
+     * @return UserDetail(UserCharacter 정보 포함)
+     */
+    private UserDetail getAllInfoByUserDetail(int userId){
+        return userDetailRepository.findByJoinFetchByUserId(userId)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+    }
+
+    /**
+     * userId와 userCharacterId로 UserCharacter 가져오기
+     * @param userId 유저 아이디
+     * @param userCharacterId 유저 캐릭터 아이디
+     * @return UserCharacter
+     */
+    private UserCharacter getUserCharacter(int userId, int userCharacterId){
+        return userCharacterRepository.findUserCharacterByUserIdAndUserCharacterId(userId, userCharacterId)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
     }
 }
