@@ -3,7 +3,7 @@ package com.walkerholic.walkingpet.domain.battle.function;
 import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.CharacterInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.UserRatingDTO;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleProgressInfo;
-import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResult;
+import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResultInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.RewardItem;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,10 +163,10 @@ public class BattleItemFunction {
         return battleProgressInfo;
     }
 
-    public BattleResult getBattleResult(Integer userId){
+    public BattleResultInfo getBattleResult(Integer userId){
         if(win){
             RewardItem rewardItem = rewardFunction.getRewardItem(win);
-            return BattleResult.builder()
+            return BattleResultInfo.builder()
                     .battleResult(win)
                     .experience(WIN_EXP)
                     .rating(WIN_RATING)
@@ -175,7 +175,7 @@ public class BattleItemFunction {
         }
         else{
             RewardItem rewardItem = rewardFunction.getRewardItem(win);
-            return BattleResult.builder()
+            return BattleResultInfo.builder()
                     .battleResult(win)
                     .experience(LOSE_EXP)
                     .rating(LOSE_RATING)

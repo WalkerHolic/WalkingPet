@@ -9,6 +9,6 @@ import lombok.*;
 public class BattleResponse {
     private EnemyInfo enemyInfo;
     private BattleProgressInfo battleProgressInfo;
-    private BattleResult battleResult;
+    private BattleResultInfo battleResultInfo;
     private LevelUpResponse levelUpResponse;
 }
