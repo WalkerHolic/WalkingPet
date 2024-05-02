@@ -17,17 +17,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    initStepData(); // 위젯이 로드될 때 fetchData 호출
-  }
-
-  Future<void> initStepData() async {
-    try {
-      var response = await checkStep();
-      print(response);
-      print(response['data']);
-    } catch (e) {
-      print('Failed to load data: $e');
-    }
   }
 
   @override
