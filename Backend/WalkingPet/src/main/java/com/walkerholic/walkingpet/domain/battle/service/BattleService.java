@@ -65,8 +65,12 @@ public class BattleService {
         //3. 배틀 결과 가져오기
         BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userDetail);
 
-        //4. 레벨업 여부 확인하기
-        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResultInfo.getRewardExperience());
+            //4. 배틀 결과 저장하기
+        saveBattleResult(userDetail, battleResultInfo);
+
+        //5. 레벨업 여부 확인하기
+        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userId, userCharacter, battleResultInfo.getRewardExperience());
+
 
         return BattleResponseDTO.builder()
                 .enemyInfo(enemyInfo)
