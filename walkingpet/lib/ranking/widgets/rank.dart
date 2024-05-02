@@ -4,11 +4,6 @@ class Rank extends StatelessWidget {
   final int ranking, step;
   final String nickname;
 
-  // Rank.fromJson(Map<String, dynamic> json, {super.key})
-  //     : ranking = json['ranking'],
-  //       step = json['step'],
-  //       nickname = json['nickname'];
-
   const Rank({
     super.key,
     required this.ranking,
@@ -78,8 +73,3 @@ class Rank extends StatelessWidget {
     );
   }
 }
-
-
-
-
-//  ranking, characterId, level, nickname, step
