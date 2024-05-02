@@ -20,5 +20,16 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
     @Query("UPDATE UserDetail ud SET ud.selectUserCharacter.userCharacterId = :userCharacterId WHERE ud.user.userId = :userId")
     void updateUserCharacterIdByUserId(Integer userId, Integer userCharacterId);
 
-    int findBattleRatingByUserUserId(Integer userId);
+    /**
+     * fetch join 사용해서 userId로 UserDetail 찾고 UserCharacter 정보도 가져오기
+     * @param userId 유저 아이디
+     * @return UserDetail with UserCharacter
+     */
+    @Query("SELECT UD " +
+            "FROM UserDetail UD " +
+            "LEFT JOIN FETCH UD.user U " +
+            "LEFT JOIN FETCH UD.selectUserCharacter UC " +
+            "LEFT JOIN FETCH UC.character " +
+            "WHERE U.userId = :userId")
+    Optional<UserDetail> findByJoinFetchByUserId(int userId);
 }
