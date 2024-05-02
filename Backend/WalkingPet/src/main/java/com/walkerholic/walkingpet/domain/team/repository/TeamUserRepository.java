@@ -17,11 +17,11 @@ public interface TeamUserRepository extends JpaRepository<TeamUser, Integer> {
     @Query("SELECT COUNT(tu) FROM TeamUser tu WHERE tu.user = :user")
     Integer countByUser(@Param("user") Users user);
 
-    @Query("SELECT tu.team FROM TeamUser tu WHERE tu.user = :user")
-    List<Team> findTeamsByUser(@Param("user") Users user);
+    @Query("SELECT tu.team FROM TeamUser tu WHERE tu.user.userId = :userId")
+    List<Team> findTeamsByUserId(@Param("userId") Integer userId);
 
-    @Query("SELECT tu FROM TeamUser tu WHERE tu.team = :team")
-    List<TeamUser> findByTeam(@Param("team") Team team);
+    @Query("SELECT tu FROM TeamUser tu WHERE tu.team.teamId = :teamId")
+    List<TeamUser> findByTeamId(@Param("teamId") Integer teamId);
 
     boolean existsByTeamAndUser(Team team, Users user);
 

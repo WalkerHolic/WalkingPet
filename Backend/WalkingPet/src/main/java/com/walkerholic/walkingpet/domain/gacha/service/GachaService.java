@@ -13,10 +13,10 @@ import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class GachaService {
     private final UsersRepository usersRepository;
     private final UserCharacterRepository userCharacterRepository;
 
-    @Transactional
+    @Transactional(readOnly = false)
     public GachaResultResponse getGachaResult(String boxType, int userId) {
 
         Users user = usersRepository.findById(userId)
@@ -69,7 +69,7 @@ public class GachaService {
         return  GachaResultResponse.from(character,duplication);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public GachaCountResponse getGachaCount(int userId){
 
         List<UserItem> userItems = userItemRepository.findByUserIdWithUserFetch(userId)

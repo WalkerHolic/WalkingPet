@@ -17,10 +17,10 @@ public class TeamUsersResponse {
     private Integer level;
     private Integer step;
 
-    public static TeamUsersResponse from(Users users, UserDetail userDetail, UserStep userStep){
+    public static TeamUsersResponse from(UserDetail userDetail,UserStep userStep){
         return TeamUsersResponse.builder()
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
-                .nickname(users.getNickname())
+                .nickname(userDetail.getUser().getNickname())
                 .level(userDetail.getSelectUserCharacter().getLevel())
                 .step(userStep.getDailyStep())
                 .build();
