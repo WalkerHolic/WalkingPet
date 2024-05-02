@@ -12,6 +12,7 @@ public enum GlobalErrorCode {
      */
     SEVER_ERROR(500, "E500", "정의되지 않은 서버 오류 발생하였습니다."),
 
+    // 로그인 관련
     ACCESS_DENIED(401, "U400", "허용되지 않은 사용자입니다"),
     TOKEN_EXPIRED(401, "U401", "토큰이 만료되었습니다."),
     USER_NOT_FOUND(404, "U402", "해당 id에 해당하는 사용자가 없습니다."),
