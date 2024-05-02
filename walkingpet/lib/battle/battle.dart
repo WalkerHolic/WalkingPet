@@ -24,6 +24,7 @@ class _BattleState extends State<Battle> {
   Future<void> initBattleInfo() async {
     try {
       var response = await getBattleInfo();
+      print(response);
       setState(() {
         battleData = response['data']; // API 응답을 상태에 저장
         isLoading = false;
@@ -69,6 +70,8 @@ class _BattleState extends State<Battle> {
                           ['userHealth'],
                       loseDamage: battleData['battleProgressInfo']
                           ['userLoseDamage'],
+                      battleResult: battleData['battleResultInfo'],
+                      levelUpResponse: battleData['levelUpResponse'],
                     ),
                     Transform.translate(
                       offset: const Offset(0, 280),
@@ -91,6 +94,8 @@ class _BattleState extends State<Battle> {
                           ['userHealth'],
                       loseDamage: battleData['battleProgressInfo']
                           ['enemyLoseDamage'],
+                      battleResult: battleData['battleResultInfo'],
+                      levelUpResponse: battleData['levelUpResponse'],
                     ),
                   ],
                 ),
