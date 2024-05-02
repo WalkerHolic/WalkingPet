@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @ToString
 @Getter
-public class BattleResponse {
+public class BattleResponseDTO {
     private EnemyInfo enemyInfo;
     private BattleProgressInfo battleProgressInfo;
     private BattleResultInfo battleResultInfo;
