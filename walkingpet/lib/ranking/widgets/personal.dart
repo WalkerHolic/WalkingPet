@@ -14,9 +14,7 @@ class PersonalRanking extends StatefulWidget {
 class _PersonalRankingState extends State<PersonalRanking> {
   // 필요한 변수 만들기
   List top10 = [];
-  // List myrank = [];
   Map<String, dynamic> myrank = {};
-  // String animal = "";
   List top3 = [];
   bool isLoading = true;
 
@@ -96,10 +94,10 @@ class _PersonalRankingState extends State<PersonalRanking> {
               ),
               margin: const EdgeInsets.symmetric(horizontal: 7),
               child: MyRank(
-                ranking: myrank['ranking'],
-                step: myrank['step'],
-                characterId: myrank['characterId'],
-                nickname: myrank['nickname'],
+                ranking: myrank['ranking'] as int? ?? 0,
+                step: myrank['step'] as int? ?? 0,
+                characterId: myrank['characterId'] as int? ?? 0,
+                nickname: myrank['nickname'] as String? ?? 'Unknown',
               ),
             ),
           ),

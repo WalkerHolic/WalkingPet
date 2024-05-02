@@ -74,6 +74,8 @@ class Ranking extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          // Navigator.pushReplacementNamed(
+                          //     context, '/home'); // 현재 경로를 '/home'으로 교체
                         },
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(
@@ -89,18 +91,18 @@ class Ranking extends StatelessWidget {
                 ),
 
                 // 3-2. Tab : 개인(personal) / 그룹(Group) / 배틀(Battle)
-                Expanded(
+                const Expanded(
                   child: NesTabView(
                     tabs: [
                       NesTabItem(
                         child: PersonalRanking(),
                         label: '개인랭킹',
                       ),
-                      const NesTabItem(
+                      NesTabItem(
                         child: GroupRanking(),
                         label: '그룹랭킹',
                       ),
-                      const NesTabItem(
+                      NesTabItem(
                         child: BattleRanking(),
                         label: '배틀랭킹',
                       ),
