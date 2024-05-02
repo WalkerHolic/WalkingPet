@@ -17,10 +17,10 @@ import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +46,7 @@ public class TeamService {
     private final UserDetailRepository userDetailRepository;
     private final UserStepRepository userStepRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TeamResponse> getAllTeam() {
 
         List<Team> teams = teamRepository.findAll();
@@ -59,12 +59,10 @@ public class TeamService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TeamResponse> getUserTeams(int userId) {
 
-        Users user = getUserById(userId);
-
-        List<Team> teams = teamUserRepository.findTeamsByUser(user);
+        List<Team> teams = teamUserRepository.findTeamsByUserId(userId);
 
         if (teams.isEmpty()) {
             // 사용자가 가입한 그룹이 없으면 빈 배열 반환
@@ -74,7 +72,7 @@ public class TeamService {
         }
 
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TeamResponse> getSearchTeams(String content) {
 
         List<Team> teams = teamRepository.findByNameContaining(content);
@@ -98,7 +96,7 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public TeamDetailResponse getTeamDetail(int teamId) {
 
         Team team = getTeamById(teamId);
@@ -107,17 +105,12 @@ public class TeamService {
 
         TeamResponse teamResponse = TeamResponse.from(team,userCount);
 
-        List<TeamUser> teamUsers = getTeamUsersByTeam(team);
-
-        List<TeamUsersResponse> teamUsersResponses = new ArrayList<>();
-        for (TeamUser teamUser : teamUsers) {
-            TeamUsersResponse teamUsersResponse = createTeamUsersResponse(teamUser);
-            teamUsersResponses.add(teamUsersResponse);
-        }
+        List<TeamUsersResponse> teamUsersResponses = getGroupMembersInfo(teamId);
 
         return TeamDetailResponse.from(teamResponse, teamUsersResponses);
     }
-    @Transactional
+
+    @Transactional(readOnly = false)
     public void joinGroup(JoinGroupRequest joinGroupRequest,int userId) {
 
         Users user = getUserById(userId);
@@ -150,7 +143,7 @@ public class TeamService {
         teamUserRepository.save(teamUser);
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public void createGroup(CreateGroupRequest createGroupRequest, int userId) {
 
         Users user = getUserById(userId);
@@ -183,11 +176,10 @@ public class TeamService {
 
     }
 
+    @Transactional(readOnly = true)
     public List<TeamUsersResponse> getGroupMembersInfo(int teamId) {
 
-        Team team = getTeamById(teamId);
-
-        List<TeamUser> teamUsers = getTeamUsersByTeam(team);
+        List<TeamUser> teamUsers = getTeamUsersByTeamId(teamId);
 
         List<TeamUsersResponse> teamUsersResponses = new ArrayList<>();
         for (TeamUser teamUser : teamUsers) {
@@ -198,7 +190,7 @@ public class TeamService {
         return teamUsersResponses;
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public void exitGroup(ExitGroupRequest exitGroupRequest, int userId) {
 
         Users user = getUserById(userId);
@@ -237,8 +229,8 @@ public class TeamService {
     }
 
     // 주어진 그룹에 속한 사용자 목록을 데이터베이스에서 검색합니다.
-    public List<TeamUser> getTeamUsersByTeam(Team team) {
-        return teamUserRepository.findByTeam(team);
+    public List<TeamUser> getTeamUsersByTeamId(int teamId) {
+        return teamUserRepository.findByTeamId(teamId);
     }
 
     // 현재 사용자가 속한 그룹의 수를 반환합니다.
@@ -246,15 +238,16 @@ public class TeamService {
         return teamUserRepository.countByUser(user);
     }
 
-
     // 주어진 TeamUser 객체에서 사용자의 세부 정보와 단계 정보를 검색하여 TeamUsersResponse 객체를 생성합니다
     private TeamUsersResponse createTeamUsersResponse(TeamUser teamUser) {
-        Users user = teamUser.getUser();
-        UserDetail userDetail = userDetailRepository.findUserDetailByUser(user)
+
+        UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(teamUser.getUser().getUserId())
                 .orElseThrow(() -> new GlobalBaseException(USER_DETAIL_NOT_FOUND));
-        UserStep userStep = userStepRepository.findUserStepByUser(user)
+
+        UserStep userStep = userStepRepository.findUserStepByUserUserId(teamUser.getUser().getUserId())
                 .orElseThrow(() -> new GlobalBaseException(USER_STEP_NOT_FOUND));
-        return TeamUsersResponse.from(user, userDetail, userStep);
+
+        return TeamUsersResponse.from(userDetail,userStep);
     }
 
 
