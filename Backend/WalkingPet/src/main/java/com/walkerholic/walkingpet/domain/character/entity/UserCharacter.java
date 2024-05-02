@@ -2,10 +2,7 @@ package com.walkerholic.walkingpet.domain.character.entity;
 
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter
@@ -49,19 +46,6 @@ public class UserCharacter {
     @JoinColumn(name = "character_id", nullable = false)
     private Character character;
 
-    public UserCharacter(Character character, Users user){
-        this.character = character;
-        this.user = user;
-        this.level = 1;
-        this.upgrade = 0;
-        this.experience = 0;
-        this.statPoint = 0;
-        this.health = character.getFixHealth();
-        this.power = character.getFixPower();
-        this.defense = character.getFixDefense();
-
-    }
-
     public void setUpgrade(int i) {
         this.upgrade = i;
     }
@@ -97,5 +81,18 @@ public class UserCharacter {
 
     public void addStatPoint(int statPoint){
         this.statPoint += statPoint;
+    }
+
+    @Builder
+    public UserCharacter(Character character, Users user){
+        this.user = user;
+        this.character = character;
+        this.statPoint = 5;
+        this.experience = 0;
+        this.level = 1;
+        this.health = character.getFixHealth();
+        this.power = character.getFixPower();
+        this.defense = character.getFixDefense();
+        this.upgrade = 0;
     }
 }

@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.users.entity;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_detail")
 public class UserDetail {
+    private static final int INITIAL_BATTLE_RATING = 1000;
+    private static final int LIMIT_DAILY_BATTLE_COUNT = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +47,13 @@ public class UserDetail {
     }
 
     public void updateBattleRating(int ratingScore){this.battleRating += ratingScore;}
+
+    @Builder
+    public UserDetail(Users user, UserCharacter selectUserCharacter){
+        this.user = user;
+        this.selectUserCharacter = selectUserCharacter;
+        this.battleRating = INITIAL_BATTLE_RATING;   //초기 레이팅은 1000고정
+        this.initStatus = 0;
+        this.battleCount = LIMIT_DAILY_BATTLE_COUNT;
+    }
 }

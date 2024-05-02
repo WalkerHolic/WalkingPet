@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.goal.entity;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,5 +34,12 @@ public class Goal {
 
     public void setDailyGoal(int dailyGoal){
         this.dailyGoal = dailyGoal;
+    }
+
+    @Builder
+    public Goal(Users user){
+        this.dailyGoal = 0;
+        this.weeklyGoal = 0;
+        this.user = user;
     }
 }
