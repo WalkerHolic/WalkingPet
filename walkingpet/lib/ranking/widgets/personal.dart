@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
-import 'package:walkingpet/services/ranking/ranking_api.dart';
+import 'package:walkingpet/services/ranking/personal_top10.dart';
 
 class PersonalRanking extends StatelessWidget {
   PersonalRanking({super.key});
@@ -106,56 +106,56 @@ class PersonalRanking extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Rank.fromJson(json),
-                        // Rank(
-                        //   ranking: '1',
-                        //   nickname: '1등 야호',
-                        //   step: '362,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '2',
-                        //   nickname: '이겜재밌냐',
-                        //   step: '226,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '3',
-                        //   nickname: '나는지은',
-                        //   step: '160,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '4',
-                        //   nickname: '룰루루4등잼',
-                        //   step: '8,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '5',
-                        //   nickname: '우희힇',
-                        //   step: '7,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '6',
-                        //   nickname: '6등 울렐레',
-                        //   step: '6,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '7',
-                        //   nickname: '7등임당',
-                        //   step: '5,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '8',
-                        //   nickname: '난 8등',
-                        //   step: '3,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '9',
-                        //   nickname: '구구구구구',
-                        //   step: '2,254',
-                        // ),
-                        // Rank(
-                        //   ranking: '10',
-                        //   nickname: '10등이군',
-                        //   step: '1,254',
-                        // ),
+                        Rank(
+                          ranking: 10,
+                          nickname: '1등룰루룰루',
+                          step: 362254,
+                        ),
+                        Rank(
+                          ranking: 2,
+                          nickname: '이겜재밌냐',
+                          step: 226254,
+                        ),
+                        Rank(
+                          ranking: 3,
+                          nickname: '나는지은',
+                          step: 160254,
+                        ),
+                        Rank(
+                          ranking: 4,
+                          nickname: '룰루루4등잼',
+                          step: 8254,
+                        ),
+                        Rank(
+                          ranking: 5,
+                          nickname: '우희힇',
+                          step: 7254,
+                        ),
+                        Rank(
+                          ranking: 6,
+                          nickname: '6등 울렐레',
+                          step: 6254,
+                        ),
+                        Rank(
+                          ranking: 7,
+                          nickname: '7등임당',
+                          step: 5254,
+                        ),
+                        Rank(
+                          ranking: 8,
+                          nickname: '난 8등',
+                          step: 3254,
+                        ),
+                        Rank(
+                          ranking: 9,
+                          nickname: '구구구구구',
+                          step: 2254,
+                        ),
+                        Rank(
+                          ranking: 10,
+                          nickname: '10등이군',
+                          step: 1254,
+                        ),
                       ],
                     ),
                   ),

@@ -15,7 +15,7 @@ class Top1to3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 7,
+        horizontal: 5,
       ),
       child: Column(
         children: [
@@ -23,7 +23,7 @@ class Top1to3 extends StatelessWidget {
           Text(
             ranking,
             style: const TextStyle(
-              fontSize: 35,
+              fontSize: 34,
             ),
           ),
 
@@ -31,7 +31,7 @@ class Top1to3 extends StatelessWidget {
           Image.asset(
             'assets/animals/cow/cow_walk.gif',
             // characterId
-            height: 100,
+            height: 90,
           ),
 
           // 걸음수 생략
