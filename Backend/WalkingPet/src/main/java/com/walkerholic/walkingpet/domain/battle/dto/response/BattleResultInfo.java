@@ -5,7 +5,7 @@ import lombok.*;
 @Builder
 @ToString
 @Getter
-public class BattleResult {
+public class BattleResultInfo {
     private boolean battleResult;
     private int experience;
     private int rating;
