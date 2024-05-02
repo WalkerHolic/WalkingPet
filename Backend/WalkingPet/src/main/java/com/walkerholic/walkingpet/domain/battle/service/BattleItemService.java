@@ -9,7 +9,7 @@ import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.CharacterInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.functionDTO.UserRatingDTO;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleProgressInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResponse;
-import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResult;
+import com.walkerholic.walkingpet.domain.battle.dto.response.BattleResultInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.EnemyInfo;
 import com.walkerholic.walkingpet.domain.battle.dto.response.UserBattleInfoDTO;
 import com.walkerholic.walkingpet.domain.battle.function.BattleFunction;
@@ -131,14 +131,14 @@ public class BattleItemService {
         System.out.println("배틀 function 진행!");
         BattleProgressInfo battleProgressInfo = battleFunction.getBattleProgress(userCharacterInfo, enemyCharacterInfo);
         System.out.println("배틀 결과 저장하기");
-        BattleResult battleResult = battleFunction.getBattleResult(userId);
+        BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userId);
 
         //배틀의 결과로 얻은 보상 데이터 저장
 
         System.out.println("배틀 결과로 얻은 데이터 저장");
 
         //배틀을 통해 얻은 상자 아이템 데이터를 저장한다.
-        String box = battleResult.getBattleReward().getBox();
+        String box = battleResultInfo.getBattleReward().getBox();
         if(box != null){
             System.out.println("박스 획득했어요!");
             UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, box)
@@ -150,17 +150,17 @@ public class BattleItemService {
         }
         System.out.println("경치 업데이트 준비");
         //배틀을 통해 얻은 경험치 업데이트
-        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResult.getExperience());
+        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userCharacter, battleResultInfo.getExperience());
 
         System.out.println("경치 업데이트 완");
         //배틀을 통해 얻은 레이팅 업데이트
-        userDetail.updateBattleRating(battleResult.getRating());
+        userDetail.updateBattleRating(battleResultInfo.getRating());
         userDetailRepository.save(userDetail);
         System.out.println("레이팅 업데이트 완");
         return BattleResponse.builder()
                 .enemyInfo(enemyInfo)
                 .battleProgressInfo(battleProgressInfo)
-                .battleResult(battleResult)
+                .battleResultInfo(battleResultInfo)
                 .levelUpResponse(levelUpResponse)
                 .build();
     }
