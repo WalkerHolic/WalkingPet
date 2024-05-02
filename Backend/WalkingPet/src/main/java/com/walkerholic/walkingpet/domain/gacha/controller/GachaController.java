@@ -37,7 +37,7 @@ public class GachaController {
     @Operation(summary = "뽑기 결과 조회", description = "선택한 상자에 따라 뽑기 결과를 조회한다")
     @ApiResponse(responseCode = "200", description = "S200 - 뽑기 결과 조회 성공", content = @Content(schema = @Schema(implementation = GachaResultResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 뽑기 결과 조회 실패")
-    @GetMapping("/result/{userId}")
+    @GetMapping("/result")
     public ResponseEntity<CommonResponseEntity> getGachaResult(@RequestParam("box") String boxType){
         int userId=1;
         GachaResultResponse gachaResult = gachaService.getGachaResult(boxType, userId);
