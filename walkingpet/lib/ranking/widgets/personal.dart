@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
@@ -12,10 +13,12 @@ class PersonalRanking extends StatefulWidget {
 }
 
 class _PersonalRankingState extends State<PersonalRanking> {
+  // 필요한 변수 만들기
   List top10 = [];
+  // List myrank = [];
   Map<String, dynamic> myrank = {};
+  // String animal = "";
   List top3 = [];
-
   bool isLoading = true;
 
   @override
@@ -24,6 +27,7 @@ class _PersonalRankingState extends State<PersonalRanking> {
     initTop10();
   }
 
+  // API 요청으로 데이터 불러오기
   Future<void> initTop10() async {
     try {
       var responseTop10 = await getTop10();
@@ -33,6 +37,8 @@ class _PersonalRankingState extends State<PersonalRanking> {
       setState(() {
         top10 = responseTop10['data']['topRanking'];
         myrank = responseMyRank['data'];
+        // int characterId = myrank['characterId'] as int;
+        // animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
         top3 = responseTop3['data']['topRanking'];
         isLoading = false;
       });
@@ -83,15 +89,6 @@ class _PersonalRankingState extends State<PersonalRanking> {
           ),
 
           // 3. 유저의 랭킹 표시
-          // 유진이 피드백: 나의 랭킹 897위 (226,254걸음 이런식으로 하면 어떨까?)
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 20),
-          //   child: Rank(
-          //     ranking: myrank['ranking'],
-          //     nickname: myrank['nickname'],
-          //     step: myrank['step'],
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Container(
@@ -101,11 +98,11 @@ class _PersonalRankingState extends State<PersonalRanking> {
                 borderRadius: BorderRadius.circular(5),
               ),
               margin: const EdgeInsets.symmetric(horizontal: 7),
-              child: const MyRank(
-                ranking: 1,
-                step: 123,
-                characterId: 1,
-                nickname: '유저의닉네임',
+              child: MyRank(
+                ranking: myrank['ranking'],
+                step: myrank['step'],
+                characterId: myrank['characterId'],
+                nickname: myrank['nickname'],
               ),
             ),
           ),
@@ -149,11 +146,6 @@ class _PersonalRankingState extends State<PersonalRanking> {
               ],
             ),
           ),
-
-          // 5. 아래 빈 공간
-          // const SizedBox(
-          //   height: 50,
-          // )
         ],
       ),
     );
