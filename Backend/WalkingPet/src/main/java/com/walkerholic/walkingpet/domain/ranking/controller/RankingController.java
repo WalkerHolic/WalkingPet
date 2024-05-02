@@ -67,11 +67,11 @@ public class RankingController {
 
         StepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 3);
+            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 2);
         } else if (value.equals("accumulation")) {
-            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 3);
+            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 2);
         } else {
-            accStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 3);
+            accStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 2);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
