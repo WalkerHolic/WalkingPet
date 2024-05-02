@@ -18,11 +18,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/levelup")
 public class LevelUpController {
     private final LevelUpService levelUpService;
-
-    @GetMapping("/test")
-    public ResponseEntity<CommonResponseEntity> levelUpTest(@RequestParam("userId") int userId, @RequestParam("getExp") int getExp){
-        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponse(userId,getExp);
-
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, levelUpResponse);
-    }
 }
