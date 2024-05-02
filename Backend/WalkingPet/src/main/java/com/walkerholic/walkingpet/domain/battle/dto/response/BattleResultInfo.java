@@ -10,5 +10,5 @@ public class BattleResultInfo {
     private int rewardExperience;
     private int rewardRating;
     private int resultRating;
-    private RewardItem battleReward;
+    private RewardItem rewardItem;
 }
