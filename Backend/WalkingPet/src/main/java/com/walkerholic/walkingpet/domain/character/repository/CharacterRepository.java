@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface CharacterRepository extends JpaRepository<Character, Long> {
+public interface CharacterRepository extends JpaRepository<Character, Integer> {
     @Query("SELECT c FROM Character c WHERE c.grade = :grade ORDER BY RAND() LIMIT 1")
     Optional<Character> findRandomByGrade(Integer grade);
 
