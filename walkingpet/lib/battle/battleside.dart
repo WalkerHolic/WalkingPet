@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -19,6 +20,8 @@ class BattleSide extends StatefulWidget {
   final List<dynamic> receivedDamage;
   final List<dynamic> userHealth;
   final List<dynamic> loseDamage;
+  final Map<String, dynamic> battleResult;
+  final Map<String, dynamic> levelUpResponse;
 
   const BattleSide({
     super.key,
@@ -34,6 +37,8 @@ class BattleSide extends StatefulWidget {
     required this.receivedDamage,
     required this.userHealth,
     required this.loseDamage,
+    required this.battleResult,
+    required this.levelUpResponse,
   });
 
   @override
@@ -70,7 +75,18 @@ class _BattleSideState extends State<BattleSide> {
             _timer?.cancel();
             Timer(const Duration(seconds: 1), () {
               // 여기에 지연 후 실행할 코드를 작성
-              Navigator.pushReplacementNamed(context, '/battleresult');
+              if (widget.isLeft) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BattleResult(
+                      battleResult: widget.battleResult,
+                      levelUpResponse: widget.levelUpResponse,
+                      animal: animal,
+                    ),
+                  ),
+                );
+              }
             });
           }
         });

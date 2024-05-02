@@ -73,7 +73,7 @@ class _BattleReadyState extends State<BattleReady> {
                       MainFontStyle(
                           size: 30, text: "점수: ${characterData['rating']}"),
                       const SizedBox(
-                        height: 100,
+                        height: 80,
                       ),
                       Transform.translate(
                         offset: const Offset(0, 60),
