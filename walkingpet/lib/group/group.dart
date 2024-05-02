@@ -5,11 +5,22 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/my_group_list.dart';
 import 'package:walkingpet/group/widgets/search_group.dart';
+import 'package:walkingpet/group/widgets/get_group_info.dart';
 
-class Group extends StatelessWidget {
+class Group extends StatefulWidget {
   const Group({super.key});
 
   @override
+  State<Group> createState() => _GroupState();
+}
+
+class _GroupState extends State<Group> {
+  @override
+  void initState() {
+    super.initState();
+    getGroupInfo();
+  }
+
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;

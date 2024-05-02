@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ class GachaBox extends StatelessWidget {
   final String boxImage; //박스 이미지 경로
   // final int totalBoxQuantity; //내가 가진 박스
   final String buttonImage; //버튼 이미지 경로
+  final VoidCallback onTap;
 
   const GachaBox({
     super.key,
@@ -14,6 +16,7 @@ class GachaBox extends StatelessWidget {
     required this.boxImage,
     // required this.totalBoxQuantity,
     required this.buttonImage,
+    required this.onTap,
   });
 
   @override
@@ -37,9 +40,12 @@ class GachaBox extends StatelessWidget {
             ),
           ],
         ),
-        SvgPicture.asset(
-          buttonImage,
-          height: 45,
+        GestureDetector(
+          onTap: onTap,
+          child: SvgPicture.asset(
+            buttonImage,
+            height: 45,
+          ),
         ),
       ],
     );
