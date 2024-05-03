@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -53,7 +52,6 @@ public class UserCharacterService {
      */
     @Transactional(readOnly = false)
     public UserCharacterStatResponse addStatPoint(int userCharacterId, String value) {
-        //TODO: 인가 처리 -> userId 값도 받아야할듯
         UserCharacter userCharacterInfo = getUserCharacter(userCharacterId);
 
         if (userCharacterInfo.getStatPoint() < REDUCE_STAT_POINT) {
@@ -77,7 +75,6 @@ public class UserCharacterService {
      */
     @Transactional(readOnly = false)
     public void changeUserCharacter(int userId, ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
-        //TODO: 인가처리
         UserDetail userDetail = userDetailRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
@@ -91,7 +88,6 @@ public class UserCharacterService {
      */
     @Transactional(readOnly = false)
     public ResetStatResponse resetInitStatus(ResetInitStatusRequest resetInitStatusRequest) {
-        //TODO: userId 를 받아서 인가처리
         UserCharacter userCharacterInfo = getUserCharacter(resetInitStatusRequest.getUserCharacterId());
         Character character = characterRepository.findByCharacterId(userCharacterInfo.getCharacter().getCharacterId())
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.CHARACTER_NOT_FOUND));
@@ -147,13 +143,22 @@ public class UserCharacterService {
     public UserCharacterListInfoResponse getUserCharacterInfoList(int userId) {
         List<UserCharacterListInfo> userCharacterListInfos = new ArrayList<>();
 
-        System.out.println("haveCharacterList");
-//        List<Character> userCharcterList = characterRepository.findUserCharcterList(userId);
+        // 해당 사용자가 장착하고 있는 캐릭터 찾기
+        UserDetail userDetail = userDetailRepository.findByUserUserId(userId)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        // 해당 사용자가 가지고 있는 캐릭터 정보 가져오기
         List<UserCharacter> haveCharacterList = userCharacterRepository.findByUserUserId(userId);
         for (UserCharacter userCharacter : haveCharacterList) {
-            userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter));
+            if (userDetail.getSelectUserCharacter().getUserCharacterId() == userCharacter.getUserCharacterId()) {
+                // 해당 사용자가 장착한 캐릭터
+                userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter, true));
+            } else {
+                userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter, false));
+            }
         }
-        System.out.println("notHaveUserCharacterList");
+
+        // 해당 사용자가 가지고 있지 않은 캐릭터 정보 가져오기
         List<Character> notHaveUserCharacterList = characterRepository.findNotHaveUserCharacterList(userId);
         for (Character userCharacter : notHaveUserCharacterList) {
             userCharacterListInfos.add(UserCharacterListInfo.characterFrom(userCharacter));
