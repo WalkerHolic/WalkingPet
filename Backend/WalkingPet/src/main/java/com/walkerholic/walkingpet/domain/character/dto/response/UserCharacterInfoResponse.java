@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Builder
 @Getter
-@RequiredArgsConstructor
 public class UserCharacterInfoResponse {
     private String nickname;
     private int characterId;
