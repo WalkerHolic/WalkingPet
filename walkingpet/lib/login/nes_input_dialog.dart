@@ -1,56 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 
-/// {@template nes_input_dialog}
-/// A dialog that shows a message requiring a value to
-/// input from the user.
-///
-/// For ease when showing a dialog, use [NesInputDialog.show] method.
-/// {@endtemplate}
 class CustomNesInputDialog extends StatefulWidget {
-  /// {@macro nes_input_dialog}
-  const CustomNesInputDialog({
-    required this.inputLabel,
-    required this.message,
-    super.key,
-  });
-
-  /// Value of the input label.
   final String inputLabel;
-
-  /// Value of the cancel label.
-
-  /// The inputation message.
   final String message;
 
-  /// A shortcut method that can be used to show this dialog.
-  ///
-  /// Defaults:
-  /// - [inputLabel] Ok
-  /// - [cancelLabel] Cancel
+  const CustomNesInputDialog({
+    super.key,
+    required this.inputLabel,
+    required this.message,
+  });
+
   static Future<String?> show({
     required BuildContext context,
     required String message,
     String inputLabel = 'Ok',
-    String cancelLabel = 'Cancel',
-    NesDialogFrame frame = const NesBasicDialogFrame(),
   }) {
-    return NesDialog.show<String?>(
+    return showDialog<String?>(
       context: context,
-      builder: (_) => CustomNesInputDialog(
+      builder: (context) => CustomNesInputDialog(
         inputLabel: inputLabel,
         message: message,
       ),
-      frame: frame,
     );
   }
 
   @override
-  State<CustomNesInputDialog> createState() => _CustomNesInputDialogState();
+  _CustomNesInputDialogState createState() => _CustomNesInputDialogState();
 }
 
 class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
-  late final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -58,37 +40,64 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
     super.dispose();
   }
 
+  bool _validateInput(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        _errorMessage = '닉네임을 입력해주세요.';
+      });
+      return false;
+    }
+    RegExp regex = RegExp(r'^[가-힣A-Za-z0-9]{2,6}$');
+    if (!regex.hasMatch(value)) {
+      setState(() {
+        _errorMessage = '닉네임은 2~6자의 한글, 영어, 숫자만 가능';
+      });
+      return false;
+    }
+    setState(() {
+      _errorMessage = null;
+    });
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(widget.message),
-        const SizedBox(height: 16),
-        TextField(
-          controller: _controller,
-          textAlign: TextAlign.center,
-          autofocus: true,
-          //style: const TextStyle(fontSize: 20),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            NesButton(
-              type: NesButtonType.primary,
-              child: Text(
-                widget.inputLabel,
-                style: const TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(_controller.text);
-              },
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(widget.message),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _controller,
+            textAlign: TextAlign.center,
+            autofocus: true,
+            validator: (value) {
+              if (value == null || !_validateInput(value)) {
+                return ' '; // This space ' ' is used to activate the error message space.
+              }
+              return null;
+            },
+          ),
+          if (_errorMessage != null)
+            Text(
+              _errorMessage!,
+              style: const TextStyle(color: Colors.red, fontSize: 12),
             ),
-          ],
-        ),
-      ],
+          const SizedBox(height: 12),
+          NesButton(
+            type: NesButtonType.primary,
+            child: Text(widget.inputLabel,
+                style: const TextStyle(color: Colors.white)),
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                Navigator.of(context).pop(_controller.text);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
