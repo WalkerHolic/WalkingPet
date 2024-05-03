@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
-import 'package:walkingpet/battle/battle.dart';
-import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/character/characterinfo.dart';
 import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
@@ -16,6 +14,19 @@ import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, // 상단바 배경을 투명하게
+    statusBarIconBrightness: Brightness.dark, // 상단바 아이콘을 어둡게 (라이트 모드)
+  ));
+
+  /* 세로 방향 고정 */
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // 세로 방향으로 위를 가리킴
+    DeviceOrientation.portraitDown // 세로 방향으로 아래를 가리킴
+  ]);
+
   runApp(const MyApp());
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   // SystemChannels.navigation.setMethodCallHandler((MethodCall call) async {
@@ -86,7 +97,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
