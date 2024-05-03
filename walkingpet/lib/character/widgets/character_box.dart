@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/character_map.dart';
 
 class CharacterBox extends StatelessWidget {
-  final int charaterId,
+  final int characterId,
       characterGrade,
       userCharacterId,
       userCharacterLevel,
-      userCharacterUpgrade,
-      userCharacterStatus;
+      userCharacterUpgrade;
   final String characterName;
+  final bool userCharacterStatus;
 
   const CharacterBox(
       {super.key,
-      required this.charaterId,
+      required this.characterId,
       required this.characterGrade,
       required this.userCharacterId,
       required this.userCharacterLevel,
       required this.userCharacterUpgrade,
-      required this.userCharacterStatus,
-      required this.characterName});
+      required this.characterName,
+      required this.userCharacterStatus});
 
   @override
   Widget build(BuildContext context) {
     // 현재 화면의 크기 가져오기
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
+
+    String animal = CharacterMap.idToAnimal[characterId] ?? "buddy";
+    print(animal);
 
     return Container(
       width: screenWidth * 0.2,
@@ -84,6 +88,7 @@ class CharacterBox extends StatelessWidget {
               // 3. 캐릭터 이미지(id)
               Image.asset(
                 'assets/animals/cow/cow_idle.gif',
+                // 'assets/animals/$animal/${animal}_walk.gif',
                 height: 70,
                 // scale: 1,
               ),

@@ -2,17 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
-import 'package:walkingpet/levelup/levelup.dart';
+import 'package:walkingpet/common/character_map.dart';
+// import 'package:walkingpet/levelup/levelup.dart';
+import 'package:walkingpet/services/character/characterinfo.dart';
 
 // 캐릭터 정보
-class CharacterInfo extends StatelessWidget {
-  // final String nickname;
-  // final int characterId,
-  //     level,
-  //     experience,
-  //     maxExperience;
-
+class CharacterInfo extends StatefulWidget {
   const CharacterInfo({super.key});
+
+  @override
+  State<CharacterInfo> createState() => _CharacterInfoState();
+}
+
+class _CharacterInfoState extends State<CharacterInfo> {
+  // 필요한 변수 만들기
+  Map<String, dynamic> characterInfoData = {};
+  String animal = "";
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    initInfo();
+  }
+
+  // API 요청으로 데이터 불러오기
+  Future<void> initInfo() async {
+    try {
+      var responseInfo = await getCharacterInfo();
+
+      setState(() {
+        characterInfoData = responseInfo['data'];
+        int characterId = characterInfoData['characterId'] as int;
+        animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
+        isLoading = false;
+      });
+    } catch (e) {
+      isLoading = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,211 +84,229 @@ class CharacterInfo extends StatelessWidget {
           ),
 
           // 3. 내용
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 1. 유저 닉네임
-                const Text(
-                  '닉네임적어요',
-                  style: TextStyle(
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 35,
+          if (!isLoading)
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 1. 유저 닉네임
+                  Text(
+                    characterInfoData['nickname'] ?? '닉네임로딩중',
+                    style: const TextStyle(
+                      // fontWeight: FontWeight.bold,
+                      fontSize: 35,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
+                  const SizedBox(height: 5),
 
-                // 2. 캐릭터 이미지
-                Image.asset(
-                  'assets/animals/cow/cow_walk.gif',
-                  height: 200,
-                  scale: 0.3,
-                ),
+                  // 2. 캐릭터 이미지
+                  Image.asset(
+                    'assets/animals/$animal/${animal}_walk.gif',
+                    height: 200,
+                    // scale: 0.3,
+                  ),
 
-                // 3. 변경 버튼
-                TextButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Container(
-                            width: screenWidth,
-                            height: screenHeight * 0.6,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
+                  // 3. 변경 버튼
+                  TextButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Container(
+                              width: screenWidth,
+                              height: screenHeight * 0.6,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const CharacterChange(),
                             ),
-                            child: const CharacterChange(),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Image.asset(
-                    'assets/buttons/character_change_button.png',
-                    scale: 0.85,
+                          );
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/buttons/character_change_button.png',
+                      scale: 0.85,
+                    ),
                   ),
-                ),
 
-                // 4. 레벨 & 경험치 바 & 경험치 아이템 사용 버튼 (+버튼)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: SizedBox(
-                    width: screenWidth * 0.9,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // 4-1. 레벨
-                        const Text(
-                          'Lv. 7',
-                          style: TextStyle(
-                            fontSize: 23,
+                  // 4. 레벨 & 경험치 바 & 경험치 아이템 사용 버튼 (+버튼)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: SizedBox(
+                      width: screenWidth * 0.9,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // 4-1. 레벨
+                          Text(
+                            'Lv.${characterInfoData['level']}',
+                            style: const TextStyle(
+                              fontSize: 23,
+                            ),
                           ),
-                        ),
 
-                        // 4-2. 경험치 바
-                        SizedBox(
-                          width: 200,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              // 4-2-1. Linear Progress Bar
-                              const SizedBox(
-                                width: 183,
-                                height: 25,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: LinearProgressIndicator(
-                                    value: 0.7,
-                                    backgroundColor: Color(0xFF727272),
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Color(0xFFF3A52F)),
+                          // 4-2. 경험치 바
+                          SizedBox(
+                            width: 200,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // 4-2-1. Linear Progress Bar
+                                SizedBox(
+                                  width: 183,
+                                  height: 25,
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
+                                    child: LinearProgressIndicator(
+                                      value: (characterInfoData['experience'] ??
+                                                  0)
+                                              .toDouble() /
+                                          (characterInfoData['maxExperience'] ??
+                                                  1)
+                                              .toDouble(),
+                                      backgroundColor: const Color(0xFF727272),
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                              Color(0xFFF3A52F)),
+                                    ),
                                   ),
+                                ),
+
+                                // 4-2-2. 도트 이미지
+                                Image.asset(
+                                  'assets/images/character_bar_gray.png',
+                                  scale: 0.7,
+                                ),
+
+                                // 4-2-3. 경험치 값
+                                Text(
+                                  '${characterInfoData['experience'] ?? 0}/${characterInfoData['maxExperience'] ?? 0}',
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ),
+                          ),
+
+                          // 4-3. 경험치 아이템 사용 버튼 (+버튼)
+                          SizedBox(
+                            // width: 30,
+                            child: Image.asset(
+                              'assets/buttons/yellow_plus_button.png',
+                              scale: 0.75,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // 5. 능력치 & 남은 능력치 포인트 & 초기화 버튼
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: screenWidth * 0.9,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // 5-1. 능력치: 체력, 공격력, 방어력
+                          Column(
+                            children: [
+                              CharacterInfoStat(
+                                statname: '체력',
+                                point: characterInfoData['health'] ?? 0,
+                                addpoint: characterInfoData['addHealth'] ?? 0,
+                              ),
+                              CharacterInfoStat(
+                                statname: '공격력',
+                                point: characterInfoData['power'] ?? 0,
+                                addpoint: characterInfoData['addPower'] ?? 0,
+                              ),
+                              CharacterInfoStat(
+                                statname: '방어력',
+                                point: characterInfoData['defense'] ?? 0,
+                                addpoint: characterInfoData['addDefense'] ?? 0,
+                              ),
+                            ],
+                          ),
+
+                          Column(
+                            children: [
+                              // 5-2. 남은 능력치 포인트
+                              const Text(
+                                '남은 포인트',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                characterInfoData['statPoint'].toString(),
+                                style: const TextStyle(
+                                  fontSize: 35,
                                 ),
                               ),
 
-                              // 4-2-2. 도트 이미지
-                              Image.asset(
-                                'assets/images/character_bar_gray.png',
-                                scale: 0.7,
+                              // 5-3. 초기화 버튼
+                              Center(
+                                child: characterInfoData['upgrade'] == 1
+                                    ? TextButton(
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, '/characterinfo');
+                                        },
+                                        child: Image.asset(
+                                          'assets/buttons/character_reset_button.png',
+                                          scale: 0.8,
+                                        ),
+                                      )
+                                    : TextButton(
+                                        onPressed: null, // 버튼 비활성화
+                                        child: Image.asset(
+                                          'assets/buttons/character_reset_button_pushed.png',
+                                          scale: 0.8,
+                                        ),
+                                      ),
                               ),
-
-                              // 4-2-3. 경험치 값
-                              const Text(
-                                '110/200',
-                                style: TextStyle(color: Colors.white),
-                              )
                             ],
                           ),
-                        ),
-
-                        // 4-3. 경험치 아이템 사용 버튼 (+버튼)
-                        SizedBox(
-                          // width: 30,
-                          child: Image.asset(
-                            'assets/buttons/yellow_plus_button.png',
-                            scale: 0.75,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-
-                // 5. 능력치 & 남은 능력치 포인트 & 초기화 버튼
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    width: screenWidth * 0.9,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // 5-1. 능력치: 체력, 공격력, 방어력
-                        const Column(
-                          children: [
-                            CharacterInfoStat(
-                                statname: '체력',
-                                point: 400,
-                                fix: 300,
-                                upgrade: 100),
-                            CharacterInfoStat(
-                                statname: '공격력',
-                                point: 18,
-                                fix: 10,
-                                upgrade: 8),
-                            CharacterInfoStat(
-                                statname: '방어력',
-                                point: 12,
-                                fix: 10,
-                                upgrade: 2),
-                          ],
-                        ),
-
-                        Column(
-                          children: [
-                            // 5-2. 남은 능력치 포인트
-                            const Text(
-                              '남은 포인트',
-                              style: TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                            const Text(
-                              '3',
-                              style: TextStyle(
-                                fontSize: 35,
-                              ),
-                            ),
-
-                            // 5-3. 초기화 버튼
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/characterinfo');
-                              },
-                              child: Image.asset(
-                                'assets/buttons/character_reset_button.png',
-                                scale: 0.8,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
           // 4. (임시 코드) levelup 모달
-          Positioned(
-            bottom: 0,
-            child: ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Container(
-                        width: 300,
-                        height: 500,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: const LevelUp(),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: const Text('Level Up Modal'),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 0,
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       showDialog(
+          //         context: context,
+          //         builder: (BuildContext context) {
+          //           return Dialog(
+          //             shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(20.0)),
+          //             child: Container(
+          //               width: 300,
+          //               height: 500,
+          //               decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(20.0),
+          //               ),
+          //               child: const LevelUp(),
+          //             ),
+          //           );
+          //         },
+          //       );
+          //     },
+          //     child: const Text('Level Up Modal'),
+          //   ),
+          // ),
         ],
       ),
       bottomNavigationBar: const BottomNavBar(
