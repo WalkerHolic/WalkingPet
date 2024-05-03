@@ -24,8 +24,9 @@ public class UserCharacterInfoResponse {
     private int addDefense;
     private int statPoint;
     private int upgrade;
+    private int initStatus;
 
-    public static UserCharacterInfoResponse from(UserCharacter userCharacter){
+    public static UserCharacterInfoResponse from(UserCharacter userCharacter, int initStatus){
         return UserCharacterInfoResponse.builder()
                 .nickname("test")
                 .characterId(userCharacter.getUserCharacterId())
@@ -40,6 +41,7 @@ public class UserCharacterInfoResponse {
                 .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
                 .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
                 .upgrade(userCharacter.getUpgrade())
+                .initStatus(initStatus)
                 .build();
     }
 }
