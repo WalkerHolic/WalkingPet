@@ -36,11 +36,11 @@ public class CharacterController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "유저의 캐릭터 정보 가져오기", description = "유저가 보유한 캐릭터와 보유하지 않은 캐릭터 목록 가져오기")
+    @Operation(summary = "유저의 캐릭터 목록 정보 가져오기", description = "유저가 보유한 캐릭터와 보유하지 않은 캐릭터 목록 가져오기")
 //    @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 정보 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     public ResponseEntity<CommonResponseEntity> getUserCharacterListInfo() {
         int userId = 6;
-        log.info("캐릭터 정보 확인 getUserCharacterInfo - userId: {}", userId);
+        log.info("유저의 캐릭터 목록 정보 가져오기 getUserCharacterListInfo - userId: {}", userId);
 
         UserCharacterListInfoResponse userCharacterInfoList = userCharacterService.getUserCharacterInfoList(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfoList);
