@@ -63,6 +63,9 @@ class Login extends StatelessWidget {
                   String? nickname = await show(context: context);
                   print("Entered nickname: $nickname"); // 사용자가 입력한 값을 출력
                   //Navigator.pushNamed(context, '/home');
+                  if (nickname != null) {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  }
                 },
                 child: Image.asset('assets/icons/kakao_login_medium_wide.png'),
               ),
@@ -82,7 +85,7 @@ Future<String?> show({
     context: context,
     builder: (_) => const CustomNesInputDialog(
       inputLabel: "  확인  ",
-      message: "닉네임을 정해주세요 (2~5자)",
+      message: "닉네임을 정해주세요 (2~6자)",
     ),
     frame: frame,
   );
