@@ -1,9 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/goal/widgets/daily.dart';
 import 'package:walkingpet/goal/widgets/weekly.dart';
+// 페이지 로드 시 목표 달성 여부를 로드
+import 'package:walkingpet/services/goal/get_goal_info.dart';
 
-class Goal extends StatelessWidget {
+class Goal extends StatefulWidget {
   const Goal({super.key});
+
+  @override
+  State<Goal> createState() => _GoalState();
+}
+
+class _GoalState extends State<Goal> {
+  int steps = 0;
+  List<bool> dailyGoals = [];
+  List<bool> weeklyGoals = [];
+  Map<String, bool> stampedDays = {};
+  //일일 목표 관련
+  bool isAttended = false;
+  bool isWalked3000 = false;
+  bool isWalked5000 = false;
+  bool isWalked7000 = false;
+  bool isWalked10000 = false;
+
+  @override
+  void initState() {
+    super.initState();
+    //then() 메서드를 사용하여 Future가 완료되었을 때 얻은 결과를 처리
+    getGoalInfo().then(
+      (data) {
+        setState(
+          () {
+            //data를 State 변수에 저장
+            steps = data['step'];
+            dailyGoals = List<bool>.from(data['dailyGoal']);
+            weeklyGoals = List<bool>.from(data['weeklyGoal']);
+            print('받아서 새로 저장한 데이터: $weeklyGoals');
+            // Map 업데이트
+            stampedDays = {
+              '월요일': weeklyGoals[0],
+              '화요일': weeklyGoals[1],
+              '수요일': weeklyGoals[2],
+              '목요일': weeklyGoals[3],
+              '금요일': weeklyGoals[4],
+              '토요일': weeklyGoals[5],
+              '일요일': weeklyGoals[6]
+            };
+            //일일 목표
+            isAttended = dailyGoals[0];
+            isWalked3000 = dailyGoals[1];
+            isWalked5000 = dailyGoals[2];
+            isWalked7000 = dailyGoals[3];
+            isWalked10000 = dailyGoals[4];
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +64,9 @@ class Goal extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     // 걸음수 더미값
-    int steps = 7500;
+
     int goalStep = 10000;
-    //주간 목표 달성
-    bool isMonStamped = true;
-    bool isTueStamped = false;
-    bool isWedStamped = false;
-    bool isThrStamped = false;
-    bool isFriStamped = false;
-    bool isSatStamped = false;
-    bool isSunStamped = false;
+
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('목표'),
@@ -98,11 +144,31 @@ class Goal extends StatelessWidget {
                           fontSize: 35,
                         ),
                       ),
-                      const DailyGoalItem(title: "출석"),
-                      const DailyGoalItem(title: "3000 걸음"),
-                      const DailyGoalItem(title: "5000 걸음"),
-                      const DailyGoalItem(title: "7000 걸음"),
-                      const DailyGoalItem(title: "10000 걸음"),
+                      DailyGoalItem(
+                        title: "출석",
+                        isActivated: isAttended,
+                        goalSteps: 0,
+                      ),
+                      DailyGoalItem(
+                        title: "3000 걸음",
+                        isActivated: isWalked3000,
+                        goalSteps: 3000,
+                      ),
+                      DailyGoalItem(
+                        title: "5000 걸음",
+                        isActivated: isWalked5000,
+                        goalSteps: 5000,
+                      ),
+                      DailyGoalItem(
+                        title: "7000 걸음",
+                        isActivated: isWalked7000,
+                        goalSteps: 7000,
+                      ),
+                      DailyGoalItem(
+                        title: "10000 걸음",
+                        isActivated: isWalked10000,
+                         goalSteps: 10000,
+                      ),
                       const Text(
                         "주간 목표",
                         style: TextStyle(
@@ -112,27 +178,34 @@ class Goal extends StatelessWidget {
                       Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WeeklyGoalItem(
-                                  text: '월요일', isStamped: isMonStamped),
-                              WeeklyGoalItem(
-                                  text: '화요일', isStamped: isTueStamped),
-                              WeeklyGoalItem(
-                                  text: '수요일', isStamped: isWedStamped),
-                              WeeklyGoalItem(
-                                  text: '목요일', isStamped: isThrStamped),
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                WeeklyGoalItem(
+                                    // 단축연산 - 왼쪽 값이 null이면 false 반환
+                                    text: '월요일',
+                                    isStamped: stampedDays['월요일'] ?? false),
+                                WeeklyGoalItem(
+                                    text: '화요일',
+                                    isStamped: stampedDays['월요일'] ?? false),
+                                WeeklyGoalItem(
+                                    text: '수요일',
+                                    isStamped: stampedDays['수요일'] ?? false),
+                                WeeklyGoalItem(
+                                    text: '목요일',
+                                    isStamped: stampedDays['목요일'] ?? false),
+                              ]),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               WeeklyGoalItem(
-                                  text: '금요일', isStamped: isFriStamped),
+                                  text: '금요일',
+                                  isStamped: stampedDays['금요일'] ?? false),
                               WeeklyGoalItem(
-                                  text: '토요일', isStamped: isSatStamped),
+                                  text: '토요일',
+                                  isStamped: stampedDays['토요일'] ?? false),
                               WeeklyGoalItem(
-                                  text: '일요일', isStamped: isSunStamped),
+                                  text: '일요일',
+                                  isStamped: stampedDays['일요일'] ?? false),
                             ],
                           ),
                         ],
