@@ -30,6 +30,7 @@ public class RankingController {
     private final YesterdayStepRankingRedisService yesterdayStepRankingRedisService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
+    // mysql 버전으로 데이터 가져오기 -> 현재는 redis이기 때문에 사용x, 성능 테스트 확인용
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 개인 랭킹과 개인 랭킹 목록 조회 성공", content = @Content(schema = @Schema(implementation = PersonalStepRankingResponse.class)))
@@ -80,8 +81,8 @@ public class RankingController {
     @GetMapping("/person/myrank")
     @Operation(summary = "개인 랭킹 나의 순위 조회", description = "어제/누적/실시간 유저의 개인 랭킹 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 나의 순위 조회 성공", content = @Content(schema = @Schema(implementation = UserPersonalStepRankingResponse.class)))
-    public ResponseEntity<CommonResponseEntity> getMyPersonalRanking(@RequestParam("value") String value, @RequestParam("userId") int userId) {
-//        int userId = 2;
+    public ResponseEntity<CommonResponseEntity> getMyPersonalRanking(@RequestParam("value") String value) {
+        int userId = 1;
         log.info("개인 랭킹 나의 순위 조회 getMyPersonalRanking - value: {}, userId: {}", value, userId);
 
         StepRankingList userAccStepRanking;
