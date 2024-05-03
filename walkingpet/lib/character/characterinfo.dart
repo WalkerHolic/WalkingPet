@@ -3,7 +3,7 @@ import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
-import 'package:walkingpet/levelup/levelup.dart';
+// import 'package:walkingpet/levelup/levelup.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 
 // 캐릭터 정보
@@ -282,31 +282,31 @@ class _CharacterInfoState extends State<CharacterInfo> {
             ),
 
           // 4. (임시 코드) levelup 모달
-          Positioned(
-            bottom: 0,
-            child: ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Container(
-                        width: 300,
-                        height: 500,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: const LevelUp(),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: const Text('Level Up Modal'),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 0,
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       showDialog(
+          //         context: context,
+          //         builder: (BuildContext context) {
+          //           return Dialog(
+          //             shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(20.0)),
+          //             child: Container(
+          //               width: 300,
+          //               height: 500,
+          //               decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(20.0),
+          //               ),
+          //               child: const LevelUp(),
+          //             ),
+          //           );
+          //         },
+          //       );
+          //     },
+          //     child: const Text('Level Up Modal'),
+          //   ),
+          // ),
         ],
       ),
       bottomNavigationBar: const BottomNavBar(

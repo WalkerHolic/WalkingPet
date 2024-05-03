@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 const String baseUrl = "https://walkingpet.co.kr";
-const String characterInfo = "character?userCharacterId=22";
+const String characterInfo = "character/list";
 
-// 캐릭터 정보 조회
-Future<Map<String, dynamic>> getCharacterInfo() async {
+// 캐릭터 변경 모달
+Future<Map<String, dynamic>> getCharacterChange() async {
   final url = Uri.parse('$baseUrl/$characterInfo');
   final response = await http.get(url);
 
