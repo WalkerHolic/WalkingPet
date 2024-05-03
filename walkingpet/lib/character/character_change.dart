@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:walkingpet/character/widgets/character_box.dart';
-import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/services/character/characterchange.dart';
 
 class CharacterChange extends StatefulWidget {
@@ -15,7 +12,6 @@ class CharacterChange extends StatefulWidget {
 class _CharacterChangeState extends State<CharacterChange> {
   // 필요한 변수 만들기
   List characterInfoData = [];
-  String animal = "";
   bool isLoading = true;
 
   @override
@@ -30,10 +26,6 @@ class _CharacterChangeState extends State<CharacterChange> {
       var responseInfo = await getCharacterChange();
       setState(() {
         characterInfoData = responseInfo['data']['characters'];
-        // print(characterInfoData[0]['characterId']);
-        // characterInfoData[1];
-        // int characterId = characterInfoData['characterId'] as int;
-
         isLoading = false;
       });
     } catch (e) {
@@ -154,36 +146,6 @@ class _CharacterChangeState extends State<CharacterChange> {
             ],
           ),
         ),
-
-        // Positioned(
-        //   bottom: 10,
-        //   left: screenWidth * 0.25, // 가운데 정렬
-        //   right: screenWidth * 0.25,
-
-        //   child: TextButton(
-        //     onPressed: () => Navigator.of(context).pop(),
-        //     style: TextButton.styleFrom(
-        //       padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
-        //       fixedSize: Size(
-        //           screenWidth * 0.5, 50), // 버튼의 너비를 화면 너비의 50%, 높이는 50으로 고정
-        //       backgroundColor: Colors.transparent, // 배경 투명 설정
-        //     ),
-        //     child: Stack(
-        //       alignment: Alignment.center,
-        //       children: [
-        //         Image.asset('assets/buttons/green_button.png',
-        //             fit: BoxFit.cover), // 이미지를 꽉 채워 표시
-        //         const Text(
-        //           '변경하기',
-        //           style: TextStyle(
-        //             fontSize: 22,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
