@@ -4,7 +4,6 @@ import 'package:walkingpet/common/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
-import 'package:walkingpet/services/character/checkstep.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
