@@ -42,7 +42,7 @@ class BattleResult extends StatelessWidget {
               Image.asset(
                 battleResult['battleResult']
                     ? 'assets/animals/$animal/${animal}_attack.gif'
-                    : 'assets/animals/$animal/${animal}_hurt.gif',
+                    : 'assets/animals/$animal/${animal}_idle.gif',
                 scale: 1.2,
               ),
               Transform.translate(
