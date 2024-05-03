@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
                     ),
                     Image.asset(
                       //'assets/animals/wolf/wolf_run.gif',
-                      'assets/animals/rhino/rhino_walk.gif',
+                      'assets/animals/red_dragon/red_dragon_walk.gif',
                     ),
                   ],
                 ),
