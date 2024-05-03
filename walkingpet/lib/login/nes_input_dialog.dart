@@ -50,7 +50,7 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
     RegExp regex = RegExp(r'^[가-힣A-Za-z0-9]{2,6}$');
     if (!regex.hasMatch(value)) {
       setState(() {
-        _errorMessage = '닉네임은 2~6자의 한글, 영어, 숫자만 가능';
+        _errorMessage = '한글, 영어, 숫자만 가능합니다.';
       });
       return false;
     }
