@@ -44,7 +44,7 @@ public class UserCharacterService {
         UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-        return UserCharacterInfoResponse.from(userDetail.getSelectUserCharacter());
+        return UserCharacterInfoResponse.from(userDetail.getSelectUserCharacter(), userDetail.getInitStatus());
     }
 
     /**

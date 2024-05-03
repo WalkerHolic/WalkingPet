@@ -25,7 +25,7 @@ public class UserDetail {
 
     //0: 초기화 안함, 1: 초기화 함
     @Column(name = "init_status", columnDefinition = "TINYINT(1)", nullable = false)
-    private byte  initStatus;
+    private byte initStatus;
 
     @Column(name = "battle_count", nullable = false)
     private byte battleCount;
