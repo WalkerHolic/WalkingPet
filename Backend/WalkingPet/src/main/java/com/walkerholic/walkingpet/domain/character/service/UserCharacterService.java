@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -40,10 +41,11 @@ public class UserCharacterService {
      * 사용자의 캐릭터 정보 가져오기(api)
      */
     @Transactional(readOnly = true)
-    public UserCharacterInfoResponse getUserCharacterInfo(int userCharacterId) {
-        UserCharacter userCharacterInfo = getUserCharacter(userCharacterId);
+    public UserCharacterInfoResponse getUserCharacterInfo(int userId) {
+        UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-        return UserCharacterInfoResponse.from(userCharacterInfo);
+        return UserCharacterInfoResponse.from(userDetail.getSelectUserCharacter());
     }
 
     /**
