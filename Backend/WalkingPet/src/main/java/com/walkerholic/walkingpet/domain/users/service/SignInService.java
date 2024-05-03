@@ -21,6 +21,7 @@ import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -35,6 +36,7 @@ public class SignInService {
     private final ItemRepository itemRepository;
     private final CharacterRepository characterRepository;
 
+    @Transactional
     public void signInInItTable(String email){
         Users user = getUsersByEmail(email);
         //1. UserStep 초기화
@@ -107,31 +109,15 @@ public class SignInService {
                 .build());
     }
 
+    @Transactional(readOnly = true)
     public Users getUsersByEmail(String email){
         return usersRepository.findByEmail(email)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND_EMAIL));
     }
 
+    @Transactional(readOnly = true)
     public Character getCharacterById(int characterId){
         return characterRepository.findById(characterId)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.CHARACTER_NOT_FOUND));
     }
-
-    //이런식으로 예외처리 할까 말까 고민중!
-//    public void initUserDetail(Users user, UserCharacter selectUserCharacter) {
-//        // 해당 유저의 정보가 이미 존재하는지 확인
-//        Optional<UserDetail> existingUserDetail = userDetailRepository.findByUser(user);
-//
-//        if (existingUserDetail.isPresent()) {
-//            // 이미 존재하는 경우 예외 처리
-//            throw new RuntimeException("UserDetail already exists for user with id: " + user.getUserId());
-//        } else {
-//            // 존재하지 않는 경우 저장
-//            userDetailRepository.save(UserDetail.builder()
-//                    .user(user)
-//                    .selectUserCharacter(selectUserCharacter)
-//                    .build());
-//        }
-//    }
-
 }
