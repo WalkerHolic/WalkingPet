@@ -2,8 +2,11 @@ package com.walkerholic.walkingpet.domain.character.dto.response;
 
 
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
+import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunction;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Builder
 @Getter
@@ -28,7 +31,7 @@ public class UserCharacterInfoResponse {
                 .characterId(userCharacter.getUserCharacterId())
                 .level(userCharacter.getLevel())
                 .experience(userCharacter.getExperience())
-                .maxExperience(userCharacter.getExperience())
+                .maxExperience(userCharacter.getLevel()*(userCharacter.getLevel()-1)*5/2 + 10)
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
