@@ -38,11 +38,11 @@ public class JwtUtil {
     private Long REFRESH_TOKEN_EXPIRATION_PERIOD = 3600000L;
     
     public String generateAccessToken(UsersDto userDTO) {
-        return createToken(ACCESS_TOKEN_EXPIRATION_PERIOD, userDTO);
+        return createToken(ACCESS_TOKEN_EXPIRATION, userDTO);
     }
 
     public String generateRefreshToken(UsersDto userDTO) {
-        return createToken(REFRESH_TOKEN_EXPIRATION_PERIOD, userDTO);
+        return createToken(REFRESH_TOKEN_EXPIRATION, userDTO);
     }
     
     private String createToken(Long expirationPeriod, UsersDto userDTO) {
@@ -58,7 +58,7 @@ public class JwtUtil {
                 .addClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationPeriod))
-                .signWith(SignatureAlgorithm.HS512, SECRETKEY)
+                .signWith(SignatureAlgorithm.HS256, SECRETKEY)
                 .compact();
     }
 
@@ -78,6 +78,7 @@ public class JwtUtil {
 
         boolean isTokenExpired = checkTokenExpired(accessToken);
         if(!isTokenExpired) {
+//        if(isTokenExpired) {
             System.out.println("토큰 만료");
             throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
         } else {

@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.auth.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.global.error.response.ErrorResponseEntity;
@@ -7,12 +8,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
@@ -34,7 +32,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     }
 
     private void setErrorResponse(TokenErrorCode tokenErrorCode, HttpServletResponse response) {
-//        response.setStatus(status.value());
+        response.setStatus(tokenErrorCode.getStatus());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -45,20 +43,5 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
-
-//    private void setErrorResponse(HttpStatus status, String message, HttpServletResponse response) {
-////        response.setStatus(status.value());
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        ErrorResponseEntity errorResponse = new ErrorResponseEntity();
-//
-//        try {
-//            String json = new ObjectMapper().writeValueAsString(errorResponse);
-//            response.getWriter().write(json);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
 }

@@ -64,6 +64,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 "/api-docs/json",
                 "/api-docs",
                 "/auth/social-login",
+//                "/v3/api-docs/swagger-config",
                 "/swagger-ui/",
                 "/swagger-config",
                 "/swagger.yaml",
