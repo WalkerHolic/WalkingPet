@@ -52,6 +52,8 @@ public class JwtUtil {
         claims.put("sub", "1");
         claims.put("iss", "test");
 
+        System.out.println("만료 날짜: " + new Date(System.currentTimeMillis() + expirationPeriod));
+
         return Jwts.builder()
                 .addClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -75,7 +77,8 @@ public class JwtUtil {
         }
 
         boolean isTokenExpired = checkTokenExpired(accessToken);
-        if(isTokenExpired == true) {
+        if(!isTokenExpired) {
+            System.out.println("토큰 만료");
             throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
         } else {
             return isTokenExpired;
@@ -104,6 +107,9 @@ public class JwtUtil {
         Date expirationDate = extractClaim(token, Claims::getExpiration);
 //        Claims claims = getClaims(token);
         boolean isTokenExpired = expirationDate.after(new Date());
+        System.out.println("토큰 만료 시간: " + expirationDate);
+        System.out.println("현재 시간: " + new Date());
+        System.out.println("결과 : " + isTokenExpired);
         return isTokenExpired;
 //        return true;
     }
