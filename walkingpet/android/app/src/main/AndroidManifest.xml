@@ -1,9 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package = "com.walkerholic.walkingpet">
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="walkingpet"
-        android:name="${applicationName}"
+        android:label="워킹펫"
+        android:name="워킹펫"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
