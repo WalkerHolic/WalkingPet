@@ -1,4 +1,4 @@
-package com.example.walkingpet
+package com.walkerholic.walkingpet
 
 import io.flutter.embedding.android.FlutterActivity
 
