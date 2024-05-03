@@ -30,6 +30,7 @@ public class RankingController {
     private final YesterdayStepRankingRedisService yesterdayStepRankingRedisService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
+    // mysql 버전으로 데이터 가져오기 -> 현재는 redis이기 때문에 사용x, 성능 테스트 확인용
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 개인 랭킹과 개인 랭킹 목록 조회 성공", content = @Content(schema = @Schema(implementation = PersonalStepRankingResponse.class)))
