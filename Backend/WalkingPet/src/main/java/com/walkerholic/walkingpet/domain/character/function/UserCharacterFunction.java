@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class UserCharacterFunction {
     static final int INCREASE_MAX_EXP = 5;
-    public int getMaxExperience(int level){
+    public static int getMaxExperience(int level){
         if(level == 1){
             return 10;
         }

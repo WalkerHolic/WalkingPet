@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Builder
 @Getter
+@RequiredArgsConstructor
 public class UserCharacterInfoResponse {
     private String nickname;
     private int characterId;
@@ -31,7 +32,7 @@ public class UserCharacterInfoResponse {
                 .characterId(userCharacter.getUserCharacterId())
                 .level(userCharacter.getLevel())
                 .experience(userCharacter.getExperience())
-                .maxExperience(userCharacter.getLevel()*(userCharacter.getLevel()-1)*5/2 + 10)
+                .maxExperience(UserCharacterFunction.getMaxExperience(userCharacter.getLevel()))
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
