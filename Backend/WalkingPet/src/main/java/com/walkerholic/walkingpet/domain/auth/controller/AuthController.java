@@ -1,6 +1,12 @@
 package com.walkerholic.walkingpet.domain.auth.controller;
 
+import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
+import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
+import com.walkerholic.walkingpet.domain.users.service.UserService;
+import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
+import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +23,16 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/auth")
 public class AuthController {
+    private final UserService userService;
+    private final SecurityService securityService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/social-login")
-    public ResponseEntity<Map<String, String>> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
+    public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
     {
-
-        return null;
+        UsersDto savedOrFindUser = userService.socialLogin(socialLoginDTO);
+        securityService.saveUserInSecurityContext(socialLoginDTO);
+        Map<String, String> tokenMap = jwtUtil.initToken(savedOrFindUser);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, tokenMap);
     }
 }

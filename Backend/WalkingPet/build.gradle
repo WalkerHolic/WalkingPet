@@ -39,6 +39,13 @@ dependencies {
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1' // 자바 JWT 라이브러리
+    // com.sun.xml.bind
+    implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
+    implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
+//    // javax.xml.bind
+//    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1' // XML 문서와 Java 객체 간 매핑을 자동화
+//    implementation 'commons-codec:commons-codec:1.15'
 }
 
 tasks.named('test') {

@@ -1,16 +1,16 @@
 package com.walkerholic.walkingpet.domain.auth.util;
 
+import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
+import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
-import com.walkerholic.walkingpet.global.error.GlobalBaseException;
-import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -46,15 +46,17 @@ public class JwtUtil {
     }
     
     private String createToken(Long expirationPeriod, UsersDto userDTO) {
+
+        System.out.println("토큰 생성: " + userDTO);
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", userDTO.getUserId());
-//        claims.put("iss", userDTO.getSocialProvider());
+        claims.put("sub", "1");
+        claims.put("iss", "test");
 
         return Jwts.builder()
                 .addClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationPeriod))
-                .signWith(SignatureAlgorithm.HS256, SECRETKEY)
+                .signWith(SignatureAlgorithm.HS512, SECRETKEY)
                 .compact();
     }
 
@@ -62,15 +64,19 @@ public class JwtUtil {
         final Claims claims = Jwts.parser().setSigningKey(SECRETKEY).parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
     }
+
+    public Claims getClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRETKEY).parseClaimsJws(token).getBody();
+    }
     
     public boolean validateAccessToken(String accessToken) {
         if(accessToken == null || accessToken.length() <= 0) {
-            throw new GlobalBaseException(GlobalErrorCode.ACCESS_TOKEN_NOT_FOUND);
+            throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
 
         boolean isTokenExpired = checkTokenExpired(accessToken);
         if(isTokenExpired == true) {
-            throw new GlobalBaseException(GlobalErrorCode.TOKEN_EXPIRED);
+            throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
         } else {
             return isTokenExpired;
         }
@@ -96,8 +102,10 @@ public class JwtUtil {
     
     public boolean checkTokenExpired(String token) {
         Date expirationDate = extractClaim(token, Claims::getExpiration);
+//        Claims claims = getClaims(token);
         boolean isTokenExpired = expirationDate.after(new Date());
         return isTokenExpired;
+//        return true;
     }
 
     public Map<String, String> initToken(UsersDto savedOrFindUser) {
@@ -135,7 +143,8 @@ public class JwtUtil {
         if(StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
         } else {
-            throw new GlobalBaseException(GlobalErrorCode.ACCESS_TOKEN_NOT_FOUND);
+            System.out.println("access token 없음");
+            throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
     }
 }
