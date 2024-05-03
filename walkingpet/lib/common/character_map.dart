@@ -5,7 +5,7 @@ class CharacterMap {
     3: 'cow',
     4: 'crow',
     5: 'dog',
-    6: 'dragons',
+    6: 'red_dragon',
     7: 'duck',
     8: 'ducky',
     9: 'falcon',
@@ -22,7 +22,12 @@ class CharacterMap {
     20: 'rhino',
     21: 'squirrel',
     22: 'turtle',
-    23: 'wolf'
+    23: 'feral_wolf',
+    24: 'black_dragon',
+    25: 'black_wolf',
+    26: 'bronze_dragon',
+    27: 'brown_wolf',
+    28: 'dark_dragon',
 
     // 추가 캐릭터 매핑을 이곳에 포함시키세요.
   };

@@ -83,7 +83,7 @@ class _BattleReadyState extends State<BattleReady> {
                         ),
                       ),
                       Image.asset(
-                        'assets/animals/$animal/${animal}_walk.gif',
+                        'assets/animals/$animal/${animal}_idle.gif',
                       ),
                       Transform.translate(
                         offset: const Offset(0, -20),
