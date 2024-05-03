@@ -12,7 +12,7 @@ public class UserCharacterFunction {
             return 10;
         }
         else{
-            return level*(level-1)*5/2 + 10;
+            return level*(level-1)*INCREASE_MAX_EXP/2 + 10;
         }
     }
 }
