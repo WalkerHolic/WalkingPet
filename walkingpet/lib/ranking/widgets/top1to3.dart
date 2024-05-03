@@ -33,8 +33,7 @@ class Top1to3 extends StatelessWidget {
 
           // 2. 캐릭터 이미지
           Image.asset(
-            // 'assets/animals/$animal/${animal}_walk.gif',
-            'assets/animals/bunny/bunny_walk.gif',
+            'assets/animals/$animal/${animal}_walk.gif',
             height: 90,
           ),
 
