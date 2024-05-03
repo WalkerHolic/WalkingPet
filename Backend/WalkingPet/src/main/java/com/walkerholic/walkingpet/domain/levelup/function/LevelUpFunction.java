@@ -72,20 +72,20 @@ public class LevelUpFunction {
         for(int i = nowLevel+1; i <= nextLevel ; i++){
             //5레벨 배수마다 고급상자 1개 지급
             if(i % 5 == 0){
-                if(!itemReward.containsKey("고급상자"))
-                    itemReward.put("고급상자", 1);
+                if(!itemReward.containsKey("Luxury Box"))
+                    itemReward.put("Luxury Box", 1);
                 else{
-                    Integer nowRewardQuantity = itemReward.get("고급상자");
-                    itemReward.replace("고급상자", nowRewardQuantity+1);
+                    Integer nowRewardQuantity = itemReward.get("Luxury Box");
+                    itemReward.replace("Luxury Box", nowRewardQuantity+1);
                 }
             }
             //아니면 일반상자 1개 지급
             else{
-                if(!itemReward.containsKey("일반상자"))
-                    itemReward.put("일반상자", 1);
+                if(!itemReward.containsKey("Normal Box"))
+                    itemReward.put("Normal Box", 1);
                 else{
-                    Integer nowRewardQuantity = itemReward.get("일반상자");
-                    itemReward.replace("일반상자", nowRewardQuantity+1);
+                    Integer nowRewardQuantity = itemReward.get("Normal Box");
+                    itemReward.replace("Normal Box", nowRewardQuantity+1);
                 }
             }
         }

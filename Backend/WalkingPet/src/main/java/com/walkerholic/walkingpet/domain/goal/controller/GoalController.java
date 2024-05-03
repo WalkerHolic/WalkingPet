@@ -1,7 +1,7 @@
 package com.walkerholic.walkingpet.domain.goal.controller;
 
-import com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfo;
-import com.walkerholic.walkingpet.domain.goal.repository.GoalRepository;
+import com.walkerholic.walkingpet.domain.goal.dto.response.GoalRewardDTO;
+import com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfoDTO;
 import com.walkerholic.walkingpet.domain.goal.service.GoalService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -26,19 +26,19 @@ public class GoalController {
     public ResponseEntity<CommonResponseEntity> getGoalInfo(){
         int userId = 19;
         log.info("유저의 목표 정보 출력 GaolController userGoalInfo - userId: {}", userId);
-        UserGoalInfo userGoalInfo = goalService.getUserGoalInfo(userId);
+        UserGoalInfoDTO userGoalInfoDTO = goalService.getUserGoalInfo(userId);
 
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userGoalInfo);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userGoalInfoDTO);
     }
 
     @GetMapping("/reward")
     @Operation(summary = "유저 배틀 정보 확인", description = "특정 걸음수를 달성했을시 목표 정보를 업데이트")
     public ResponseEntity<CommonResponseEntity> getGoalReward(@RequestParam(name = "goalStep")int goalStep){
         int userId = 19;
-        UserGoalInfo userGoalInfo = goalService.getGoalReward(userId, goalStep);
+        GoalRewardDTO userGoalInfoDTO = goalService.getGoalReward(userId, goalStep);
         log.info("특정 걸음수를 달성했을 때 보상 정보 저장 GaolController userGoalInfo - userId: {}", userId);
 
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userGoalInfo);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userGoalInfoDTO);
     }
 
 }
