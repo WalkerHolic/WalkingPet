@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/login/nes_input_dialog.dart';
 import 'package:nes_ui/nes_ui.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,7 +68,7 @@ class Login extends StatelessWidget {
                   String? nickname = await show(context: context);
                   print("Entered nickname: $nickname"); // 사용자가 입력한 값을 출력
                   //Navigator.pushNamed(context, '/home');
-                  if (nickname != null) {
+                  if (nickname != null && mounted) {
                     Navigator.pushReplacementNamed(context, '/home');
                   }
                 },
