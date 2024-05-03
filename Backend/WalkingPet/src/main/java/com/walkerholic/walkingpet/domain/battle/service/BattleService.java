@@ -49,35 +49,49 @@ public class BattleService {
     //2. 배틀 결과 반환
     public BattleResponseDTO getBattleResponse(int userId){
         UserDetail userDetail = getAllInfoByUserDetail(userId);
-        UserCharacter userCharacter = userDetail.getSelectUserCharacter();
-        List<UserDetail> userDetailList = userDetailRepository.findAll();
-        int enemyUserId = matchingBattleUser(userId, userDetail.getBattleRating(), userDetailList);
-        UserDetail enemyUserDetail = getAllInfoByUserDetail(enemyUserId);
 
-        //1. 적 유저 캐릭터 정보
-        EnemyInfo enemyInfo = EnemyInfo.from(enemyUserDetail);
+        //여기서 배틀 횟수 차감하는걸 생각해줘야함.
+        try {
+            if(userDetail.getBattleCount() > 0){
+                //배틀 횟수 1회 차감
+                userDetail.battleCountDeduction();
 
-        //2. 배틀 전투 과정
-        CharacterInfo userCharacterInfo = getCharacterInfo(userCharacter);
-        CharacterInfo enemyCharacterInfo = getCharacterInfo(enemyUserDetail.getSelectUserCharacter());
-        BattleProgressInfo battleProgressInfo = battleFunction.getBattleProgress(userCharacterInfo, enemyCharacterInfo);
+                UserCharacter userCharacter = userDetail.getSelectUserCharacter();
+                List<UserDetail> userDetailList = userDetailRepository.findAll();
+                int enemyUserId = matchingBattleUser(userId, userDetail.getBattleRating(), userDetailList);
+                UserDetail enemyUserDetail = getAllInfoByUserDetail(enemyUserId);
 
-        //3. 배틀 결과 가져오기
-        BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userDetail);
+                //1. 적 유저 캐릭터 정보
+                EnemyInfo enemyInfo = EnemyInfo.from(enemyUserDetail);
 
-            //4. 배틀 결과 저장하기
-        saveBattleResult(userDetail, battleResultInfo);
+                //2. 배틀 전투 과정
+                CharacterInfo userCharacterInfo = getCharacterInfo(userCharacter);
+                CharacterInfo enemyCharacterInfo = getCharacterInfo(enemyUserDetail.getSelectUserCharacter());
+                BattleProgressInfo battleProgressInfo = battleFunction.getBattleProgress(userCharacterInfo, enemyCharacterInfo);
 
-        //5. 레벨업 여부 확인하기
-        LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userId, userCharacter, battleResultInfo.getRewardExperience());
+                //3. 배틀 결과 가져오기
+                BattleResultInfo battleResultInfo = battleFunction.getBattleResult(userDetail);
+
+                //4. 배틀 결과 저장하기
+                saveBattleResult(userDetail, battleResultInfo);
+
+                //5. 레벨업 여부 확인하기
+                LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userId, userCharacter, battleResultInfo.getRewardExperience());
 
 
-        return BattleResponseDTO.builder()
-                .enemyInfo(enemyInfo)
-                .battleProgressInfo(battleProgressInfo)
-                .battleResultInfo(battleResultInfo)
-                .levelUpResponse(levelUpResponse)
-                .build();
+                return BattleResponseDTO.builder()
+                        .enemyInfo(enemyInfo)
+                        .battleProgressInfo(battleProgressInfo)
+                        .battleResultInfo(battleResultInfo)
+                        .levelUpResponse(levelUpResponse)
+                        .build();
+            }
+            else throw new GlobalBaseException(GlobalErrorCode.USER_BATTLE_COUNT_LACK);
+        }
+        catch (GlobalBaseException globalBaseException){
+            globalBaseException.printStackTrace(); // 예외를 콘솔에 출력하여 로깅
+            throw globalBaseException;
+        }
     }
 
     /**
