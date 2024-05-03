@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/svg.dart';
 
 class CharacterInfoStat extends StatelessWidget {
   final String statname;
-  final int point, fix, upgrade;
+  final int point, addpoint;
 
   const CharacterInfoStat(
       {super.key,
       required this.statname,
       required this.point,
-      required this.fix,
-      required this.upgrade});
+      required this.addpoint});
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +23,6 @@ class CharacterInfoStat extends StatelessWidget {
             // height: 20,
             child: Image.asset(_getImagePath(statname)),
           ),
-
-          // SizedBox(
-          //   width: 30,
-          //   child: Icon(
-          //     _getIconData(statname), // staticon 값에 따라 Icon 변경
-          //     color: _getIconColor(statname),
-          //   ),
-          // ),
 
           // SvgPicture.asset(
           //   'assets/icons/icon_health.svg',
@@ -84,7 +74,7 @@ class CharacterInfoStat extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  upgrade.toString(),
+                  addpoint.toString(),
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(255, 166, 39, 30),
