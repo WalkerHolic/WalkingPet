@@ -2,12 +2,11 @@ package com.walkerholic.walkingpet.domain.goal.service;
 
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
-import com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfo;
+import com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfoDTO;
 import com.walkerholic.walkingpet.domain.goal.entity.Goal;
 import com.walkerholic.walkingpet.domain.goal.repository.GoalRepository;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
-import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import com.walkerholic.walkingpet.domain.levelup.function.LevelUpFunction;
 import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
@@ -25,8 +24,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfo.DAILY_GOAL_COUNT;
-import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfo.WEEKLY_GOAL_COUNT;
+import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfoDTO.DAILY_GOAL_COUNT;
+import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfoDTO.WEEKLY_GOAL_COUNT;
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
 /**
@@ -62,12 +61,12 @@ public class GoalItemService {
      * @param userId 유저의 아이디
      * @return 유저의 목표 정보
      */
-    public UserGoalInfo getUserGoalInfo(int userId){
+    public UserGoalInfoDTO getUserGoalInfo(int userId){
         Users user = getUserByUserId(userId);
         Goal goal = getUserGoalByUser(user);
         int userStep = getUserStepByUser(user);
 
-        return UserGoalInfo.builder()
+        return UserGoalInfoDTO.builder()
                 .step(userStep)
                 .dailyGoal(getDailyGoalStatus(goal.getDailyGoal()))
                 .weeklyGoal(getWeeklyGoalStatus(goal.getWeeklyGoal()))
@@ -80,12 +79,12 @@ public class GoalItemService {
      * @param goalStep 달성한 걸음수
      * @return 유저의 목표 달성 여부가 갱신된 정보
      */
-    public UserGoalInfo getGoalReward(int userId, int goalStep){
+    public UserGoalInfoDTO getGoalReward(int userId, int goalStep){
         Users user = getUserByUserId(userId);
         Goal goal = getUserGoalByUser(user);
         int userStep = getUserStepByUser(user);
 
-        return UserGoalInfo.builder()
+        return UserGoalInfoDTO.builder()
                 .step(userStep)
                 .dailyGoal(getDailyGoalStatus(goal.getDailyGoal()))
                 .weeklyGoal(getWeeklyGoalStatus(goal.getWeeklyGoal()))
@@ -170,31 +169,31 @@ public class GoalItemService {
             if(step == 0){
                 System.out.println("0보");
                 dailyGoalStatus[0] = true;
-                reward.put("경험치 아이템", 1);
+                reward.put("ExpItem", 1);
             }
             else if(step == 3000){
                 System.out.println("3000보");
                 dailyGoalStatus[1] = true;
-                reward.put("경험치 아이템", 2);
+                reward.put("ExpItem", 2);
             }
             else if(step == 5000){
                 System.out.println("5000보");
                 dailyGoalStatus[2] = true;
                 //주간목표 달성 기준
                 updateWeeklyGoalStatus(goal);
-                reward.put("경험치 아이템", 2);
+                reward.put("ExpItem", 2);
             }
             else if(step == 7000){
                 System.out.println("7000보");
                 dailyGoalStatus[3] = true;
-                reward.put("경험치 아이템", 2);
-                reward.put("일반 상자", 1);
+                reward.put("ExpItem", 2);
+                reward.put("Normal Box", 1);
             }
             else if(step == 10000){
                 System.out.println("10000보");
                 dailyGoalStatus[4] = true;
-                reward.put("경험치 아이템", 2);
-                reward.put("고급 상자", 1);
+                reward.put("ExpItem", 2);
+                reward.put("Luxury Box", 1);
             }
             else{
                 throw new Exception("보상에 해당하지 않는 걸음수가 입력값으로 들어왔습니다.");
@@ -242,7 +241,7 @@ public class GoalItemService {
     public void getGoalRewardBox(int userId, HashMap<String, Integer> reward){
         for(String itemName : reward.keySet()){
             UserItem userItem = getUserItemByUserIdAndItemName(userId,itemName);
-            userItem.addItemQuantity(reward.get(userItem));
+            userItem.addItemQuantity(reward.get(itemName));
             userItemRepository.save(userItem);
         }
     }
