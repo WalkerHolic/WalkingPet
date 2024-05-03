@@ -45,9 +45,10 @@ public enum GlobalErrorCode {
     USER_STEP_NOT_FOUND(404, "S400", "유저의 걸음수 정보를 찾을 수 없습니다."),
 
     //목표 관련(goal)
-    USER_GOAL_NOT_FOUND(404, "G400", "유저의 목표 정보를 찾을 수 없습니다.");
+    USER_GOAL_NOT_FOUND(404, "G400", "유저의 목표 정보를 찾을 수 없습니다."),
 
     // 정의하지 않은 그 외의 에러
+    USER_BATTLE_COUNT_LACK(404, "B400", "일일 배틀 횟수 초과");
 
     //기타 에러
 
