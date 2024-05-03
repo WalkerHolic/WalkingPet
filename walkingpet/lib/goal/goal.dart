@@ -16,6 +16,13 @@ class _GoalState extends State<Goal> {
   List<bool> dailyGoals = [];
   List<bool> weeklyGoals = [];
   Map<String, bool> stampedDays = {};
+  //일일 목표 관련
+  bool isAttended = false;
+  bool isWalked3000 = false;
+  bool isWalked5000 = false;
+  bool isWalked7000 = false;
+  bool isWalked10000 = false;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +46,12 @@ class _GoalState extends State<Goal> {
               '토요일': weeklyGoals[5],
               '일요일': weeklyGoals[6]
             };
+            //일일 목표
+            isAttended = dailyGoals[0];
+            isWalked3000 = dailyGoals[1];
+            isWalked5000 = dailyGoals[2];
+            isWalked7000 = dailyGoals[3];
+            isWalked10000 = dailyGoals[4];
           },
         );
       },
@@ -53,14 +66,7 @@ class _GoalState extends State<Goal> {
     // 걸음수 더미값
 
     int goalStep = 10000;
-    //주간 목표 달성
-    // bool isMonStamped = true;
-    // bool isTueStamped = false;
-    // bool isWedStamped = false;
-    // bool isThrStamped = false;
-    // bool isFriStamped = false;
-    // bool isSatStamped = false;
-    // bool isSunStamped = false;
+
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('목표'),
@@ -138,11 +144,31 @@ class _GoalState extends State<Goal> {
                           fontSize: 35,
                         ),
                       ),
-                      const DailyGoalItem(title: "출석"),
-                      const DailyGoalItem(title: "3000 걸음"),
-                      const DailyGoalItem(title: "5000 걸음"),
-                      const DailyGoalItem(title: "7000 걸음"),
-                      const DailyGoalItem(title: "10000 걸음"),
+                      DailyGoalItem(
+                        title: "출석",
+                        isActivated: isAttended,
+                        goalSteps: 0,
+                      ),
+                      DailyGoalItem(
+                        title: "3000 걸음",
+                        isActivated: isWalked3000,
+                        goalSteps: 3000,
+                      ),
+                      DailyGoalItem(
+                        title: "5000 걸음",
+                        isActivated: isWalked5000,
+                        goalSteps: 5000,
+                      ),
+                      DailyGoalItem(
+                        title: "7000 걸음",
+                        isActivated: isWalked7000,
+                        goalSteps: 7000,
+                      ),
+                      DailyGoalItem(
+                        title: "10000 걸음",
+                        isActivated: isWalked10000,
+                         goalSteps: 10000,
+                      ),
                       const Text(
                         "주간 목표",
                         style: TextStyle(
