@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface UserDetailRepository extends JpaRepository<UserDetail, Integer> {
     Optional<UserDetail> findUserDetailByUser(Users user);
 
+    @Query("SELECT ud FROM UserDetail ud WHERE ud.user.userId = :userId")
     Optional<UserDetail> findByUserUserId(Integer userId);
 
     Optional<UserDetail> findBySelectUserCharacterUserCharacterId(Integer userCharacterId);

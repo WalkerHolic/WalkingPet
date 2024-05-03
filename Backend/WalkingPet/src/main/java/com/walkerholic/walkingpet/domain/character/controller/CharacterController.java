@@ -27,10 +27,11 @@ public class CharacterController {
     @Operation(summary = "캐릭터 정보 확인", description = "유저의 userCharacterId로  캐릭터 정보 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
-    public ResponseEntity<CommonResponseEntity> getUserCharacterInfo(@RequestParam("userCharacterId") int userCharacterId) {
-        log.info("캐릭터 정보 확인 getUserCharacterInfo - userCharacterId: {}", userCharacterId);
+    public ResponseEntity<CommonResponseEntity> getUserCharacterInfo() {
+        int userId = 1;
+        log.info("캐릭터 정보 확인 getUserCharacterInfo - userId: {}", userId);
 
-        UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userCharacterId);
+        UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfo);
     }
 
