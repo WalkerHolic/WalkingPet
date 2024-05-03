@@ -19,6 +19,9 @@ public interface UserStepRepository extends JpaRepository<UserStep, Integer> {
     @Query("SELECT us FROM UserStep us WHERE us.user.status = 1 ORDER BY us.accumulationStep DESC")
     List<UserStep> findUserStepList();
 
+    @Query("SELECT US.dailyStep FROM UserStep US WHERE US.user.userId = :userId")
+    Integer findUserDailyStep(int userId);
+
     @Query("""
         SELECT COUNT(*) + 1
         FROM UserStep us1
