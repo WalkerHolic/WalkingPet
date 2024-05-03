@@ -4,7 +4,7 @@ package = "com.walkerholic.walkingpet">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="워킹펫"
-        android:name="워킹펫"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
