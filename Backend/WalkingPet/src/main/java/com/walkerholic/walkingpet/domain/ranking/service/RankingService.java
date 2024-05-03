@@ -16,6 +16,7 @@ import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class RankingService {
     /*
      * 누적 걸음수 랭킹 가져오기
      */
+    @Transactional(readOnly = true)
     public PersonalStepRankingResponse getAccStepRanking(int userId) {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
@@ -48,6 +50,7 @@ public class RankingService {
     /*
      * 누적 걸음수 기준으로 top 10 랭킹 가져오기
      */
+    @Transactional(readOnly = true)
     public AccStepRankingResponse getAccStepRankingTop10() {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
@@ -66,6 +69,7 @@ public class RankingService {
     /*
      * 누적 걸음수 기준으로 top 3 개인 랭킹 가져오기
      */
+    @Transactional(readOnly = true)
     public AccStepTop3RankingResponse getAccStepRankingTop3() {
         //TODO: Redis 데이터로 변경
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
@@ -81,6 +85,7 @@ public class RankingService {
     /*
      * 누적 걸음수 기준으로 개인 랭킹에서 해당 유저의 랭킹 가져오기
      */
+    @Transactional(readOnly = true)
     public UserPersonalStepRankingResponse getUserAccStepRanking(int userId) {
         //TODO: Redis 데이터로 변경
         int userRanking = userStepRepository.findUserPersonalRankingByAccStep(userId);
@@ -94,6 +99,7 @@ public class RankingService {
     사용자들의 누적 걸음수 데이터 가져오기
     userId, nickname, step
      */
+    @Transactional(readOnly = true)
     public List<AccStepRankingInfo> getUserAccStepList() {
         List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
 
@@ -111,6 +117,7 @@ public class RankingService {
         사용자들의 어제 걸음수 데이터 가져오기
         yesterdayStep
      */
+    @Transactional(readOnly = true)
     public List<YesterdayStepRankingInfo> getUserYseterdayStepList() {
         List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
 
@@ -128,6 +135,7 @@ public class RankingService {
     사용자들의 실시간 걸음수 데이터 가져오기
     yesterdayStep
  */
+    @Transactional(readOnly = true)
     public List<ReailtimeStepRankingInfo> getUserRealtimeStepList() {
         List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
 
