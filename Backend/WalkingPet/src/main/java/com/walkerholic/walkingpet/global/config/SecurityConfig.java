@@ -2,7 +2,6 @@ package com.walkerholic.walkingpet.global.config;
 
 import com.walkerholic.walkingpet.domain.auth.filter.ExceptionHandlerFilter;
 import com.walkerholic.walkingpet.domain.auth.filter.JwtAuthorizationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     JwtAuthorizationFilter jwtAuthorizationFilter;
     ExceptionHandlerFilter exceptionHandlerFilter;
-
 
     @Autowired
     public SecurityConfig(JwtAuthorizationFilter jwtAuthorizationFilter, ExceptionHandlerFilter exceptionHandlerFilter) {
