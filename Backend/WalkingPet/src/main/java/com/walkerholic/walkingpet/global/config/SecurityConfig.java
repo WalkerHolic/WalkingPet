@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.global.config;
 
+import com.walkerholic.walkingpet.domain.auth.filter.ExceptionHandlerFilter;
 import com.walkerholic.walkingpet.domain.auth.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,31 +11,34 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     JwtAuthorizationFilter jwtAuthorizationFilter;
+    ExceptionHandlerFilter exceptionHandlerFilter;
 
 
     @Autowired
-    public SecurityConfig(JwtAuthorizationFilter jwtAuthorizationFilter) {
+    public SecurityConfig(JwtAuthorizationFilter jwtAuthorizationFilter, ExceptionHandlerFilter exceptionHandlerFilter) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+        this.exceptionHandlerFilter = exceptionHandlerFilter;
     }
 
     // HTTP 요청에 대한 보안 필터 체인을 정의, 특정 URL 패턴 또는 요청에 대한 보안 필터의 집합을 정의
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .anyRequest().authenticated()
-
-                )
+//                .authorizeRequests(authorizeRequests ->
+//                        authorizeRequests
+//                                .anyRequest().authenticated()
+//
+//                )
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout -> logout.logoutSuccessUrl("/").permitAll());
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthorizationFilter.class);
+//                .logout(logout -> logout.logoutSuccessUrl("/").permitAll());
 
 
         return http.build();

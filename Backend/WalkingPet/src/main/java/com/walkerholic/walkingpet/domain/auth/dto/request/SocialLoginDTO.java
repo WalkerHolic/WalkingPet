@@ -5,5 +5,6 @@ import lombok.Getter;
 @Getter
 public class SocialLoginDTO {
     private String socialEmail;
+    private String nickname;
 //    private String socialProvider;
 }

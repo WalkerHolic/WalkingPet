@@ -1,10 +1,13 @@
 package com.walkerholic.walkingpet.domain.auth.filter;
 
+import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
+import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,10 +21,29 @@ import java.util.Arrays;
  * 이어서 가져온 토큰이 유효한지 확인하고 유효하다면 인증 정보를 관리하는 시큐리티 컨텍스트에 인증 정보를 설정한다.
  */
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    private final JwtUtil jwtUtil;
+    private final SecurityService securityService;
 
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        if(checkAccessTokenValid(request)) {
+            filterChain.doFilter(request, response);
+        } else {
+            throw new RuntimeException("알 수 없는 오류가 발생했습니다.");
+        }
+    }
+
+    private boolean checkAccessTokenValid(HttpServletRequest request) {
+        String accessToken = jwtUtil.extractTokenFromHeader(request);
+        if(!jwtUtil.validateAccessToken(accessToken)) {
+            securityService.saveUserInSecurityContext(accessToken);
+        }
+        return true;
     }
 
     /* 
@@ -32,10 +54,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+//        String[] excludePath = {
+////                "/character/test",
+//                "/auth/social-login",
+//                "/swagger-ui/",
+//                "/error"
+//        };
         String[] excludePath = {
-//                "/character/test",
+                "/api-docs/json",
+                "/api-docs",
                 "/auth/social-login",
                 "/swagger-ui/",
+                "/swagger-config",
+                "/swagger.yaml",
+                "/requestBodies",
+                "/swagger-",
                 "/error"
         };
         String path = request.getRequestURI();

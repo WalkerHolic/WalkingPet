@@ -2,18 +2,19 @@ package com.walkerholic.walkingpet.domain.auth.Service;
 
 import com.walkerholic.walkingpet.domain.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
+import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
+import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
-import com.walkerholic.walkingpet.global.error.GlobalBaseException;
-import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collection;
 
@@ -33,11 +34,30 @@ public class SecurityService {
     public void saveUserInSecurityContext(SocialLoginDTO socialLoginDTO) {
         String socialId = socialLoginDTO.getSocialEmail();
 //        String socialProvider = socialLoginDTO.getSocialProvider();
-        saveUserInSecurityContext(socialId);
+        saveUserInSecurityContext(socialId, "tests");
     }
 
-    private void saveUserInSecurityContext(String socialId) {
-        UserDetails userDetails = loadUserBySocialIdAndSocialProvider(socialId);
+    public void saveUserInSecurityContext(String accessToken) {
+        if(accessToken == null) {
+            throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
+        }
+
+        String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
+        String socialProvider = jwtUtil.extractClaim(accessToken, Claims::getIssuer);
+        saveUserInSecurityContext(socialId, socialProvider);
+    }
+
+//    public void saveUserInSecurityContext(String accessToken) {
+//        String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
+////        Claims claims = jwtUtil.getClaims(accessToken);
+////        String socialProvider = jwtUtil.extractClaim(accessToken, Claims::getIssuer);
+//        String socialProvider = "test";
+////        saveUserInSecurityContext(claims.getSubject(), socialProvider);
+//        saveUserInSecurityContext(socialId, socialProvider);
+//    }
+
+    private void saveUserInSecurityContext(String socialId, String socialProvider) {
+        UserDetails userDetails = loadUserBySocialIdAndSocialProvider(socialId, socialProvider);
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
@@ -48,12 +68,11 @@ public class SecurityService {
         }
     }
 
-
-    private UserDetails loadUserBySocialIdAndSocialProvider(String socialId) {
+    private UserDetails loadUserBySocialIdAndSocialProvider(String socialId, String socialProvidero) {
         Users user = usersRepository.findByEmail(socialId);
 
         if(user == null) {
-            throw new GlobalBaseException(GlobalErrorCode.TOKEN_EXPIRED);
+            throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
         } else {
             CustomUserDetail userDetails = new CustomUserDetail();
             userDetails.setUser(user);
