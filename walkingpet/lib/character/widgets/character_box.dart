@@ -27,7 +27,7 @@ class CharacterBox extends StatelessWidget {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     String animal = CharacterMap.idToAnimal[characterId] ?? "buddy";
-    print(animal);
+    // print(animal);
 
     return Container(
       width: screenWidth * 0.2,
@@ -87,8 +87,8 @@ class CharacterBox extends StatelessWidget {
 
               // 3. 캐릭터 이미지(id)
               Image.asset(
-                'assets/animals/cow/cow_idle.gif',
-                // 'assets/animals/$animal/${animal}_walk.gif',
+                // 'assets/animals/cow/cow_idle.gif',
+                'assets/animals/$animal/${animal}_idle.gif',
                 height: 70,
                 // scale: 1,
               ),
