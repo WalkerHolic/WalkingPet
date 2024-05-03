@@ -15,8 +15,7 @@ class CharacterChange extends StatefulWidget {
 class _CharacterChangeState extends State<CharacterChange> {
   // 필요한 변수 만들기
   List characterInfoData = [];
-  // String animal = "";
-  // List animal = [];
+  String animal = "";
   bool isLoading = true;
 
   @override
@@ -31,6 +30,10 @@ class _CharacterChangeState extends State<CharacterChange> {
       var responseInfo = await getCharacterChange();
       setState(() {
         characterInfoData = responseInfo['data']['characters'];
+        // print(characterInfoData[0]['characterId']);
+        // characterInfoData[1];
+        // int characterId = characterInfoData['characterId'] as int;
+
         isLoading = false;
       });
     } catch (e) {
@@ -47,10 +50,8 @@ class _CharacterChangeState extends State<CharacterChange> {
     return Stack(
       children: [
         // 1. 배경 (바깥)
-        Positioned(
+        Positioned.fill(
           child: Container(
-            width: screenWidth,
-            height: screenHeight,
             decoration: BoxDecoration(
               color: const Color(0xFF00A8FF),
               borderRadius: BorderRadius.circular(5),
@@ -58,120 +59,131 @@ class _CharacterChangeState extends State<CharacterChange> {
           ),
         ),
 
-        // 2. 배경 (안쪽)
-        Center(
-          child: Column(
+        // 2. 캐릭터 변경 제목
+        const Positioned(
+          top: 10,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Text(
+              '캐릭터변경',
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+
+        // 3. 배경 (안쪽)
+        Positioned(
+          bottom: 15,
+          left: 10,
+          right: 10,
+          child: Container(
+            width: screenWidth * 0.7,
+            height: screenHeight * 0.5,
+            decoration: BoxDecoration(
+              color: const Color(0xFF283C57),
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+
+        // 4. 캐릭터 선택 그리드
+        if (isLoading)
+          const Center(
+              child: Text(
+            '캐릭터 불러오는 중..',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ))
+        else
+          Positioned(
+            top: screenHeight * 0.1,
+            left: screenWidth * 0.05,
+            right: screenWidth * 0.05,
+            bottom: screenHeight * 0.1,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 한 행에 보여줄 개수
+                childAspectRatio: 1 / 1.5, // 아이템의 가로 세로 비율
+                mainAxisSpacing: 5, // 수평 간격
+                crossAxisSpacing: 5, // 수직 간격
+              ),
+              itemCount: characterInfoData.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CharacterBox(
+                  characterId: characterInfoData[index]['characterId'] ?? 1,
+                  characterGrade:
+                      characterInfoData[index]['characterGrade'] ?? 0,
+                  userCharacterId:
+                      characterInfoData[index]['userCharacterId'] ?? 1,
+                  userCharacterLevel:
+                      characterInfoData[index]['userCharacterLevel'] ?? 1,
+                  userCharacterUpgrade:
+                      characterInfoData[index]['userCharacterUpgrade'] ?? 0,
+                  characterName:
+                      characterInfoData[index]['characterName'] ?? '~로딩중~',
+                  userCharacterStatus:
+                      characterInfoData[index]['userCharacterStatus'] ?? 0,
+                );
+              },
+            ),
+          ),
+
+        // 5. 변경 버튼
+        Positioned(
+          bottom: 16,
+          left: screenWidth * 0.1,
+          right: screenWidth * 0.1,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(7),
-                child: Text(
-                  '캐릭터변경',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.white,
-                  ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Image.asset(
+                  'assets/buttons/green_button.png',
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  width: screenWidth * 0.7,
-                  height: screenHeight * 0.5,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF283C57),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
+              const Text(
+                '변경하기',
+                style: TextStyle(fontSize: 22),
               ),
             ],
           ),
         ),
 
-        // 3. 내용
-        // if (isLoading)
-        //   const Center(
-        //       child: Text(
-        //     '캐릭터 불러오는 중..',
-        //     style: TextStyle(
-        //       color: Colors.white,
-        //     ),
-        //   ))
-        // else
-        if (!isLoading)
-          Center(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 3-1. 캐릭터 선택 박스
-                const SizedBox(
-                  height: 70,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    height: screenHeight * 0.37,
-                    width: screenWidth * 0.7,
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, // 1 개의 한 행에 보여줄 개수
-                        childAspectRatio: 1 / 1.5, // item 의 가로, 세로 비율
-                        mainAxisSpacing: 10, // 수평 Padding
-                        crossAxisSpacing: 0, // 수직 Padding
-                      ),
-                      itemCount: characterInfoData.length,
-                      // itemCount: 23,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Center(
-                          child: CharacterBox(
-                            characterId:
-                                characterInfoData[index]['characterId'] ?? 1,
-                            characterGrade:
-                                characterInfoData[index]['characterGrade'] ?? 0,
-                            userCharacterId: characterInfoData[index]
-                                    ['userCharacterId'] ??
-                                1,
-                            userCharacterLevel: characterInfoData[index]
-                                    ['userCharacterLevel'] ??
-                                1,
-                            userCharacterUpgrade: characterInfoData[index]
-                                    ['userCharacterUpgrade'] ??
-                                0,
-                            characterName: characterInfoData[index]
-                                    ['characterName'] ??
-                                '로딩중',
-                            userCharacterStatus: characterInfoData[index]
-                                    ['userCharacterStatus'] ??
-                                0,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+        // Positioned(
+        //   bottom: 10,
+        //   left: screenWidth * 0.25, // 가운데 정렬
+        //   right: screenWidth * 0.25,
 
-                // 3-2. 변경 버튼
-                Positioned(
-                  bottom: 0,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Image.asset(
-                          'assets/buttons/green_button.png',
-                        ),
-                      ),
-                      const Text(
-                        '변경하기',
-                        style: TextStyle(fontSize: 21),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+        //   child: TextButton(
+        //     onPressed: () => Navigator.of(context).pop(),
+        //     style: TextButton.styleFrom(
+        //       padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
+        //       fixedSize: Size(
+        //           screenWidth * 0.5, 50), // 버튼의 너비를 화면 너비의 50%, 높이는 50으로 고정
+        //       backgroundColor: Colors.transparent, // 배경 투명 설정
+        //     ),
+        //     child: Stack(
+        //       alignment: Alignment.center,
+        //       children: [
+        //         Image.asset('assets/buttons/green_button.png',
+        //             fit: BoxFit.cover), // 이미지를 꽉 채워 표시
+        //         const Text(
+        //           '변경하기',
+        //           style: TextStyle(
+        //             fontSize: 22,
+        //             color: Colors.black,
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

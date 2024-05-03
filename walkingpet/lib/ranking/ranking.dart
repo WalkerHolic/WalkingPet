@@ -57,41 +57,41 @@ class Ranking extends StatelessWidget {
 
           // 3. 내용
           // 전체적으로 padding 지정
-          Padding(
-            padding: const EdgeInsets.all(15),
+          const Padding(
+            padding: EdgeInsets.all(15),
             child: Column(
               children: [
                 // 3-1. 랭킹 & X버튼
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
+                  padding: EdgeInsets.only(bottom: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         '랭킹',
                         style: TextStyle(fontSize: 30),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          // Navigator.pushReplacementNamed(
-                          //     context, '/home'); // 현재 경로를 '/home'으로 교체
-                        },
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.zero), // 버튼의 내부 패딩 제거
-                        ),
-                        child: const Text(
-                          'X',
-                          style: TextStyle(fontSize: 30, color: Colors.black),
-                        ),
-                      )
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //     // Navigator.pushReplacementNamed(
+                      //     //     context, '/home'); // 현재 경로를 '/home'으로 교체
+                      //   },
+                      //   style: ButtonStyle(
+                      //     padding: MaterialStateProperty.all(
+                      //         EdgeInsets.zero), // 버튼의 내부 패딩 제거
+                      //   ),
+                      //   child: const Text(
+                      //     'X',
+                      //     style: TextStyle(fontSize: 30, color: Colors.black),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
 
                 // 3-2. Tab : 개인(personal) / 그룹(Group) / 배틀(Battle)
-                const Expanded(
+                Expanded(
                   child: NesTabView(
                     tabs: [
                       NesTabItem(
