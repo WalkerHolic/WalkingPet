@@ -61,9 +61,8 @@ public class TeamController {
     @Operation(summary = "그룹 상세보기", description = "특정 teamId를 통해 그룹 정보 상세보기")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹 상세보기 성공", content = @Content(schema = @Schema(implementation = TeamDetailResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 상세보기 실패")
-    @GetMapping("/detail")
-    public ResponseEntity<CommonResponseEntity> getSearchTeams(){
-        int teamId=2;
+    @GetMapping("/detail/{teamId}")
+    public ResponseEntity<CommonResponseEntity> getSearchTeams(@PathVariable("teamId") int teamId){
         TeamDetailResponse teamDetail = teamService.getTeamDetail(teamId);
         log.info("그룹 상세보기 teamDetail -  teamId: {}", teamId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,teamDetail);
@@ -94,9 +93,8 @@ public class TeamController {
     @Operation(summary = "그룹원 정보 조회", description = "특정 teamId에 해당하는 그룹원들의 상세정보 조회")
     @ApiResponse(responseCode = "200", description = "S200 - 그룹원 정보 조회 성공", content = @Content(schema = @Schema(implementation = TeamUsersResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 그룹원 정보 조회 실패")
-    @GetMapping("/members")
-    public ResponseEntity<CommonResponseEntity> getGroupMembersInfo(){
-        int teamId=2;
+    @GetMapping("/members/{teamId}")
+    public ResponseEntity<CommonResponseEntity> getGroupMembersInfo(@PathVariable("teamId") int teamId){
         List<TeamUsersResponse> membersInfo = teamService.getGroupMembersInfo(teamId);
         log.info("그룹원 정보 조회 getGroupMembersInfo - teamId:{}", teamId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,membersInfo);
