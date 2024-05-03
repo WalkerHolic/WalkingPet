@@ -27,6 +27,7 @@ class _BattleReadyState extends State<BattleReady> {
   Future<void> initMyInfo() async {
     try {
       var response = await getMyInfo();
+
       setState(() {
         characterData = response['data']; // API 응답을 상태에 저장
         int characterId = characterData['characterId']
@@ -78,7 +79,7 @@ class _BattleReadyState extends State<BattleReady> {
                       Transform.translate(
                         offset: const Offset(0, 60),
                         child: Star(
-                          count: characterData['grade'],
+                          count: characterData['characterGrade'],
                         ),
                       ),
                       Image.asset(
