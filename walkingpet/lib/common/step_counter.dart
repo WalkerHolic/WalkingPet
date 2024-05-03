@@ -6,7 +6,7 @@ class StepCounter with ChangeNotifier {
   int _steps = 0;
   late Stream<StepCount> _stepCountStream;
   int _baseSteps = 0; // 기기에서 측정된 초기 걸음수를 저장할 변수
-  int _offset = 0;
+  int _realSteps = 0;
 
   StepCounter() {
     _initializePedometer();
@@ -24,23 +24,17 @@ class StepCounter with ChangeNotifier {
   Future<void> _fetchInitialSteps() async {
     try {
       int serverSteps = await checkStep(); // 서버에서 걸음수를 가져옴
-      _stepCountStream.first.then((event) {
-        _baseSteps = event.steps;
-        if (serverSteps > _baseSteps) {
-          _offset = serverSteps - _baseSteps;
-          _steps = serverSteps; // 서버 걸음수가 더 큰 경우에만 업데이트
-        } else {
-          _steps = _baseSteps; // 그렇지 않은 경우 기기 걸음수를 사용
-        }
-        notifyListeners();
-      });
+      StepCount event = await _stepCountStream.first;
+      _baseSteps = event.steps;
+      _realSteps = serverSteps > _baseSteps ? serverSteps : _baseSteps;
+      _steps = serverSteps > _baseSteps ? serverSteps : _baseSteps;
     } catch (e) {
       print("Failed to fetch initial steps: $e");
     }
   }
 
   void _onStepCount(StepCount event) {
-    _steps = event.steps - _baseSteps + _offset; // 새로운 걸음수를 계산
+    _steps = _realSteps + event.steps - _baseSteps; // 새로운 걸음수를 계산
     notifyListeners();
     print(_steps);
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/login/nes_input_dialog.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -57,8 +59,10 @@ class Login extends StatelessWidget {
                 height: 40,
               ),
               InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/home');
+                onTap: () async {
+                  String? nickname = await show(context: context);
+                  print("Entered nickname: $nickname"); // 사용자가 입력한 값을 출력
+                  //Navigator.pushNamed(context, '/home');
                 },
                 child: Image.asset('assets/icons/kakao_login_medium_wide.png'),
               ),
@@ -68,4 +72,18 @@ class Login extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<String?> show({
+  required BuildContext context,
+  NesDialogFrame frame = const NesBasicDialogFrame(),
+}) {
+  return NesDialog.show<String?>(
+    context: context,
+    builder: (_) => const CustomNesInputDialog(
+      inputLabel: "  확인  ",
+      message: "닉네임을 정해주세요 (2~5자)",
+    ),
+    frame: frame,
+  );
 }
