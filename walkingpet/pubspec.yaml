@@ -64,6 +64,13 @@ flutter:
     - assets/animals/squirrel/
     - assets/animals/turtle/
     - assets/animals/wolf/
+    - assets/animals/red_dragon/
+    - assets/animals/black_dragon/
+    - assets/animals/bronze_dragon/
+    - assets/animals/dark_dragon/
+    - assets/animals/black_wolf/
+    - assets/animals/feral_wolf/
+    - assets/animals/brown_wolf/
     - assets/backgrounds/
     - assets/buttons/
     - assets/icons/
