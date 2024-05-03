@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/gacha/widgets/gacha_box.dart';
+import 'package:walkingpet/gacha/widgets/gacha_modal.dart';
 
 class Gacha extends StatelessWidget {
   const Gacha({super.key});
@@ -78,21 +79,22 @@ class Gacha extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GachaBox(
-                          boxName: '일반 상자',
-                          boxImage: 'assets/items/itembox_normal.png',
-                          buttonImage: 'assets/buttons/button_gacha_normal.svg',
-                        ),
-                        SizedBox(width: 40), //일반상자 ~ 고급상자 사이 공간
+                            boxName: '일반 상자',
+                            boxImage: 'assets/items/itembox_normal.png',
+                            buttonImage:
+                                'assets/buttons/button_gacha_normal.svg',
+                            onTap: () => showGachaModal(context)),
+                        const SizedBox(width: 40), //일반상자 ~ 고급상자 사이 공간
                         GachaBox(
-                          boxName: '고급 상자',
-                          boxImage: 'assets/items/itembox_special.png',
-                          buttonImage:
-                              'assets/buttons/button_gacha_special.svg',
-                        ),
+                            boxName: '고급 상자',
+                            boxImage: 'assets/items/itembox_special.png',
+                            buttonImage:
+                                'assets/buttons/button_gacha_special.svg',
+                            onTap: () => showGachaModal(context)),
                       ],
                     ),
                   ],
