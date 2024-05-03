@@ -27,7 +27,6 @@ class CharacterBox extends StatelessWidget {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     String animal = CharacterMap.idToAnimal[characterId] ?? "buddy";
-    // print(animal);
 
     return Container(
       width: screenWidth * 0.2,
@@ -87,7 +86,6 @@ class CharacterBox extends StatelessWidget {
 
               // 3. 캐릭터 이미지(id)
               Image.asset(
-                // 'assets/animals/cow/cow_idle.gif',
                 'assets/animals/$animal/${animal}_idle.gif',
                 height: 70,
                 // scale: 1,
@@ -117,13 +115,13 @@ class CharacterBox extends StatelessWidget {
           ),
 
           // 6. 사용자의 캐릭터 보유 여부 => 자물쇠로 표시
-          // Center(
-          //   child: Image.asset(
-          //     'assets/images/character_lock.png',
-          //     // height: 200,
-          //     // scale: 0.3,
-          //   ),
-          // ),
+          if (!userCharacterStatus)
+            Center(
+              child: Image.asset(
+                'assets/images/character_lock.png',
+                scale: 10,
+              ),
+            ),
         ],
       ),
     );
