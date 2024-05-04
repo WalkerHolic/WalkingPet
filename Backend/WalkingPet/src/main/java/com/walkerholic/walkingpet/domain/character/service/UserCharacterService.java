@@ -90,17 +90,17 @@ public class UserCharacterService {
      * 스탯 초기화 버튼 클릭
      */
     @Transactional(readOnly = false)
-    public ResetStatResponse resetInitStatus(ResetInitStatusRequest resetInitStatusRequest) {
-        UserCharacter userCharacterInfo = getUserCharacter(resetInitStatusRequest.getUserCharacterId());
-        Character character = characterRepository.findByCharacterId(userCharacterInfo.getCharacter().getCharacterId())
-                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.CHARACTER_NOT_FOUND));
-//        UserDetail userDetail = userDetailRepository.findBySelectUserCharacterUserCharacterId(resetInitStatusRequest.getUserCharacterId())
-        UserDetail userDetail = userDetailRepository.findUserDetailByUser(userCharacterInfo.getUser())
+    public ResetStatResponse resetInitStatus(int userId) {
+        UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
         if (userDetail.getInitStatus() == 1) {
             throw new GlobalBaseException(GlobalErrorCode.STAT_INIT_LIMIT_EXCEEDED);
         }
+
+        UserCharacter userCharacterInfo = userDetail.getSelectUserCharacter();
+        System.out.println("-------------------------------------------------");
+        Character character = userCharacterInfo.getCharacter();
 
         int resetStatPoint = userCharacterInfo.getStatPoint();
         resetStatPoint += userCharacterInfo.getPower() - character.getFixPower();
