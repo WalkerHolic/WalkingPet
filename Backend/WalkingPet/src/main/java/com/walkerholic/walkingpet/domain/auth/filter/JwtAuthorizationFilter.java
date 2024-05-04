@@ -54,24 +54,37 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+                String[] excludePath = {
+                        "/ranking",
+                        "/auth",
+                        "/battle",
+                        "/character",
+                        "/gacha",
+                        "/goal",
+                        "/levelup",
+                        "/team",
+                        "/goal",
+                        "/goal",
+
+        };
 //        String[] excludePath = {
 ////                "/character/test",
 //                "/auth/social-login",
 //                "/swagger-ui/",
 //                "/error"
 //        };
-        String[] excludePath = {
-                "/api-docs/json",
-                "/api-docs",
-                "/auth/social-login",
-//                "/v3/api-docs/swagger-config",
-                "/swagger-ui/",
-                "/swagger-config",
-                "/swagger.yaml",
-                "/requestBodies",
-                "/swagger-",
-                "/error"
-        };
+//        String[] excludePath = {
+//                "/api-docs/json",
+//                "/api-docs",
+//                "/auth/social-login",
+////                "/v3/api-docs/swagger-config",
+//                "/swagger-ui/",
+//                "/swagger-config",
+//                "/swagger.yaml",
+//                "/requestBodies",
+//                "/swagger-",
+//                "/error"
+//        };
         String path = request.getRequestURI();
 
         System.out.println(path);
