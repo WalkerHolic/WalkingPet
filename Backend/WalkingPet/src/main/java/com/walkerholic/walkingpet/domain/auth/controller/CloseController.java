@@ -1,7 +1,9 @@
 package com.walkerholic.walkingpet.domain.auth.controller;
 
 import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
+import com.walkerholic.walkingpet.domain.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.service.UserService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +31,11 @@ public class CloseController {
     @GetMapping
     @Operation(summary = "토큰 테스트", description = "통신 테스트")
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
-    public ResponseEntity<CommonResponseEntity> test() {
+    public ResponseEntity<CommonResponseEntity> test(@AuthenticationPrincipal CustomUserDetail userDetail) {
         log.info("토큰 테스트 입장 성공");
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "토큰 테스트 입장 성공");
+        Users users = userDetail.getUsers();
+        System.out.println("user: " + users.getEmail());
+        System.out.println("user: " + users.getUserId());
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "토큰 테스트 입장 성공 userId: " + users.getUserId());
     }
 }

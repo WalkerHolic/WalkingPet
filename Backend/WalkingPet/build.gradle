@@ -46,6 +46,8 @@ dependencies {
 //    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
     implementation 'javax.xml.bind:jaxb-api:2.3.1' // XML 문서와 Java 객체 간 매핑을 자동화
 //    implementation 'commons-codec:commons-codec:1.15'
+
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
