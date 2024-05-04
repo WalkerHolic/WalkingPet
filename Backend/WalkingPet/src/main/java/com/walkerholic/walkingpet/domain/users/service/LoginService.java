@@ -17,6 +17,7 @@ import java.util.Optional;
 public class LoginService {
 
     private final UsersRepository usersRepository;
+    private final SignInService signInService;
     public boolean checkIsMember(String userEmail){
         return usersRepository.existsByEmail(userEmail);
     }
@@ -29,13 +30,17 @@ public class LoginService {
     @Transactional(readOnly = false)
     public UsersDto socialLogin(SocialLoginDTO socialLoginDTO) {
         Optional<Users> user = usersRepository.findByEmail(socialLoginDTO.getSocialEmail());
+        
         if (user.isEmpty()) {
-            System.out.println("socialLogin - 첫 유저");
             // 회원가입 로직
-            // TODO: 회원가입 데이터 세팅
+            System.out.println("socialLogin - 첫 유저");
+
             Users saveUser = usersRepository.save(Users.createNewMember(socialLoginDTO.getSocialEmail(), socialLoginDTO.getNickname()));
+            signInService.signInInItTable(socialLoginDTO.getSocialEmail());
+
             return UsersDto.from(saveUser);
         } else {
+            // 로그인 로직
             System.out.println("socialLogin - 이미 가입한 유저");
             return UsersDto.from(user.get());
         }

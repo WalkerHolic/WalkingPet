@@ -36,7 +36,7 @@ public class SignInService {
     private final ItemRepository itemRepository;
     private final CharacterRepository characterRepository;
 
-    @Transactional
+    @Transactional(readOnly = false)
     public void signInInItTable(String email){
         Users user = getUsersByEmail(email);
         //1. UserStep 초기화
@@ -78,11 +78,13 @@ public class SignInService {
     public void initUserItem(Users user){
         int countItem = (int)itemRepository.count();
         for(int i = 1; i < countItem+1 ; i++){
-            Item item = itemRepository.findById(i).orElseThrow(()->new GlobalBaseException(GlobalErrorCode.ITEM_NOT_FOUND));
-        userItemRepository.save(UserItem.builder()
-                .item(item)
-                .user(user)
-                .build());
+            Item item = itemRepository.findById(i)
+                    .orElseThrow(()->new GlobalBaseException(GlobalErrorCode.ITEM_NOT_FOUND));
+
+            userItemRepository.save(UserItem.builder()
+                    .item(item)
+                    .user(user)
+                    .build());
         }
     }
 
