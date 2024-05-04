@@ -84,6 +84,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         "/goal",
                         "/init",
                         "/user",
+                        "/redis",
                         "/v3/api-docs",
                         "/v3/api-docs/swagger-config",
                         "/swagger-",

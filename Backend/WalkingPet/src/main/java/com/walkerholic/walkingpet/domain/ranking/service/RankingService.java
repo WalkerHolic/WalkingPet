@@ -27,6 +27,7 @@ public class RankingService {
     private final UserStepRepository userStepRepository;
     private final UserDetailRepository userDetailRepository;
 
+
     /*
      * 누적 걸음수 랭킹 가져오기
      */
