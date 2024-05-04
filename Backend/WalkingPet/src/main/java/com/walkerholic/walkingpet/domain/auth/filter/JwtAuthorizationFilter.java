@@ -54,10 +54,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // SecurityContext 에 Authentication 객체를 저장합니다.
             securityService.saveUserInSecurityContext(accessToken);
         } catch (ExpiredJwtException e) {
-            System.out.println("JwtAuthorizationFilter doFilterInternal 토큰 만료");
+//            System.out.println("JwtAuthorizationFilter doFilterInternal 토큰 만료");
             throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
         } catch (Exception e) {
-            System.out.println("JwtAuthorizationFilter doFilterInternal 그 외 에러 ");
+//            System.out.println("JwtAuthorizationFilter doFilterInternal 그 외 에러 ");
             throw new TokenBaseException(TokenErrorCode.INVALID_TOKEN);
         }
 
@@ -82,6 +82,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         "/levelup",
                         "/team",
                         "/goal",
+                        "/init",
+                        "/user",
                         "/v3/api-docs",
                         "/v3/api-docs/swagger-config",
                         "/swagger-"
@@ -107,10 +109,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 //        };
         String path = request.getRequestURI();
 
-        System.out.println(path);
-        System.out.println(Arrays.toString(excludePath));
+//        System.out.println(path);
+//        System.out.println(Arrays.toString(excludePath));
         boolean shouldNotFilter = Arrays.stream(excludePath).anyMatch(path::startsWith);
-        System.out.println(shouldNotFilter);
+//        System.out.println(shouldNotFilter);
 
         return shouldNotFilter;
     }
