@@ -1,10 +1,7 @@
 package com.walkerholic.walkingpet.domain.auth.controller;
 
-import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.domain.auth.dto.CustomUserDetail;
-import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
-import com.walkerholic.walkingpet.domain.users.service.UserService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/close")
 public class CloseController {
-    private final UserService userService;
-    private final SecurityService securityService;
-    private final JwtUtil jwtUtil;
 
     @GetMapping
     @Operation(summary = "토큰 테스트", description = "통신 테스트")

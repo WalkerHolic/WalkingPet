@@ -4,7 +4,7 @@ import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
 import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
-import com.walkerholic.walkingpet.domain.users.service.UserService;
+import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/auth")
 public class AuthController {
-    private final UserService userService;
+    private final LoginService loginService;
     private final SecurityService securityService;
     private final JwtUtil jwtUtil;
 
@@ -30,7 +30,7 @@ public class AuthController {
     public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
     {
         log.info("로그인 api socialLogin - SocialLoginDTO: {}", socialLoginDTO);
-        UsersDto savedOrFindUser = userService.socialLogin(socialLoginDTO);
+        UsersDto savedOrFindUser = loginService.socialLogin(socialLoginDTO);
 //        securityService.saveUserInSecurityContext(socialLoginDTO);
         securityService.saveUserInSecurityContext(savedOrFindUser);
         Map<String, String> tokenMap = jwtUtil.initToken(savedOrFindUser);
