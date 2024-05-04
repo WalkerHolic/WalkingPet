@@ -29,6 +29,7 @@ public class AuthController {
     @PostMapping("/social-login")
     public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
     {
+        log.info("로그인 api socialLogin - SocialLoginDTO: {}", socialLoginDTO);
         UsersDto savedOrFindUser = userService.socialLogin(socialLoginDTO);
 //        securityService.saveUserInSecurityContext(socialLoginDTO);
         securityService.saveUserInSecurityContext(savedOrFindUser);
