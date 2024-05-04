@@ -16,8 +16,6 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
     @Query("SELECT ud FROM UserDetail ud WHERE ud.user.userId = :userId")
     Optional<UserDetail> findByUserUserId(Integer userId);
 
-    Optional<UserDetail> findBySelectUserCharacterUserCharacterId(Integer userCharacterId);
-
     @Modifying
     @Query("UPDATE UserDetail ud SET ud.selectUserCharacter.userCharacterId = :userCharacterId WHERE ud.user.userId = :userId")
     void updateUserCharacterIdByUserId(Integer userId, Integer userCharacterId);
@@ -33,8 +31,14 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
             "LEFT JOIN FETCH UD.selectUserCharacter UC " +
             "LEFT JOIN FETCH UC.character " +
             "WHERE U.userId = :userId")
-    Optional<UserDetail> findByJoinFetchByUserId(int userId);
+    Optional<UserDetail> findByJoinFetchByUserId(Integer userId);
 
     @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.user LEFT JOIN FETCH ud.selectUserCharacter WHERE ud.user.status = :status")
-    List<UserDetail> findAllByUserStatus(int status);
+    List<UserDetail> findAllByUserStatus(Integer status);
+
+    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.user LEFT JOIN FETCH ud.selectUserCharacter WHERE ud.user.userId = :userId")
+    Optional<UserDetail> findUserAndUserCharacterByUserId(Integer userId);
+
+    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.selectUserCharacter WHERE ud.user.userId = :userId")
+    Optional<UserDetail> findUserCharacterByUserId(Integer userId);
 }

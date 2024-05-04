@@ -44,7 +44,7 @@ public class UserCharacterService {
         UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-        return UserCharacterInfoResponse.from(userDetail.getSelectUserCharacter(), userDetail.getInitStatus());
+        return UserCharacterInfoResponse.from(userDetail);
     }
 
     /**
@@ -52,7 +52,10 @@ public class UserCharacterService {
      */
     @Transactional(readOnly = false)
     public UserCharacterStatResponse addStatPoint(int userId, String value) {
-        UserCharacter userCharacterInfo = getUserCharacter(userId);
+        UserDetail userDetail = userDetailRepository.findUserCharacterByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        UserCharacter userCharacterInfo = userDetail.getSelectUserCharacter();
 
         if (userCharacterInfo.getStatPoint() < REDUCE_STAT_POINT) {
             throw new GlobalBaseException(GlobalErrorCode.INSUFFICIENT_STAT_POINT);
