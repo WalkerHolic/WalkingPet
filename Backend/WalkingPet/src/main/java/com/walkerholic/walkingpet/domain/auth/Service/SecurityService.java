@@ -5,8 +5,11 @@ import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
 import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
+import com.walkerholic.walkingpet.global.error.GlobalBaseException;
+import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,36 +35,33 @@ public class SecurityService {
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
 
-    public void saveUserInSecurityContext(SocialLoginDTO socialLoginDTO) {
-        String socialId = socialLoginDTO.getSocialEmail();
+    // 회원가입 및 로그인 시 사용 controller에서
+//    public void saveUserInSecurityContext(SocialLoginDTO socialLoginDTO) {
+    public void saveUserInSecurityContext(UsersDto usersDto) {
+        Integer socialId = usersDto.getUserId();
 //        String socialProvider = socialLoginDTO.getSocialProvider();
-        saveUserInSecurityContext(socialId, "tests");
+        saveUserInSecurityContext(String.valueOf(socialId), "test");
     }
 
+    // jwtAuthorizationFilter에서 사용 -> userId로 탐색
     public void saveUserInSecurityContext(String accessToken) {
         if(accessToken == null) {
+            System.out.println("SecurityService saveUserInSecurityContext 토큰 없음");
             throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
 
         String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
         String socialProvider = jwtUtil.extractClaim(accessToken, Claims::getIssuer);
+
         saveUserInSecurityContext(socialId, socialProvider);
     }
-
-//    public void saveUserInSecurityContext(String accessToken) {
-//        String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
-////        Claims claims = jwtUtil.getClaims(accessToken);
-////        String socialProvider = jwtUtil.extractClaim(accessToken, Claims::getIssuer);
-//        String socialProvider = "test";
-////        saveUserInSecurityContext(claims.getSubject(), socialProvider);
-//        saveUserInSecurityContext(socialId, socialProvider);
-//    }
 
     private void saveUserInSecurityContext(String socialId, String socialProvider) {
         UserDetails userDetails = loadUserBySocialIdAndSocialProvider(socialId, socialProvider);
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
+        System.out.println("context 저장 saveUserInSecurityContext - authentication: " + authentication);
         if(authentication != null) {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
@@ -70,15 +70,16 @@ public class SecurityService {
     }
 
     private UserDetails loadUserBySocialIdAndSocialProvider(String socialId, String socialProvidero) {
-        Optional<Users> user = usersRepository.findByEmail(socialId);
+        Users user = usersRepository.findByUserId(Integer.valueOf(socialId));
+//        Optional<Users> user = usersRepository.findByEmail(socialId);
 
-        if(user.isEmpty()) {
-            throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
+        if(user == null) {
+            System.out.println("SecurityService loadUserBySocialIdAndSocialProvider 유저 못찾음 ");
+            throw new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND);
         } else {
             CustomUserDetail userDetails = new CustomUserDetail();
-            userDetails.setUser(user.get());
+            userDetails.setUser(user);
             return userDetails;
         }
-
     }
 }

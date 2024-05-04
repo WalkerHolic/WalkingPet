@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.auth.dto;
 
 import com.walkerholic.walkingpet.domain.users.entity.Users;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
+@Getter
 public class CustomUserDetail implements UserDetails {
     private Users users;
 
