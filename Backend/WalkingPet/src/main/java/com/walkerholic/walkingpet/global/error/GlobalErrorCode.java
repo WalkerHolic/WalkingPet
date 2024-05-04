@@ -12,8 +12,10 @@ public enum GlobalErrorCode {
      */
     SEVER_ERROR(500, "E500", "정의되지 않은 서버 오류 발생하였습니다."),
 
-    ACCESS_DENIED(401, "U400", "허용되지 않은 사용자입니다"),
-    TOKEN_EXPIRED(401, "U401", "토큰이 만료되었습니다."),
+    // 로그인 관련
+//    ACCESS_DENIED(401, "U400", "허용되지 않은 사용자입니다"),
+//    ACCESS_TOKEN_NOT_FOUND(401, "U400", "액세스 토큰이 존재하지 않습니다."),
+//    TOKEN_EXPIRED(401, "U401", "토큰이 만료되었습니다."),
     USER_NOT_FOUND(404, "U402", "해당 id에 해당하는 사용자가 없습니다."),
     USER_NOT_FOUND_EMAIL(404, "U403", "해당 이메일과 해당하는 사용자가 없습니다."),
 //    DUPLICATE_NICKNAME(400, "U404", "이미 존재하는 닉네임입니다."),
