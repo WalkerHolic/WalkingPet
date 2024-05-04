@@ -56,10 +56,11 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 성공", content = @Content(schema = @Schema(implementation = UserCharacterStatResponse.class)))
     @ApiResponse(responseCode = "403", description = "C400 - 유저의 해당 캐릭터 스탯 포인트가 부족")
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
-    public ResponseEntity<CommonResponseEntity> statDistribution(@RequestParam("userCharacterId") int userCharacterId, @RequestParam("value") String value) {
-        log.info("스탯 분배 statDistribution - userCharacterId: {}, value: {}", userCharacterId, value);
+    public ResponseEntity<CommonResponseEntity> statDistribution(@RequestParam("value") String value) {
+        int userId = 1;
+        log.info("스탯 분배 statDistribution - userId: {}, value: {}", userId, value);
 
-        UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userCharacterId, value);
+        UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userId, value);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterStatInfo);
     }
 

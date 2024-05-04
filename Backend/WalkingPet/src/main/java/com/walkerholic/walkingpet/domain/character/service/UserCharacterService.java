@@ -51,8 +51,8 @@ public class UserCharacterService {
      * 사용자가 가지고 있는 스탯 포인트로 능력치 올리기
      */
     @Transactional(readOnly = false)
-    public UserCharacterStatResponse addStatPoint(int userCharacterId, String value) {
-        UserCharacter userCharacterInfo = getUserCharacter(userCharacterId);
+    public UserCharacterStatResponse addStatPoint(int userId, String value) {
+        UserCharacter userCharacterInfo = getUserCharacter(userId);
 
         if (userCharacterInfo.getStatPoint() < REDUCE_STAT_POINT) {
             throw new GlobalBaseException(GlobalErrorCode.INSUFFICIENT_STAT_POINT);
@@ -170,8 +170,12 @@ public class UserCharacterService {
     /**
      * 사용자의 캐릭터 정보 가져오기(내부 메서드)
      */
-    public UserCharacter getUserCharacter(int userCharacterId) {
-        return userCharacterRepository.findByUserCharacterId(userCharacterId)
-                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
+    public UserCharacter getUserCharacter(int userId) {
+        UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        return userDetail.getSelectUserCharacter();
     }
+
+
 }
