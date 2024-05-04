@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.character.dto.response;
 
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.function.UserCharacterFunction;
+import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,11 @@ public class UserCharacterInfoResponse {
     private int upgrade;
     private int initStatus;
 
-    public static UserCharacterInfoResponse from(UserCharacter userCharacter, int initStatus){
+    public static UserCharacterInfoResponse from(UserDetail userDetail){
+        UserCharacter userCharacter = userDetail.getSelectUserCharacter();
+
         return UserCharacterInfoResponse.builder()
-                .nickname("test")
+                .nickname(userDetail.getUser().getNickname())
                 .characterId(userCharacter.getUserCharacterId())
                 .level(userCharacter.getLevel())
                 .experience(userCharacter.getExperience())
@@ -41,7 +44,7 @@ public class UserCharacterInfoResponse {
                 .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
                 .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
                 .upgrade(userCharacter.getUpgrade())
-                .initStatus(initStatus)
+                .initStatus(userDetail.getInitStatus())
                 .build();
     }
 }

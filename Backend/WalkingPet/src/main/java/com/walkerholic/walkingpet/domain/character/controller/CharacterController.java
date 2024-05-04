@@ -56,21 +56,25 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 성공", content = @Content(schema = @Schema(implementation = UserCharacterStatResponse.class)))
     @ApiResponse(responseCode = "403", description = "C400 - 유저의 해당 캐릭터 스탯 포인트가 부족")
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
-    public ResponseEntity<CommonResponseEntity> statDistribution(@RequestParam("userCharacterId") int userCharacterId, @RequestParam("value") String value) {
-        log.info("스탯 분배 statDistribution - userCharacterId: {}, value: {}", userCharacterId, value);
+    public ResponseEntity<CommonResponseEntity> statDistribution(@RequestParam("value") String value) {
+        int userId = 1;
+        log.info("스탯 분배 statDistribution - userId: {}, value: {}", userId, value);
 
-        UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userCharacterId, value);
+        UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userId, value);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterStatInfo);
     }
 
-    @PostMapping("/stat/reset")
+//    @PostMapping("/stat/reset")
+    @GetMapping("/stat/reset")
     @Operation(summary = "스탯 분배 초기화", description = "유저의 캐릭터 스탯을 분배 초기화")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 초기화 성공", content = @Content(schema = @Schema(implementation = ResetStatResponse.class)))
     @ApiResponse(responseCode = "400", description = "C400 - 이미 스탯 초기화 버튼 누름")
-    public ResponseEntity<CommonResponseEntity> resetStatDistribution(@RequestBody ResetInitStatusRequest resetInitStatusRequest) {
-        log.info("스탯 분배 초기화 resetStatDistribution - userCharacterId: {}", resetInitStatusRequest.getUserCharacterId());
+    public ResponseEntity<CommonResponseEntity> resetStatDistribution() {
+//    public ResponseEntity<CommonResponseEntity> resetStatDistribution(@RequestBody ResetInitStatusRequest resetInitStatusRequest) {
+        int userId = 1;
+        log.info("스탯 분배 초기화 resetStatDistribution - userIdv: {}", userId);
 
-        ResetStatResponse resetStatResponse = userCharacterService.resetInitStatus(resetInitStatusRequest);
+        ResetStatResponse resetStatResponse = userCharacterService.resetInitStatus(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, resetStatResponse);
     }
 

@@ -44,15 +44,18 @@ public class UserCharacterService {
         UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-        return UserCharacterInfoResponse.from(userDetail.getSelectUserCharacter(), userDetail.getInitStatus());
+        return UserCharacterInfoResponse.from(userDetail);
     }
 
     /**
      * 사용자가 가지고 있는 스탯 포인트로 능력치 올리기
      */
     @Transactional(readOnly = false)
-    public UserCharacterStatResponse addStatPoint(int userCharacterId, String value) {
-        UserCharacter userCharacterInfo = getUserCharacter(userCharacterId);
+    public UserCharacterStatResponse addStatPoint(int userId, String value) {
+        UserDetail userDetail = userDetailRepository.findUserCharacterByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        UserCharacter userCharacterInfo = userDetail.getSelectUserCharacter();
 
         if (userCharacterInfo.getStatPoint() < REDUCE_STAT_POINT) {
             throw new GlobalBaseException(GlobalErrorCode.INSUFFICIENT_STAT_POINT);
@@ -87,17 +90,17 @@ public class UserCharacterService {
      * 스탯 초기화 버튼 클릭
      */
     @Transactional(readOnly = false)
-    public ResetStatResponse resetInitStatus(ResetInitStatusRequest resetInitStatusRequest) {
-        UserCharacter userCharacterInfo = getUserCharacter(resetInitStatusRequest.getUserCharacterId());
-        Character character = characterRepository.findByCharacterId(userCharacterInfo.getCharacter().getCharacterId())
-                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.CHARACTER_NOT_FOUND));
-//        UserDetail userDetail = userDetailRepository.findBySelectUserCharacterUserCharacterId(resetInitStatusRequest.getUserCharacterId())
-        UserDetail userDetail = userDetailRepository.findUserDetailByUser(userCharacterInfo.getUser())
+    public ResetStatResponse resetInitStatus(int userId) {
+        UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
         if (userDetail.getInitStatus() == 1) {
             throw new GlobalBaseException(GlobalErrorCode.STAT_INIT_LIMIT_EXCEEDED);
         }
+
+        UserCharacter userCharacterInfo = userDetail.getSelectUserCharacter();
+        System.out.println("-------------------------------------------------");
+        Character character = userCharacterInfo.getCharacter();
 
         int resetStatPoint = userCharacterInfo.getStatPoint();
         resetStatPoint += userCharacterInfo.getPower() - character.getFixPower();
@@ -170,8 +173,12 @@ public class UserCharacterService {
     /**
      * 사용자의 캐릭터 정보 가져오기(내부 메서드)
      */
-    public UserCharacter getUserCharacter(int userCharacterId) {
-        return userCharacterRepository.findByUserCharacterId(userCharacterId)
-                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
+    public UserCharacter getUserCharacter(int userId) {
+        UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        return userDetail.getSelectUserCharacter();
     }
+
+
 }
