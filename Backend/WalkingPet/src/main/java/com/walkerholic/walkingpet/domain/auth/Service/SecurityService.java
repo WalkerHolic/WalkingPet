@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /*
     1.AuthenticationProvider에서 UserDetailsService 인터페이스를 통해 loadUserByUsername을 호출
@@ -69,13 +70,13 @@ public class SecurityService {
     }
 
     private UserDetails loadUserBySocialIdAndSocialProvider(String socialId, String socialProvidero) {
-        Users user = usersRepository.findByEmail(socialId);
+        Optional<Users> user = usersRepository.findByEmail(socialId);
 
-        if(user == null) {
+        if(user.isEmpty()) {
             throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
         } else {
             CustomUserDetail userDetails = new CustomUserDetail();
-            userDetails.setUser(user);
+            userDetails.setUser(user.get());
             return userDetails;
         }
 

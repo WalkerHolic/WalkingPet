@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -16,8 +18,8 @@ public class UserService {
     // 해당 사용자가 존재하면 그 데이터를 반환하고 없으면 가입 후 데이터 반환
     @Transactional(readOnly = false)
     public UsersDto socialLogin(SocialLoginDTO socialLoginDTO) {
-        Users user = usersRepository.findByEmail(socialLoginDTO.getSocialEmail());
-        if (user == null) {
+        Optional<Users> user = usersRepository.findByEmail(socialLoginDTO.getSocialEmail());
+        if (user.isEmpty()) {
             System.out.println("socialLogin - 첫 유저");
             // 회원가입 로직
             // TODO: 회원가입 데이터 세팅
@@ -25,7 +27,7 @@ public class UserService {
             return UsersDto.from(saveUser);
         } else {
             System.out.println("socialLogin - 이미 가입한 유저");
-            return UsersDto.from(user);
+            return UsersDto.from(user.get());
         }
     }
 }
