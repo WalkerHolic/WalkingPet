@@ -7,7 +7,6 @@ import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.service.UserService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,10 @@ public class AuthController {
     @PostMapping("/social-login")
     public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
     {
+        log.info("로그인 api socialLogin - SocialLoginDTO: {}", socialLoginDTO);
         UsersDto savedOrFindUser = userService.socialLogin(socialLoginDTO);
-        securityService.saveUserInSecurityContext(socialLoginDTO);
+//        securityService.saveUserInSecurityContext(socialLoginDTO);
+        securityService.saveUserInSecurityContext(savedOrFindUser);
         Map<String, String> tokenMap = jwtUtil.initToken(savedOrFindUser);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, tokenMap);
     }

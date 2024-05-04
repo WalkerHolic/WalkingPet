@@ -1,7 +1,10 @@
 package com.walkerholic.walkingpet.domain.auth.filter;
 
 import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
+import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
+import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +34,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        log.info("토큰 인증 필터 구간");
         if(checkAccessTokenValid(request)) {
             filterChain.doFilter(request, response);
         } else {
@@ -40,9 +44,23 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private boolean checkAccessTokenValid(HttpServletRequest request) {
         String accessToken = jwtUtil.extractTokenFromHeader(request);
-        if(!jwtUtil.validateAccessToken(accessToken)) {
+
+        // true: 토큰 만료x, false: 토큰 만료
+
+        boolean result = false;
+        try {
+            result = jwtUtil.validateAccessToken(accessToken);
+
+            // SecurityContext 에 Authentication 객체를 저장합니다.
             securityService.saveUserInSecurityContext(accessToken);
+        } catch (ExpiredJwtException e) {
+            System.out.println("JwtAuthorizationFilter doFilterInternal 토큰 만료");
+            throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
+        } catch (Exception e) {
+            System.out.println("JwtAuthorizationFilter doFilterInternal 그 외 에러 ");
+            throw new TokenBaseException(TokenErrorCode.INVALID_TOKEN);
         }
+
         return true;
     }
 
@@ -64,7 +82,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         "/levelup",
                         "/team",
                         "/goal",
-                        "/goal",
+                        "/v3/api-docs",
+                        "/v3/api-docs/swagger-config",
+                        "/swagger-"
 
         };
 //        String[] excludePath = {

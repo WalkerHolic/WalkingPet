@@ -34,8 +34,6 @@ public class JwtUtil {
     private Long REFRESH_TOKEN_EXPIRATION;
     @Value("${jwt.access-token-expiration-time}")
     private Long ACCESS_TOKEN_EXPIRATION;
-    private Long ACCESS_TOKEN_EXPIRATION_PERIOD = 600000L;
-    private Long REFRESH_TOKEN_EXPIRATION_PERIOD = 3600000L;
     
     public String generateAccessToken(UsersDto userDTO) {
         return createToken(ACCESS_TOKEN_EXPIRATION, userDTO);
@@ -49,10 +47,11 @@ public class JwtUtil {
 
         System.out.println("토큰 생성: " + userDTO);
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "1");
+        claims.put("sub", userDTO.getUserId());
         claims.put("iss", "test");
 
         System.out.println("만료 날짜: " + new Date(System.currentTimeMillis() + expirationPeriod));
+        System.out.println("claim 값: " + claims.get("sub"));
 
         return Jwts.builder()
                 .addClaims(claims)
@@ -67,16 +66,16 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    public Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRETKEY).parseClaimsJws(token).getBody();
-    }
     
+    // true: 토큰 만료x, false: 토큰 만료
     public boolean validateAccessToken(String accessToken) {
         if(accessToken == null || accessToken.length() <= 0) {
             throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
 
+        // true: 토큰 만료x, false: 토큰 만료
         boolean isTokenExpired = checkTokenExpired(accessToken);
+        System.out.println("validateAccessToken isTokenExpired: " + isTokenExpired);
         if(!isTokenExpired) {
 //        if(isTokenExpired) {
             System.out.println("토큰 만료");
@@ -86,6 +85,15 @@ public class JwtUtil {
         }
     }
 
+    public boolean checkTokenExpired(String token) {
+        Date expirationDate = extractClaim(token, Claims::getExpiration);
+//        Claims claims = getClaims(token);
+        boolean isTokenExpired = expirationDate.after(new Date());
+        System.out.println("토큰 만료 시간: " + expirationDate);
+        System.out.println("현재 시간: " + new Date());
+        System.out.println("결과 : " + isTokenExpired);
+        return isTokenExpired;
+    }
 
     public Boolean validateRefreshToken(String refreshToken) {
         //TODO: refreshtoken 유효화 검사
@@ -103,17 +111,6 @@ public class JwtUtil {
 
         return true;
     }
-    
-    public boolean checkTokenExpired(String token) {
-        Date expirationDate = extractClaim(token, Claims::getExpiration);
-//        Claims claims = getClaims(token);
-        boolean isTokenExpired = expirationDate.after(new Date());
-        System.out.println("토큰 만료 시간: " + expirationDate);
-        System.out.println("현재 시간: " + new Date());
-        System.out.println("결과 : " + isTokenExpired);
-        return isTokenExpired;
-//        return true;
-    }
 
     public Map<String, String> initToken(UsersDto savedOrFindUser) {
         Map<String, String> tokenMap = new HashMap<>();
@@ -123,7 +120,8 @@ public class JwtUtil {
         tokenMap.put("accessToken", accessToken);
         tokenMap.put("refreshToken", refreshToken);
 
-        updRefreshTokenInDB(refreshToken, savedOrFindUser);
+        // 새 refresh token db 저장
+//        updRefreshTokenInDB(refreshToken, savedOrFindUser);
 
         return tokenMap;
     }
@@ -150,7 +148,7 @@ public class JwtUtil {
         if(StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
         } else {
-            System.out.println("access token 없음");
+            System.out.println("jwtutil - extractTokenFromHeader - access token 없음");
             throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
     }
