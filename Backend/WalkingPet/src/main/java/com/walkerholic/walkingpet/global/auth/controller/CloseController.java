@@ -1,6 +1,6 @@
-package com.walkerholic.walkingpet.domain.auth.controller;
+package com.walkerholic.walkingpet.global.auth.controller;
 
-import com.walkerholic.walkingpet.domain.auth.dto.CustomUserDetail;
+import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;

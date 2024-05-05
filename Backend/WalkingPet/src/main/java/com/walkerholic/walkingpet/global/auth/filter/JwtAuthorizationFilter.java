@@ -1,9 +1,9 @@
-package com.walkerholic.walkingpet.domain.auth.filter;
+package com.walkerholic.walkingpet.global.auth.filter;
 
-import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
-import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
-import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
-import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
+import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
+import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
+import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
