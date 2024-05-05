@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
-import 'package:walkingpet/services/ranking/personal_yesterday.dart';
+import 'package:walkingpet/services/ranking/personal.dart';
 
 class PersonalRanking extends StatefulWidget {
   const PersonalRanking({super.key});
@@ -17,28 +17,32 @@ class _PersonalRankingState extends State<PersonalRanking> {
   Map<String, dynamic> myrank = {};
   List top3 = [];
   bool isLoading = true;
+  String selectedTimeFrame = 'realtime';
 
   @override
   void initState() {
     super.initState();
-    initTop10();
+    fetchData();
   }
 
-  // API 요청으로 데이터 불러오기
-  Future<void> initTop10() async {
+  // API 요청으로 데이터 불러오기 => 기본 realtime으로 설정
+  Future<void> fetchData({String timeframe = 'realtime'}) async {
     try {
-      var responseTop10 = await getTop10();
-      var responseMyRank = await getMyRank();
-      var responseTop3 = await getTop3();
+      var responseTop10 = await getTop10(timeframe: timeframe);
+      var responseMyRank = await getMyRank(timeframe: timeframe);
+      var responseTop3 = await getTop3(timeframe: timeframe);
 
       setState(() {
         top10 = responseTop10['data']['topRanking'];
         myrank = responseMyRank['data'];
         top3 = responseTop3['data']['topRanking'];
         isLoading = false;
+        selectedTimeFrame = timeframe;
       });
     } catch (e) {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -52,17 +56,54 @@ class _PersonalRankingState extends State<PersonalRanking> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // 1. 어제 / 실시간 / 누적 선택
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      // '어제 | 실시간 | 누적',
-                      '어제자',
-                      textAlign: TextAlign.right,
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'yesterday'),
+                      child: Text(
+                        '어제',
+                        style: TextStyle(
+                          fontWeight: selectedTimeFrame == 'yesterday'
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: selectedTimeFrame == 'yesterday'
+                              ? const Color.fromARGB(255, 9, 118, 208)
+                              : Colors.black,
+                        ),
+                      ),
                     ),
-                    SizedBox(
-                      width: 15,
-                    )
+                    const Text(' | '),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'realtime'),
+                      child: Text(
+                        '실시간',
+                        style: TextStyle(
+                          fontWeight: selectedTimeFrame == 'realtime'
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: selectedTimeFrame == 'realtime'
+                              ? const Color.fromARGB(255, 9, 118, 208)
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                    const Text(' | '),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'accumulation'),
+                      child: Text(
+                        '누적',
+                        style: TextStyle(
+                          fontWeight: selectedTimeFrame == 'accumulation'
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: selectedTimeFrame == 'accumulation'
+                              ? const Color.fromARGB(255, 9, 118, 208)
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
                   ],
                 ),
 
@@ -76,10 +117,10 @@ class _PersonalRankingState extends State<PersonalRanking> {
                   children: [
                     ...top3.map((item) {
                       return Top1to3(
-                        ranking: item['ranking'],
-                        characterId: item['characterId'],
-                        nickname: item['nickname'],
-                        step: item['step'],
+                        ranking: item['ranking'] as int? ?? 0,
+                        characterId: item['characterId'] as int? ?? 0,
+                        nickname: item['nickname'] as String? ?? 'Unknown',
+                        step: item['step'] as int? ?? 0,
                       );
                     }),
                   ],
@@ -132,9 +173,10 @@ class _PersonalRankingState extends State<PersonalRanking> {
                             children: [
                               ...top10.map((item) {
                                 return Rank(
-                                  ranking: item['ranking'],
-                                  nickname: item['nickname'],
-                                  step: item['step'],
+                                  ranking: item['ranking'] as int? ?? 0,
+                                  nickname:
+                                      item['nickname'] as String? ?? 'Unknown',
+                                  step: item['step'] as int? ?? 0,
                                 );
                               }),
                             ],
