@@ -101,7 +101,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
 
                   // 2. 캐릭터 이미지
                   Image.asset(
-                    'assets/animals/$animal/${animal}_walk.gif',
+                    'assets/animals/$animal/${animal}_idle.gif',
                     height: 200,
                     // scale: 0.3,
                   ),

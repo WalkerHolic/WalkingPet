@@ -111,13 +111,13 @@ class _CharacterChangeState extends State<CharacterChange> {
                   characterGrade:
                       characterInfoData[index]['characterGrade'] ?? 0,
                   userCharacterId:
-                      characterInfoData[index]['userCharacterId'] ?? 1,
+                      characterInfoData[index]['userCharacterId'] ?? false,
                   userCharacterLevel:
                       characterInfoData[index]['userCharacterLevel'] ?? 1,
                   userCharacterUpgrade:
                       characterInfoData[index]['userCharacterUpgrade'] ?? 0,
                   characterName:
-                      characterInfoData[index]['characterName'] ?? '~로딩중~',
+                      characterInfoData[index]['characterName'] ?? '이름로딩중',
                   userCharacterStatus:
                       characterInfoData[index]['userCharacterStatus'] ?? 0,
                 );

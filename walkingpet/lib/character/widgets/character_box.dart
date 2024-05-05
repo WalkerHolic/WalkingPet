@@ -4,11 +4,10 @@ import 'package:walkingpet/common/character_map.dart';
 class CharacterBox extends StatelessWidget {
   final int characterId,
       characterGrade,
-      userCharacterId,
       userCharacterLevel,
       userCharacterUpgrade;
   final String characterName;
-  final bool userCharacterStatus;
+  final bool userCharacterId, userCharacterStatus;
 
   const CharacterBox(
       {super.key,
