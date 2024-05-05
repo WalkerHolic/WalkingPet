@@ -1,6 +1,5 @@
 package com.walkerholic.walkingpet.global.error;
 
-import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
 import lombok.Getter;
 
 @Getter

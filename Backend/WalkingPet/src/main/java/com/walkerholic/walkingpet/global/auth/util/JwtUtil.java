@@ -1,7 +1,7 @@
-package com.walkerholic.walkingpet.domain.auth.util;
+package com.walkerholic.walkingpet.global.auth.util;
 
-import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
-import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
+import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
+import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import io.jsonwebtoken.Claims;

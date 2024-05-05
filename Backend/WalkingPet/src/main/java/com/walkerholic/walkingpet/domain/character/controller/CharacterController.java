@@ -1,11 +1,8 @@
 package com.walkerholic.walkingpet.domain.character.controller;
 
-import com.walkerholic.walkingpet.domain.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
-import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
 import com.walkerholic.walkingpet.domain.character.dto.response.*;
 import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
-import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,8 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

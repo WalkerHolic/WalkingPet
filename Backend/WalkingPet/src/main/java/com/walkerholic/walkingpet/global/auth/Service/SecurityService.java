@@ -1,10 +1,9 @@
-package com.walkerholic.walkingpet.domain.auth.Service;
+package com.walkerholic.walkingpet.global.auth.Service;
 
-import com.walkerholic.walkingpet.domain.auth.dto.CustomUserDetail;
-import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
-import com.walkerholic.walkingpet.domain.auth.error.TokenBaseException;
-import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
-import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
+import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
+import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
+import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
@@ -20,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /*
     1.AuthenticationProvider에서 UserDetailsService 인터페이스를 통해 loadUserByUsername을 호출

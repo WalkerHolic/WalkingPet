@@ -1,6 +1,6 @@
 package com.walkerholic.walkingpet.domain.users.service;
 
-import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
+import com.walkerholic.walkingpet.global.auth.dto.request.SocialLoginDTO;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;

@@ -1,7 +1,7 @@
 package com.walkerholic.walkingpet.global.config;
 
-import com.walkerholic.walkingpet.domain.auth.filter.ExceptionHandlerFilter;
-import com.walkerholic.walkingpet.domain.auth.filter.JwtAuthorizationFilter;
+import com.walkerholic.walkingpet.global.auth.filter.ExceptionHandlerFilter;
+import com.walkerholic.walkingpet.global.auth.filter.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
