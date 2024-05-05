@@ -13,7 +13,7 @@ Future<Map<String, dynamic>> getCharacterChange() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
+    print(jsonData);
     return jsonData;
   } else {
     print("캐릭터 정보 받아오기 오류 : ${response.statusCode}");
