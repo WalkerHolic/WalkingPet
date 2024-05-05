@@ -45,13 +45,9 @@ public class JwtUtil {
     
     private String createToken(Long expirationPeriod, UsersDto userDTO) {
 
-        System.out.println("토큰 생성: " + userDTO);
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", userDTO.getUserId());
         claims.put("iss", "test");
-
-        System.out.println("만료 날짜: " + new Date(System.currentTimeMillis() + expirationPeriod));
-        System.out.println("claim 값: " + claims.get("sub"));
 
         return Jwts.builder()
                 .addClaims(claims)

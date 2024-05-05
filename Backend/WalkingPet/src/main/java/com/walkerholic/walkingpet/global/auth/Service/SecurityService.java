@@ -59,7 +59,6 @@ public class SecurityService {
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
-        System.out.println("context 저장 saveUserInSecurityContext - authentication: " + authentication);
         if(authentication != null) {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
