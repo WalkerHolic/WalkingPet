@@ -56,59 +56,58 @@ class _PersonalRankingState extends State<PersonalRanking> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // 1. 어제 / 실시간 / 누적 선택
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () => fetchData(timeframe: 'yesterday'),
-                      child: Text(
-                        '어제',
-                        style: TextStyle(
-                          fontWeight: selectedTimeFrame == 'yesterday'
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                          color: selectedTimeFrame == 'yesterday'
-                              ? const Color.fromARGB(255, 9, 118, 208)
-                              : Colors.black,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () => fetchData(timeframe: 'yesterday'),
+                        child: Text(
+                          ' 어제 ',
+                          style: TextStyle(
+                            fontWeight: selectedTimeFrame == 'yesterday'
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: selectedTimeFrame == 'yesterday'
+                                ? const Color.fromARGB(255, 9, 118, 208)
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    const Text(' | '),
-                    GestureDetector(
-                      onTap: () => fetchData(timeframe: 'realtime'),
-                      child: Text(
-                        '실시간',
-                        style: TextStyle(
-                          fontWeight: selectedTimeFrame == 'realtime'
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                          color: selectedTimeFrame == 'realtime'
-                              ? const Color.fromARGB(255, 9, 118, 208)
-                              : Colors.black,
+                      const Text('|'),
+                      GestureDetector(
+                        onTap: () => fetchData(timeframe: 'realtime'),
+                        child: Text(
+                          ' 실시간 ',
+                          style: TextStyle(
+                            fontWeight: selectedTimeFrame == 'realtime'
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: selectedTimeFrame == 'realtime'
+                                ? const Color.fromARGB(255, 9, 118, 208)
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    const Text(' | '),
-                    GestureDetector(
-                      onTap: () => fetchData(timeframe: 'accumulation'),
-                      child: Text(
-                        '누적',
-                        style: TextStyle(
-                          fontWeight: selectedTimeFrame == 'accumulation'
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                          color: selectedTimeFrame == 'accumulation'
-                              ? const Color.fromARGB(255, 9, 118, 208)
-                              : Colors.black,
+                      const Text('|'),
+                      GestureDetector(
+                        onTap: () => fetchData(timeframe: 'accumulation'),
+                        child: Text(
+                          ' 누적 ',
+                          style: TextStyle(
+                            fontWeight: selectedTimeFrame == 'accumulation'
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: selectedTimeFrame == 'accumulation'
+                                ? const Color.fromARGB(255, 9, 118, 208)
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 15),
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 10,
+                      const SizedBox(width: 15),
+                    ],
+                  ),
                 ),
 
                 // 2. 1~3위 표시
