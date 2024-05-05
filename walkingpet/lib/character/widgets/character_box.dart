@@ -32,8 +32,10 @@ class CharacterBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1D2A3D),
         border: Border.all(
-          color: const Color(0xFF3C6093),
-          width: 2, // 테두리 두께
+          color: userCharacterId
+              ? const Color(0xFF5ACB01)
+              : const Color(0xFF3C6093), // 조건부 색상
+          width: userCharacterId ? 3 : 2, // 조건부 두께
         ),
         borderRadius: BorderRadius.circular(10),
         // boxShadow: [
