@@ -2,13 +2,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 const String baseUrl = "https://walkingpet.co.kr";
-const String yesterdayTop10 = "ranking/person/top10?value=yesterday";
-const String yesterdayMyRank = "ranking/person/myrank?value=yesterday&userId=1";
-const String yesterdayTop3 = "ranking/person/top3?value=yesterday";
 
 // 랭킹 Top10 조회
-Future<Map<String, dynamic>> getTop10() async {
-  final url = Uri.parse('$baseUrl/$yesterdayTop10');
+Future<Map<String, dynamic>> getTop10({String timeframe = 'realtime'}) async {
+  final url = Uri.parse('$baseUrl/ranking/person/top10?value=$timeframe');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
@@ -23,8 +20,8 @@ Future<Map<String, dynamic>> getTop10() async {
 }
 
 // 랭킹 본인 순위 조회
-Future<Map<String, dynamic>> getMyRank() async {
-  final url = Uri.parse('$baseUrl/$yesterdayMyRank');
+Future<Map<String, dynamic>> getMyRank({String timeframe = 'realtime'}) async {
+  final url = Uri.parse('$baseUrl/ranking/person/myrank?value=$timeframe');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
@@ -39,8 +36,8 @@ Future<Map<String, dynamic>> getMyRank() async {
 }
 
 // 랭킹 1~3위 조회
-Future<Map<String, dynamic>> getTop3() async {
-  final url = Uri.parse('$baseUrl/$yesterdayTop3');
+Future<Map<String, dynamic>> getTop3({String timeframe = 'realtime'}) async {
+  final url = Uri.parse('$baseUrl/ranking/person/top3?value=$timeframe');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
