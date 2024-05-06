@@ -124,12 +124,10 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
       var response = await updateStat(characterId, statnameEn);
       var data = response['data'];
 
-      print(data);
-      print(data[statnameEn]);
-
       setState(() {
         widget.point = data[statnameEn];
-        // widget.addpoint = data['add$statnameEn'];
+        widget.addpoint =
+            data['add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'];
       });
     } catch (e) {
       print('캐릭터 능력치 Update, 페이지 내 오류: $e');
