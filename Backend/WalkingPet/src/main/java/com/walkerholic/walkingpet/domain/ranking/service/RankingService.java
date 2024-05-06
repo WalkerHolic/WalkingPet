@@ -11,6 +11,8 @@ import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RankingService {
     private final UserStepRepository userStepRepository;
     private final UserDetailRepository userDetailRepository;
@@ -149,7 +152,9 @@ public class RankingService {
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
+    @Cacheable(value="teamRankingTop10")
     public TeamRankingResponse getTeamRankingTop10() {
+        log.info("그룹 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
 
         List<TeamRanking> teamRankingTop10List = new ArrayList<>();
@@ -170,6 +175,7 @@ public class RankingService {
     // 나의 그룹 랭킹 가져오기
     @Transactional(readOnly = true)
     public TeamRankingResponse getMyTeamRanking(int userId) {
+        // TODO: redis에 그룹 포인트 저장 방식으로 변경
         List<Team> myTeamRanking = teamRepository.findTeamsByUserIdOrderByPointDesc(userId);
 
         List<TeamRanking> myTeamRankingList = new ArrayList<>();
