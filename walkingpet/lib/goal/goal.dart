@@ -90,8 +90,8 @@ class _GoalState extends State<Goal> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 75,
+              SizedBox(
+                height: screenHeight * 0.08,
               ),
               Center(
                 child: SizedBox(
@@ -134,14 +134,14 @@ class _GoalState extends State<Goal> {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         "일일 목표",
                         style: TextStyle(
-                          fontSize: 35,
+                          fontSize: screenHeight * 0.04,
                         ),
                       ),
                       DailyGoalItem(
@@ -167,12 +167,12 @@ class _GoalState extends State<Goal> {
                       DailyGoalItem(
                         title: "10000 걸음",
                         isActivated: isWalked10000,
-                         goalSteps: 10000,
+                        goalSteps: 10000,
                       ),
-                      const Text(
+                      Text(
                         "주간 목표",
                         style: TextStyle(
-                          fontSize: 35,
+                          fontSize: screenHeight * 0.04,
                         ),
                       ),
                       Column(

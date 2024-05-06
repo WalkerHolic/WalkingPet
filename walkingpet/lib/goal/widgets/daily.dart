@@ -68,8 +68,8 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
           children: [
             Text(
               widget.title,
-              style: const TextStyle(
-                fontSize: 23,
+              style: TextStyle(
+                fontSize: screenHeight * 0.024,
               ),
             ),
             GestureDetector(
@@ -78,7 +78,7 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
                 _isPressed
                     ? 'assets/buttons/brown_button_pushed.svg'
                     : 'assets/buttons/brown_button.svg',
-                width: 75,
+                width: screenWidth * 0.18,
               ),
             ),
           ],
