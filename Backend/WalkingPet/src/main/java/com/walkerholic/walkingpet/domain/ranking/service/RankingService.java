@@ -1,13 +1,9 @@
 package com.walkerholic.walkingpet.domain.ranking.service;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepTop3Ranking;
-import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepRankingResponse;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.AccStepTop3RankingResponse;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.UserPersonalStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.*;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.*;
+import com.walkerholic.walkingpet.domain.team.entity.Team;
+import com.walkerholic.walkingpet.domain.team.repository.TeamRepository;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
@@ -26,7 +22,7 @@ import java.util.List;
 public class RankingService {
     private final UserStepRepository userStepRepository;
     private final UserDetailRepository userDetailRepository;
-
+    private final TeamRepository teamRepository;
 
     /*
      * 누적 걸음수 랭킹 가져오기
@@ -135,7 +131,7 @@ public class RankingService {
     /*
     사용자들의 실시간 걸음수 데이터 가져오기
     yesterdayStep
- */
+    */
     @Transactional(readOnly = true)
     public List<ReailtimeStepRankingInfo> getUserRealtimeStepList() {
         List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
@@ -149,5 +145,25 @@ public class RankingService {
         }
 
         return reailtimeStepRankingList;
+    }
+
+    // 그룹 랭킹 상위 10개 가져오기
+    @Transactional(readOnly = true)
+    public TeamRankingTop10Response getTeamRankingTop10() {
+        List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
+
+        List<TeamRankingTop10> teamRankingTop10 = new ArrayList<>();
+
+        int rank = 0;
+        int previousPoints = -1;
+        for (Team team: teamTop10) {
+            // 동점 계산
+            if (team.getPoint() != previousPoints) rank++;
+
+            teamRankingTop10.add(TeamRankingTop10.from(team, rank));
+            previousPoints = team.getPoint();
+        }
+
+        return TeamRankingTop10Response.from(teamRankingTop10);
     }
 }

@@ -10,4 +10,6 @@ public interface TeamRepository extends JpaRepository<Team, Integer> {
     List<Team> findByNameContaining(String name);
 
     Optional<Team> findByTeamId(Integer teamId);
+
+    List<Team> findTop10ByOrderByPointDesc();
 }

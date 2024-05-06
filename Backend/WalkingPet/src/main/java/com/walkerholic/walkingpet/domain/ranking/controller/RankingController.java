@@ -96,4 +96,15 @@ public class RankingController {
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);
     }
+
+    @GetMapping("/group")
+    @Operation(summary = "그룹 랭킹 top 10 조회", description = "그룹의 포인트를 기준으로 상위 10개 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 랭킹 top 10 조회 성공", content = @Content(schema = @Schema(implementation = UserPersonalStepRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getTeamRankingTop10() {
+        log.info("그룹 랭킹 top 10 조회 getTeamRankingTop10 ");
+
+        TeamRankingTop10Response teamRankingTop10 = rankingService.getTeamRankingTop10();
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, teamRankingTop10);
+    }
 }
