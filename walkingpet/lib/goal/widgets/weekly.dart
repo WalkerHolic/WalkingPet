@@ -16,7 +16,7 @@ class WeeklyGoalItem extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: EdgeInsets.all(screenWidth * 0.01),
       child: Stack(
         children: [
           Image.asset(
@@ -28,10 +28,10 @@ class WeeklyGoalItem extends StatelessWidget {
               ),
           Positioned(
             bottom: 0.1,
-            right: 2,
+            right: 14,
             child: Text(text,
-                style: const TextStyle(
-                  fontSize: 20,
+                style: TextStyle(
+                  fontSize: screenHeight * 0.02,
                   color: Colors.white,
                 )),
           ),
