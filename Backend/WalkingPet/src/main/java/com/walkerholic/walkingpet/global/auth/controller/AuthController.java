@@ -1,8 +1,8 @@
-package com.walkerholic.walkingpet.domain.auth.controller;
+package com.walkerholic.walkingpet.global.auth.controller;
 
-import com.walkerholic.walkingpet.domain.auth.Service.SecurityService;
-import com.walkerholic.walkingpet.domain.auth.dto.request.SocialLoginDTO;
-import com.walkerholic.walkingpet.domain.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
+import com.walkerholic.walkingpet.global.auth.dto.request.SocialLoginDTO;
+import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;

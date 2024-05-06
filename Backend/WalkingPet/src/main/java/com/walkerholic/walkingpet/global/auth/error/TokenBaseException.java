@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.domain.auth.error;
+package com.walkerholic.walkingpet.global.auth.error;
 
 import lombok.Getter;
 

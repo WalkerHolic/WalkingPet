@@ -1,6 +1,6 @@
 package com.walkerholic.walkingpet.global.error.response;
 
-import com.walkerholic.walkingpet.domain.auth.error.TokenErrorCode;
+import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.Builder;
 import lombok.Getter;

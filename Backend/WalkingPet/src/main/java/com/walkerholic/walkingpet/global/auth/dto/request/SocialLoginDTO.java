@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.domain.auth.dto.request;
+package com.walkerholic.walkingpet.global.auth.dto.request;
 
 import lombok.Getter;
 import lombok.ToString;

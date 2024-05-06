@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.domain.auth.dto;
+package com.walkerholic.walkingpet.global.auth.dto;
 
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import lombok.Getter;

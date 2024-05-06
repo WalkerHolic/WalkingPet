@@ -29,6 +29,17 @@ public class RedisController {
     private final AccStepRankingRedisService accStepRankingRedisService;
     private final YesterdayStepRankingRedisService yesterdayStepRankingRedisService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
+    private final RankingRedisService rankingRedisService;
+
+    @GetMapping("/saveTest")
+    @Operation(summary = "redis 모든 랭킹 저장 테스트", description = "")
+    public ResponseEntity<CommonResponseEntity> saveRedisAllRankingInfo() {
+        log.info("redis 모든 랭킹 저장 테스트 - redis test saveRedisAccRankingInfo");
+
+        rankingRedisService.saveRedisAllRanking();
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+    }
 
     @GetMapping("/saveTest/accStepRanking")
     @Operation(summary = "redis 누적 랭킹 저장 테스트", description = "")
@@ -64,6 +75,7 @@ public class RedisController {
         log.info("redis 어제 걸음수 랭킹 저장 테스트 - redis test saveRedisYesterdayRankingInfo");
 
         List<ReailtimeStepRankingInfo> userRealtimeStepList = rankingService.getUserRealtimeStepList();
+
         for (ReailtimeStepRankingInfo stepInfo : userRealtimeStepList) {
             realtimeStepRankingRedisService.saveAllUserYesterdayStepList(stepInfo);
         }
