@@ -11,6 +11,8 @@ import 'package:walkingpet/login/login.dart';
 import 'package:walkingpet/ranking/ranking.dart';
 import 'package:flutter/services.dart'; // SystemChrome을 사용하기 위해 필요
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:walkingpet/providers/gachabox_count_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +29,15 @@ void main() {
     DeviceOrientation.portraitDown // 세로 방향으로 아래를 가리킴
   ]);
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => BoxCounterProvider()..initializeBoxCounts())
+      ],
+      child: const MyApp(),
+    ),
+  );
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   // SystemChannels.navigation.setMethodCallHandler((MethodCall call) async {
   //   if (call.method == 'popRoute') {

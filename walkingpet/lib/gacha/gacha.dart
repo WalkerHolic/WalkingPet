@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/gacha/widgets/gacha_box.dart';
 import 'package:walkingpet/gacha/widgets/gacha_modal.dart';
+import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:walkingpet/services/gacha/count_remain_box.dart';
 
 class Gacha extends StatefulWidget {
@@ -16,16 +18,16 @@ class Gacha extends StatefulWidget {
 }
 
 class _GachaState extends State<Gacha> {
-  int normalBoxCount = 0;
-  int luxuryBoxCount = 0;
+  // int normalBoxCount = 0;
+  // int luxuryBoxCount = 0;
   @override
   // 페이지가 처음 로드될 때 남은 상자 정보 받아옴
   void initState() {
     super.initState(); //이거 왜 써줘야 하는 거임?
     countRemainBox().then((data) {
       setState(() {
-        normalBoxCount = data['normalBoxCount'];
-        luxuryBoxCount = data['luxuryBoxCount'];
+        // normalBoxCount = data['normalBoxCount'];
+        // luxuryBoxCount = data['luxuryBoxCount'];
       });
     });
   }
@@ -34,6 +36,9 @@ class _GachaState extends State<Gacha> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    // 박스 카운트 가져오기
+    final boxCounter = Provider.of<BoxCounterProvider>(context);
+
     //새로 나온 캐릭터 홍보
     const String itemName = "레드 드래곤";
     const int rating = 3; //별의 개수
@@ -90,7 +95,7 @@ class _GachaState extends State<Gacha> {
                     ),
                     SizedBox(
                       //츌시 <-> 스테이지 사이 공간
-                      height: screenHeight * 0.2,
+                      height: screenHeight * 0.1,
                     ),
                     Stack(
                       alignment: Alignment.topCenter,
@@ -103,20 +108,29 @@ class _GachaState extends State<Gacha> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GachaBox(
-                            boxName: '일반 상자',
-                            boxImage: 'assets/items/itembox_normal.png',
-                            buttonImage:
-                                'assets/buttons/button_gacha_normal.svg',
-                            remainCount: normalBoxCount,
-                            onTap: () => showGachaModal(context)),
+                          boxName: '일반 상자',
+                          boxImage: 'assets/items/itembox_normal.png',
+                          buttonImage: 'assets/buttons/button_gacha_normal.svg',
+                          remainCount: boxCounter.normalBoxCount,
+                          // onTap: () => showGachaModal(context),
+                          onTap: () {
+                            boxCounter.openNormalBox(); // 상태 업데이트
+                            showGachaModal(context); //모달창 표시
+                          },
+                        ),
                         const SizedBox(width: 40), //일반상자 ~ 고급상자 사이 공간
                         GachaBox(
-                            boxName: '고급 상자',
-                            boxImage: 'assets/items/itembox_special.png',
-                            buttonImage:
-                                'assets/buttons/button_gacha_special.svg',
-                            remainCount: luxuryBoxCount,
-                            onTap: () => showGachaModal(context)),
+                          boxName: '고급 상자',
+                          boxImage: 'assets/items/itembox_special.png',
+                          buttonImage:
+                              'assets/buttons/button_gacha_special.svg',
+                          remainCount: boxCounter.luxuryBoxCount,
+                          // onTap: () => showGachaModal(context),
+                          onTap: () {
+                            boxCounter.openLuxuryBox();
+                            showGachaModal(context);
+                          },
+                        ),
                       ],
                     ),
                   ],
