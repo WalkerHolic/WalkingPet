@@ -149,10 +149,10 @@ public class RankingService {
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
-    public TeamRankingTop10Response getTeamRankingTop10() {
+    public TeamRankingResponse getTeamRankingTop10() {
         List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
 
-        List<TeamRankingTop10> teamRankingTop10 = new ArrayList<>();
+        List<TeamRanking> teamRankingTop10List = new ArrayList<>();
 
         int rank = 0;
         int previousPoints = -1;
@@ -160,10 +160,25 @@ public class RankingService {
             // 동점 계산
             if (team.getPoint() != previousPoints) rank++;
 
-            teamRankingTop10.add(TeamRankingTop10.from(team, rank));
+            teamRankingTop10List.add(TeamRanking.from(team, rank));
             previousPoints = team.getPoint();
         }
 
-        return TeamRankingTop10Response.from(teamRankingTop10);
+        return TeamRankingResponse.from(teamRankingTop10List);
+    }
+
+    // 나의 그룹 랭킹 가져오기
+    @Transactional(readOnly = true)
+    public TeamRankingResponse getMyTeamRanking(int userId) {
+        List<Team> myTeamRanking = teamRepository.findTeamsByUserIdOrderByPointDesc(userId);
+
+        List<TeamRanking> myTeamRankingList = new ArrayList<>();
+
+        for (Team team: myTeamRanking) {
+            Integer userTeamRanking = teamRepository.findUserTeamRanking(team.getTeamId());
+            myTeamRankingList.add(TeamRanking.from(team, userTeamRanking));
+        }
+
+        return TeamRankingResponse.from(myTeamRankingList);
     }
 }

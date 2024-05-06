@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class TeamRankingTop10 {
+public class TeamRanking {
     private Integer ranking;
     private String teamName;
     private String explain;
     private Integer teamPoint;
 
-    public static TeamRankingTop10 from(Team team, Integer ranking){
-        return TeamRankingTop10.builder()
+    public static TeamRanking from(Team team, Integer ranking){
+        return TeamRanking.builder()
                 .ranking(ranking)
                 .teamName(team.getName())
                 .explain(team.getExplanation())
