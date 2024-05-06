@@ -21,13 +21,12 @@ class DailyGoalItem extends StatefulWidget {
 }
 
 class _DailyGoalItemState extends State<DailyGoalItem> {
-  // 유저가 버튼을 눌렀는지 확인하는 변수
   late bool _isPressed;
-  // is Activated가 false면 버튼 안 눌려야 함
+
   @override
   void initState() {
     super.initState();
-    _isPressed = false; //초기 상태는 눌리지 않음
+    _isPressed = false;
   }
 
   _toggleButton() {
@@ -38,26 +37,26 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
           duration: Duration(seconds: 2),
         ),
       );
+    } else if (!_isPressed) {
+      sendRewardRequest(widget.goalSteps).then((success) {
+        if (success) {
+          setState(() {
+            _isPressed = true;
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("리워드 요청에 실패했습니다."),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      });
     }
-    sendRewardRequest(widget.goalSteps).then((success) {
-      if (success) {
-        setState(() {
-          _isPressed = true; // 버튼이 성공적으로 눌림
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("이 목표는 이미 완료되었거나, 활성화 되지 않았습니다."),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // 현재 화면의 크기를 가져오기
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
@@ -74,13 +73,14 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
               ),
             ),
             GestureDetector(
-                onTap: _toggleButton,
-                child: SvgPicture.asset(
-                  _isPressed
-                      ? 'assets/buttons/brown_button_pushed.svg'
-                      : 'assets/buttons/brown_button.svg',
-                  width: 75,
-                )),
+              onTap: _toggleButton,
+              child: SvgPicture.asset(
+                _isPressed
+                    ? 'assets/buttons/brown_button_pushed.svg'
+                    : 'assets/buttons/brown_button.svg',
+                width: 75,
+              ),
+            ),
           ],
         ),
       ),
