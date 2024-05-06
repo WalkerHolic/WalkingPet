@@ -10,6 +10,9 @@ public class UserCharacterStatResponse {
     private int health;
     private int power;
     private int defense;
+    private int addHealth;
+    private int addPower;
+    private int addDefense;
     private int statPoint;
 
     public static UserCharacterStatResponse from(UserCharacter userCharacter){
@@ -17,6 +20,9 @@ public class UserCharacterStatResponse {
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
+                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth())
+                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
+                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
                 .statPoint(userCharacter.getStatPoint())
                 .build();
     }
