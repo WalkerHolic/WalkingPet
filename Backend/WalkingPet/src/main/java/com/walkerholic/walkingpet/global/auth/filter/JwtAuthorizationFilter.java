@@ -66,7 +66,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throw new TokenBaseException(TokenErrorCode.INVALID_TOKEN);
         }
 
-        
+
         String step = jwtUtil.extractStepFromHeader(request);
         if (step != null) {
             String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
@@ -77,7 +77,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         return true;
     }
-    
+
     // 헤더에 있는 step의 값을 redis 에 저장
     private void saveRedisStep(String socialId, String step) {
         realtimeStepRankingRedisService.saveUserYesterdayStep(
