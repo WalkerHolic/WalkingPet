@@ -44,7 +44,7 @@ public class RankingController {
 
     @GetMapping("/person/top10")
     @Operation(summary = "개인 랭킹 top 10 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 10 가져오기")
-    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = AccStepRankingResponse.class)))
+    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = StepRankingResponse.class)))
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
         log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
@@ -62,7 +62,7 @@ public class RankingController {
 
     @GetMapping("/person/top3")
     @Operation(summary = "개인 랭킹 top 3 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 3 가져오기")
-    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = AccStepTop3RankingResponse.class)))
+    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = StepRankingResponse.class)))
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop3(@RequestParam("value") String value) {
         log.info("개인 걸음수 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", value);
 
@@ -80,7 +80,7 @@ public class RankingController {
 
     @GetMapping("/person/myrank")
     @Operation(summary = "개인 랭킹 나의 순위 조회", description = "어제/누적/실시간 유저의 개인 랭킹 가져오기")
-    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 나의 순위 조회 성공", content = @Content(schema = @Schema(implementation = UserPersonalStepRankingResponse.class)))
+    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 나의 순위 조회 성공", content = @Content(schema = @Schema(implementation = StepRankingList.class)))
     public ResponseEntity<CommonResponseEntity> getMyPersonalRanking(@RequestParam("value") String value) {
         int userId = 1;
         log.info("개인 랭킹 나의 순위 조회 getMyPersonalRanking - value: {}, userId: {}", value, userId);
@@ -95,5 +95,28 @@ public class RankingController {
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userAccStepRanking);
+    }
+
+    @GetMapping("/group")
+    @Operation(summary = "그룹 랭킹 top 10 조회", description = "그룹의 포인트를 기준으로 상위 10개 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 랭킹 top 10 조회 성공", content = @Content(schema = @Schema(implementation = TeamRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getTeamRankingTop10() {
+        log.info("그룹 랭킹 top 10 조회 getTeamRankingTop10 ");
+
+        TeamRankingResponse teamRankingTop10 = rankingService.getTeamRankingTop10();
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, teamRankingTop10);
+    }
+
+    @GetMapping("/myGroup")
+    @Operation(summary = "나의 그룹 랭킹 조회", description = "나의 그룹의 포인트를 기준으로 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 나의 그룹 랭킹 조회 성공", content = @Content(schema = @Schema(implementation = TeamRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getMyTeamRanking() {
+        int userId = 1;
+        log.info("나의 그룹 랭킹 조회 getMyTeamRanking userId: {}", userId);
+
+        TeamRankingResponse myTeamRanking = rankingService.getMyTeamRanking(userId);
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, myTeamRanking);
     }
 }
