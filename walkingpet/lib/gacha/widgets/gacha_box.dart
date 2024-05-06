@@ -8,6 +8,7 @@ class GachaBox extends StatelessWidget {
   final String boxImage; //박스 이미지 경로
   // final int totalBoxQuantity; //내가 가진 박스
   final String buttonImage; //버튼 이미지 경로
+  final int remainCount; // 남은 상자 개수
   final VoidCallback onTap;
 
   const GachaBox({
@@ -16,27 +17,25 @@ class GachaBox extends StatelessWidget {
     required this.boxImage,
     // required this.totalBoxQuantity,
     required this.buttonImage,
+    required this.remainCount,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
+        Text(boxName, style: TextStyle(fontSize: screenHeight * 0.03)),
+        Text('x $remainCount',
+            style: TextStyle(fontSize: screenHeight * 0.04, color: Colors.red)),
         Stack(
           alignment: Alignment.center,
           children: [
             Image.asset(
               boxImage,
-              width: 100,
-              height: 95, // 상자 넘쳐서 150 -> 95로 줄임
-            ),
-            Positioned(
-              top: 0,
-              child: Text(
-                boxName,
-                style: const TextStyle(fontSize: 23),
-              ),
+              width: screenWidth * 0.3,
             ),
           ],
         ),
@@ -44,7 +43,7 @@ class GachaBox extends StatelessWidget {
           onTap: onTap,
           child: SvgPicture.asset(
             buttonImage,
-            height: 45,
+            height: screenHeight * 0.06,
           ),
         ),
       ],

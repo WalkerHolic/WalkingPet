@@ -6,9 +6,29 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/gacha/widgets/gacha_box.dart';
 import 'package:walkingpet/gacha/widgets/gacha_modal.dart';
+import 'package:walkingpet/services/gacha/count_remain_box.dart';
 
-class Gacha extends StatelessWidget {
+class Gacha extends StatefulWidget {
   const Gacha({super.key});
+
+  @override
+  State<Gacha> createState() => _GachaState();
+}
+
+class _GachaState extends State<Gacha> {
+  int normalBoxCount = 0;
+  int luxuryBoxCount = 0;
+  @override
+  // 페이지가 처음 로드될 때 남은 상자 정보 받아옴
+  void initState() {
+    super.initState(); //이거 왜 써줘야 하는 거임?
+    countRemainBox().then((data) {
+      setState(() {
+        normalBoxCount = data['normalBoxCount'];
+        luxuryBoxCount = data['luxuryBoxCount'];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +51,13 @@ class Gacha extends StatelessWidget {
           Center(
             child: Container(
               width: screenWidth * 0.9,
-              height: screenHeight * 0.7,
+              height: screenHeight * 0.85,
               //모서리 둥글게
               decoration: BoxDecoration(
                   color: const Color(0xfffff3dc).withOpacity(0.9),
                   borderRadius: BorderRadius.circular(20)),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
+                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.05),
                 child: Column(
                   //컨테이너 안에 컬럼 넣기
                   mainAxisAlignment: MainAxisAlignment.start, //컨테이너 상단부터 시작
@@ -47,30 +67,30 @@ class Gacha extends StatelessWidget {
                       children: [
                         ...List.generate(
                           rating,
-                          (_) => const Icon(
+                          (_) => Icon(
                             Icons.star,
-                            color: Color(0xffff004c),
-                            size: 30,
+                            color: const Color(0xffff004c),
+                            size: screenWidth * 0.07,
                           ),
                         ),
-                        const SizedBox(width: 10), //텍스트와 별 사이 여백
-                        const Text(
+                        SizedBox(width: screenHeight * 0.02), //텍스트와 별 사이 여백
+                        Text(
                           itemName,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: screenWidth * 0.07,
                           ),
                         ),
                       ],
                     ),
-                    const Text(
+                    Text(
                       "출시!",
                       style: TextStyle(
-                        fontSize: 25,
+                        fontSize: screenWidth * 0.06,
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       //츌시 <-> 스테이지 사이 공간
-                      height: 140,
+                      height: screenHeight * 0.2,
                     ),
                     Stack(
                       alignment: Alignment.topCenter,
@@ -87,6 +107,7 @@ class Gacha extends StatelessWidget {
                             boxImage: 'assets/items/itembox_normal.png',
                             buttonImage:
                                 'assets/buttons/button_gacha_normal.svg',
+                            remainCount: normalBoxCount,
                             onTap: () => showGachaModal(context)),
                         const SizedBox(width: 40), //일반상자 ~ 고급상자 사이 공간
                         GachaBox(
@@ -94,6 +115,7 @@ class Gacha extends StatelessWidget {
                             boxImage: 'assets/items/itembox_special.png',
                             buttonImage:
                                 'assets/buttons/button_gacha_special.svg',
+                            remainCount: luxuryBoxCount,
                             onTap: () => showGachaModal(context)),
                       ],
                     ),
