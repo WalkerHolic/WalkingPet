@@ -5,6 +5,7 @@ import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 // import 'package:walkingpet/levelup/levelup.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
+import 'package:walkingpet/services/character/statupdate.dart';
 
 // 캐릭터 정보
 class CharacterInfo extends StatefulWidget {
@@ -218,18 +219,27 @@ class _CharacterInfoState extends State<CharacterInfo> {
                             children: [
                               CharacterInfoStat(
                                 statname: '체력',
+                                statnameEn: 'health',
                                 point: characterInfoData['health'] ?? 0,
                                 addpoint: characterInfoData['addHealth'] ?? 0,
+                                characterId:
+                                    characterInfoData['characterId'] ?? 0,
                               ),
                               CharacterInfoStat(
                                 statname: '공격력',
+                                statnameEn: 'power',
                                 point: characterInfoData['power'] ?? 0,
                                 addpoint: characterInfoData['addPower'] ?? 0,
+                                characterId:
+                                    characterInfoData['characterId'] ?? 0,
                               ),
                               CharacterInfoStat(
                                 statname: '방어력',
+                                statnameEn: 'defense',
                                 point: characterInfoData['defense'] ?? 0,
                                 addpoint: characterInfoData['addDefense'] ?? 0,
+                                characterId:
+                                    characterInfoData['characterId'] ?? 0,
                               ),
                             ],
                           ),
