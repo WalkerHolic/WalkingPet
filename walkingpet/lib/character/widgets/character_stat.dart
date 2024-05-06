@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/services/character/statupdate.dart';
 
-class CharacterInfoStat extends StatelessWidget {
-  final String statname;
-  final int point, addpoint;
+class CharacterInfoStat extends StatefulWidget {
+  final String statname, statnameEn;
+  final int characterId;
+  int point, addpoint;
 
-  const CharacterInfoStat(
+  CharacterInfoStat(
       {super.key,
       required this.statname,
       required this.point,
-      required this.addpoint});
+      required this.addpoint,
+      required this.characterId,
+      required this.statnameEn});
 
+  @override
+  State<CharacterInfoStat> createState() => _CharacterInfoStatState();
+}
+
+class _CharacterInfoStatState extends State<CharacterInfoStat> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,7 +30,7 @@ class CharacterInfoStat extends StatelessWidget {
           SizedBox(
             width: 25,
             // height: 20,
-            child: Image.asset(_getImagePath(statname)),
+            child: Image.asset(_getImagePath(widget.statname)),
           ),
 
           // SvgPicture.asset(
@@ -34,7 +43,7 @@ class CharacterInfoStat extends StatelessWidget {
           SizedBox(
             width: 70,
             child: Text(
-              statname,
+              widget.statname,
               style: const TextStyle(
                 fontSize: 20,
               ),
@@ -49,7 +58,7 @@ class CharacterInfoStat extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  point.toString(),
+                  widget.point.toString(),
                   style: const TextStyle(
                     fontSize: 20,
                   ),
@@ -60,12 +69,6 @@ class CharacterInfoStat extends StatelessWidget {
                     fontSize: 17,
                   ),
                 ),
-                // Text(
-                //   fix.toString(),
-                //   style: const TextStyle(
-                //     fontSize: 13,
-                //   ),
-                // ),
                 const Text(
                   '+',
                   style: TextStyle(
@@ -74,7 +77,7 @@ class CharacterInfoStat extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  addpoint.toString(),
+                  widget.addpoint.toString(),
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(255, 166, 39, 30),
@@ -91,16 +94,10 @@ class CharacterInfoStat extends StatelessWidget {
           ),
 
           // 4. '+' 버튼
-          SizedBox(
-            // width: 30,
-            child: Image.asset(
-              'assets/buttons/yellow_plus_button.png',
-              scale: 0.8,
-            ),
-            // child: Icon(
-            //   Icons.add_box_sharp,
-            //   color: Color.fromRGBO(251, 192, 45, 1),
-            // ),
+          GestureDetector(
+            onTap: _updateStats,
+            child: Image.asset('assets/buttons/yellow_plus_button.png',
+                scale: 0.8),
           ),
         ],
       ),
@@ -120,29 +117,20 @@ class CharacterInfoStat extends StatelessWidget {
     }
   }
 
-  // IconData _getIconData(String statname) {
-  //   switch (statname) {
-  //     case '체력':
-  //       return Icons.favorite;
-  //     case '공격력':
-  //       return Icons.flash_on;
-  //     case '방어력':
-  //       return Icons.shield;
-  //     default:
-  //       return Icons.error;
-  //   }
-  // }
+  void _updateStats() async {
+    try {
+      var characterId = widget.characterId;
+      var statnameEn = widget.statnameEn;
+      var response = await updateStat(characterId, statnameEn);
+      var data = response['data'];
 
-  // IconData _getIconColor(statname) {
-  //   switch (statname) {
-  //     case '체력':
-  //       return Colors.red;
-  //     case '공격력':
-  //       return Colors.yellow;
-  //     case '방어력':
-  //       return Colors.blue;
-  //     default:
-  //       return Colors.grey;
-  //   }
-  // }
+      setState(() {
+        widget.point = data[statnameEn];
+        widget.addpoint =
+            data['add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'];
+      });
+    } catch (e) {
+      print('캐릭터 능력치 Update, 페이지 내 오류: $e');
+    }
+  }
 }
