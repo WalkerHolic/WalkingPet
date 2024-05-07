@@ -67,8 +67,11 @@ public class SecurityService {
     }
 
     private UserDetails loadUserBySocialIdAndSocialProvider(String socialId, String socialProvidero) {
-        Users user = usersRepository.findByUserId(Integer.valueOf(socialId));
-//        Optional<Users> user = usersRepository.findByEmail(socialId);
+
+        // 회원의 user 데이터를 authentification에 모두 저장
+//        Users user = usersRepository.findByUserId(Integer.valueOf(socialId));
+
+        Users user = new Users(Integer.valueOf(socialId));
 
         if(user == null) {
             System.out.println("SecurityService loadUserBySocialIdAndSocialProvider 유저 못찾음 ");

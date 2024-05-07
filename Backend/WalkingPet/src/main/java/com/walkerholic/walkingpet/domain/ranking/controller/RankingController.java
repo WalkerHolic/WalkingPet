@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.ranking.controller;
 import com.walkerholic.walkingpet.domain.ranking.dto.StepRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.*;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
+import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import com.walkerholic.walkingpet.global.redis.service.AccStepRankingRedisService;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,8 +36,8 @@ public class RankingController {
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 개인 랭킹과 개인 랭킹 목록 조회 성공", content = @Content(schema = @Schema(implementation = PersonalStepRankingResponse.class)))
-    public ResponseEntity<CommonResponseEntity> getPersonalRanking(@RequestParam("value") String value) {
-        int userId = 1;
+    public ResponseEntity<CommonResponseEntity> getPersonalRanking(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("value") String value) {
+        Integer userId = userDetail.getUsers().getUserId();
         log.info("개인 랭킹 조회 getPersonalRanking - userId: {}, value: {}", userId, value);
 
         PersonalStepRankingResponse personalStepRanking = rankingService.getAccStepRanking(userId);
@@ -81,8 +83,8 @@ public class RankingController {
     @GetMapping("/person/myrank")
     @Operation(summary = "개인 랭킹 나의 순위 조회", description = "어제/누적/실시간 유저의 개인 랭킹 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 나의 순위 조회 성공", content = @Content(schema = @Schema(implementation = StepRankingList.class)))
-    public ResponseEntity<CommonResponseEntity> getMyPersonalRanking(@RequestParam("value") String value) {
-        int userId = 1;
+    public ResponseEntity<CommonResponseEntity> getMyPersonalRanking(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("value") String value) {
+        Integer userId = userDetail.getUsers().getUserId();
         log.info("개인 랭킹 나의 순위 조회 getMyPersonalRanking - value: {}, userId: {}", value, userId);
 
         StepRankingList userAccStepRanking;
@@ -111,8 +113,8 @@ public class RankingController {
     @GetMapping("/myGroup")
     @Operation(summary = "나의 그룹 랭킹 조회", description = "나의 그룹의 포인트를 기준으로 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 나의 그룹 랭킹 조회 성공", content = @Content(schema = @Schema(implementation = TeamRankingResponse.class)))
-    public ResponseEntity<CommonResponseEntity> getMyTeamRanking() {
-        int userId = 1;
+    public ResponseEntity<CommonResponseEntity> getMyTeamRanking(@AuthenticationPrincipal CustomUserDetail userDetail) {
+        Integer userId = userDetail.getUsers().getUserId();
         log.info("나의 그룹 랭킹 조회 getMyTeamRanking userId: {}", userId);
 
         TeamRankingResponse myTeamRanking = rankingService.getMyTeamRanking(userId);
