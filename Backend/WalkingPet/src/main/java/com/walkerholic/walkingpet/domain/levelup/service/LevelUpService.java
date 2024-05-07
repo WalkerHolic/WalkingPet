@@ -82,6 +82,7 @@ public class LevelUpService {
      */
     public LevelUpInfo getLevelUpInfo(int userId, UserCharacter selectUserCharacter, int getExperience){
 
+        int nowLevel = selectUserCharacter.getLevel();
         CharacterLevelExperienceInfo updateCharacterInfo = levelUpFunction.getNextLevel(selectUserCharacter.getLevel(), selectUserCharacter.getExperience(), getExperience);
         LevelUpReward levelUpReward = levelUpFunction.getLevelUpReward(selectUserCharacter.getLevel(), updateCharacterInfo.getNowLevel());
 
@@ -99,7 +100,7 @@ public class LevelUpService {
 
 
         return LevelUpInfo.builder()
-                .nowLevel(selectUserCharacter.getLevel())
+                .nowLevel(nowLevel)
                 .nextLevel(updateCharacterInfo.getNowLevel())
                 .levelUpReward(levelUpReward)
                 .build();
