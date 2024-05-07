@@ -30,8 +30,8 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getUserCharacterInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
-        userId = 1;
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         log.info("캐릭터 정보 확인 getUserCharacterInfo - userId: {}", userId);
 
         UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userId);
@@ -42,8 +42,8 @@ public class CharacterController {
     @Operation(summary = "유저의 캐릭터 목록 정보 가져오기", description = "유저가 보유한 캐릭터와 보유하지 않은 캐릭터 목록 가져오기")
 //    @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 정보 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     public ResponseEntity<CommonResponseEntity> getUserCharacterListInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
-        userId = 1;
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         log.info("유저의 캐릭터 목록 정보 가져오기 getUserCharacterListInfo - userId: {}", userId);
 
         UserCharacterListInfoResponse userCharacterInfoList = userCharacterService.getUserCharacterInfoList(userId);
@@ -57,8 +57,8 @@ public class CharacterController {
     @ApiResponse(responseCode = "403", description = "C400 - 유저의 해당 캐릭터 스탯 포인트가 부족")
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> statDistribution(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("value") String value) {
-        Integer userId = userDetail.getUsers().getUserId();
-        userId = 1;
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         log.info("스탯 분배 statDistribution - userId: {}, value: {}", userId, value);
 
         UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userId, value);
@@ -71,8 +71,8 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 초기화 성공", content = @Content(schema = @Schema(implementation = ResetStatResponse.class)))
     @ApiResponse(responseCode = "400", description = "C400 - 이미 스탯 초기화 버튼 누름")
     public ResponseEntity<CommonResponseEntity> resetStatDistribution(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
-        userId = 1;
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         log.info("스탯 분배 초기화 resetStatDistribution - userIdv: {}", userId);
 
         ResetStatResponse resetStatResponse = userCharacterService.resetInitStatus(userId);
@@ -83,8 +83,8 @@ public class CharacterController {
     @Operation(summary = "캐릭터 변경", description = "유저의 현재 캐릭터 변경")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 변경 성공")
     public ResponseEntity<CommonResponseEntity> changeUserCharacter(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
-        Integer userId = userDetail.getUsers().getUserId();
-        userId = 1;
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         log.info("캐릭터 변경 changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getUserCharacterId());
         userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
 
@@ -95,8 +95,8 @@ public class CharacterController {
     @Operation(summary = "유저의 걸음수 측정", description = "앱 시작시 걸음수 측정")
     @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
     public ResponseEntity<CommonResponseEntity> getUserStep(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
-        userId = 1;
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         int frontStep = 100;
         log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
 
