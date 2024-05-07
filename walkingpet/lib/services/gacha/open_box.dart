@@ -1,8 +1,10 @@
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // JSON 데이터를 다루고, 문자열 인코딩 및 디코딩을 위함
+import 'dart:convert';
+import '../Interceptor.dart'; // JSON 데이터를 다루고, 문자열 인코딩 및 디코딩을 위함
 
 Future<Map<String, dynamic>> openLuxuryBox() async {
-  final response = await http
+  final client = AuthInterceptor();
+  final response = await client
       .get(Uri.parse('https://walkingpet.co.kr/gacha/result?box=luxury'));
   if (response.statusCode == 200) {
     // 응답 바이트를 UTF-8로 디코딩 (UTF8 디코딩 안하면 한글이 깨져서 온다)
