@@ -94,6 +94,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 //        String[] excludePath = {
 ////                "/character/test",
 //                "/auth/social-login",
+//                "/user",
 //                "/swagger-ui/",
 //                "/error"
 //        };
