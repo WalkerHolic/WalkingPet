@@ -1,8 +1,9 @@
 // 일일 목표 달성시 서버에 보상 요청하는 코드
-import 'package:http/http.dart' as http;
+import '../Interceptor.dart';
 
 Future<bool> sendRewardRequest(int goalSteps) async {
-  var response = await http.get(
+  final client = AuthInterceptor();
+  var response = await client.get(
       Uri.parse('https://walkingpet.co.kr/goal/reward?goalStep=$goalSteps'));
   if (response.statusCode == 200) {
     print(response.body);
