@@ -13,6 +13,7 @@ import 'package:flutter/services.dart'; // SystemChrome을 사용하기 위해 �
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,12 @@ void main() {
     DeviceOrientation.portraitUp, // 세로 방향으로 위를 가리킴
     DeviceOrientation.portraitDown // 세로 방향으로 아래를 가리킴
   ]);
+
+  KakaoSdk.init(
+    nativeAppKey: '779b15a502d5db79f97478c1a0076650',
+    javaScriptAppKey: '98dfecd4151782eef7342a07e95b9c57',
+  );
+
 
   runApp(
     MultiProvider(
