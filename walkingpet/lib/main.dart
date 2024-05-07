@@ -35,7 +35,6 @@ void main() {
     javaScriptAppKey: '98dfecd4151782eef7342a07e95b9c57',
   );
 
-
   runApp(
     MultiProvider(
       providers: [
@@ -114,7 +113,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      initialRoute: '/login',
+      initialRoute: '/home',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
