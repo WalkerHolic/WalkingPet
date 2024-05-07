@@ -5,14 +5,17 @@ class CharacterInfoStat extends StatefulWidget {
   final String statname, statnameEn;
   final int characterId;
   int point, addpoint;
+  Function(int) updateStatPoint;
 
-  CharacterInfoStat(
-      {super.key,
-      required this.statname,
-      required this.point,
-      required this.addpoint,
-      required this.characterId,
-      required this.statnameEn});
+  CharacterInfoStat({
+    super.key,
+    required this.statname,
+    required this.point,
+    required this.addpoint,
+    required this.characterId,
+    required this.statnameEn,
+    required this.updateStatPoint,
+  });
 
   @override
   State<CharacterInfoStat> createState() => _CharacterInfoStatState();
@@ -124,11 +127,30 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
       var response = await updateStat(characterId, statnameEn);
       var data = response['data'];
 
+      // print(widget.point);
+
+      // widget.updateStatPoint(data['statPoint']);
+
       setState(() {
+        // widget.updateStatPoint(data['statPoint']);
+
         widget.point = data[statnameEn];
+        // print(widget.statname);
+        // print(widget.point);
+
         widget.addpoint =
             data['add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'];
+
+        // print(widget.point);
+        // print(data);
       });
+      // widget.updateStatPoint(data['statPoint']);
+
+      // setState()가 완료된 후 updateStatPoint를 호출
+      // Future.delayed(const Duration(milliseconds: 50), () {
+      //   widget.updateStatPoint(data['statPoint']);
+      // });
+      // widget.updateStatPoint(data['statPoint']);
     } catch (e) {
       print('캐릭터 능력치 Update, 페이지 내 오류: $e');
     }
