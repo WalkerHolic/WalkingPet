@@ -29,13 +29,19 @@ public class UserStep {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    public void updateDailyStep(int step) { this.dailyStep = step;}
-
     @Builder
     public UserStep(Users user){
         this.yesterdayStep = 0;
         this.dailyStep = 0;
         this.accumulationStep = 0;
         this.user = user;
+    }
+
+    public void updateDailyStep(int step) { this.dailyStep = step;}
+
+    public void updateUserStepInfo(int dailyStep) {
+        this.yesterdayStep = dailyStep;
+        this.accumulationStep += dailyStep;
+        this.dailyStep = 0;
     }
 }
