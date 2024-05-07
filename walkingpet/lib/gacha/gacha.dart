@@ -22,15 +22,15 @@ class _GachaState extends State<Gacha> {
   // int luxuryBoxCount = 0;
   @override
   // 페이지가 처음 로드될 때 남은 상자 정보 받아옴
-  void initState() {
-    super.initState(); //이거 왜 써줘야 하는 거임?
-    countRemainBox().then((data) {
-      setState(() {
-        // normalBoxCount = data['normalBoxCount'];
-        // luxuryBoxCount = data['luxuryBoxCount'];
-      });
-    });
-  }
+  // void initState() {
+  //   super.initState();
+  //   countRemainBox().then((data) {
+  //     setState(() {
+  //       normalBoxCount = data['normalBoxCount'];
+  //       luxuryBoxCount = data['luxuryBoxCount'];
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -97,12 +97,12 @@ class _GachaState extends State<Gacha> {
                       //츌시 <-> 스테이지 사이 공간
                       height: screenHeight * 0.1,
                     ),
-                    Stack(
-                      alignment: Alignment.topCenter,
-                      children: <Widget>[
-                        Image.asset('assets/items/gacha_stage.png'),
-                      ],
-                    ),
+                    // Stack(
+                    //   alignment: Alignment.topCenter,
+                    //   children: <Widget>[
+                    //     Image.asset('assets/items/gacha_stage.png'),
+                    //   ],
+                    // ),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
