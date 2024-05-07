@@ -31,6 +31,7 @@ public class CharacterController {
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getUserCharacterInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
         Integer userId = userDetail.getUsers().getUserId();
+        userId = 1;
         log.info("캐릭터 정보 확인 getUserCharacterInfo - userId: {}", userId);
 
         UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userId);
@@ -42,6 +43,7 @@ public class CharacterController {
 //    @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 정보 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     public ResponseEntity<CommonResponseEntity> getUserCharacterListInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
         Integer userId = userDetail.getUsers().getUserId();
+        userId = 1;
         log.info("유저의 캐릭터 목록 정보 가져오기 getUserCharacterListInfo - userId: {}", userId);
 
         UserCharacterListInfoResponse userCharacterInfoList = userCharacterService.getUserCharacterInfoList(userId);
@@ -56,6 +58,7 @@ public class CharacterController {
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> statDistribution(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("value") String value) {
         Integer userId = userDetail.getUsers().getUserId();
+        userId = 1;
         log.info("스탯 분배 statDistribution - userId: {}, value: {}", userId, value);
 
         UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userId, value);
@@ -69,6 +72,7 @@ public class CharacterController {
     @ApiResponse(responseCode = "400", description = "C400 - 이미 스탯 초기화 버튼 누름")
     public ResponseEntity<CommonResponseEntity> resetStatDistribution(@AuthenticationPrincipal CustomUserDetail userDetail) {
         Integer userId = userDetail.getUsers().getUserId();
+        userId = 1;
         log.info("스탯 분배 초기화 resetStatDistribution - userIdv: {}", userId);
 
         ResetStatResponse resetStatResponse = userCharacterService.resetInitStatus(userId);
@@ -80,6 +84,7 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 변경 성공")
     public ResponseEntity<CommonResponseEntity> changeUserCharacter(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
         Integer userId = userDetail.getUsers().getUserId();
+        userId = 1;
         log.info("캐릭터 변경 changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getUserCharacterId());
         userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
 
@@ -91,14 +96,13 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
     public ResponseEntity<CommonResponseEntity> getUserStep(@AuthenticationPrincipal CustomUserDetail userDetail) {
         Integer userId = userDetail.getUsers().getUserId();
+        userId = 1;
         int frontStep = 100;
         log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
 
         UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userStepResponse);
     }
-
-
 
     @GetMapping("/test")
     @Operation(summary = "통신 테스트", description = "통신 테스트")
