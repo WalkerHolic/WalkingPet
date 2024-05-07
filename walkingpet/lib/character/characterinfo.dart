@@ -23,11 +23,11 @@ class _CharacterInfoState extends State<CharacterInfo> {
   bool isLoading = true;
 
   // statPoint 값을 업데이트하는 메서드
-  void updateStatPoint(int newStatPoint) {
-    setState(() {
-      statPoint = newStatPoint;
-    });
-  }
+  // void updateStatPoint(int newStatPoint) {
+  //   setState(() {
+  //     statPoint = newStatPoint;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -233,7 +233,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addHealth'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
-                                updateStatPoint: updateStatPoint,
+                                statPoint: statPoint,
                               ),
                               CharacterInfoStat(
                                 statname: '공격력',
@@ -242,7 +242,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addPower'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
-                                updateStatPoint: updateStatPoint,
+                                statPoint: statPoint,
                               ),
                               CharacterInfoStat(
                                 statname: '방어력',
@@ -251,7 +251,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addDefense'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
-                                updateStatPoint: updateStatPoint,
+                                statPoint: statPoint,
                               ),
                             ],
                           ),

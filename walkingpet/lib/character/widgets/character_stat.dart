@@ -4,8 +4,8 @@ import 'package:walkingpet/services/character/statupdate.dart';
 class CharacterInfoStat extends StatefulWidget {
   final String statname, statnameEn;
   final int characterId;
-  int point, addpoint;
-  Function(int) updateStatPoint;
+  int point, addpoint, statPoint;
+  // Function(int) updateStatPoint;
 
   CharacterInfoStat({
     super.key,
@@ -14,7 +14,7 @@ class CharacterInfoStat extends StatefulWidget {
     required this.addpoint,
     required this.characterId,
     required this.statnameEn,
-    required this.updateStatPoint,
+    required this.statPoint,
   });
 
   @override
@@ -127,6 +127,8 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
       var response = await updateStat(characterId, statnameEn);
       var data = response['data'];
 
+      print(data);
+
       // print(widget.point);
 
       // widget.updateStatPoint(data['statPoint']);
@@ -141,8 +143,10 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
         widget.addpoint =
             data['add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'];
 
+        // widget.statPoint = data['statPoint'];
+
         // print(widget.point);
-        // print(data);
+        // print(data['statPoint']);
       });
       // widget.updateStatPoint(data['statPoint']);
 
