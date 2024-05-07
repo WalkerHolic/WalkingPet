@@ -143,7 +143,6 @@ public class JwtUtil {
         if(StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
         } else {
-            System.out.println("jwtutil - extractTokenFromHeader - access token 없음");
             throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
     }

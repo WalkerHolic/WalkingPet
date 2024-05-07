@@ -1,4 +1,4 @@
-package com.walkerholic.walkingpet.global.auth.Service;
+package com.walkerholic.walkingpet.global.auth.service;
 
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
