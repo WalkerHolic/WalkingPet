@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.global.auth.filter;
 import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
 import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
+import com.walkerholic.walkingpet.global.auth.service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
@@ -56,7 +57,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         try {
             result = jwtUtil.validateAccessToken(accessToken);
 
-            // SecurityContext 에 Authentication 객체를 저장합니다.
+            // SecurityContext 에 Authentication 객체를 저장
             securityService.saveUserInSecurityContext(accessToken);
         } catch (ExpiredJwtException e) {
             System.out.println("JwtAuthorizationFilter doFilterInternal 토큰 만료");
@@ -88,7 +89,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         );
     }
 
-    /* 
+    /*
         SecurityConfig 파일에서 해당 api에 접근시 permitAll로 해두었으나 
         permitAll과 상관없이 jwtAuthorizationFilter 로 계속 들어가서 JwtAuthorizationFilter에서 다시 설정
         -> Spring Security에서는 보안 필터 체인을 통해 모든 요청에 대한 보안 검사를 수행하기 때문
