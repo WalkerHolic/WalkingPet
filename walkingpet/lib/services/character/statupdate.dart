@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import '../Interceptor.dart';
 
 const String baseUrl = "https://walkingpet.co.kr";
 const String statUrl = "character/stat";
@@ -7,9 +7,11 @@ const String statUrl = "character/stat";
 // 캐릭터 스탯 업데이트
 Future<Map<String, dynamic>> updateStat(
     int userCharacterId, String value) async {
+  final client = AuthInterceptor();
   final url = Uri.parse(
       '$baseUrl/$statUrl?userCharacterId=$userCharacterId&value=$value');
-  final response = await http.get(url);
+
+  final response = await client.get(url);
 
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
