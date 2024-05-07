@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
 import 'package:walkingpet/character/characterinfo.dart';
+import 'package:walkingpet/common/step_counter.dart';
 import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
 import 'package:walkingpet/group/group.dart';
@@ -14,8 +15,25 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:workmanager/workmanager.dart';
+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) {
+    // 싱글톤 인스턴스 호출
+    StepCounter().resetSteps();
+    return Future.value(true); // 작업이 성공적으로 완료됨을 표시
+  });
+}
 
 void main() {
+  /* 백그라운드 작업 */
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  Workmanager().registerPeriodicTask(
+    "1",
+    "resetStepsTask",
+    frequency: const Duration(seconds: 10),
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
