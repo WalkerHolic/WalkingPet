@@ -26,6 +26,7 @@ package = "com.walkerholic.walkingpet">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <data android:scheme="kakao779b15a502d5db79f97478c1a0076650" android:host="oauth"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
