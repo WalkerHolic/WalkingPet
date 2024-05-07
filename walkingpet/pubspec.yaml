@@ -23,6 +23,8 @@ dependencies:
   motion_tab_bar: ^2.0.4
   http: ^1.2.1
   percent_indicator: ^4.2.3
+  kakao_flutter_sdk: ^1.9.0
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
