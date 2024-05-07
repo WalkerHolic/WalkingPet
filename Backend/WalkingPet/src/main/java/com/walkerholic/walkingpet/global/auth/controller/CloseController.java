@@ -27,9 +27,8 @@ public class CloseController {
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CommonResponseEntity> test(@AuthenticationPrincipal CustomUserDetail userDetail) {
         log.info("토큰 테스트 입장 성공");
-        Users users = userDetail.getUsers();
-        System.out.println("user: " + users.getEmail());
-        System.out.println("user: " + users.getUserId());
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "토큰 테스트 입장 성공 userId: " + users.getUserId());
+        Integer userId = userDetail.getUsers().getUserId();
+        System.out.println("user: " + userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "토큰 테스트 입장 성공 userId: " + userId);
     }
 }

@@ -50,6 +50,10 @@ public class Users {
         this.role = 0;
     }
 
+    public Users(Integer userId) {
+        this.userId = userId;
+    }
+
     public static Users createNewMember(
             String email,
             String nickname
