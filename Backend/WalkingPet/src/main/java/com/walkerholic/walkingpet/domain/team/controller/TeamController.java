@@ -44,7 +44,8 @@ public class TeamController {
     @ApiResponse(responseCode = "404", description = "C400 - 유저가 소속된 그룹들 조회 실패")
     @GetMapping("/belong")
     public ResponseEntity<CommonResponseEntity> getUserTeams(@AuthenticationPrincipal CustomUserDetail userDetail){
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         List<TeamResponse> allTeam = teamService.getUserTeams(userId);
         log.info("소속된 그룹 확인 getUserTeams -  userId: {}", userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
@@ -75,7 +76,8 @@ public class TeamController {
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 가입 실패")
     @PostMapping("/join")
     public ResponseEntity<CommonResponseEntity> joinGroup(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody JoinGroupRequest joinGroupRequest){
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         teamService.joinGroup(joinGroupRequest,userId);
         log.info("그룹 가입 joinGroup -  joinGroupRequest: {}, userId:{}", joinGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
@@ -86,7 +88,8 @@ public class TeamController {
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 생성 실패")
     @PostMapping("/create")
     public ResponseEntity<CommonResponseEntity> createGroup(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody CreateGroupRequest createGroupRequest){
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         teamService.createGroup(createGroupRequest,userId);
         log.info("그룹 생성 createGroup - createGroupRequest: {}, userId: {}", createGroupRequest, userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
@@ -107,7 +110,8 @@ public class TeamController {
     @ApiResponse(responseCode = "404", description = "C400 - 그룹 나가기 실패")
     @PostMapping("/exit")
     public ResponseEntity<CommonResponseEntity> exitGroup(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody ExitGroupRequest exitGroupRequest){
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        int userId = 1;
         teamService.exitGroup(exitGroupRequest, userId);
         log.info("그룹 나가기 exitGroup - exitGroupRequest:{}, userId:{}", exitGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
