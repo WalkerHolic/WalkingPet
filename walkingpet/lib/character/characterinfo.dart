@@ -19,7 +19,15 @@ class _CharacterInfoState extends State<CharacterInfo> {
   // 필요한 변수 만들기
   Map<String, dynamic> characterInfoData = {};
   String animal = "";
+  int statPoint = 0;
   bool isLoading = true;
+
+  // statPoint 값을 업데이트하는 메서드
+  void updateStatPoint(int newStatPoint) {
+    setState(() {
+      statPoint = newStatPoint;
+    });
+  }
 
   @override
   void initState() {
@@ -36,6 +44,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
         characterInfoData = responseInfo['data'];
         int characterId = characterInfoData['characterId'] as int;
         animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
+        statPoint = characterInfoData['statPoint'] as int;
         isLoading = false;
       });
     } catch (e) {
@@ -224,6 +233,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addHealth'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
+                                updateStatPoint: updateStatPoint,
                               ),
                               CharacterInfoStat(
                                 statname: '공격력',
@@ -232,6 +242,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addPower'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
+                                updateStatPoint: updateStatPoint,
                               ),
                               CharacterInfoStat(
                                 statname: '방어력',
@@ -240,6 +251,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addDefense'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
+                                updateStatPoint: updateStatPoint,
                               ),
                             ],
                           ),
@@ -254,7 +266,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 ),
                               ),
                               Text(
-                                characterInfoData['statPoint'].toString(),
+                                statPoint.toString(),
                                 style: const TextStyle(
                                   fontSize: 35,
                                 ),
