@@ -282,27 +282,27 @@ class _CharacterInfoState extends State<CharacterInfo> {
                               ),
 
                               // 5-3. 초기화 버튼
-                              // Center(
-                              //   child: characterInfoData['initStatus'] == 0
-                              //       ? TextButton(
-                              //           onPressed: () {
-                              //             getStatReset();
-                              //             Navigator.pushNamed(
-                              //                 context, '/characterinfo');
-                              //           },
-                              //           child: Image.asset(
-                              //             'assets/buttons/character_reset_button.png',
-                              //             scale: 0.8,
-                              //           ),
-                              //         )
-                              //       : TextButton(
-                              //           onPressed: null, // 버튼 비활성화
-                              //           child: Image.asset(
-                              //             'assets/buttons/character_reset_button_pushed.png',
-                              //             scale: 0.8,
-                              //           ),
-                              //         ),
-                              // ),
+                              Center(
+                                child: characterInfoData['initStatus'] == 0
+                                    ? TextButton(
+                                        onPressed: () async {
+                                          await getStatReset();
+                                          Navigator.pushNamed(
+                                              context, '/characterinfo');
+                                        },
+                                        child: Image.asset(
+                                          'assets/buttons/character_reset_button.png',
+                                          scale: 0.8,
+                                        ),
+                                      )
+                                    : TextButton(
+                                        onPressed: null, // 버튼 비활성화
+                                        child: Image.asset(
+                                          'assets/buttons/character_reset_button_pushed.png',
+                                          scale: 0.8,
+                                        ),
+                                      ),
+                              ),
                             ],
                           ),
                         ],

@@ -13,6 +13,7 @@ class _CharacterChangeState extends State<CharacterChange> {
   // 필요한 변수 만들기
   List characterInfoData = [];
   bool isLoading = true;
+  int? userCharacterId; // 유저가 현재 선택한 캐릭터 ID
 
   @override
   void initState() {
@@ -26,11 +27,21 @@ class _CharacterChangeState extends State<CharacterChange> {
       var responseInfo = await getCharacterChange();
       setState(() {
         characterInfoData = responseInfo['data']['characters'];
+        userCharacterId = 1;
+        // userCharacterId = responseInfo['data']['userCharacterId'] ?? 1;
         isLoading = false;
       });
     } catch (e) {
+      print('캐릭터 변경 모달 에러 발생! ${e.toString()}');
       isLoading = false;
     }
+  }
+
+  // CharacterBox 클릭 시, userCharacterId 업데이트 함수
+  void _handleCharacterSelected(int characterId) {
+    setState(() {
+      userCharacterId = characterId; // 선택된 캐릭터 ID를 업데이트
+    });
   }
 
   @override
@@ -108,18 +119,21 @@ class _CharacterChangeState extends State<CharacterChange> {
               itemBuilder: (BuildContext context, int index) {
                 return CharacterBox(
                   characterId: characterInfoData[index]['characterId'] ?? 1,
+                  characterName:
+                      characterInfoData[index]['characterName'] ?? '이름로딩중',
                   characterGrade:
                       characterInfoData[index]['characterGrade'] ?? 0,
-                  userCharacterId:
-                      characterInfoData[index]['userCharacterId'] ?? false,
+                  //
                   userCharacterLevel:
                       characterInfoData[index]['userCharacterLevel'] ?? 1,
                   userCharacterUpgrade:
                       characterInfoData[index]['userCharacterUpgrade'] ?? 0,
-                  characterName:
-                      characterInfoData[index]['characterName'] ?? '이름로딩중',
                   userCharacterStatus:
-                      characterInfoData[index]['userCharacterStatus'] ?? 0,
+                      characterInfoData[index]['userCharacterStatus'] ?? false,
+                  //
+                  isSelected: userCharacterId ==
+                      characterInfoData[index]['characterId'],
+                  onSelected: _handleCharacterSelected,
                 );
               },
             ),
