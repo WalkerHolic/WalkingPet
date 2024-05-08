@@ -109,6 +109,7 @@ public class UserCharacterService {
 
         userCharacterInfo.resetStat(resetStatPoint, character.getFixPower(), character.getFixDefense(), character.getFixHealth());
         userDetail.changeInitStatus();
+        userDetailRepository.save(userDetail);
 
         return ResetStatResponse.from(userCharacterInfo);
     }
