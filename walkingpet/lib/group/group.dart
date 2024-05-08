@@ -5,7 +5,7 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/my_group_list.dart';
 import 'package:walkingpet/group/widgets/search_group.dart';
-import 'package:walkingpet/group/widgets/get_group_info.dart';
+import 'package:walkingpet/services/group/get_my_group.dart';
 
 class Group extends StatefulWidget {
   const Group({super.key});
@@ -15,12 +15,34 @@ class Group extends StatefulWidget {
 }
 
 class _GroupState extends State<Group> {
+  // 그룹 데이터 담을 빈 배열
+  List<Map<String, dynamic>> myGroups = [];
+  // 로딩중인가?
+  bool isLoding = true;
+
   @override
   void initState() {
     super.initState();
-    getGroupInfo();
+    _fetchGroups();
   }
 
+  Future<void> _fetchGroups() async {
+    try {
+      final groups = await getMyGroup();
+      setState(() {
+        myGroups = groups;
+        isLoding = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoding = false;
+        // 에러 처리
+        print('에러: $e');
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -66,13 +88,13 @@ class _GroupState extends State<Group> {
                 child: SizedBox(
                   width: screenWidth * 0.9,
                   height: screenHeight * 0.73,
-                  child: const NesTabView(
+                  child: NesTabView(
                     tabs: [
                       NesTabItem(
-                        child: MyGroup(),
+                        child: MyGroup(myGroups: myGroups), //인자 넘겨주기
                         label: "내 그룹",
                       ),
-                      NesTabItem(
+                      const NesTabItem(
                         child: SearchGroup(),
                         label: "그룹 검색",
                       ),
