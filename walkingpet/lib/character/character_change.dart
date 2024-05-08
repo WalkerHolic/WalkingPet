@@ -28,15 +28,16 @@ class _CharacterChangeState extends State<CharacterChange> {
       setState(() {
         characterInfoData = responseInfo['data']['characters'];
         userCharacterId = 1;
-        // userCharacterId = responseInfo['data']['userCharacterId'];
+        // userCharacterId = responseInfo['data']['userCharacterId'] ?? 1;
         isLoading = false;
       });
     } catch (e) {
+      print('캐릭터 변경 모달 에러 발생! ${e.toString()}');
       isLoading = false;
     }
   }
 
-  // CharacterBox 클릭 시, selectedCharacterId 업데이트 함수
+  // CharacterBox 클릭 시, userCharacterId 업데이트 함수
   void _handleCharacterSelected(int characterId) {
     setState(() {
       userCharacterId = characterId; // 선택된 캐릭터 ID를 업데이트
@@ -116,21 +117,6 @@ class _CharacterChangeState extends State<CharacterChange> {
               ),
               itemCount: characterInfoData.length,
               itemBuilder: (BuildContext context, int index) {
-                // return CharacterBox(
-                //   characterId: characterInfoData[index]['characterId'] ?? 1,
-                //   characterGrade:
-                //       characterInfoData[index]['characterGrade'] ?? 0,
-                //   userCharacterId:
-                //       characterInfoData[index]['userCharacterId'] ?? false,
-                //   userCharacterLevel:
-                //       characterInfoData[index]['userCharacterLevel'] ?? 1,
-                //   userCharacterUpgrade:
-                //       characterInfoData[index]['userCharacterUpgrade'] ?? 0,
-                //   characterName:
-                //       characterInfoData[index]['characterName'] ?? '이름로딩중',
-                //   userCharacterStatus:
-                //       characterInfoData[index]['userCharacterStatus'] ?? 0,
-                // );
                 return CharacterBox(
                   characterId: characterInfoData[index]['characterId'] ?? 1,
                   characterName:
