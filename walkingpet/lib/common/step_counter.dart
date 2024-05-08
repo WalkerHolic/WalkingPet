@@ -1,18 +1,20 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/services/character/checkstep.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StepCounter with ChangeNotifier {
   int _steps = 0;
+  int _baseSteps = 0;
   late Stream<StepCount> _stepCountStream;
-  int _baseSteps = 0; // 기기에서 측정된 초기 걸음수를 저장할 변수
-  final int _realSteps = 0;
-  int _serverSteps = 0;
+  static SharedPreferences? _prefs;
 
-  static final StepCounter _instance = StepCounter._internal();
+  static StepCounter? _instance;
 
   factory StepCounter() {
-    return _instance;
+    _instance ??= StepCounter._internal();
+    return _instance!;
   }
 
   StepCounter._internal() {
@@ -21,44 +23,49 @@ class StepCounter with ChangeNotifier {
 
   int get steps => _steps;
 
-  void _initializePedometer() {
+  Future<void> _initializePedometer() async {
+    _prefs = await SharedPreferences.getInstance();
+    _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
+
     _stepCountStream = Pedometer.stepCountStream;
-    _stepCountStream
-        .listen(_onStepCount); // 새로운 걸음수 데이터가 도착할 때마다 _onStepCount 콜백 함수르르 호출
+    _stepCountStream.listen(_onStepCount);
     _fetchInitialSteps();
   }
 
   Future<void> _fetchInitialSteps() async {
     try {
-      int serverSteps = await checkStep(); // 서버에서 걸음수를 가져옴
+      int serverSteps = await checkStep();
       StepCount event = await _stepCountStream.first;
-      _baseSteps = event.steps;
-      if (serverSteps > event.steps) _serverSteps = serverSteps;
-      _steps = event.steps - _baseSteps + _serverSteps;
+
+      if (serverSteps > event.steps) {
+        _baseSteps -= serverSteps;
+        await _prefs?.setInt('baseSteps', _baseSteps);
+      }
     } catch (e) {
       print("Failed to fetch initial steps: $e");
     }
   }
 
   void _onStepCount(StepCount event) {
-    _steps = event.steps - _baseSteps + _serverSteps; // 새로운 걸음수를 계산
+    _steps = event.steps - _baseSteps;
     notifyListeners();
   }
 
-  // 현재 쓰는 곳 없음
-  void setSteps(int newSteps) {
-    _steps = newSteps;
-
-    notifyListeners(); // 상태 변경을 알림
+  void resetSteps() async {
+    try {
+      StepCount event = await _stepCountStream.first;
+      _baseSteps = event.steps;
+      await _prefs?.setInt('baseSteps', _baseSteps);
+      notifyListeners();
+      print("걸음 수가 리셋되었습니다.");
+    } catch (e) {
+      print("걸음 수 리셋 중 오류 발생: $e");
+    }
   }
 
-  /* 자정에 백그라운드에서 실행할 함수 */
-  void resetSteps() async {
-    print("백그라운드 되나요");
-    StepCount event = await _stepCountStream.first;
-    _baseSteps = event.steps;
-    _serverSteps = 0;
-
-    notifyListeners(); // 상태 변경을 알림
+  @override
+  @mustCallSuper
+  void dispose() {
+    // 싱글톤이므로 dispose 로직을 비활성화
   }
 }

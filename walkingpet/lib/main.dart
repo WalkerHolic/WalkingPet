@@ -18,27 +18,35 @@ import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:workmanager/workmanager.dart';
 
 void callbackDispatcher() {
+  print("콜백시작");
+  WidgetsFlutterBinding.ensureInitialized();
+  print("이거 돼요??");
   Workmanager().executeTask((task, inputData) {
-    // 싱글톤 인스턴스 호출
-    StepCounter().resetSteps();
-    return Future.value(true); // 작업이 성공적으로 완료됨을 표시
+    try {
+      // 싱글톤 인스턴스 호출
+      StepCounter().resetSteps();
+      print("작업 성공");
+      return Future.value(true);
+    } catch (e) {
+      print("작업 실패: $e");
+      return Future.value(false);
+    }
   });
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   /* 백그라운드 작업 */
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
-  Workmanager().registerPeriodicTask(
+  Workmanager().registerOneOffTask(
     "1",
-    "resetStepsTask",
-    frequency: const Duration(seconds: 10),
+    "instantTask",
+    initialDelay: const Duration(seconds: 10), // 즉시 실행
   );
-
-  WidgetsFlutterBinding.ensureInitialized();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // 상단바 배경을 투명하게
+    statusBarColor: Colors.transparent, // 상단바 배fl경을 투명하게
     statusBarIconBrightness: Brightness.dark, // 상단바 아이콘을 어둡게 (라이트 모드)
   ));
 
@@ -54,11 +62,8 @@ void main() {
   );
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-            create: (context) => BoxCounterProvider()..initializeBoxCounts())
-      ],
+    ChangeNotifierProvider<StepCounter>(
+      create: (_) => StepCounter(),
       child: const MyApp(),
     ),
   );
