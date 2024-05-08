@@ -42,7 +42,7 @@ public class LoginService {
             signInService.signInInItTable(socialLoginDTO.getSocialEmail());
 
             // redis에 데이터 세팅
-            redisSignInService.saveRedisRankingAndUser(saveUser.getUserId(), saveUser.getNickname());
+//            redisSignInService.saveRedisRankingAndUser(saveUser.getUserId(), saveUser.getNickname());
 
             return UsersDto.from(saveUser);
         } else {

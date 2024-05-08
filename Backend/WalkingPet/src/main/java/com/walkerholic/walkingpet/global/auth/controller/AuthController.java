@@ -10,10 +10,7 @@ import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -35,5 +32,17 @@ public class AuthController {
         securityService.saveUserInSecurityContext(savedOrFindUser);
         Map<String, String> tokenMap = jwtUtil.initToken(savedOrFindUser);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, tokenMap);
+    }
+
+    @GetMapping("/generate/user")
+    public void generateUsers() //TODO: @Valid 추가
+    {
+        for(int i = 0; i < 30 ; i++){
+            String testEmail = "test" + i + "@gmail.com";
+            String testNickname = "test" + i;
+            SocialLoginDTO socialLoginDTO = new SocialLoginDTO(testEmail,testNickname);
+            UsersDto savedOrFindUser = loginService.socialLogin(socialLoginDTO);
+            securityService.saveUserInSecurityContext(savedOrFindUser);
+        }
     }
 }
