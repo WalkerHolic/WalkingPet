@@ -5,6 +5,7 @@ import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/member_scrollable_list.dart';
 import 'package:http/http.dart' as http; // http 요청을 위해
 
+// git branch test
 class GroupDetail extends StatelessWidget {
   final String groupName; //팀 이름
 
