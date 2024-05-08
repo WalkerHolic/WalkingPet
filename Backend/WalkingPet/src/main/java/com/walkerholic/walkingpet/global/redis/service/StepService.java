@@ -20,15 +20,12 @@ public class StepService {
     private final UserStepRepository userStepRepository;
 
     public void updateUserStepInfo() {
-        // Get daily step for all users from Redis
         Map<Object, Object> dailySteps = redisTemplate.opsForHash().entries(USERS_KEY);
 
-        // Process daily step for each user
         for (Map.Entry<Object, Object> entry : dailySteps.entrySet()) {
             String userId = (String) entry.getKey();
             int dailyStep = (int) entry.getValue();
 
-            // Update yesterday step in MySQL and reset daily step in Redis
             UserStep userStep = userStepRepository.findById(Integer.valueOf(userId)).orElse(null);
             if (userStep != null) {
                 userStep.updateUserStepInfo(dailyStep);
