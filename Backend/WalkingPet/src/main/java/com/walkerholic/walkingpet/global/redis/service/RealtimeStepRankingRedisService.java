@@ -5,14 +5,20 @@ import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.StepRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
+import com.walkerholic.walkingpet.domain.users.entity.UserStep;
+import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -23,6 +29,8 @@ public class RealtimeStepRankingRedisService {
 
     @Resource(name = "redisTemplateForStepCount")
     private final RedisTemplate<String, Integer> rankigRedisTemplate;
+
+    private final UserStepRepository userStepRepository;
 
     // redis에 모든 사용자들의 누적 걸음수 정보 저장
     public void saveAllUserYesterdayStepList(ReailtimeStepRankingInfo rankingInfo) {
@@ -78,4 +86,34 @@ public class RealtimeStepRankingRedisService {
         return (userRanking != null) ? userRanking.intValue() + 1 : -1;
     }
 
+    public void updateUserStepInfo() {
+//        ValueOperations<String, Integer> dailySteps = rankigRedisTemplate.opsForValue();
+//        ZSetOperations<String, Integer> dailySteps = rankigRedisTemplate.opsForZSet();
+//        Set<Integer> integers = rankigRedisTemplate.opsForZSet().rangeByScore(USERS_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        Set<ZSetOperations.TypedTuple<Integer>> rankingData = rankigRedisTemplate.opsForZSet()
+                .rangeByScoreWithScores(USERS_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        for (ZSetOperations.TypedTuple<Integer> tuple : rankingData) {
+            String userId = String.valueOf(tuple.getValue()); // userId 가져오기
+            double dailyStep = tuple.getScore() == null ? 0 : tuple.getScore(); // step 가져오기
+            System.out.println("User ID: " + userId + ", dailyStep: " + dailyStep);
+
+            UserStep userStep = userStepRepository.findById(Integer.valueOf(userId)).orElse(null);
+            if (userStep != null) {
+                userStep.updateUserStepInfo((int) dailyStep);
+                userStepRepository.save(userStep);
+            }
+        }
+//        for (ValueOperations<String, Integer> entry : dailySteps.ent) {
+//            String userId = (String) entry.getKey();
+//            int dailyStep = (int) entry.getValue();
+//
+//            UserStep userStep = userStepRepository.findById(Integer.valueOf(userId)).orElse(null);
+//            if (userStep != null) {
+//                userStep.updateUserStepInfo(dailyStep);
+//                userStepRepository.save(userStep);
+//            }
+//        }
+    }
 }
