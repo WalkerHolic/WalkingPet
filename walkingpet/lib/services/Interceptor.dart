@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthInterceptor extends http.BaseClient {
   final http.Client _inner = http.Client();
-  final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
