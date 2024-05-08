@@ -5,7 +5,7 @@ import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 // import 'package:walkingpet/levelup/levelup.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
-import 'package:walkingpet/services/character/statupdate.dart';
+import 'package:walkingpet/services/character/statpointreset.dart';
 
 // 캐릭터 정보
 class CharacterInfo extends StatefulWidget {
@@ -19,15 +19,21 @@ class _CharacterInfoState extends State<CharacterInfo> {
   // 필요한 변수 만들기
   Map<String, dynamic> characterInfoData = {};
   String animal = "";
+  int sp = 0;
   int statPoint = 0;
   bool isLoading = true;
 
   // statPoint 값을 업데이트하는 메서드
-  // void updateStatPoint(int newStatPoint) {
-  //   setState(() {
-  //     statPoint = newStatPoint;
-  //   });
-  // }
+  void updateStatPoint(
+      String statnameEn, int point, int addpoint, int newStatPoint) {
+    setState(() {
+      characterInfoData[statnameEn] = point;
+      characterInfoData[
+              'add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'] =
+          addpoint;
+      statPoint = newStatPoint;
+    });
+  }
 
   @override
   void initState() {
@@ -203,13 +209,13 @@ class _CharacterInfoState extends State<CharacterInfo> {
                           ),
 
                           // 4-3. 경험치 아이템 사용 버튼 (+버튼)
-                          SizedBox(
-                            // width: 30,
-                            child: Image.asset(
-                              'assets/buttons/yellow_plus_button.png',
-                              scale: 0.75,
-                            ),
-                          ),
+                          // SizedBox(
+                          //   // width: 30,
+                          //   child: Image.asset(
+                          //     'assets/buttons/yellow_plus_button.png',
+                          //     scale: 0.75,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -233,6 +239,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addHealth'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
+                                updateStatPoint: updateStatPoint,
                                 statPoint: statPoint,
                               ),
                               CharacterInfoStat(
@@ -242,6 +249,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addPower'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
+                                updateStatPoint: updateStatPoint,
                                 statPoint: statPoint,
                               ),
                               CharacterInfoStat(
@@ -251,6 +259,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 addpoint: characterInfoData['addDefense'] ?? 0,
                                 characterId:
                                     characterInfoData['characterId'] ?? 0,
+                                updateStatPoint: updateStatPoint,
                                 statPoint: statPoint,
                               ),
                             ],
@@ -273,26 +282,27 @@ class _CharacterInfoState extends State<CharacterInfo> {
                               ),
 
                               // 5-3. 초기화 버튼
-                              Center(
-                                child: characterInfoData['upgrade'] == 1
-                                    ? TextButton(
-                                        onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, '/characterinfo');
-                                        },
-                                        child: Image.asset(
-                                          'assets/buttons/character_reset_button.png',
-                                          scale: 0.8,
-                                        ),
-                                      )
-                                    : TextButton(
-                                        onPressed: null, // 버튼 비활성화
-                                        child: Image.asset(
-                                          'assets/buttons/character_reset_button_pushed.png',
-                                          scale: 0.8,
-                                        ),
-                                      ),
-                              ),
+                              // Center(
+                              //   child: characterInfoData['initStatus'] == 0
+                              //       ? TextButton(
+                              //           onPressed: () {
+                              //             getStatReset();
+                              //             Navigator.pushNamed(
+                              //                 context, '/characterinfo');
+                              //           },
+                              //           child: Image.asset(
+                              //             'assets/buttons/character_reset_button.png',
+                              //             scale: 0.8,
+                              //           ),
+                              //         )
+                              //       : TextButton(
+                              //           onPressed: null, // 버튼 비활성화
+                              //           child: Image.asset(
+                              //             'assets/buttons/character_reset_button_pushed.png',
+                              //             scale: 0.8,
+                              //           ),
+                              //         ),
+                              // ),
                             ],
                           ),
                         ],
