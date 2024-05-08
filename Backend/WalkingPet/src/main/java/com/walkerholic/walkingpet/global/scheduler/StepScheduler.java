@@ -19,8 +19,8 @@ public class StepScheduler {
 //        stepTask.dailyStepJob(jobRepository(), dailyStepStep()).execute(null);
 //    }
 
-//    @Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(cron = "0 42 9 * * ?", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 42 9 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 4 0 * * ?")
     public void updateMidnightUserStep() {
         System.out.println("업데이트 시작");
 //        stepService.updateUserStepInfo();
