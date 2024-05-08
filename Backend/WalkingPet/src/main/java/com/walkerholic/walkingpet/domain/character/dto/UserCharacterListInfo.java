@@ -11,7 +11,7 @@ public class UserCharacterListInfo {
     private int characterId;
     private String characterName;
     private int characterGrade;
-    private boolean userCharacterId;
+//    private boolean userCharacterId;
     private int userCharacterLevel;
     private int userCharacterUpgrade;
     private boolean userCharacterStatus;
@@ -22,18 +22,16 @@ public class UserCharacterListInfo {
                 .characterId(character.getCharacterId())
                 .characterName(character.getName())
                 .characterGrade(character.getGrade())
-                .userCharacterId(false)
                 .userCharacterStatus(false)
                 .build();
     }
 
     // 해당 캐릭터를 사용자가 가지고 있는 경우
-    public static UserCharacterListInfo userCharacterFrom(UserCharacter userCharacter, boolean isSelectCharacter){
+    public static UserCharacterListInfo userCharacterFrom(UserCharacter userCharacter){
         return UserCharacterListInfo.builder()
                 .characterId(userCharacter.getCharacter().getCharacterId())
                 .characterName(userCharacter.getCharacter().getName())
                 .characterGrade(userCharacter.getCharacter().getGrade())
-                .userCharacterId(isSelectCharacter)
                 .userCharacterLevel(userCharacter.getLevel())
                 .userCharacterUpgrade(userCharacter.getUpgrade())
                 .userCharacterStatus(true)

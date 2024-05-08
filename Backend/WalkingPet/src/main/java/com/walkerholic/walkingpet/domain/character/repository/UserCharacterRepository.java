@@ -18,7 +18,7 @@ public interface UserCharacterRepository extends JpaRepository<UserCharacter, In
     @Query("select uc from UserCharacter uc where uc.user.userId = :userId and uc.userCharacterId = :userCharacterId")
     Optional<UserCharacter> findUserCharacterByUserIdAndUserCharacterId(int userId, int userCharacterId);
 
-    @Query("SELECT uc FROM UserCharacter uc WHERE uc.user.userId = :userId")
+    @Query("SELECT uc FROM UserCharacter uc LEFT JOIN FETCH uc.character WHERE uc.user.userId = :userId")
     List<UserCharacter> findByUserUserId(int userId);
 
 }
