@@ -39,7 +39,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context) => BoxCounterProvider()..initializeBoxCounts())
+            create: (context) => BoxCounterProvider()..initializeBoxCounts()),
       ],
       child: const MyApp(),
     ),
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
