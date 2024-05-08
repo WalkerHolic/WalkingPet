@@ -5,7 +5,7 @@ class CharacterInfoStat extends StatefulWidget {
   final String statname, statnameEn;
   final int characterId;
   int point, addpoint, statPoint;
-  // Function(int) updateStatPoint;
+  Function(String, int, int, int) updateStatPoint;
 
   CharacterInfoStat({
     super.key,
@@ -14,6 +14,7 @@ class CharacterInfoStat extends StatefulWidget {
     required this.addpoint,
     required this.characterId,
     required this.statnameEn,
+    required this.updateStatPoint,
     required this.statPoint,
   });
 
@@ -99,8 +100,10 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
           // 4. '+' 버튼
           GestureDetector(
             onTap: _updateStats,
-            child: Image.asset('assets/buttons/yellow_plus_button.png',
-                scale: 0.8),
+            child: widget.statPoint == 0
+                ? Container() // statPoint가 0이면 이미지를 숨김
+                : Image.asset('assets/buttons/yellow_plus_button.png',
+                    scale: 0.8),
           ),
         ],
       ),
@@ -127,34 +130,17 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
       var response = await updateStat(characterId, statnameEn);
       var data = response['data'];
 
-      print(data);
-
-      // print(widget.point);
-
-      // widget.updateStatPoint(data['statPoint']);
+      var point = data[statnameEn];
+      var addpoint =
+          data['add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'];
+      var statPoint = data['statPoint'];
 
       setState(() {
-        // widget.updateStatPoint(data['statPoint']);
-
-        widget.point = data[statnameEn];
-        // print(widget.statname);
-        // print(widget.point);
-
-        widget.addpoint =
-            data['add${statnameEn[0].toUpperCase()}${statnameEn.substring(1)}'];
-
-        // widget.statPoint = data['statPoint'];
-
-        // print(widget.point);
-        // print(data['statPoint']);
+        widget.point = point;
+        widget.addpoint = addpoint;
+        widget.updateStatPoint(statnameEn, point, addpoint, statPoint);
       });
-      // widget.updateStatPoint(data['statPoint']);
-
-      // setState()가 완료된 후 updateStatPoint를 호출
-      // Future.delayed(const Duration(milliseconds: 50), () {
-      //   widget.updateStatPoint(data['statPoint']);
-      // });
-      // widget.updateStatPoint(data['statPoint']);
+      print(data);
     } catch (e) {
       print('캐릭터 능력치 Update, 페이지 내 오류: $e');
     }
