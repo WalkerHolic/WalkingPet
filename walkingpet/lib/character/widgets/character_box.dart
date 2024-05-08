@@ -36,7 +36,9 @@ class _CharacterBoxState extends State<CharacterBox> {
     String animal = CharacterMap.idToAnimal[widget.characterId] ?? "buddy";
 
     return GestureDetector(
-      onTap: () => widget.onSelected(widget.characterId),
+      onTap: widget.userCharacterStatus
+          ? () => widget.onSelected(widget.characterId)
+          : null,
       child: Container(
         width: screenWidth * 0.2,
         decoration: BoxDecoration(
