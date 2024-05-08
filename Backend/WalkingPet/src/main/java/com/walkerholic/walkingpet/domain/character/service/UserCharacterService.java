@@ -81,9 +81,10 @@ public class UserCharacterService {
         UserDetail userDetail = userDetailRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
-        UserCharacter userCharacterInfo = getUserCharacter(changeUserCharacterIdRequest.getUserCharacterId());
+        UserCharacter userCharacter = userCharacterRepository.findUserCharacterByUserIdAndUserCharacterId(userId, changeUserCharacterIdRequest.getUserCharacterId())
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
 
-        userDetail.changeUserCharacter(userCharacterInfo);
+        userDetail.changeUserCharacter(userCharacter);
     }
 
     /**
