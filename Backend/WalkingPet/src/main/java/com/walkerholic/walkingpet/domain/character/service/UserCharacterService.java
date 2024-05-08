@@ -154,12 +154,7 @@ public class UserCharacterService {
         // 해당 사용자가 가지고 있는 캐릭터 정보 가져오기
         List<UserCharacter> haveCharacterList = userCharacterRepository.findByUserUserId(userId);
         for (UserCharacter userCharacter : haveCharacterList) {
-            if (userDetail.getSelectUserCharacter().getUserCharacterId() == userCharacter.getUserCharacterId()) {
-                // 해당 사용자가 장착한 캐릭터
-                userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter, true));
-            } else {
-                userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter, false));
-            }
+            userCharacterListInfos.add(UserCharacterListInfo.userCharacterFrom(userCharacter));
         }
 
         // 해당 사용자가 가지고 있지 않은 캐릭터 정보 가져오기
@@ -168,7 +163,7 @@ public class UserCharacterService {
             userCharacterListInfos.add(UserCharacterListInfo.characterFrom(userCharacter));
         }
 
-        return UserCharacterListInfoResponse.from(userCharacterListInfos);
+        return UserCharacterListInfoResponse.from(userCharacterListInfos, userDetail.getSelectUserCharacter().getUserCharacterId());
     }
 
     /**
