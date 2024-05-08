@@ -3,23 +3,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/member_scrollable_list.dart';
-import 'package:http/http.dart' as http; // http 요청을 위해
+import 'package:walkingpet/services/group/get_group_detail.dart';
 
-// git branch test
-class GroupDetail extends StatelessWidget {
-  final String groupName; //팀 이름
+class GroupDetail extends StatefulWidget {
+  final int groupId; //팀 이름
 
   const GroupDetail({
     super.key,
-    required this.groupName,
+    required this.groupId,
   });
+
+  @override
+  State<GroupDetail> createState() => _GroupDetailState();
+}
+
+class _GroupDetailState extends State<GroupDetail> {
+  //nullable 타입의 데이터 선언
+  Map<String, dynamic>? groupData;
+  //null인지 상태 체크해야 함
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    _fetchGroupDetail();
+  }
+
+  Future<void> _fetchGroupDetail() async {
+    try {
+      final data = await getGroupDetail(widget.groupId);
+      setState(() {
+        groupData = data; // 데이터를 가져와 상태 변수에 저장
+        isLoading = false; //로딩 완료
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // 에러 발생 시 로딩 중지
+      });
+      print("데이터 가져오기 에러 : $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    // 로딩 중이면 스피너
+    if (isLoading) {
+      return const Scaffold(
+          body: Center(
+        child: CircularProgressIndicator(),
+      ));
+    }
+
+    if (groupData == null) {
+      return const Scaffold(
+          body: Center(
+        child: Text("그룹 정보를 가져올 수 없습니다"),
+      ));
+    }
+
     int goalStep = 10000; // 목표 걸음수
     int currStep = 3000; // 현재 결음수
+    String groupName = groupData!['teamName'] ?? '그룹 이름 없음';
+    String description = groupData!['explain'] ?? '설명 없음';
 
     return Scaffold(
       body: Stack(
@@ -47,9 +94,9 @@ class GroupDetail extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: Column(
                   children: <Widget>[
-                    const Text(
-                      "대전 2팀 모여라!",
-                      style: TextStyle(fontSize: 33),
+                    Text(
+                      groupName,
+                      style: const TextStyle(fontSize: 33),
                     ),
                     const SizedBox(height: 10),
                     const Text(
