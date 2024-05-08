@@ -74,6 +74,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
                 String[] excludePath = {
                         "/auth/social-login",
+                        "/auth/generate/user",
                         "/user",
                         "/redis",
                         "/init",

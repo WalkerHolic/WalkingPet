@@ -8,5 +8,11 @@ import lombok.ToString;
 public class SocialLoginDTO {
     private String socialEmail;
     private String nickname;
+
+    public SocialLoginDTO(String socialEmail, String nickname){
+        this.socialEmail= socialEmail;
+        this.nickname = nickname;
+    }
+
 //    private String socialProvider;
 }
