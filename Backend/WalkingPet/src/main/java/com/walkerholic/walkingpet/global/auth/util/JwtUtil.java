@@ -150,6 +150,8 @@ public class JwtUtil {
 
     public String extractStepFromHeader(HttpServletRequest request) {
         String step = request.getHeader("step");
+        System.out.println("util: " + request.getHeader("step"));
+//        if (request.getHeader("step") == null)
 
         System.out.println("jwtUtil 들어온 step: " + step);
         return step;
