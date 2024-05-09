@@ -66,4 +66,8 @@ public class Users {
         users.regDate = LocalDateTime.now();
         return users;
     }
+
+    public void modifyNickname(String nickname){
+        this.nickname = nickname;
+    }
 }
