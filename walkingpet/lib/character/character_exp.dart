@@ -334,6 +334,7 @@ class _CharacterExpState extends State<CharacterExp> {
                           var expitemData = responseExpitem['data'];
                           var isLevelUp = expitemData['isLevelUp'];
                           var levelUpInfo = expitemData['levelUpInfo'];
+                          print(levelUpInfo);
 
                           // 5-2. 레벨업 : O => 레벨업 모달 이동 / X => 캐릭터 정보 페이지 이동
                           if (isLevelUp) {
