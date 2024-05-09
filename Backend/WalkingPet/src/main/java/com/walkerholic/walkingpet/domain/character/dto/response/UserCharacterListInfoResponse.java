@@ -9,12 +9,12 @@ import java.util.List;
 @Builder
 @Getter
 public class UserCharacterListInfoResponse {
-    private Integer userCharacterId;
+    private Integer selectCharacterId;
     private List<UserCharacterListInfo> characters;
 
     public static UserCharacterListInfoResponse from(List<UserCharacterListInfo> userCharacterListInfos, int userCharacterId) {
         return UserCharacterListInfoResponse.builder()
-                .userCharacterId(userCharacterId)
+                .selectCharacterId(userCharacterId)
                 .characters(userCharacterListInfos)
                 .build();
     }
