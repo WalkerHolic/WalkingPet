@@ -1,10 +1,10 @@
 package com.walkerholic.walkingpet.global.auth.controller;
 
-import com.walkerholic.walkingpet.global.auth.service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.dto.request.SocialLoginDTO;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
+import com.walkerholic.walkingpet.global.auth.service.SecurityLoginService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,8 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
     private final LoginService loginService;
-    private final SecurityService securityService;
+
+    private final SecurityLoginService securityService;
     private final JwtUtil jwtUtil;
 
     @PostMapping("/social-login")

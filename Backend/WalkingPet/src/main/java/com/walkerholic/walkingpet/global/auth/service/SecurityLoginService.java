@@ -1,12 +1,11 @@
 package com.walkerholic.walkingpet.global.auth.service;
 
+import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
+import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
-import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
-import com.walkerholic.walkingpet.domain.users.entity.Users;
-import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import io.jsonwebtoken.Claims;
@@ -27,10 +26,9 @@ import java.util.Collection;
     4. 실패할 경우 AuthenticationFailureHandler을 실행
     5. 그 뒤에는 토큰 검증 등의 작업
  */
-@Service
+@Service("mySecurityLoginService")
 @RequiredArgsConstructor
-public class SecurityService {
-    private final UsersRepository usersRepository;
+public class SecurityLoginService {
     private final JwtUtil jwtUtil;
 
     // 회원가입 및 로그인 시 사용 controller에서
