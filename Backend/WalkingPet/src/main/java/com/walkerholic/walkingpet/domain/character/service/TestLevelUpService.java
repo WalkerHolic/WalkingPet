@@ -42,9 +42,9 @@ public class TestLevelUpService {
             UserItem userNormalBox = null;
             UserItem userLuxuryBox = null;
             for(UserItem userItem : userItemList){
-                if(userItem.getItem().getName().equals("일반상자"))
+                if(userItem.getItem().getName().equals("Normal Box"))
                     userNormalBox = userItem;
-                else if(userItem.getItem().getName().equals("고급상자"))
+                else if(userItem.getItem().getName().equals("Luxury Box"))
                     userLuxuryBox = userItem;
             }
 
@@ -56,7 +56,7 @@ public class TestLevelUpService {
         }
         else{
             System.out.println("일반 상자 획득~");
-            UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, "일반상자")
+            UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId, "Normal Box")
                     .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_ITEM_NOT_FOUND_BOX));
             userItem.addItemQuantity(1);
             userItemRepository.save(userItem);

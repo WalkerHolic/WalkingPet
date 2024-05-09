@@ -8,6 +8,8 @@ import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.CharacterRepository;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
+import com.walkerholic.walkingpet.domain.item.entity.UserItem;
+import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
@@ -32,6 +34,7 @@ public class UserCharacterService {
     private static final int ADD_STAT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
 
     private final UserCharacterRepository userCharacterRepository;
+    private final UserItemRepository userItemRepository;
     private final UserDetailRepository userDetailRepository;
     private final CharacterRepository characterRepository;
     private final UserStepRepository userStepRepository;
@@ -45,6 +48,20 @@ public class UserCharacterService {
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
         return UserCharacterInfoResponse.from(userDetail);
+    }
+
+    /**
+     * 사용자의 캐릭터 경험치 정보 가져오기(api)
+     */
+    @Transactional(readOnly = true)
+    public UserCharacterExpInfoResponse getUserCharacterExpInfo(Integer userId) {
+        UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        UserItem userItem = userItemRepository.findByUserItemWithUserAndItemFetch(userId,"Exp Item")
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_ITEM_NOT_FOUND_EXP));
+
+        return UserCharacterExpInfoResponse.from(userDetail,userItem);
     }
 
     /**
