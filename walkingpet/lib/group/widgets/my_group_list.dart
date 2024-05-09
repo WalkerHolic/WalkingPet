@@ -20,9 +20,9 @@ class _MyGroupState extends State<MyGroup> {
   Widget build(BuildContext context) {
     final List<GroupCard> groupCards = widget.myGroups.map((group) {
       return GroupCard(
-        groupId : group['teamId'],
+        groupId: group['teamId'],
         groupName: group['teamName'],
-        description: group['explain'],
+        description: group['teamExplain'],
         numOfMember: group['userCount'],
       );
     }).toList();
