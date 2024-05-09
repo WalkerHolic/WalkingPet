@@ -24,10 +24,9 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/social-login")
-    public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO, @RequestHeader("step") String step) //TODO: @Valid 추가
+    public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
     {
         log.info("로그인 api socialLogin - SocialLoginDTO: {}", socialLoginDTO);
-        System.out.println("step: " + step);
         UsersDto savedOrFindUser = loginService.socialLogin(socialLoginDTO);
 //        securityService.saveUserInSecurityContext(socialLoginDTO);
         securityService.saveUserInSecurityContext(savedOrFindUser);
