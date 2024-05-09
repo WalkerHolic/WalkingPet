@@ -27,7 +27,7 @@ Future<Map<String, dynamic>> getCharacterChange() async {
 }
 
 // 2. 유저의 현재 장착 캐릭터 변경하기 (post)
-Future<void> postCharacterChange(int userCharacterId) async {
+Future<void> postCharacterChange(int selectCharacterId) async {
   final client = AuthInterceptor();
   final url = Uri.parse('$baseUrl/$characterChange');
 
@@ -35,8 +35,9 @@ Future<void> postCharacterChange(int userCharacterId) async {
     final response = await client.post(
       url,
       headers: {"Content-Type": "application/json"}, // 콘텐트 타입 헤더 추가
-      body: jsonEncode({"userCharacterId": userCharacterId}),
+      body: jsonEncode({"selectCharacterId": selectCharacterId}),
     );
+    print(selectCharacterId);
     // print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {

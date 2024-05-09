@@ -13,7 +13,7 @@ class _CharacterChangeState extends State<CharacterChange> {
   // 필요한 변수 만들기
   List characterInfoData = [];
   bool isLoading = true;
-  int userCharacterId = 1; // 유저가 현재 선택한 캐릭터 ID
+  int? selectCharacterId; // 유저가 현재 선택한 캐릭터 ID
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _CharacterChangeState extends State<CharacterChange> {
       var responseInfo = await getCharacterChange();
       setState(() {
         characterInfoData = responseInfo['data']['characters'];
-        userCharacterId = responseInfo['data']['userCharacterId'] ?? 1;
+        selectCharacterId = responseInfo['data']['selectCharacterId'];
         isLoading = false;
       });
     } catch (e) {
@@ -36,10 +36,10 @@ class _CharacterChangeState extends State<CharacterChange> {
     }
   }
 
-  // CharacterBox 클릭 시, userCharacterId 업데이트 함수
+  // CharacterBox 클릭 시, selectCharacterId 업데이트 함수
   void _handleCharacterSelected(int characterId) {
     setState(() {
-      userCharacterId = characterId; // 선택된 캐릭터 ID를 업데이트
+      selectCharacterId = characterId; // 선택된 캐릭터 ID를 업데이트
     });
   }
 
@@ -130,7 +130,7 @@ class _CharacterChangeState extends State<CharacterChange> {
                   userCharacterStatus:
                       characterInfoData[index]['userCharacterStatus'] ?? false,
                   //
-                  isSelected: userCharacterId ==
+                  isSelected: selectCharacterId ==
                       characterInfoData[index]['characterId'],
                   onSelected: _handleCharacterSelected,
                 );
@@ -145,7 +145,7 @@ class _CharacterChangeState extends State<CharacterChange> {
           right: screenWidth * 0.1,
           child: TextButton(
             onPressed: () async {
-              await postCharacterChange(userCharacterId);
+              await postCharacterChange(selectCharacterId as int);
               Navigator.pushNamed(context, '/characterinfo');
             },
             child: Stack(
