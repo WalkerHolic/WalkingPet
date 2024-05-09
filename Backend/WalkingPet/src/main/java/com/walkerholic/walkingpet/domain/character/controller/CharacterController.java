@@ -85,7 +85,7 @@ public class CharacterController {
     public ResponseEntity<CommonResponseEntity> changeUserCharacter(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
 //        Integer userId = userDetail.getUsers().getUserId();
         int userId = 1;
-        log.info("캐릭터 변경 changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getCharacterId());
+        log.info("캐릭터 변경 changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getSelectCharacterId());
         userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
