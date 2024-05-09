@@ -32,7 +32,7 @@ public class UserCharacterInfoResponse {
 
         return UserCharacterInfoResponse.builder()
                 .nickname(userDetail.getUser().getNickname())
-                .characterId(userCharacter.getUserCharacterId())
+                .characterId(userCharacter.getCharacter().getCharacterId())
                 .level(userCharacter.getLevel())
                 .experience(userCharacter.getExperience())
                 .maxExperience(UserCharacterFunction.getMaxExperience(userCharacter.getLevel()))

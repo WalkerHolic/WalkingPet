@@ -86,9 +86,9 @@ public class CharacterController {
 //        Integer userId = userDetail.getUsers().getUserId();
         int userId = 1;
         log.info("캐릭터 변경 changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getSelectCharacterId());
-        userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
+        ChangeCharacterIdResponse changeCharacter = userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
 
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, changeCharacter);
     }
 
     @GetMapping("/checkstep")
