@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
