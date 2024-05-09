@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/character/widgets/levelup.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
-import 'package:walkingpet/levelup/levelup.dart';
 import 'package:walkingpet/services/character/characterexpitem.dart';
 
 // 캐릭터 경험치 아이템 사용 페이지
@@ -23,8 +22,6 @@ class _CharacterExpState extends State<CharacterExp> {
 
   int quantity = 0; // API 요청으로 받아오는 '경험치 아이템' 값
   int expitemCount = 0; // 알고리즘 구현을 위한 값
-
-  // Map<String, dynamic> characterExpData = {};
 
   @override
   void initState() {
@@ -329,16 +326,16 @@ class _CharacterExpState extends State<CharacterExp> {
                         ),
                       ),
 
-                      // 4-8-2. '사용' 버튼
+                      // 4-8-2. '사용' 버튼 => 5. API 요청
                       TextButton(
                         onPressed: () async {
-                          // 5. API 요청 및 데이터 처리
+                          // 5-1. API 요청 및 데이터 처리
                           var responseExpitem = await getExpitem(expitemCount);
                           var expitemData = responseExpitem['data'];
                           var isLevelUp = expitemData['isLevelUp'];
                           var levelUpInfo = expitemData['levelUpInfo'];
 
-                          // 6. 레벨업 : O => 레벨업 모달 이동 / X => 캐릭터 정보 페이지 이동
+                          // 5-2. 레벨업 : O => 레벨업 모달 이동 / X => 캐릭터 정보 페이지 이동
                           if (isLevelUp) {
                             await showDialog(
                               context: context,
@@ -361,7 +358,7 @@ class _CharacterExpState extends State<CharacterExp> {
                             );
                           }
 
-                          // 캐릭터 정보 페이지로 이동
+                          // 5-3. 캐릭터 정보 페이지로 이동
                           Navigator.pushNamed(context, '/characterinfo');
                         },
                         child: Image.asset(

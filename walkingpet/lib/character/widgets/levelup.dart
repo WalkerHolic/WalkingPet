@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LevelUpModal extends StatelessWidget {
-  // levelUpInfo: {nowLevel: 7, nextLevel: 8, levelUpReward: {statPoint: 5, itemReward: {Normal Box: 1}}}
-  // Map<String, dynamic> levelUpInfoData = {};
   final Map<String, dynamic> levelUpInfo;
 
   const LevelUpModal({super.key, required this.levelUpInfo});
@@ -41,13 +39,13 @@ class LevelUpModal extends StatelessWidget {
         // 3. 내용
         Center(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // 1. 레벨업 표시
               // const Text('LEVEL UP !'),
-              const SizedBox(
-                height: 90,
-              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
 
               // 2. 캐릭터 이미지
               Image.asset(
@@ -57,29 +55,91 @@ class LevelUpModal extends StatelessWidget {
               ),
 
               // 3. 레벨 상승 표시
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Lv.47'),
-                  Text(' > '),
                   Text(
-                    'Lv.48',
-                    style: TextStyle(fontSize: 25),
+                    'Lv.${levelUpInfo['nowLevel']}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const Text('  >  '),
+                  Text(
+                    'Lv.${levelUpInfo['nextLevel']}',
+                    style: const TextStyle(fontSize: 28),
                   ),
                 ],
               ),
 
               // 4. 보상
-              const Column(
-                children: [
-                  Text('--- 보상 ---'),
-                  Text('능력치 포인트 + 5'),
-                  Text('선물상자 X 1'),
-                ],
+              // const Text('--- 보상 ---'),
+              SizedBox(
+                height: screenHeight * 0.13,
+                width: screenWidth * 0.6,
+                child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255)
+                          .withOpacity(0.65),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // 4-1. 능력치 포인트
+                        Text(
+                          '능력치 포인트 + ${levelUpInfo['levelUpReward']['statPoint']}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+
+                        // 4-2. 상자
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // 4-2-1. 일반 상자
+                            if (levelUpInfo['levelUpReward']['itemReward']
+                                    ['Normal Box'] >
+                                0)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/items/itembox_normal.png',
+                                    height: 70,
+                                  ),
+                                  Text(
+                                    'X ${levelUpInfo['levelUpReward']['itemReward']['Normal Box']}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+
+                            const SizedBox(width: 15),
+
+                            // 4-2-2. 고급 상자
+                            if (levelUpInfo['levelUpReward']['itemReward']
+                                    ['Normal Box'] >
+                                0)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/items/itembox_special.png',
+                                    height: 55,
+                                  ),
+                                  Text(
+                                    'X ${levelUpInfo['levelUpReward']['itemReward']['Normal Box']}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ],
+                    )),
               ),
 
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
 
               // 5. 확인 버튼
