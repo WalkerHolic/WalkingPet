@@ -147,4 +147,11 @@ public class JwtUtil {
             throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
     }
+
+    public String extractStepFromHeader(HttpServletRequest request) {
+        String step = request.getHeader("step");
+
+        System.out.println("jwtUtil 들어온 step: " + step);
+        return step;
+    }
 }

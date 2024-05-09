@@ -1,9 +1,13 @@
 package com.walkerholic.walkingpet.global.auth.filter;
 
+import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
 import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,6 +33,7 @@ import java.util.Arrays;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final SecurityService securityService;
+    private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -61,7 +66,26 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throw new TokenBaseException(TokenErrorCode.INVALID_TOKEN);
         }
 
+        
+        String step = jwtUtil.extractStepFromHeader(request);
+        if (step != null) {
+            String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
+            System.out.println("필터에서의 step: " + step);
+            saveRedisStep(socialId, step);
+        } else {
+            System.out.println("헤더에 step이 존재 하지 않음");
+        }
         return true;
+    }
+    
+    // 헤더에 있는 step의 값을 redis 에 저장
+    private void saveRedisStep(String socialId, String step) {
+        realtimeStepRankingRedisService.saveUserYesterdayStep(
+                RealtimeStepRequest.builder()
+                        .userId(Integer.parseInt(socialId))
+                        .realtimeStep(Integer.parseInt(step))
+                        .build()
+        );
     }
 
     /* 
