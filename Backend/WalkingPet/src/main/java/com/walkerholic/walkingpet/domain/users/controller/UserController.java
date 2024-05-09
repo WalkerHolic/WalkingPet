@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.users.controller;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
 import com.walkerholic.walkingpet.domain.gacha.service.GachaService;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
+import com.walkerholic.walkingpet.domain.users.service.UserService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,10 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final LoginService loginService;
+    private final UserService userService;
 
     @GetMapping("/emailCheck")
     @Operation(summary = "가입한 회원인지 확인", description = "유저의 이메일이 이미 회원가입한 이메일인지 확인하기 ")
@@ -43,5 +42,16 @@ public class UserController {
         log.info("닉네임 중복 체크 checkAvailableNickname - nickname: {}", nickname);
         boolean isAvailable = loginService.checkAvailableNickname(nickname);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, isAvailable);
+    }
+
+    @PostMapping("/modifyNickname")
+    @Operation(summary = "닉네임 수정", description = "입력한 닉네임으로 수정하기. 중복금지")
+    @ApiResponse(responseCode = "200", description = "S200 - 닉네임 수정 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 닉네임 수정 실패")
+    public ResponseEntity<CommonResponseEntity> modifyNickname(@RequestParam("nickname") String nickname) {
+        log.info("수정할 닉네임 체크 checkAvailableNickname - nickname: {}", nickname);
+        int userId = 1;
+        boolean checkChange = userService.modifyNickname(userId,nickname);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, checkChange);
     }
 }
