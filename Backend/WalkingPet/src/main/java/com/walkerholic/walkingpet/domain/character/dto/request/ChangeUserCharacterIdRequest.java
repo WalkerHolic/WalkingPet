@@ -5,5 +5,5 @@ import lombok.Getter;
 
 @Getter
 public class ChangeUserCharacterIdRequest {
-    private int userCharacterId;
+    private int selectCharacterId;
 }
