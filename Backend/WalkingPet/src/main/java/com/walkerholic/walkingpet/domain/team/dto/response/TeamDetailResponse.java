@@ -16,18 +16,20 @@ public class TeamDetailResponse {
 
     private Integer teamId;
     private String teamName;
-    private String explain;
+    private String teamExplain;
     private Integer teamPoint;
     private Integer userCount;
+    private Integer teamTotalSteps;
     private List<TeamUsersResponse> teamUsers;
 
-    public static TeamDetailResponse from(TeamResponse teamResponse, List<TeamUsersResponse> teamUsers){
+    public static TeamDetailResponse from(TeamResponse teamResponse, List<TeamUsersResponse> teamUsers,Integer teamTotalSteps){
         return TeamDetailResponse.builder()
                 .teamId(teamResponse.getTeamId())
                 .teamName(teamResponse.getTeamName())
-                .explain(teamResponse.getExplain())
+                .teamExplain(teamResponse.getTeamExplain())
                 .teamPoint(teamResponse.getTeamPoint())
                 .userCount(teamResponse.getUserCount())
+                .teamTotalSteps(teamTotalSteps)
                 .teamUsers(teamUsers)
                 .build();
     }

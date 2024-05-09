@@ -107,7 +107,12 @@ public class TeamService {
 
         List<TeamUsersResponse> teamUsersResponses = getGroupMembersInfo(teamId);
 
-        return TeamDetailResponse.from(teamResponse, teamUsersResponses);
+        int teamTotalSteps = teamUsersResponses.stream()
+                .mapToInt(TeamUsersResponse::getStep)
+                .sum();
+
+
+        return TeamDetailResponse.from(teamResponse, teamUsersResponses,teamTotalSteps);
     }
 
     @Transactional(readOnly = false)
