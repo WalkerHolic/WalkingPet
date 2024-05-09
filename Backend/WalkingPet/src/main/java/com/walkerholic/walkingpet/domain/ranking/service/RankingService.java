@@ -51,8 +51,9 @@ public class RankingService {
      * 누적 걸음수 기준으로 top 10 랭킹 가져오기
      */
     @Transactional(readOnly = true)
-    @Cacheable(value="accStepRankingTop10")
+    @Cacheable(value="accStepRankingTop10", key = "#AccStepTop10")
     public AccStepRankingResponse getAccStepRankingTop10() {
+        log.info("RankingService getAccStepRankingTop10 누적 걸음수 top10(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
         int rank = 0;

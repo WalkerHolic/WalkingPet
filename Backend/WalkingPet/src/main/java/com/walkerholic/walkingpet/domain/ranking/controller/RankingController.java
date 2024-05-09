@@ -59,8 +59,8 @@ public class RankingController {
             accStepRankingList = rankingService.getAccStepRankingTop10();
 //            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
         } else {
-            accStepRankingList = rankingService.getAccStepRankingTop10();
-//            accStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 9);
+            RedisStepRankingResponse redisRealtimeStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 9);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, redisRealtimeStepRankingList);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
