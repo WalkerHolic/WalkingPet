@@ -16,14 +16,13 @@ class _CharacterExpState extends State<CharacterExp> {
   // 필요한 변수 만들기
   Map<String, dynamic> characterInfoData = {};
   String animal = "";
-  int? level;
+  int? characterLevel;
   double? expValue;
   bool isLoading = true;
+  int expitemCount = 0;
 
   Map<String, dynamic> characterExpData = {};
   int? quantity;
-
-  int itemCount = 15;
 
   @override
   void initState() {
@@ -35,7 +34,7 @@ class _CharacterExpState extends State<CharacterExp> {
   // API 요청으로 데이터 불러오기
   Future<void> initInfo() async {
     try {
-      var responseInfo = await getCharacterInfo();
+      var responseInfo = await getExpitemInfo();
 
       setState(() {
         characterInfoData = responseInfo['data'];
@@ -43,7 +42,7 @@ class _CharacterExpState extends State<CharacterExp> {
         int characterId = characterInfoData['characterId'] as int;
         animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
 
-        level = characterInfoData['level'];
+        characterLevel = characterInfoData['characterLevel'];
         expValue = (characterInfoData['experience'] ?? 0).toDouble() /
             (characterInfoData['maxExperience'] ?? 1).toDouble();
 
@@ -112,14 +111,15 @@ class _CharacterExpState extends State<CharacterExp> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // 1. 유저 닉네임
-                  Text(
-                    characterInfoData['nickname'] ?? '닉네임로딩중',
-                    style: const TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      fontSize: 35,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      characterInfoData['nickname'] ?? '닉네임로딩중',
+                      style: const TextStyle(
+                        fontSize: 35,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 5),
 
                   // 2. 캐릭터 이미지
                   Image.asset(
@@ -128,7 +128,7 @@ class _CharacterExpState extends State<CharacterExp> {
                     // scale: 0.3,
                   ),
 
-                  // 3. 레벨 & 경험치 바 & 경험치 아이템 사용 버튼 (+버튼)
+                  // 3. 레벨 & 경험치 바
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     child: SizedBox(
@@ -138,7 +138,7 @@ class _CharacterExpState extends State<CharacterExp> {
                         children: [
                           // 3-1. 레벨
                           Text(
-                            'Lv.$level',
+                            'Lv.$characterLevel',
                             style: const TextStyle(
                               fontSize: 23,
                             ),
@@ -192,12 +192,12 @@ class _CharacterExpState extends State<CharacterExp> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // 4-1. EXP item 이미지
-                      Image.asset(
-                        'assets/images/character_expitem.png',
-                        height: 80,
-                      ),
-                      const SizedBox(
-                        width: 20,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Image.asset(
+                          'assets/images/character_expitem.png',
+                          height: 80,
+                        ),
                       ),
 
                       // 4-2. EXP item 설명
@@ -216,7 +216,7 @@ class _CharacterExpState extends State<CharacterExp> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black, // 색상 추가
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -232,10 +232,10 @@ class _CharacterExpState extends State<CharacterExp> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // 4-4. '-' 버튼
+                          // 4-3. '-' 버튼
                           GestureDetector(
-                            onTap: itemCount > 0
-                                ? () => setState(() => itemCount--)
+                            onTap: expitemCount > 0
+                                ? () => setState(() => expitemCount--)
                                 : null,
                             child: Image.asset(
                               'assets/buttons/yellow_minus_button.png',
@@ -243,10 +243,7 @@ class _CharacterExpState extends State<CharacterExp> {
                             ),
                           ),
 
-                          // 4-3. 사용 / 보유 표시
-                          // Text('$itemCount / 30',
-                          //     style: Theme.of(context).textTheme.titleLarge),
-
+                          // 4-4. 사용할 경험치 아이템 개수 표시
                           SizedBox(
                             height: 30,
                             width: 70,
@@ -257,17 +254,19 @@ class _CharacterExpState extends State<CharacterExp> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Center(
-                                child: Text('$itemCount',
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge),
+                                child: Text(
+                                  '$expitemCount',
+                                  // 어떤 코드인지 고민 더 필요
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
                               ),
                             ),
                           ),
 
                           // 4-5. '+' 버튼
                           GestureDetector(
-                            onTap: itemCount < 30
-                                ? () => setState(() => itemCount++)
+                            onTap: expitemCount < characterInfoData['quantity']
+                                ? () => setState(() => expitemCount++)
                                 : null,
                             child: Image.asset(
                               'assets/buttons/yellow_plus_button.png',
@@ -277,8 +276,9 @@ class _CharacterExpState extends State<CharacterExp> {
 
                           // 4-6. 'MAX' 버튼
                           GestureDetector(
-                            onTap: itemCount < 30
-                                ? () => setState(() => itemCount += 5)
+                            onTap: expitemCount < characterInfoData['quantity']
+                                ? () => setState(() => expitemCount =
+                                    characterInfoData['quantity'])
                                 : null,
                             child: Image.asset(
                               'assets/buttons/yellow_max_button.png',
@@ -290,30 +290,35 @@ class _CharacterExpState extends State<CharacterExp> {
                     ),
                   ),
 
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '보유개수 : ',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        '30',
-                        style: TextStyle(fontSize: 22),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
+                  // 4-7. 경험치 아이템 보유 개수 표시
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          '총 ',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          characterInfoData['quantity'].toString(),
+                          style: const TextStyle(fontSize: 22),
+                        ),
+                        const Text(
+                          '개 보유',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
 
+                  // 4-8. 경험치 아이템 관련 버튼
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // 4-7. '취소' 버튼
+                      // 4-8-1. '취소' 버튼
                       TextButton(
-                        onPressed: () async {
-                          // await getStatReset();
+                        onPressed: () {
                           Navigator.pushNamed(context, '/characterinfo');
                         },
                         child: Image.asset(
@@ -322,7 +327,7 @@ class _CharacterExpState extends State<CharacterExp> {
                         ),
                       ),
 
-                      // 4-8. '사용' 버튼
+                      // 4-8-2. '사용' 버튼
                       TextButton(
                         onPressed: () async {
                           // await getStatReset();
