@@ -15,7 +15,7 @@ void showGachaModal(BuildContext context) async {
     int characterId = characterData['characterId'];
     animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
     //캐릭터 아이디에 해당하는 동물 이름 가져오기 (gif 파일에 접근하기 위함)
-    int grade = characterData['grade']; // 희귀도 가져오기
+    int grade = characterData['characterGrade']; // 희귀도 가져오기
     // grade 만큼의 별이 담긴 List 생성
     List<Widget> stars = List.generate(
         grade,
@@ -76,9 +76,9 @@ void showGachaModal(BuildContext context) async {
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
-                              Navigator.of(context).pop();
-                            },
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
                               child: SvgPicture.asset(
                                   'assets/buttons/button_confirm.svg'))
                         ],
