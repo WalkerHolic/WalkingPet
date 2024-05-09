@@ -11,7 +11,7 @@ import lombok.ToString;
 public class GachaResultResponse {
     private Integer characterId;
     private String characterName;
-    private Integer grade;
+    private Integer characterGrade;
 
     private boolean duplication;
 
@@ -19,7 +19,7 @@ public class GachaResultResponse {
         return GachaResultResponse.builder()
                 .characterId(character.getCharacterId())
                 .characterName(character.getName())
-                .grade(character.getGrade())
+                .characterGrade(character.getGrade())
                 .duplication(duplication)
                 .build();
     }

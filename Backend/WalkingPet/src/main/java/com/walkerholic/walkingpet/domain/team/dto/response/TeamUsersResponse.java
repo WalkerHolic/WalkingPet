@@ -14,14 +14,14 @@ public class TeamUsersResponse {
 
     private Integer characterId;
     private String nickname;
-    private Integer level;
+    private Integer characterLevel;
     private Integer step;
 
     public static TeamUsersResponse from(UserDetail userDetail,UserStep userStep){
         return TeamUsersResponse.builder()
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .nickname(userDetail.getUser().getNickname())
-                .level(userDetail.getSelectUserCharacter().getLevel())
+                .characterLevel(userDetail.getSelectUserCharacter().getLevel())
                 .step(userStep.getDailyStep())
                 .build();
     }

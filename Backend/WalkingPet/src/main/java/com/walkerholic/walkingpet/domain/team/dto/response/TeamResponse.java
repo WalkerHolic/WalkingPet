@@ -12,7 +12,7 @@ public class TeamResponse {
 
     private Integer teamId;
     private String teamName;
-    private String explain;
+    private String teamExplain;
     private Integer teamPoint;
     private Integer userCount;
 
@@ -20,7 +20,7 @@ public class TeamResponse {
         return TeamResponse.builder()
                 .teamId(team.getTeamId())
                 .teamName(team.getName())
-                .explain(team.getExplanation())
+                .teamExplain(team.getExplanation())
                 .teamPoint(team.getPoint())
                 .userCount(userCount)
                 .build();
