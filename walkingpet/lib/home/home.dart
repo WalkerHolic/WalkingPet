@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
-import 'package:walkingpet/common/step_counter.dart';
+import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
