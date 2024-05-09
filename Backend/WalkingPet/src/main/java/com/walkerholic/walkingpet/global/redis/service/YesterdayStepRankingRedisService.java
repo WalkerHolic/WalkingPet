@@ -3,7 +3,7 @@ package com.walkerholic.walkingpet.global.redis.service;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.StepRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -29,7 +29,7 @@ public class YesterdayStepRankingRedisService {
         rankigRedisTemplate.opsForZSet().add(USERS_KEY, stepRankingInfo.getUserId(), stepRankingInfo.getYesterdayStep());
     }
 
-    public StepRankingResponse getRedisYesterdayStepRankingList(int startRanking, int endRanking) {
+    public RedisStepRankingResponse getRedisYesterdayStepRankingList(int startRanking, int endRanking) {
         List<StepRankingList> accStepRankingList = new ArrayList<>();
         Set<Integer> top10users = rankigRedisTemplate.opsForZSet().reverseRange(USERS_KEY, startRanking, endRanking);
         assert top10users != null;
@@ -44,7 +44,7 @@ public class YesterdayStepRankingRedisService {
             accStepRankingList.add(StepRankingList.from(changeAccStepRankingInfo, userRanking));
         }
 
-        return StepRankingResponse.from(accStepRankingList);
+        return RedisStepRankingResponse.from(accStepRankingList);
     }
 
     public StepRankingList getUserYesterdayStepRanking(int userId) {
