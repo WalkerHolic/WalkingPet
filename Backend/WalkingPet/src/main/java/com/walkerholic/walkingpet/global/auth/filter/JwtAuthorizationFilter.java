@@ -2,7 +2,6 @@ package com.walkerholic.walkingpet.global.auth.filter;
 
 import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
-import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;

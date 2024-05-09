@@ -4,21 +4,18 @@ import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.StepRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import jakarta.annotation.Resource;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -44,7 +41,7 @@ public class RealtimeStepRankingRedisService {
     }
 
     // 실시간 걸음수 기준 상위 랭킹 래스트 가져오기
-    public StepRankingResponse getRedisRealtimeStepRankingList(int startRanking, int endRanking) {
+    public RedisStepRankingResponse getRedisRealtimeStepRankingList(int startRanking, int endRanking) {
         List<StepRankingList> accStepRankingList = new ArrayList<>();
         Set<Integer> top10users = rankigRedisTemplate.opsForZSet().reverseRange(USERS_KEY, startRanking, endRanking);
         assert top10users != null;
@@ -59,7 +56,7 @@ public class RealtimeStepRankingRedisService {
             accStepRankingList.add(StepRankingList.from(changeAccStepRankingInfo, userRanking));
         }
 
-        return StepRankingResponse.from(accStepRankingList);
+        return RedisStepRankingResponse.from(accStepRankingList);
     }
 
     // 실시간 걸음수를 기준으로 특정 유저의 순위를 가져오기

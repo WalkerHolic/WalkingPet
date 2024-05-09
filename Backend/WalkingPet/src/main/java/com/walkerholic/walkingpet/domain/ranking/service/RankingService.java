@@ -51,16 +51,22 @@ public class RankingService {
      * 누적 걸음수 기준으로 top 10 랭킹 가져오기
      */
     @Transactional(readOnly = true)
+    @Cacheable(value="accStepRankingTop10")
     public AccStepRankingResponse getAccStepRankingTop10() {
-        //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
-        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-        for (UserStep userStepInfo : topUsers) {
+        int rank = 0;
+        int previousAccumulationStep = -1;
+        List<StepRankingInfo> accStepRankingList = new ArrayList<>();
+
+        for (UserStep userStepInfo: topUsers) {
             UserDetail userDetailInfo = userDetailRepository.findUserDetailByUser(userStepInfo.getUser())
                     .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
+            if (userStepInfo.getAccumulationStep() != previousAccumulationStep) rank++;
+
+            accStepRankingList.add(StepRankingInfo.entityFrom(userDetailInfo, userStepInfo, rank));
+            previousAccumulationStep = userStepInfo.getAccumulationStep();
         }
 
         return AccStepRankingResponse.from(accStepRankingList);
