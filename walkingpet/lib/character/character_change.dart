@@ -139,30 +139,31 @@ class _CharacterChangeState extends State<CharacterChange> {
           ),
 
         // 5. 변경 버튼
-        Positioned(
-          bottom: 16,
-          left: screenWidth * 0.1,
-          right: screenWidth * 0.1,
-          child: TextButton(
-            onPressed: () async {
-              await postCharacterChange(selectCharacterId as int);
-              Navigator.pushNamed(context, '/characterinfo');
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset('assets/buttons/green_button.png'),
-                const Text(
-                  '변경하기',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.black,
+        if (!isLoading)
+          Positioned(
+            bottom: 16,
+            left: screenWidth * 0.1,
+            right: screenWidth * 0.1,
+            child: TextButton(
+              onPressed: () async {
+                await postCharacterChange(selectCharacterId as int);
+                Navigator.pushNamed(context, '/characterinfo');
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset('assets/buttons/green_button.png'),
+                  const Text(
+                    '변경하기',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }
