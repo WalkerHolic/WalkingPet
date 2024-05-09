@@ -97,8 +97,11 @@ class LevelUpModal extends StatelessWidget {
                           children: [
                             // 4-2-1. 일반 상자
                             if (levelUpInfo['levelUpReward']['itemReward']
-                                    ['Normal Box'] >
-                                0)
+                                        ['Normal Box'] !=
+                                    null &&
+                                levelUpInfo['levelUpReward']['itemReward']
+                                        ['Normal Box'] >
+                                    0)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -117,8 +120,11 @@ class LevelUpModal extends StatelessWidget {
 
                             // 4-2-2. 고급 상자
                             if (levelUpInfo['levelUpReward']['itemReward']
-                                    ['Normal Box'] >
-                                0)
+                                        ['Normal Box'] !=
+                                    null &&
+                                levelUpInfo['levelUpReward']['itemReward']
+                                        ['Luxury Box'] >
+                                    0)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
