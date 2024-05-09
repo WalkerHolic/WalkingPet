@@ -51,14 +51,9 @@ class StepCounter with ChangeNotifier {
   void _onStepCount(StepCount event) async {
     _prefs?.reload();
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
-    print(event.steps);
     _steps = event.steps - _baseSteps;
 
     await _prefs?.setInt('eventSteps', event.steps);
-    print("불러보자");
-    print(_prefs?.getInt('eventSteps'));
-    print(_steps);
-    print(_baseSteps);
     notifyListeners();
   }
 

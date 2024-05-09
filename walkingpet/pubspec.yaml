@@ -27,6 +27,7 @@ dependencies:
   flutter_secure_storage: ^4.2.1
   shared_preferences: ^2.2.3
   android_alarm_manager_plus: ^4.0.3
+  timezone: ^0.9.3
 
 dev_dependencies:
   flutter_test:
