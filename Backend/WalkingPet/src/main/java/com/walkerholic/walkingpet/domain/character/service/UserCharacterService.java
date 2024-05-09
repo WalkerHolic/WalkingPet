@@ -77,7 +77,7 @@ public class UserCharacterService {
      * 사용자의 캐릭터 변경 메서드
      */
     @Transactional(readOnly = false)
-    public void changeUserCharacter(int userId, ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
+    public ChangeCharacterIdResponse changeUserCharacter(int userId, ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
         UserDetail userDetail = userDetailRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
 
@@ -85,6 +85,7 @@ public class UserCharacterService {
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
 
         userDetail.changeUserCharacter(userCharacter);
+        return ChangeCharacterIdResponse.from(userDetail.getSelectUserCharacter().getCharacter().getCharacterId());
     }
 
     /**
