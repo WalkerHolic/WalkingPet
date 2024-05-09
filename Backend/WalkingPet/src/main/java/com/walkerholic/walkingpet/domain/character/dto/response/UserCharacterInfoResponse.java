@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class UserCharacterInfoResponse {
     private String nickname;
     private int characterId;
-    private int level;
+    private int characterLevel;
     private int experience;
     private int maxExperience;
     private int health;
@@ -33,7 +33,7 @@ public class UserCharacterInfoResponse {
         return UserCharacterInfoResponse.builder()
                 .nickname(userDetail.getUser().getNickname())
                 .characterId(userCharacter.getCharacter().getCharacterId())
-                .level(userCharacter.getLevel())
+                .characterLevel(userCharacter.getLevel())
                 .experience(userCharacter.getExperience())
                 .maxExperience(UserCharacterFunction.getMaxExperience(userCharacter.getLevel()))
                 .health(userCharacter.getHealth())

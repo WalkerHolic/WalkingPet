@@ -40,6 +40,18 @@ public class CharacterController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfo);
     }
 
+    @GetMapping("/exp")
+    @Operation(summary = "캐릭터 경험치 정보 확인", description = "유저의 userCharacterId로  캐릭터 경험치 정보 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터의 경험치 정보를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterExpInfoResponse.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터의 경험치 정보를 찾기 실패")
+    public ResponseEntity<CommonResponseEntity> getUserCharacterExpInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
+        Integer userId = userDetail.getUsers().getUserId();
+        log.info("캐릭터 경험치 정보 확인 getUserCharacterExpInfo - userId: {}", userId);
+
+        UserCharacterExpInfoResponse userCharacterExpInfo = userCharacterService.getUserCharacterExpInfo(userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterExpInfo);
+    }
+
     @GetMapping("/list")
     @Operation(summary = "유저의 캐릭터 목록 정보 가져오기", description = "유저가 보유한 캐릭터와 보유하지 않은 캐릭터 목록 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 정보 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
