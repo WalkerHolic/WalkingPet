@@ -67,6 +67,7 @@ class _GroupDetailState extends State<GroupDetail> {
     int currStep = 3000; // 현재 결음수
     String groupName = groupData!['teamName'] ?? '그룹 이름 없음';
     String description = groupData!['explain'] ?? '설명 없음';
+    int groupTotalStep = groupData!['teamTotalStep'] ?? 0;
 
     return Scaffold(
       body: Stack(
@@ -128,7 +129,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                   width: 250,
                                   child: LinearProgressIndicator(
                                     // 그룹 목표
-                                    value: currStep / goalStep,
+                                    value: groupTotalStep / goalStep,
                                     minHeight: 20,
                                     color: const Color(0xff7DF39D),
                                     backgroundColor: const Color(0xff43695c),
