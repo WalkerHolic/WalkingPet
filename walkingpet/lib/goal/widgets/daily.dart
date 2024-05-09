@@ -5,7 +5,8 @@ import 'package:walkingpet/services/goal/get_daily_reward.dart';
 class DailyGoalItem extends StatefulWidget {
   final String title;
   // 서버에서 받은 데이터에 따라 초기 활성화 상태 변경
-  final isActivated;
+  final bool isActivated; //활성화 여부
+  final bool isCompleted;
   final int goalSteps; // 각각 목표에 따라 리워드 지급 요청을 보내기 위해
 
   const DailyGoalItem({
@@ -14,6 +15,7 @@ class DailyGoalItem extends StatefulWidget {
     required this.title,
     //기존 상태 = 비활성
     required this.isActivated,
+    required this.isCompleted,
     required this.goalSteps,
   });
   @override
@@ -26,32 +28,78 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
   @override
   void initState() {
     super.initState();
-    _isPressed = false;
+    //목표가 이미 완료된 경우 _isPressed를 true로 설정
+    _isPressed = widget.isCompleted;
   }
 
-  _toggleButton() {
+  // _toggleButton() {
+  //   if (!_isPressed) {
+  //     if (!widget.isActivated) {
+  //       //버튼 안눌림, 활성화 안됨
+  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //         content: Text("이 목표는 활성화되지 않았습니다."),
+  //         duration: Duration(seconds: 4),
+  //       ));
+  //     } else {
+  //       //버튼 안눌림. 활성화 됨
+  //       sendRewardRequest(widget.goalSteps).then((success) {
+  //         if (success) {
+  //           setState(() {
+  //             _isPressed = true;
+  //           });
+  //         } else {
+  //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //             content: Text("리워드 요청에 실패했습니다."),
+  //             duration: Duration(seconds: 4),
+  //           ));
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
+  void _toggleButton() {
+    // 버튼이 이미 완료된 상태라면 요청을 보내지 않음
+    if (_isPressed || widget.isCompleted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("이미 완료된 목표입니다."),
+        duration: Duration(seconds: 4),
+      ));
+      return; // 더 이상의 작업을 수행하지 않고 함수 종료
+    }
+
+    // 버튼이 비활성화된 경우
     if (!widget.isActivated) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("이 목표는 이미 완료되었거나, 활성화 되지 않았습니다."),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } else if (!_isPressed) {
-      sendRewardRequest(widget.goalSteps).then((success) {
-        if (success) {
-          setState(() {
-            _isPressed = true;
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("리워드 요청에 실패했습니다."),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
-      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("이 목표는 활성화되지 않았습니다."),
+        duration: Duration(seconds: 4),
+      ));
+      return; // 비활성화 상태에서 요청을 보내지 않고 함수 종료
+    }
+
+    // 보상 요청을 서버로 보냄
+    sendRewardRequest(widget.goalSteps).then((success) {
+      if (success) {
+        setState(() {
+          _isPressed = true;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("리워드 요청에 실패했습니다."),
+          duration: Duration(seconds: 4),
+        ));
+      }
+    });
+  }
+
+  String getButtonAsset() {
+    if (widget.isCompleted) {
+      //이미 달성된 경우
+      return 'assets/buttons/button_complete.svg';
+    } else if (widget.isActivated) {
+      //달성되지 않았지만 활성화된 경우
+      return 'assets/buttons/brown_button.svg';
+    } else {
+      return 'assets/buttons/button_not_enough.svg';
     }
   }
 
@@ -75,9 +123,7 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
             GestureDetector(
               onTap: _toggleButton,
               child: SvgPicture.asset(
-                _isPressed
-                    ? 'assets/buttons/brown_button_pushed.svg'
-                    : 'assets/buttons/brown_button.svg',
+                getButtonAsset(),
                 width: screenWidth * 0.18,
               ),
             ),

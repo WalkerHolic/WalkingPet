@@ -12,12 +12,12 @@ class Goal extends StatefulWidget {
 }
 
 class _GoalState extends State<Goal> {
-  int steps = 0;
+  int steps = 7500;
   List<bool> dailyGoals = [];
   List<bool> weeklyGoals = [];
   Map<String, bool> stampedDays = {};
   //일일 목표 관련
-  bool isAttended = false;
+  bool isAttended = true;
   bool isWalked3000 = false;
   bool isWalked5000 = false;
   bool isWalked7000 = false;
@@ -32,7 +32,7 @@ class _GoalState extends State<Goal> {
         setState(
           () {
             //data를 State 변수에 저장
-            steps = data['step'];
+            // steps = data['step'];
             dailyGoals = List<bool>.from(data['dailyGoal']);
             weeklyGoals = List<bool>.from(data['weeklyGoal']);
             print('받아서 새로 저장한 데이터: $weeklyGoals');
@@ -46,16 +46,21 @@ class _GoalState extends State<Goal> {
               '토요일': weeklyGoals[5],
               '일요일': weeklyGoals[6]
             };
-            //일일 목표
-            isAttended = dailyGoals[0];
-            isWalked3000 = dailyGoals[1];
-            isWalked5000 = dailyGoals[2];
-            isWalked7000 = dailyGoals[3];
-            isWalked10000 = dailyGoals[4];
+            // 초기 일일 목표 상태를 업데이트
+            updateDailyGoals();
           },
         );
       },
     );
+  }
+
+  void updateDailyGoals() {
+    setState(() {
+      isWalked3000 = steps >= 3000;
+      isWalked5000 = steps >= 5000;
+      isWalked7000 = steps >= 7000;
+      isWalked10000 = steps >= 10000;
+    });
   }
 
   @override
@@ -147,26 +152,36 @@ class _GoalState extends State<Goal> {
                       DailyGoalItem(
                         title: "출석",
                         isActivated: isAttended,
+                        isCompleted:
+                            dailyGoals.isNotEmpty ? dailyGoals[0] : false,
                         goalSteps: 0,
                       ),
                       DailyGoalItem(
                         title: "3000 걸음",
                         isActivated: isWalked3000,
+                        isCompleted:
+                            dailyGoals.isNotEmpty ? dailyGoals[1] : false,
                         goalSteps: 3000,
                       ),
                       DailyGoalItem(
                         title: "5000 걸음",
                         isActivated: isWalked5000,
+                        isCompleted:
+                            dailyGoals.isNotEmpty ? dailyGoals[2] : false,
                         goalSteps: 5000,
                       ),
                       DailyGoalItem(
                         title: "7000 걸음",
                         isActivated: isWalked7000,
+                        isCompleted:
+                            dailyGoals.isNotEmpty ? dailyGoals[3] : false,
                         goalSteps: 7000,
                       ),
                       DailyGoalItem(
                         title: "10000 걸음",
                         isActivated: isWalked10000,
+                        isCompleted:
+                            dailyGoals.isNotEmpty ? dailyGoals[4] : false,
                         goalSteps: 10000,
                       ),
                       Text(
