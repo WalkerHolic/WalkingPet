@@ -156,7 +156,7 @@ class MyApp extends StatelessWidget {
         '/gacha': (context) => const Gacha(),
         '/battleready': (context) => const BattleReady(),
         '/group': (context) => const Group(),
-        '/levelup': (context) => const LevelUp(),
+        '/levelup': (context) => LevelUp(), // 주석처리 가능한지 고민
       },
     );
   }
