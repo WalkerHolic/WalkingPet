@@ -37,6 +37,7 @@ public class ItemService {
         UserCharacter userCharacter = getUserDetail(userId).getSelectUserCharacter();
         return levelUpService.getLevelUpResponseByObject(userId, userCharacter, expItemQuantity*EXP_ITEM_EXP_QUANTITY);
     }
+
     /**
      * userId로 userDetail과 UserCharacter 가져오는 메소드
      * @param userId 유저아이디
@@ -51,4 +52,5 @@ public class ItemService {
         return userItemRepository.findByUserItemWithUserAndItemFetch(userId, itemName)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.ITEM_NOT_FOUND));
     }
+
 }
