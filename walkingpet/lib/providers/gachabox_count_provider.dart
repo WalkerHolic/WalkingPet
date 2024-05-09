@@ -8,8 +8,8 @@ class BoxCounterProvider extends ChangeNotifier {
   //상자 수 초기화
   Future<void> initializeBoxCounts() async {
     var data = await countRemainBox();
-    normalBoxCount = data['normalBoxCount'];
-    luxuryBoxCount = data['luxuryBoxCount'];
+    normalBoxCount = data['normalBoxCount'] ?? 0;
+    luxuryBoxCount = data['luxuryBoxCount'] ?? 0;
     notifyListeners(); //리스너에게 상태 변경 알림
   }
 
