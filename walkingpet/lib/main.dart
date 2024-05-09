@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
 import 'package:walkingpet/character/characterinfo.dart';
+import 'package:walkingpet/common/step_counter.dart';
 import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
 import 'package:walkingpet/group/group.dart';
@@ -14,9 +15,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  _requestPermissions();
+  await AndroidAlarmManager.initialize();
+  scheduleMinuteAlarm();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -40,6 +46,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(
             create: (context) => BoxCounterProvider()..initializeBoxCounts()),
+        ChangeNotifierProvider(create: (context) => StepCounter()),
       ],
       child: const MyApp(),
     ),
@@ -51,9 +58,42 @@ void main() {
   //   }
   //   return Future.value(true);
   // }
-
-  _requestPermissions();
 }
+
+void triggerOnEachMinute() async {
+  print("실행됨");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.reload();
+  var es = prefs.getInt('eventSteps') ?? 0;
+  await prefs.setInt('baseSteps', es);
+
+  print(es);
+}
+
+void scheduleMinuteAlarm() {
+  const int alarmId = 1;
+  final DateTime now = DateTime.now();
+  final DateTime nextMinute =
+      DateTime(now.year, now.month, now.day, now.hour, now.minute + 1);
+
+  AndroidAlarmManager.periodic(
+      const Duration(seconds: 5), alarmId, triggerOnEachMinute,
+      startAt: nextMinute, exact: true, wakeup: true);
+}
+
+/*
+void scheduleResetSteps() {
+  const int alarmId = 1;
+  final DateTime now = DateTime.now();
+  final DateTime firstInstance = DateTime(now.year, now.month, now.day + 1);
+  const Duration daily = Duration(days: 1);
+
+  AndroidAlarmManager.periodic(daily, alarmId, resetStepsCallback,
+      startAt: firstInstance, exact: true, wakeup: true);
+}
+
+void resetStepsCallback() {}
+*/
 
 // 권한 요청 메소드 정의
 void _requestPermissions() async {
