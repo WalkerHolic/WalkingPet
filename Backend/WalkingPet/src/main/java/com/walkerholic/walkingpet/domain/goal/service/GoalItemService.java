@@ -17,12 +17,14 @@ import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfoDTO.DAILY_GOAL_COUNT;
 import static com.walkerholic.walkingpet.domain.goal.dto.response.UserGoalInfoDTO.WEEKLY_GOAL_COUNT;
@@ -45,16 +47,6 @@ public class GoalItemService {
     private final UserCharacterRepository userCharacterRepository;
     private final LevelUpFunction levelUpFunction;
     private final LevelUpService levelUpService;
-
-    //보상으로 주어지는 박스의 갯수
-    public final int GOAL_REWARD_BOX_QUANTITY = 1;
-
-    public final int GOAL_REWARD_EXP_ATTENDANCE = 3;
-    public final int GOAL_REWARD_EXP_NORMAL = 5;
-
-    public final String NORMAL_BOX = "일반상자";
-    public final String LUXURY_BOX = "고급상자";
-
 
     /**
      * Controller - 유저의 목표 정보를 보여주는 service
@@ -261,6 +253,26 @@ public class GoalItemService {
         }
 
         return result;
+    }
+
+    //매일매일 개인목표 초기화
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    public void resetDailyGoal(){
+        List<Goal> goalList = goalRepository.findAll();
+        for(Goal goal : goalList){
+            goal.setDailyGoal(0);
+            goalRepository.save(goal);
+        }
+    }
+
+    //매주 목요일마다 주간목표 초기화
+    @Scheduled(cron = "0 0 0 * * 1", zone = "Asia/Seoul")
+    public void resetWeeklyGoal(){
+        List<Goal> goalList = goalRepository.findAll();
+        for(Goal goal : goalList){
+            goal.setWeeklyGoal(0);
+            goalRepository.save(goal);
+        }
     }
 
     public Users getUserByUserId(int userId){
