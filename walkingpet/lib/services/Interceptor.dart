@@ -8,9 +8,12 @@ class AuthInterceptor extends http.BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     final accessToken = await _storage.read(key: 'ACCESS_TOKEN');
-
+    int steps = 1000;
     final headers = request.headers;
+
     headers['Authorization'] = 'Bearer $accessToken';
+    headers['Steps'] = '$steps';
+
     request.headers.addAll(headers);
 
     return _inner.send(request);
