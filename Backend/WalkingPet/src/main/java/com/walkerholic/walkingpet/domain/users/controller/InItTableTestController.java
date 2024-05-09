@@ -27,6 +27,6 @@ public class InItTableTestController {
     public ResponseEntity<CommonResponseEntity> getPersonalRanking(@RequestParam("email") String email) {
 
         signInService.signInInItTable(email);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, null    );
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, null);
     }
 }

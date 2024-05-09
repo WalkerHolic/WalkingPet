@@ -48,6 +48,8 @@ public class UserDetail {
 
     public void updateBattleRating(int ratingScore){this.battleRating += ratingScore;}
 
+    public void setBattleRating(int battleRating){this.battleRating = battleRating;}
+
     @Builder
     public UserDetail(Users user, UserCharacter selectUserCharacter){
         this.user = user;
