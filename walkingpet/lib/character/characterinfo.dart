@@ -168,7 +168,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                         children: [
                           // 4-1. 레벨
                           Text(
-                            'Lv.${characterInfoData['level']}',
+                            'Lv.${characterInfoData['characterLevel']}',
                             style: const TextStyle(
                               fontSize: 23,
                             ),
