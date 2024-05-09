@@ -39,9 +39,9 @@ public class UserItem {
     }
 
     @Builder
-    public UserItem(Users user,Item item){
+    public UserItem(Users user,Item item, int quantity){
         this.item = item;
         this.user = user;
-        this.quantity = 0;
+        this.quantity = quantity;
     }
 }

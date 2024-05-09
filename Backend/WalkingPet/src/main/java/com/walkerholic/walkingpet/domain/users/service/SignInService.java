@@ -84,6 +84,7 @@ public class SignInService {
             userItemRepository.save(UserItem.builder()
                     .item(item)
                     .user(user)
+                    .quantity(5)
                     .build());
         }
     }
