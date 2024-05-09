@@ -26,8 +26,7 @@ public class GoalController {
     @GetMapping("/info")
     @Operation(summary = "유저의 목표 정보 출력", description = "정수로 저장된 유저의 일일 목표를 true, false 배열로 출력")
     public ResponseEntity<CommonResponseEntity> getGoalInfo(@AuthenticationPrincipal CustomUserDetail userDetail){
-//        Integer userId = userDetail.getUsers().getUserId();
-        int userId = 1;
+        Integer userId = userDetail.getUsers().getUserId();
         log.info("유저의 목표 정보 출력 GaolController userGoalInfo - userId: {}", userId);
         UserGoalInfoDTO userGoalInfoDTO = goalService.getUserGoalInfo(userId);
 
@@ -37,8 +36,7 @@ public class GoalController {
     @GetMapping("/reward")
     @Operation(summary = "유저 목표 달성 보상 확인", description = "특정 걸음수를 달성했을시 목표 정보를 업데이트")
     public ResponseEntity<CommonResponseEntity> getGoalReward(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam(name = "goalStep")int goalStep){
-//        Integer userId = userDetail.getUsers().getUserId();
-        int userId = 1;
+        Integer userId = userDetail.getUsers().getUserId();
         GoalRewardDTO userGoalInfoDTO = goalService.getGoalReward(userId, goalStep);
         log.info("특정 걸음수를 달성했을 때 보상 정보 저장 GaolController userGoalInfo - userId: {}", userId);
 
