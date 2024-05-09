@@ -5,12 +5,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/group/widgets/group_detail.dart';
 
 class GroupCard extends StatelessWidget {
+  final int groupId;
   final String groupName;
   final String description; // 그룹 한줄 설명
   final int numOfMember; //그룹 내 멤버 수
 
   const GroupCard({
     super.key,
+    required this.groupId,
     required this.groupName,
     required this.description,
     required this.numOfMember,
@@ -79,7 +81,7 @@ class GroupCard extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  const GroupDetail(groupName: "아무그룹"),
+                                  GroupDetail(groupId: groupId),
                             ),
                           );
                         },

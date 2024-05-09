@@ -20,18 +20,19 @@ class _MyGroupState extends State<MyGroup> {
   Widget build(BuildContext context) {
     final List<GroupCard> groupCards = widget.myGroups.map((group) {
       return GroupCard(
+        groupId : group['teamId'],
         groupName: group['teamName'],
         description: group['explain'],
         numOfMember: group['userCount'],
       );
     }).toList();
     return Container(
-      // child: Column(
-      //   children: groupCards,
-      // ),
-      child: const Center(
-        child: Text("공사 중입니다."),
+      child: Column(
+        children: groupCards,
       ),
+      // child: const Center(
+      //   child: Text("공사 중입니다."),
+      // ),
     );
   }
 }
