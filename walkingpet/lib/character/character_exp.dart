@@ -19,16 +19,16 @@ class _CharacterExpState extends State<CharacterExp> {
   int? characterLevel;
   double? expValue;
   bool isLoading = true;
-  int expitemCount = 0;
+
+  int quantity = 0; // API 요청으로 받아오는 '경험치 아이템' 값
+  int expitemCount = 0; // 알고리즘 구현을 위한 값
 
   Map<String, dynamic> characterExpData = {};
-  int? quantity;
 
   @override
   void initState() {
     super.initState();
     initInfo();
-    // Expitem(quantity as int);
   }
 
   // API 요청으로 데이터 불러오기
@@ -45,6 +45,8 @@ class _CharacterExpState extends State<CharacterExp> {
         characterLevel = characterInfoData['characterLevel'];
         expValue = (characterInfoData['experience'] ?? 0).toDouble() /
             (characterInfoData['maxExperience'] ?? 1).toDouble();
+
+        quantity = characterInfoData['quantity'];
 
         print(characterInfoData);
         isLoading = false;
@@ -265,7 +267,7 @@ class _CharacterExpState extends State<CharacterExp> {
 
                           // 4-5. '+' 버튼
                           GestureDetector(
-                            onTap: expitemCount < characterInfoData['quantity']
+                            onTap: expitemCount < quantity
                                 ? () => setState(() => expitemCount++)
                                 : null,
                             child: Image.asset(
@@ -276,9 +278,8 @@ class _CharacterExpState extends State<CharacterExp> {
 
                           // 4-6. 'MAX' 버튼
                           GestureDetector(
-                            onTap: expitemCount < characterInfoData['quantity']
-                                ? () => setState(() => expitemCount =
-                                    characterInfoData['quantity'])
+                            onTap: expitemCount < quantity
+                                ? () => setState(() => expitemCount = quantity)
                                 : null,
                             child: Image.asset(
                               'assets/buttons/yellow_max_button.png',
@@ -301,7 +302,7 @@ class _CharacterExpState extends State<CharacterExp> {
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          characterInfoData['quantity'].toString(),
+                          quantity.toString(),
                           style: const TextStyle(fontSize: 22),
                         ),
                         const Text(
@@ -330,8 +331,18 @@ class _CharacterExpState extends State<CharacterExp> {
                       // 4-8-2. '사용' 버튼
                       TextButton(
                         onPressed: () async {
-                          // await getStatReset();
-                          Navigator.pushNamed(context, '/characterinfo');
+                          // 5. API 요청
+                          var responseExpitem = await getExpitem(expitemCount);
+                          var expitemData = responseExpitem['data'];
+                          var isLevelUp = expitemData['isLevelUp'];
+                          var levelUpInfo = expitemData['levelUpInfo'];
+
+                          // 6. 레벨업 : O => 레벨업 모달 이동 / X => 캐릭터 정보 페이지 이동
+                          // if (isLevelUp) {
+
+                          // } else {
+                          //   Navigator.pushNamed(context, '/characterinfo');
+                          // }
                         },
                         child: Image.asset(
                           'assets/buttons/green_use_button.png',
