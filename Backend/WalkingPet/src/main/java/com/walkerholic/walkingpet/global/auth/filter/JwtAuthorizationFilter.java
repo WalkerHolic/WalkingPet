@@ -1,11 +1,10 @@
 package com.walkerholic.walkingpet.global.auth.filter;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
-import com.walkerholic.walkingpet.global.auth.service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
+import com.walkerholic.walkingpet.global.auth.service.SecurityLoginService;
 import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,7 +31,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-    private final SecurityService securityService;
+    private final SecurityLoginService securityService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     @Override
