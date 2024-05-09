@@ -100,7 +100,15 @@ class _CharacterInfoState extends State<CharacterInfo> {
           ),
 
           // 3. 내용
-          if (!isLoading)
+          if (isLoading)
+            const Center(
+                child: Text(
+              '캐릭터 정보 로딩중..',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ))
+          else
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
