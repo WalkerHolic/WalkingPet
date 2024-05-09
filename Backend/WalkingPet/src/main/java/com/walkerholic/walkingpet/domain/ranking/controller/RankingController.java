@@ -35,12 +35,12 @@ public class RankingController {
     // mysql 버전으로 데이터 가져오기 -> 현재는 redis이기 때문에 사용x, 성능 테스트 확인용
     @GetMapping
     @Operation(summary = "유저의 개인 랭킹과 개인 랭킹 목록 조회", description = "유저의 어제/누적/실시간 랭킹 정보를 가져오기")
-    @ApiResponse(responseCode = "200", description = "S200 - 유저의 개인 랭킹과 개인 랭킹 목록 조회 성공", content = @Content(schema = @Schema(implementation = PersonalStepRankingResponse.class)))
+    @ApiResponse(responseCode = "200", description = "S200 - 유저의 개인 랭킹과 개인 랭킹 목록 조회 성공", content = @Content(schema = @Schema(implementation = PersonalStepRankingAllInfoResponse.class)))
     public ResponseEntity<CommonResponseEntity> getPersonalRanking(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("value") String value) {
         Integer userId = userDetail.getUsers().getUserId();
         log.info("개인 랭킹 조회 getPersonalRanking - userId: {}, value: {}", userId, value);
 
-        PersonalStepRankingResponse personalStepRanking = rankingService.getAccStepRanking(userId);
+        PersonalStepRankingAllInfoResponse personalStepRanking = rankingService.getAccStepRanking(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, personalStepRanking);
     }
 
@@ -51,9 +51,9 @@ public class RankingController {
         log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
 //        RedisStepRankingResponse accStepRankingList;
-        AccStepRankingResponse accStepRankingList;
+        PersonalStepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            accStepRankingList = rankingService.getAccStepRankingTop10();
+            accStepRankingList = rankingService.getYesterdayStepRankingTop10();
 //            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 9);
         } else if (value.equals("accumulation")) {
             accStepRankingList = rankingService.getAccStepRankingTop10();
@@ -74,15 +74,14 @@ public class RankingController {
 
         RedisStepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getAccStepRankingTop3());
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getYesterdayStepRankingTop3());
 //            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 2);
         } else if (value.equals("accumulation")) {
-            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 2);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getAccStepRankingTop3());
+//            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 2);
         } else {
-            accStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 2);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 2));
         }
-
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
 
     @GetMapping("/person/myrank")
