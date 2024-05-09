@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/character/character_change.dart';
+import 'package:walkingpet/character/character_exp.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
@@ -217,13 +218,25 @@ class _CharacterInfoState extends State<CharacterInfo> {
                           ),
 
                           // 4-3. 경험치 아이템 사용 버튼 (+버튼)
-                          // SizedBox(
-                          //   // width: 30,
-                          //   child: Image.asset(
-                          //     'assets/buttons/yellow_plus_button.png',
-                          //     scale: 0.75,
-                          //   ),
-                          // ),
+                          SizedBox(
+                            width: 30,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CharacterExp()),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              child: Image.asset(
+                                'assets/buttons/yellow_plus_button.png',
+                                scale: 0.75,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
