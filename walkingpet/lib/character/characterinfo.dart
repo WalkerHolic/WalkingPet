@@ -131,7 +131,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                     // scale: 0.3,
                   ),
 
-                  // 3. 변경 버튼
+                  // 3. 캐릭터 변경 버튼
                   TextButton(
                     onPressed: () {
                       showDialog(
@@ -217,7 +217,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                             ),
                           ),
 
-                          // 4-3. 경험치 아이템 사용 버튼 (+버튼)
+                          // 4-3. 경험치 아이템 사용 버튼 (페이지 이동)
                           SizedBox(
                             width: 30,
                             child: TextButton(
