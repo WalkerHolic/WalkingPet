@@ -16,13 +16,5 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/item")
 public class ItemController {
-    private final ItemService itemService;
 
-    @GetMapping("/use/expitem")
-    public ResponseEntity<CommonResponseEntity> useExpItem(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("quantity") int quantity){
-        int userId = userDetail.getUsers().getUserId();
-        log.info("경험치 아이템 사용 확인 useExpItem - userId: {}, quantity: {}", userId, quantity);
-        LevelUpResponse levelUpResponse = itemService.usingExpItem(userId, quantity);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, levelUpResponse);
-    }
 }

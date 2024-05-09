@@ -3,6 +3,8 @@ package com.walkerholic.walkingpet.domain.character.controller;
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
 import com.walkerholic.walkingpet.domain.character.dto.response.*;
 import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
+import com.walkerholic.walkingpet.domain.item.service.ItemService;
+import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class CharacterController {
 
     private final UserCharacterService userCharacterService;
+    private final ItemService itemService;
 
     @GetMapping
     @Operation(summary = "캐릭터 정보 확인", description = "유저의 userCharacterId로  캐릭터 정보 가져오기")
@@ -110,4 +113,13 @@ public class CharacterController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트");
     }
 
+    @Operation(summary = "경험치 아이템 사용", description = "경험치가 5씩 증가하는 아이템을 사용한다.")
+    @ApiResponse(responseCode = "200", description = "S200 - 아이템 사용 성공")
+    @GetMapping("/item/use/expitem")
+    public ResponseEntity<CommonResponseEntity> useExpItem(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("quantity") int quantity){
+        int userId = userDetail.getUsers().getUserId();
+        log.info("경험치 아이템 사용 확인 useExpItem - userId: {}, quantity: {}", userId, quantity);
+        LevelUpResponse levelUpResponse = itemService.usingExpItem(userId, quantity);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, levelUpResponse);
+    }
 }
