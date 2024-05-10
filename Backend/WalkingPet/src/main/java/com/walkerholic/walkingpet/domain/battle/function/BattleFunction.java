@@ -143,7 +143,6 @@ public class BattleFunction {
         if(battleResult){
             return BattleResultInfo.builder()
                     .battleResult(battleResult)
-                    .rewardExperience(WIN_EXP)
                     .rewardRating(WIN_RATING)
                     .resultRating(userDetail.getBattleRating() + WIN_RATING)
                     .rewardItem(rewardfunction.getRewardItem(battleResult))
@@ -152,7 +151,6 @@ public class BattleFunction {
         else{
             return BattleResultInfo.builder()
                     .battleResult(battleResult)
-                    .rewardExperience(LOSE_EXP)
                     .rewardRating(LOSE_RATING)
                     .resultRating(userDetail.getBattleRating() + LOSE_EXP)
                     .rewardItem(rewardfunction.getRewardItem(battleResult))
