@@ -25,6 +25,7 @@ public class RewardFunction {
 
         if(batlleResult){
             battleReward.replace("Exp Item", WIN_EXP_ITEM_QUANTITY);
+
             if(boxProbability <= BOX_PROBABILITY){
                 int randomBoxCheck = random.nextInt(100);
                 if(randomBoxCheck <= LUXURY_BOX_PROBABILITY){

@@ -159,15 +159,21 @@ public class BattleService {
         selectUserCharacter.addExperience(battleResultInfo.getRewardExperience());
         userCharacterRepository.save(selectUserCharacter);
 
+        System.out.println("보상을 저장합니다.");
         HashMap<String, Integer> reward = battleResultInfo.getRewardItem().getReward();
         UserItem normalBoxUserItem = getUserItem(userDetail.getUser().getUserId(), "Normal Box");
         normalBoxUserItem.addItemQuantity(reward.get("Normal Box"));
+        userItemRepository.save(normalBoxUserItem);
 
-        UserItem luxuryBoxUserItem = getUserItem(userDetail.getUser().getUserId(), "Normal Box");
+        UserItem luxuryBoxUserItem = getUserItem(userDetail.getUser().getUserId(), "Luxury Box");
         luxuryBoxUserItem.addItemQuantity(reward.get("Luxury Box"));
+        userItemRepository.save(luxuryBoxUserItem);
 
-        UserItem expItemUserItem = getUserItem(userDetail.getUser().getUserId(), "Normal Box");
-        expItemUserItem.addItemQuantity(reward.get("Exp Box"));
+        UserItem expItemUserItem = getUserItem(userDetail.getUser().getUserId(), "Exp Item");
+        System.out.println("경험치 아이템 획득량 = " + reward.get("Exp Item"));
+        expItemUserItem.addItemQuantity(reward.get("Exp Item"));
+        userItemRepository.save(expItemUserItem);
+        System.out.println("경험치 아이템 저장 이후의 수량 = " + expItemUserItem.getQuantity()) ;
     }
 
     /**
