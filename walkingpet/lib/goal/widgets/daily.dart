@@ -32,31 +32,6 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
     _isPressed = widget.isCompleted;
   }
 
-  // _toggleButton() {
-  //   if (!_isPressed) {
-  //     if (!widget.isActivated) {
-  //       //버튼 안눌림, 활성화 안됨
-  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //         content: Text("이 목표는 활성화되지 않았습니다."),
-  //         duration: Duration(seconds: 4),
-  //       ));
-  //     } else {
-  //       //버튼 안눌림. 활성화 됨
-  //       sendRewardRequest(widget.goalSteps).then((success) {
-  //         if (success) {
-  //           setState(() {
-  //             _isPressed = true;
-  //           });
-  //         } else {
-  //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //             content: Text("리워드 요청에 실패했습니다."),
-  //             duration: Duration(seconds: 4),
-  //           ));
-  //         }
-  //       });
-  //     }
-  //   }
-  // }
   void _toggleButton() {
     // 버튼이 이미 완료된 상태라면 요청을 보내지 않음
     if (_isPressed || widget.isCompleted) {
