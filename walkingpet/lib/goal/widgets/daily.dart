@@ -34,7 +34,7 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
 
   void _toggleButton() {
     // 버튼이 이미 완료된 상태라면 요청을 보내지 않음
-    if (_isPressed) {
+    if (_isPressed || widget.isCompleted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("이미 완료된 목표입니다."),
         duration: Duration(seconds: 2),
@@ -52,32 +52,28 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
     }
 
     // 보상 요청을 서버로 보냄
-    sendRewardRequest(widget.goalSteps).then((success) {
-      if (success) {
-        setState(() {
-          _isPressed = true;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("보상이 지급되었습니다."),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("리워드 요청에 실패했습니다."),
-          duration: Duration(seconds: 2),
-        ));
-      }
+    sendRewardRequest(widget.goalSteps).then((reward) {
+      setState(() {
+        _isPressed = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("보상이 지급되었습니다. : $reward"),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     });
   }
 
   String getButtonAsset() {
     if (_isPressed) {
+      print('이미 달성된 경우 : $_isPressed');
       //이미 달성된 경우
       return 'assets/buttons/button_complete.svg';
     } else if (widget.isActivated) {
       //달성되지 않았지만 활성화된 경우
+      print('달성되지 않았지만 활성화된 경우 : $_isPressed');
+      //왜 isPressed가 false로 뜨지?
       return 'assets/buttons/brown_button.svg';
     } else {
       return 'assets/buttons/button_not_enough.svg';
