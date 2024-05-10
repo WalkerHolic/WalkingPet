@@ -19,19 +19,15 @@ class Gacha extends StatefulWidget {
 }
 
 class _GachaState extends State<Gacha> {
-  // int normalBoxCount = 0;
-  // int luxuryBoxCount = 0;
   @override
   // 페이지가 처음 로드될 때 남은 상자 정보 받아옴
-  // void initState() {
-  //   super.initState();
-  //   countRemainBox().then((data) {
-  //     setState(() {
-  //       normalBoxCount = data['normalBoxCount'];
-  //       luxuryBoxCount = data['luxuryBoxCount'];
-  //     });
-  //   });
-  // }
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<BoxCounterProvider>(context, listen: false)
+          .initializeBoxCounts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,10 +137,8 @@ class _GachaState extends State<Gacha> {
           ),
           Positioned(
             top: screenWidth / 8, //화면 높이 기준 위치
-            child: Image.asset(
-                'assets/animals/red_dragon/red_dragon_idle.gif',
-                width: 400,
-                fit: BoxFit.cover),
+            child: Image.asset('assets/animals/red_dragon/red_dragon_idle.gif',
+                width: 400, fit: BoxFit.cover),
           ),
         ],
       ),
