@@ -27,12 +27,12 @@ class _MyGroupState extends State<MyGroup> {
       );
     }).toList();
     return Container(
-      child: Column(
-        children: groupCards,
-      ),
-      // child: const Center(
-      //   child: Text("공사 중입니다."),
+      // child: Column(
+      //   children: groupCards,
       // ),
+      child: const Center(
+        child: Text("공사 중입니다."),
+      ),
     );
   }
 }

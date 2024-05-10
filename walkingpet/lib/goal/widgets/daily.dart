@@ -34,10 +34,10 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
 
   void _toggleButton() {
     // 버튼이 이미 완료된 상태라면 요청을 보내지 않음
-    if (_isPressed || widget.isCompleted) {
+    if (_isPressed) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("이미 완료된 목표입니다."),
-        duration: Duration(seconds: 4),
+        duration: Duration(seconds: 2),
       ));
       return; // 더 이상의 작업을 수행하지 않고 함수 종료
     }
@@ -46,7 +46,7 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
     if (!widget.isActivated) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("이 목표는 활성화되지 않았습니다."),
-        duration: Duration(seconds: 4),
+        duration: Duration(seconds: 2),
       ));
       return; // 비활성화 상태에서 요청을 보내지 않고 함수 종료
     }
@@ -57,17 +57,23 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
         setState(() {
           _isPressed = true;
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("보상이 지급되었습니다."),
+            duration: Duration(seconds: 2),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("리워드 요청에 실패했습니다."),
-          duration: Duration(seconds: 4),
+          duration: Duration(seconds: 2),
         ));
       }
     });
   }
 
   String getButtonAsset() {
-    if (widget.isCompleted) {
+    if (_isPressed) {
       //이미 달성된 경우
       return 'assets/buttons/button_complete.svg';
     } else if (widget.isActivated) {
