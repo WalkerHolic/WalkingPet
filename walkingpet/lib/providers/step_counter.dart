@@ -12,7 +12,7 @@ class StepCounter with ChangeNotifier {
 
   // Private constructor
   StepCounter._internal() {
-    _initializePedometer();
+    initializePedometer();
   }
 
   // Factory constructor
@@ -24,15 +24,21 @@ class StepCounter with ChangeNotifier {
   int get steps => _steps;
   int get bs => _baseSteps;
 
-  Future<void> _initializePedometer() async {
+  Future<void> initializePedometer() async {
+    print("pedometer 초기화");
     _prefs = await SharedPreferences.getInstance();
+    await _prefs?.reload();
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
     if (_baseSteps == 0) {
       await _prefs?.setInt('baseSteps', 0);
     }
     _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen((event) {
+      _prefs?.setInt('eventSteps', event.steps);
+    });
     _stepCountStream.listen(_onStepCount);
     _fetchInitialSteps();
+    print("pedometer 초기화 완료");
   }
 
   Future<void> _fetchInitialSteps() async {
@@ -49,21 +55,34 @@ class StepCounter with ChangeNotifier {
   }
 
   void _onStepCount(StepCount event) async {
-    _prefs?.reload();
+    print("onStepCount 실행됨");
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs?.reload();
+    print(_prefs?.getInt('baseSteps'));
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
     _steps = event.steps - _baseSteps;
 
-    await _prefs?.setInt('eventSteps', event.steps);
+    _prefs?.setInt('eventSteps', event.steps);
+    await _prefs?.reload();
+    print(_prefs);
+    print(_prefs?.getInt('eventSteps'));
     notifyListeners();
+    print(_steps);
   }
 
-  void resetStep() async {
+  Future<void> resetStep() async {
+    print("걸음수 초기화");
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    print(prefs.getInt('eventSteps'));
     int currentSteps = prefs.getInt('eventSteps') ?? 0;
+    print("eventSteps");
+    print(currentSteps);
     await prefs.setInt(
         'baseSteps', currentSteps); // baseSteps를 현재의 eventSteps 값으로 설정
     _steps = 0; // 로컬 변수를 리셋
     notifyListeners();
+    print("걸음수 초기화 완료");
   }
 
   @override
