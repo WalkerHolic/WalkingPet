@@ -87,6 +87,11 @@ class _HomeState extends State<Home> {
                         //'assets/animals/wolf/wolf_run.gif',
                         'assets/animals/$animal/${animal}_walk.gif',
                       ),
+                    const MainFontStyle(
+                      size: 12,
+                      text: "걸음수는 하루 첫 접속 기준으로 계산됩니다",
+                      color: Colors.yellow,
+                    ),
                   ],
                 ),
               ),
