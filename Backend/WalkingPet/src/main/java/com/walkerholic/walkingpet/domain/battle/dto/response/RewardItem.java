@@ -2,10 +2,11 @@ package com.walkerholic.walkingpet.domain.battle.dto.response;
 
 import lombok.*;
 
+import java.util.HashMap;
+
 @Builder
 @ToString
 @Getter
 public class RewardItem {
-    private int expItem;
-    private String box;
+    private HashMap<String, Integer> reward;
 }
