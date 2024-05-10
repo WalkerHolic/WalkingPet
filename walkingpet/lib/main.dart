@@ -7,7 +7,6 @@ import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
 import 'package:walkingpet/group/group.dart';
 import 'package:walkingpet/home/home.dart';
-import 'package:walkingpet/levelup/levelup.dart';
 import 'package:walkingpet/login/login.dart';
 import 'package:walkingpet/ranking/ranking.dart';
 import 'package:flutter/services.dart'; // SystemChrome을 사용하기 위해 필요
@@ -156,7 +155,6 @@ class MyApp extends StatelessWidget {
         '/gacha': (context) => const Gacha(),
         '/battleready': (context) => const BattleReady(),
         '/group': (context) => const Group(),
-        '/levelup': (context) => const LevelUp(),
       },
     );
   }

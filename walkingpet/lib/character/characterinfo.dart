@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/character/character_change.dart';
+import 'package:walkingpet/character/character_exp.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
@@ -130,7 +131,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                     // scale: 0.3,
                   ),
 
-                  // 3. 변경 버튼
+                  // 3. 캐릭터 변경 버튼
                   TextButton(
                     onPressed: () {
                       showDialog(
@@ -167,7 +168,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
                         children: [
                           // 4-1. 레벨
                           Text(
-                            'Lv.${characterInfoData['level']}',
+                            'Lv.${characterInfoData['characterLevel']}',
                             style: const TextStyle(
                               fontSize: 23,
                             ),
@@ -216,14 +217,26 @@ class _CharacterInfoState extends State<CharacterInfo> {
                             ),
                           ),
 
-                          // 4-3. 경험치 아이템 사용 버튼 (+버튼)
-                          // SizedBox(
-                          //   // width: 30,
-                          //   child: Image.asset(
-                          //     'assets/buttons/yellow_plus_button.png',
-                          //     scale: 0.75,
-                          //   ),
-                          // ),
+                          // 4-3. 경험치 아이템 사용 버튼 (페이지 이동)
+                          SizedBox(
+                            width: 30,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CharacterExp()),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              child: Image.asset(
+                                'assets/buttons/yellow_plus_button.png',
+                                scale: 0.75,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
