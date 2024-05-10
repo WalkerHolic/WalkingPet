@@ -208,7 +208,8 @@ Future<void> _login(BuildContext context) async {
 
     if (response.statusCode == 200) {
       await _saveTokens(response.body);
-      Navigator.pushNamed(context, '/home');
+
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
       print("서버로부터 응답이 없습니다");
     }

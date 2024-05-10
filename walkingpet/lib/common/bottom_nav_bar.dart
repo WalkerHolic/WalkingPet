@@ -72,19 +72,19 @@ void _onItemTapped(BuildContext context, int index, int selectedIndex) {
 
   switch (index) {
     case 0:
-      Navigator.pushReplacementNamed(context, '/characterinfo');
+      Navigator.pushNamed(context, '/characterinfo');
       break;
     case 1:
-      Navigator.pushReplacementNamed(context, '/gacha');
+      Navigator.pushNamed(context, '/gacha');
       break;
     case 2:
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushNamed(context, '/home');
       break;
     case 3:
-      Navigator.pushReplacementNamed(context, '/battleready');
+      Navigator.pushNamed(context, '/battleready');
       break;
     case 4:
-      Navigator.pushReplacementNamed(context, '/group');
+      Navigator.pushNamed(context, '/group');
       break;
   }
 }

@@ -74,7 +74,7 @@ class _BattleSideState extends State<BattleSide> {
             Timer(const Duration(seconds: 1), () {
               // 여기에 지연 후 실행할 코드를 작성
               if (widget.isLeft) {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => BattleResult(
