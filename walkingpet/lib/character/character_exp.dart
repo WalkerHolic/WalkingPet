@@ -17,7 +17,11 @@ class _CharacterExpState extends State<CharacterExp> {
   Map<String, dynamic> characterInfoData = {};
   String animal = "";
   int? characterLevel;
+
+  int experience = 0;
+  int maxExperience = 0;
   double? expValue;
+
   bool isLoading = true;
 
   int quantity = 0; // API 요청으로 받아오는 '경험치 아이템' 값
@@ -41,8 +45,11 @@ class _CharacterExpState extends State<CharacterExp> {
         animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
 
         characterLevel = characterInfoData['characterLevel'];
-        expValue = (characterInfoData['experience'] ?? 0).toDouble() /
-            (characterInfoData['maxExperience'] ?? 1).toDouble();
+        experience = characterInfoData['experience'];
+        maxExperience = characterInfoData['maxExperience'];
+        expValue = experience / maxExperience;
+        // expValue = (characterInfoData['experience'] ?? 0).toDouble() /
+        //     (characterInfoData['maxExperience'] ?? 1).toDouble();
 
         quantity = characterInfoData['quantity'];
 
@@ -234,9 +241,14 @@ class _CharacterExpState extends State<CharacterExp> {
                         children: [
                           // 4-3. '-' 버튼
                           GestureDetector(
-                            onTap: expitemCount > 0
-                                ? () => setState(() => expitemCount--)
-                                : null,
+                            onTap: () {
+                              if (expitemCount > 0) {
+                                setState(() {
+                                  expitemCount--;
+                                  experience -= (5 * expitemCount);
+                                });
+                              }
+                            },
                             child: Image.asset(
                               'assets/buttons/yellow_minus_button.png',
                               scale: 0.75,
@@ -265,9 +277,14 @@ class _CharacterExpState extends State<CharacterExp> {
 
                           // 4-5. '+' 버튼
                           GestureDetector(
-                            onTap: expitemCount < quantity
-                                ? () => setState(() => expitemCount++)
-                                : null,
+                            onTap: () {
+                              if (expitemCount < quantity) {
+                                setState(() {
+                                  expitemCount++;
+                                  experience += (5 * expitemCount);
+                                });
+                              }
+                            },
                             child: Image.asset(
                               'assets/buttons/yellow_plus_button.png',
                               scale: 0.75,
