@@ -368,8 +368,9 @@ class _CharacterExpState extends State<CharacterExp> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    child:
-                                        LevelUpModal(levelUpInfo: levelUpInfo),
+                                    child: LevelUpModal(
+                                        levelUpInfo: levelUpInfo,
+                                        animal: animal),
                                   ),
                                 );
                               },
