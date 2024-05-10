@@ -24,10 +24,36 @@ class Top1to3 extends StatelessWidget {
       child: Column(
         children: [
           // 1. 순위 (1~3위)
-          Text(
-            ranking.toString(),
-            style: const TextStyle(
-              fontSize: 34,
+          // 1,2,3위는 해당하는 메달 이미지를, 나머지는 텍스트만 나오도록 수정
+          SizedBox(
+            width: 36,
+            child: ranking == 1
+                ? Image.asset(
+              'assets/icons/gold_medal.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
+            )
+                : ranking == 2
+                ? Image.asset(
+              'assets/icons/silver_medal.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
+            )
+                : ranking == 3
+                ? Image.asset(
+              'assets/icons/bronze_medal.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
+            )
+                : Text(
+              ranking.toString(),
+              style: const TextStyle(
+                fontSize: 22,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
 
