@@ -6,7 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/gacha/widgets/gacha_box.dart';
-import 'package:walkingpet/gacha/widgets/gacha_modal.dart';
+import 'package:walkingpet/gacha/widgets/modal_luxury.dart';
+import 'package:walkingpet/gacha/widgets/modal_normal.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:walkingpet/services/gacha/count_remain_box.dart';
 
@@ -115,7 +116,7 @@ class _GachaState extends State<Gacha> {
                           // onTap: () => showGachaModal(context),
                           onTap: () {
                             boxCounter.openNormalBox(); // 상태 업데이트
-                            showGachaModal(context); //모달창 표시
+                            showNormalModal(context); //모달창 표시
                           },
                         ),
                         const SizedBox(width: 40), //일반상자 ~ 고급상자 사이 공간
@@ -128,7 +129,7 @@ class _GachaState extends State<Gacha> {
                           // onTap: () => showGachaModal(context),
                           onTap: () {
                             boxCounter.openLuxuryBox();
-                            showGachaModal(context);
+                            showLuxuryModal(context);
                           },
                         ),
                       ],
