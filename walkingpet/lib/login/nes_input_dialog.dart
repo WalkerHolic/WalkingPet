@@ -45,6 +45,12 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
     super.dispose();
   }
 
+  void setErrorMessage() {
+    setState(() {
+      _errorMessage = '중복된 닉네임 입니다.';
+    });
+  }
+
   bool _validateInput(String value) {
     if (value.isEmpty) {
       setState(() {
@@ -65,6 +71,39 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
     return true;
   }
 
+  // 신규 유저 회원가입
+  Future<void> _signUp(BuildContext context, String nickname) async {
+    final User user = await UserApi.instance.me();
+    const baseUrl = 'https://walkingpet.co.kr';
+    const endpoint = '/auth/social-login';
+
+    if (await _checkNickname(nickname)) {
+      try {
+        final url = Uri.parse('$baseUrl$endpoint');
+        final body = {
+          'socialEmail': '${user.kakaoAccount?.email}',
+          'nickname': nickname
+        };
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(body),
+        );
+
+        if (response.statusCode == 200) {
+          await _saveTokens(response.body);
+          Navigator.pushNamed(context, '/home');
+        } else {
+          print("서버로부터 응답이 없습니다");
+        }
+      } catch (error) {
+        print("네트워크 문제: $error");
+      }
+    } else {
+      setErrorMessage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -78,6 +117,10 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
             controller: _controller,
             textAlign: TextAlign.center,
             autofocus: true,
+            maxLength: 6,
+            decoration: const InputDecoration(
+              counterText: "", // 카운터 텍스트를 숨김
+            ),
             validator: (value) {
               if (value == null || !_validateInput(value)) {
                 return ' '; // This space ' ' is used to activate the error message space.
@@ -97,7 +140,7 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
                 style: const TextStyle(color: Colors.white)),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                _signUp(context,_controller.text);
+                _signUp(context, _controller.text);
                 //Navigator.of(context).pop(_controller.text);
               }
             },
@@ -114,14 +157,13 @@ Future<void> _saveTokens(String responseBody) async {
   final accessToken = jsonResponse['data']['accessToken'];
   final refreshToken = jsonResponse['data']['refreshToken'];
 
-  final storage = FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
   await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
   await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
 }
 
 // 닉네임 중복 체크
 Future<bool> _checkNickname(String nickname) async {
-
   const baseUrl = 'https://walkingpet.co.kr';
   const endpoint = '/user/nicknameCheck';
 
@@ -150,37 +192,3 @@ Future<bool> _checkNickname(String nickname) async {
     return false;
   }
 }
-
-
-
-// 신규 유저 회원가입
-Future<void> _signUp(BuildContext context,String nickname) async {
-  final User user = await UserApi.instance.me();
-  const baseUrl = 'https://walkingpet.co.kr';
-  const endpoint = '/auth/social-login';
-
-  if (await _checkNickname(nickname)) {
-    try {
-      final url = Uri.parse('$baseUrl$endpoint');
-      final body = {
-        'socialEmail': '${user.kakaoAccount?.email}',
-        'nickname': nickname
-      };
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(body),
-      );
-
-      if (response.statusCode == 200) {
-        await _saveTokens(response.body);
-        Navigator.pushNamed(context, '/home');
-      } else {
-        print("서버로부터 응답이 없습니다");
-      }
-    } catch (error) {
-      print("네트워크 문제: $error");
-    }
-  }
-}
-

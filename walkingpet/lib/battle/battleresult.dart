@@ -14,70 +14,74 @@ class BattleResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/backgrounds/battleResult.png"),
-          fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
+    return PopScope(
+      canPop: false,
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/backgrounds/battleResult.png"),
+            fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 200,
-              ),
-              ResultFontStyle(
-                size: 40,
-                text: battleResult['battleResult'] ? "WIN" : "LOSE",
-                color: battleResult['battleResult'] ? Colors.blue : Colors.red,
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-              Image.asset(
-                battleResult['battleResult']
-                    ? 'assets/animals/$animal/${animal}_attack.gif'
-                    : 'assets/animals/$animal/${animal}_idle.gif',
-                scale: 1.2,
-              ),
-              // Transform.translate(
-              //     offset: const Offset(80, -140),
-              //     child: ResultFontStyle(
-              //         size: 20,
-              //         text: "경험치 +${battleResult['rewardExperience']}",
-              //         color: Colors.green)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const MainFontStyle(size: 20, text: "점수:"),
-                  MainFontStyle(
-                      size: 40, text: " ${battleResult['resultRating']} "),
-                  ResultFontStyle(
-                      size: 30,
-                      text:
-                          '(${battleResult['rewardRating'] > 0 ? "+" : ""}${battleResult['rewardRating']})',
-                      color: battleResult['rewardRating'] > 0
-                          ? Colors.blue
-                          : Colors.red),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/battleready');
-                },
-                child: Image.asset(
-                  'assets/buttons/yesiknow_button.png',
-                  scale: 0.8,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 200,
                 ),
-              ),
-            ],
+                ResultFontStyle(
+                  size: 40,
+                  text: battleResult['battleResult'] ? "WIN" : "LOSE",
+                  color:
+                      battleResult['battleResult'] ? Colors.blue : Colors.red,
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Image.asset(
+                  battleResult['battleResult']
+                      ? 'assets/animals/$animal/${animal}_attack.gif'
+                      : 'assets/animals/$animal/${animal}_idle.gif',
+                  scale: 1.2,
+                ),
+                // Transform.translate(
+                //     offset: const Offset(80, -140),
+                //     child: ResultFontStyle(
+                //         size: 20,
+                //         text: "경험치 +${battleResult['rewardExperience']}",
+                //         color: Colors.green)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const MainFontStyle(size: 20, text: "점수:"),
+                    MainFontStyle(
+                        size: 40, text: " ${battleResult['resultRating']} "),
+                    ResultFontStyle(
+                        size: 30,
+                        text:
+                            '(${battleResult['rewardRating'] > 0 ? "+" : ""}${battleResult['rewardRating']})',
+                        color: battleResult['rewardRating'] > 0
+                            ? Colors.blue
+                            : Colors.red),
+                  ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+
+                InkWell(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/battleready');
+                  },
+                  child: Image.asset(
+                    'assets/buttons/yesiknow_button.png',
+                    scale: 0.8,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

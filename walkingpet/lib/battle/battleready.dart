@@ -144,7 +144,7 @@ class _BattleReadyState extends State<BattleReady> {
                       InkWell(
                           onTap: () {
                             if (characterData['battleCount'] > 0) {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
