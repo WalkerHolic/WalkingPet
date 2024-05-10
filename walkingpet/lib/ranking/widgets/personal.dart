@@ -57,7 +57,8 @@ class _PersonalRankingState extends State<PersonalRanking> {
               children: [
                 // 1. 어제 / 실시간 / 누적 선택
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  // 기존의 bottom padding 값 10을 20으로 수정
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
