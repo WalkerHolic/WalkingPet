@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/battle/battle.dart';
+import 'package:walkingpet/battle/widgets/character_change.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
-import 'package:walkingpet/common/star.dart';
+// import 'package:walkingpet/common/star.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/services/battle/getmyinfo.dart';
 
@@ -43,6 +44,9 @@ class _BattleReadyState extends State<BattleReady> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -67,6 +71,7 @@ class _BattleReadyState extends State<BattleReady> {
                 ),
                 child: Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MainFontStyle(
                           size: 40,
@@ -74,62 +79,97 @@ class _BattleReadyState extends State<BattleReady> {
                       MainFontStyle(
                           size: 30, text: "점수: ${characterData['rating']}"),
                       const SizedBox(
-                        height: 80,
+                        height: 30,
                       ),
-                      Transform.translate(
-                        offset: const Offset(0, 60),
-                        child: Star(
-                          count: characterData['characterGrade'],
-                        ),
+
+                      // 캐릭터 등급(별)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(characterData['characterGrade'],
+                            (index) {
+                          return Image.asset(
+                            'assets/items/one_star.png',
+                            width: screenWidth * 0.08,
+                          );
+                        }),
                       ),
+
                       Image.asset(
                         'assets/animals/$animal/${animal}_idle.gif',
                       ),
+
                       Transform.translate(
                         offset: const Offset(0, -20),
                         child: MainFontStyle(
                             size: 30, text: "Lv.${characterData['level']}"),
                       ),
-                      Transform.translate(
-                        offset: const Offset(0, -15),
+
+                      // 캐릭터 변경 버튼
+                      // Transform.translate(
+                      //   offset: const Offset(0, -15),
+                      //   child: Image.asset(
+                      //     'assets/buttons/character_change_button.png',
+                      //   ),
+                      // ),
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Container(
+                                  width: screenWidth,
+                                  height: screenHeight * 0.6,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: const BattleCharacterChange(),
+                                ),
+                              );
+                            },
+                          );
+                        },
                         child: Image.asset(
                           'assets/buttons/character_change_button.png',
+                          scale: 0.85,
                         ),
                       ),
+
                       const SizedBox(
                         height: 5,
                       ),
+
                       InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    Battle(myCharacterData: characterData),
-                              ),
-                            );
+                            if (characterData['battleCount'] > 0) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      Battle(myCharacterData: characterData),
+                                ),
+                              );
+                            }
                           },
                           child: Stack(
+                            alignment: Alignment.center,
                             children: [
                               Image.asset(
                                   'assets/buttons/battle_start_button.png'),
-                              Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Text(
-                                      "Battle Start!",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    Text(
-                                      "일일 남은 횟수: ${characterData['battleCount']}/10",
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ],
-                                ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Battle Start!",
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                  Text(
+                                    "일일 배틀 횟수: ${characterData['battleCount']}/10",
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
                               ),
                             ],
                           )),
