@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
+import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
+import 'package:walkingpet/services/character/characterinfo.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,6 +18,24 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    initInfo();
+  }
+
+  String animal = "cow";
+  bool isLoading = true;
+
+// API 요청으로 데이터 불러오기
+  Future<void> initInfo() async {
+    try {
+      var responseInfo = await getCharacterInfo();
+      var characterInfoData = responseInfo['data'];
+      int characterId = characterInfoData['characterId'] as int;
+
+      setState(() {
+        animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
+        isLoading = false;
+      });
+    } catch (e) {}
   }
 
   @override
@@ -62,10 +82,11 @@ class _HomeState extends State<Home> {
                             size: 100, text: "${provider.steps}");
                       }),
                     ),
-                    Image.asset(
-                      //'assets/animals/wolf/wolf_run.gif',
-                      'assets/animals/red_dragon/red_dragon_walk.gif',
-                    ),
+                    if (!isLoading)
+                      Image.asset(
+                        //'assets/animals/wolf/wolf_run.gif',
+                        'assets/animals/$animal/${animal}_walk.gif',
+                      ),
                   ],
                 ),
               ),
