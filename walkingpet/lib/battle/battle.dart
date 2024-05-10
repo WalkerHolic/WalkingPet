@@ -36,6 +36,9 @@ class _BattleState extends State<Battle> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -44,63 +47,62 @@ class _BattleState extends State<Battle> {
         ),
       ),
       child: Scaffold(
-          backgroundColor: Colors.transparent, // Scaffold의 배경을 투명하게 설정
-          body: Column(
-            children: [
-              if (!isLoading)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    BattleSide(
-                      health: widget.myCharacterData['health'],
-                      power: widget.myCharacterData['power'],
-                      defense: widget.myCharacterData['defense'],
-                      rating: widget.myCharacterData['rating'],
-                      characterId: widget.myCharacterData['characterId'],
-                      //characterId: widget.myCharacterData['characterId'],
-                      userCharacterLevel: widget.myCharacterData['level'],
-                      nickname: widget.myCharacterData['nickname'],
-                      isLeft: true, // 입은 데미지
-                      attackDamage: battleData['battleProgressInfo']
-                          ['userAttackDamage'],
-                      receivedDamage: battleData['battleProgressInfo']
-                          ['enemyAttackDamage'],
+        backgroundColor: Colors.transparent, // Scaffold의 배경을 투명하게 설정
+        body: Column(
+          children: [
+            if (!isLoading)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  BattleSide(
+                    health: widget.myCharacterData['health'],
+                    power: widget.myCharacterData['power'],
+                    defense: widget.myCharacterData['defense'],
+                    rating: widget.myCharacterData['rating'],
+                    characterId: widget.myCharacterData['characterId'],
+                    //characterId: widget.myCharacterData['characterId'],
+                    userCharacterLevel: widget.myCharacterData['level'],
+                    nickname: widget.myCharacterData['nickname'],
+                    isLeft: true, // 입은 데미지
+                    attackDamage: battleData['battleProgressInfo']
+                        ['userAttackDamage'],
+                    receivedDamage: battleData['battleProgressInfo']
+                        ['enemyAttackDamage'],
 
-                      userHealth: battleData['battleProgressInfo']
-                          ['userHealth'],
-                      loseDamage: battleData['battleProgressInfo']
-                          ['userLoseDamage'],
-                      battleResult: battleData['battleResultInfo'],
-                      levelUpResponse: battleData['levelUpResponse'],
-                    ),
-                    Transform.translate(
-                      offset: const Offset(0, 280),
-                      child: const MainFontStyle(size: 16, text: "vs"),
-                    ),
-                    BattleSide(
-                      health: battleData['enemyInfo']['health'],
-                      power: battleData['enemyInfo']['power'],
-                      defense: battleData['enemyInfo']['defense'],
-                      rating: battleData['enemyInfo']['rating'],
-                      characterId: battleData['enemyInfo']['characterId'],
-                      userCharacterLevel: battleData['enemyInfo']['level'],
-                      nickname: battleData['enemyInfo']['nickname'],
-                      isLeft: false,
-                      attackDamage: battleData['battleProgressInfo']
-                          ['enemyAttackDamage'],
-                      receivedDamage: battleData['battleProgressInfo']
-                          ['userAttackDamage'],
-                      userHealth: battleData['battleProgressInfo']
-                          ['userHealth'],
-                      loseDamage: battleData['battleProgressInfo']
-                          ['enemyLoseDamage'],
-                      battleResult: battleData['battleResultInfo'],
-                      levelUpResponse: battleData['levelUpResponse'],
-                    ),
-                  ],
-                ),
-            ],
-          )),
+                    userHealth: battleData['battleProgressInfo']['userHealth'],
+                    loseDamage: battleData['battleProgressInfo']
+                        ['userLoseDamage'],
+                    battleResult: battleData['battleResultInfo'],
+                    levelUpResponse: battleData['levelUpResponse'],
+                  ),
+                  Transform.translate(
+                    offset: const Offset(0, 280),
+                    child: const MainFontStyle(size: 16, text: "vs"),
+                  ),
+                  BattleSide(
+                    health: battleData['enemyInfo']['health'],
+                    power: battleData['enemyInfo']['power'],
+                    defense: battleData['enemyInfo']['defense'],
+                    rating: battleData['enemyInfo']['rating'],
+                    characterId: battleData['enemyInfo']['characterId'],
+                    userCharacterLevel: battleData['enemyInfo']['level'],
+                    nickname: battleData['enemyInfo']['nickname'],
+                    isLeft: false,
+                    attackDamage: battleData['battleProgressInfo']
+                        ['enemyAttackDamage'],
+                    receivedDamage: battleData['battleProgressInfo']
+                        ['userAttackDamage'],
+                    userHealth: battleData['battleProgressInfo']['userHealth'],
+                    loseDamage: battleData['battleProgressInfo']
+                        ['enemyLoseDamage'],
+                    battleResult: battleData['battleResultInfo'],
+                    levelUpResponse: battleData['levelUpResponse'],
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
