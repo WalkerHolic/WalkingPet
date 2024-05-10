@@ -35,7 +35,11 @@ public class LevelUpService {
      * @return 레벨업 여부 & 레벨업 정보 => 현재 레벨, 다음 레벨, 보상 정보
      */
     public LevelUpResponse getLevelUpResponse(UserDetail userDetail, int getExperience){
+        //일단 얻은 경험치 양만큼 캐릭터에 경험치 증가
         UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
+        selectUserCharacter.addExperience(getExperience);
+        userCharacterRepository.save(selectUserCharacter);
+
         int userId= userDetail.getUser().getUserId();
         
         if(levelUpFunction.checkLevelUp(selectUserCharacter.getLevel(), selectUserCharacter.getExperience(), getExperience)){
@@ -69,7 +73,7 @@ public class LevelUpService {
         else{
             return LevelUpResponse.builder()
                 .isLevelUp(false)
-                .levelUpInfo(null)
+                .levelUpInfo(getLevelUpInfo(userId,userCharacter, getExperience))
                 .build();
         }
     }
