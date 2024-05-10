@@ -4,13 +4,11 @@ import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class BattleResult extends StatelessWidget {
   final Map<String, dynamic> battleResult;
-  final Map<String, dynamic> levelUpResponse;
   final String animal;
 
   const BattleResult({
     super.key,
     required this.battleResult,
-    required this.levelUpResponse,
     required this.animal,
   });
 
@@ -45,12 +43,12 @@ class BattleResult extends StatelessWidget {
                     : 'assets/animals/$animal/${animal}_idle.gif',
                 scale: 1.2,
               ),
-              Transform.translate(
-                  offset: const Offset(80, -140),
-                  child: ResultFontStyle(
-                      size: 20,
-                      text: "경험치 +${battleResult['rewardExperience']}",
-                      color: Colors.green)),
+              // Transform.translate(
+              //     offset: const Offset(80, -140),
+              //     child: ResultFontStyle(
+              //         size: 20,
+              //         text: "경험치 +${battleResult['rewardExperience']}",
+              //         color: Colors.green)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -58,7 +56,7 @@ class BattleResult extends StatelessWidget {
                   MainFontStyle(
                       size: 40, text: " ${battleResult['resultRating']} "),
                   ResultFontStyle(
-                      size: 40,
+                      size: 30,
                       text:
                           '(${battleResult['rewardRating'] > 0 ? "+" : ""}${battleResult['rewardRating']})',
                       color: battleResult['rewardRating'] > 0
@@ -69,12 +67,14 @@ class BattleResult extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
+
               InkWell(
                 onTap: () {
                   Navigator.pushNamed(context, '/battleready');
                 },
                 child: Image.asset(
                   'assets/buttons/yesiknow_button.png',
+                  scale: 0.8,
                 ),
               ),
             ],

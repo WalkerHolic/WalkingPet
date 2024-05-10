@@ -36,6 +36,9 @@ class _BattleState extends State<Battle> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -44,14 +47,14 @@ class _BattleState extends State<Battle> {
         ),
       ),
       child: Scaffold(
-          backgroundColor: Colors.transparent, // Scaffold의 배경을 투명하게 설정
-          body: Column(
-            children: [
-              if (!isLoading)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    BattleSide(
+        backgroundColor: Colors.transparent, // Scaffold의 배경을 투명하게 설정
+        body: Column(
+          children: [
+            if (!isLoading)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  BattleSide(
                       health: widget.myCharacterData['health'],
                       power: widget.myCharacterData['power'],
                       defense: widget.myCharacterData['defense'],
@@ -65,19 +68,16 @@ class _BattleState extends State<Battle> {
                           ['userAttackDamage'],
                       receivedDamage: battleData['battleProgressInfo']
                           ['enemyAttackDamage'],
-
                       userHealth: battleData['battleProgressInfo']
                           ['userHealth'],
                       loseDamage: battleData['battleProgressInfo']
                           ['userLoseDamage'],
-                      battleResult: battleData['battleResultInfo'],
-                      levelUpResponse: battleData['levelUpResponse'],
-                    ),
-                    Transform.translate(
-                      offset: const Offset(0, 280),
-                      child: const MainFontStyle(size: 16, text: "vs"),
-                    ),
-                    BattleSide(
+                      battleResult: battleData['battleResultInfo']),
+                  Transform.translate(
+                    offset: const Offset(0, 280),
+                    child: const MainFontStyle(size: 16, text: "vs"),
+                  ),
+                  BattleSide(
                       health: battleData['enemyInfo']['health'],
                       power: battleData['enemyInfo']['power'],
                       defense: battleData['enemyInfo']['defense'],
@@ -94,13 +94,12 @@ class _BattleState extends State<Battle> {
                           ['userHealth'],
                       loseDamage: battleData['battleProgressInfo']
                           ['enemyLoseDamage'],
-                      battleResult: battleData['battleResultInfo'],
-                      levelUpResponse: battleData['levelUpResponse'],
-                    ),
-                  ],
-                ),
-            ],
-          )),
+                      battleResult: battleData['battleResultInfo']),
+                ],
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

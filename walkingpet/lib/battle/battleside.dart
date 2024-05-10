@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
@@ -21,25 +22,22 @@ class BattleSide extends StatefulWidget {
   final List<dynamic> userHealth;
   final List<dynamic> loseDamage;
   final Map<String, dynamic> battleResult;
-  final Map<String, dynamic> levelUpResponse;
 
-  const BattleSide({
-    super.key,
-    required this.health,
-    required this.power,
-    required this.defense,
-    required this.rating,
-    required this.characterId,
-    required this.userCharacterLevel,
-    required this.nickname,
-    required this.isLeft,
-    required this.attackDamage,
-    required this.receivedDamage,
-    required this.userHealth,
-    required this.loseDamage,
-    required this.battleResult,
-    required this.levelUpResponse,
-  });
+  const BattleSide(
+      {super.key,
+      required this.health,
+      required this.power,
+      required this.defense,
+      required this.rating,
+      required this.characterId,
+      required this.userCharacterLevel,
+      required this.nickname,
+      required this.isLeft,
+      required this.attackDamage,
+      required this.receivedDamage,
+      required this.userHealth,
+      required this.loseDamage,
+      required this.battleResult});
 
   @override
   State<BattleSide> createState() => _BattleSideState();
@@ -81,7 +79,6 @@ class _BattleSideState extends State<BattleSide> {
                   MaterialPageRoute(
                     builder: (context) => BattleResult(
                       battleResult: widget.battleResult,
-                      levelUpResponse: widget.levelUpResponse,
                       animal: animal,
                     ),
                   ),
@@ -102,70 +99,85 @@ class _BattleSideState extends State<BattleSide> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
-        const SizedBox(
-          height: 300,
+        SizedBox(
+          height: screenHeight * 0.37,
         ),
-        Row(
-          children: [
-            Transform.translate(
-              offset: const Offset(0, 3),
-              child: const MainFontStyle(size: 16, text: "점수: "),
-            ),
-            MainFontStyle(
-              size: 32,
-              text: widget.rating.toString(),
-            ),
-          ],
-        ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Image.asset(
-              widget.isLeft
-                  ? 'assets/images/health_bar_left.png'
-                  : 'assets/images/health_bar_right.png',
-              scale: 1.1,
-            ),
-            Transform.translate(
-              offset:
-                  widget.isLeft ? const Offset(15.5, 0) : const Offset(-16, 0),
-              child: LinearPercentIndicator(
-                backgroundColor: Colors.grey,
-                progressColor: Colors.green,
-                width: 130,
-                percent: 1,
-                animation: true,
-                lineHeight: 6,
-                barRadius: const Radius.circular(2),
+
+        SizedBox(
+          height: screenHeight * 0.15,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Transform.translate(
+                    offset: const Offset(0, 3),
+                    child: const MainFontStyle(size: 16, text: "점수: "),
+                  ),
+                  MainFontStyle(
+                    size: 32,
+                    text: widget.rating.toString(),
+                  ),
+                ],
               ),
-            ),
-            Transform(
-              alignment: Alignment.center,
-              transform: widget.isLeft
-                  ? Matrix4.rotationY(math.pi)
-                  : Matrix4.identity(),
-              child: Transform.translate(
-                offset:
-                    widget.isLeft ? const Offset(-15, 0) : const Offset(-16, 0),
-                child: LinearPercentIndicator(
-                  backgroundColor: Colors.transparent,
-                  width: 130,
-                  percent: _currentPercent,
-                  animation: true,
-                  lineHeight: 6,
-                  barRadius: const Radius.circular(2),
-                  animateFromLastPercent: true,
-                  animationDuration: 500,
-                ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    widget.isLeft
+                        ? 'assets/images/health_bar_left.png'
+                        : 'assets/images/health_bar_right.png',
+                    scale: 1.1,
+                  ),
+                  Transform.translate(
+                    offset: widget.isLeft
+                        ? const Offset(15.5, 0)
+                        : const Offset(-16, 0),
+                    child: LinearPercentIndicator(
+                      backgroundColor: Colors.grey,
+                      progressColor: Colors.green,
+                      width: 130,
+                      percent: 1,
+                      animation: true,
+                      lineHeight: 6,
+                      barRadius: const Radius.circular(2),
+                    ),
+                  ),
+                  Transform(
+                    alignment: Alignment.center,
+                    transform: widget.isLeft
+                        ? Matrix4.rotationY(math.pi)
+                        : Matrix4.identity(),
+                    child: Transform.translate(
+                      offset: widget.isLeft
+                          ? const Offset(-15, 0)
+                          : const Offset(-16, 0),
+                      child: LinearPercentIndicator(
+                        backgroundColor: Colors.transparent,
+                        width: 130,
+                        percent: _currentPercent,
+                        animation: true,
+                        lineHeight: 6,
+                        barRadius: const Radius.circular(2),
+                        animateFromLastPercent: true,
+                        animationDuration: 500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        const SizedBox(
-          height: 30,
+
+        SizedBox(
+          height: screenHeight * 0.025,
         ),
+
         SizedBox(
           height: 150,
           width: 160,
@@ -199,6 +211,8 @@ class _BattleSideState extends State<BattleSide> {
             ],
           ),
         ),
+
+        // 캐릭터 정보 박스
         Container(
           width: 150,
           height: 150,
@@ -209,6 +223,7 @@ class _BattleSideState extends State<BattleSide> {
           padding: const EdgeInsets.all(16),
           child: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -221,9 +236,10 @@ class _BattleSideState extends State<BattleSide> {
                     MainFontStyle(size: 12, text: widget.nickname),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -236,12 +252,16 @@ class _BattleSideState extends State<BattleSide> {
                     const SizedBox(
                       width: 10,
                     ),
-                    MainFontStyle(size: 16, text: (widget.health).toString()),
+                    MainFontStyle(
+                      size: 16,
+                      text: (widget.health).toString(),
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                // const SizedBox(
+                //   height: 5,
+                // ),
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -257,9 +277,10 @@ class _BattleSideState extends State<BattleSide> {
                     MainFontStyle(size: 16, text: (widget.power).toString()),
                   ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                // const SizedBox(
+                //   height: 5,
+                // ),
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
