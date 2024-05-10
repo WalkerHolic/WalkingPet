@@ -154,6 +154,9 @@ public class GoalService {
      */
     public HashMap<String, Integer> updateDailyGoalStatus(Goal goal, int goalStep){
         HashMap<String, Integer> goalReward = new HashMap<>();
+        goalReward.put("Normal Box", 0);
+        goalReward.put("Luxury Box", 0);
+        goalReward.put("Exp Item", 0);
 
         //int로 저장되어있는 일일 목표 값을 달성여부 boolean형 배열로 변환
         boolean[] dailyGoalStatus = getDailyGoalStatus(goal.getDailyGoal());
@@ -164,31 +167,31 @@ public class GoalService {
             if(goalStep == 0){
                 System.out.println("0보");
                 dailyGoalStatus[0] = true;
-                goalReward.put("Exp Item", 1);
+                goalReward.replace("Exp Item", 1);
             }
             else if(goalStep == 3000){
                 System.out.println("3000보");
                 dailyGoalStatus[1] = true;
-                goalReward.put("Exp Item", 2);
+                goalReward.replace("Exp Item", 2);
             }
             else if(goalStep == 5000){
                 System.out.println("5000보");
                 dailyGoalStatus[2] = true;
-                goalReward.put("Exp Item", 2);
+                goalReward.replace("Exp Item", 2);
                 //주간목표 달성 기준
                 updateWeeklyGoalStatus(goal);
             }
             else if(goalStep == 7000){
                 System.out.println("7000보");
                 dailyGoalStatus[3] = true;
-                goalReward.put("Exp Item", 2);
-                goalReward.put("Normal Box", 1);
+                goalReward.replace("Exp Item", 2);
+                goalReward.replace("Normal Box", 1);
             }
             else if(goalStep == 10000){
                 System.out.println("10000보");
                 dailyGoalStatus[4] = true;
-                goalReward.put("Exp Item", 2);
-                goalReward.put("Luxury Box", 1);
+                goalReward.replace("Exp Item", 2);
+                goalReward.replace("Luxury Box", 1);
             }
             else{
                 throw new Exception("보상에 해당하지 않는 걸음수가 입력값으로 들어왔습니다.");
