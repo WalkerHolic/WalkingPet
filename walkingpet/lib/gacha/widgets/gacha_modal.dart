@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/services/gacha/open_box.dart';
@@ -40,47 +41,61 @@ void showGachaModal(BuildContext context) async {
               // 클릭 이벤트 등의 Material 디자인 기능을 제공
               child: SizedBox(
                 // alignment: Alignment.center,
-                width: screenWidth * 0.9,
-                height: screenWidth * 0.9,
+                width: screenWidth,
+                height: screenWidth,
                 child: Stack(
                   children: [
                     Image.asset('assets/backgrounds/gacha_modal.png',
                         fit: BoxFit.cover),
                     Align(
                       alignment: const Alignment(0, 0.3),
-                      child: Column(
+                      child: Stack(
+                        // 캐릭터 이미지를 입체로 띄우기 위함
                         children: [
-                          SizedBox(
-                              //상자 안 컨텐츠 위치 조정을 위한 sizedBox
-                              height: screenHeight * 0.05),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center, //중앙 정렬
-                            children: stars,
-                          ),
-                          Text(
-                            '${characterData['characterName']}',
-                            style: const TextStyle(fontSize: 30),
-                          ),
-                          Image.asset(
-                            'assets/animals/$animal/${animal}_walk.gif',
-                            height: screenHeight * 0.1,
-                          ),
-                          SizedBox(
-                            width: screenWidth * 0.6,
-                            child: Text(
-                              statusText,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
+                          Align(
+                            alignment:
+                                const Alignment(0, -0.3), // 세로축 값을 조정해 더 위로 이동
+                            child: Image.asset(
+                              'assets/animals/$animal/${animal}_walk.gif',
+                              height: screenHeight * 0.2,
                             ),
                           ),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: SvgPicture.asset(
-                                  'assets/buttons/button_confirm.svg'))
+                          Column(
+                            children: [
+                              SizedBox(
+                                  //상자 안 컨텐츠 위치 조정을 위한 sizedBox
+                                  height: screenHeight * 0.05),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.center, //중앙 정렬
+                                children: stars,
+                              ),
+                              Text(
+                                '${characterData['characterName']}',
+                                style: const TextStyle(fontSize: 30),
+                              ),
+                              SizedBox(
+                                // 캐릭터 이름과 설명 사이 공간 확보
+                                height: screenHeight * 0.15,
+                              ),
+                              SizedBox(
+                                width: screenWidth * 0.6,
+                                child: Text(
+                                  statusText, // 중복인지 아닌지 알려주는 텍스트
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: SvgPicture.asset(
+                                      'assets/buttons/button_confirm.svg'))
+                            ],
+                          ),
                         ],
                       ),
                     ),
