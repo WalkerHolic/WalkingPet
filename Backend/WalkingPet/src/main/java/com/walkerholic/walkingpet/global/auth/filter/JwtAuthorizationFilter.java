@@ -3,8 +3,8 @@ package com.walkerholic.walkingpet.global.auth.filter;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
+import com.walkerholic.walkingpet.global.auth.util.AuthService;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
-import com.walkerholic.walkingpet.global.auth.service.SecurityLoginService;
 import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-    private final SecurityLoginService securityService;
+    private final AuthService authService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     @Override
@@ -56,7 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             result = jwtUtil.validateAccessToken(accessToken);
 
             // SecurityContext 에 Authentication 객체를 저장
-            securityService.saveUserInSecurityContext(accessToken);
+            authService.saveUserInSecurityContext(accessToken);
         } catch (ExpiredJwtException e) {
             System.out.println("JwtAuthorizationFilter doFilterInternal 토큰 만료");
             throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);

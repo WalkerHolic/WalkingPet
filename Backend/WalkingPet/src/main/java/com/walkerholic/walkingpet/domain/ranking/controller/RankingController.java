@@ -70,16 +70,18 @@ public class RankingController {
     @Operation(summary = "개인 랭킹 top 3 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 3 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = RedisStepRankingResponse.class)))
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop3(@RequestParam("value") String value) {
-        log.info("개인 걸음수 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", value);
 
         RedisStepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
+            log.info("개인 걸음수 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", "어제");
             return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getYesterdayStepRankingTop3());
 //            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 2);
         } else if (value.equals("accumulation")) {
+            log.info("개인 걸음수 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", "누적");
             return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getAccStepRankingTop3());
 //            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 2);
         } else {
+            log.info("개인 걸음수 랭킹 top 3 조회 getPersonalRankingTop3 - value: {}", "실시간");
             return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 2));
         }
     }

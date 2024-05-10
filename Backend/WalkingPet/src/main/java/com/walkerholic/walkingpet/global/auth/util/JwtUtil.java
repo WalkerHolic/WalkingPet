@@ -71,7 +71,6 @@ public class JwtUtil {
 
         // true: 토큰 만료x, false: 토큰 만료
         boolean isTokenExpired = checkTokenExpired(accessToken);
-        System.out.println("validateAccessToken isTokenExpired: " + isTokenExpired);
         if(!isTokenExpired) {
 //        if(isTokenExpired) {
             System.out.println("토큰 만료");

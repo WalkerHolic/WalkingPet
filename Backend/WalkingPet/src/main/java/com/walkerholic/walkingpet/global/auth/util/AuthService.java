@@ -1,11 +1,10 @@
-package com.walkerholic.walkingpet.global.auth.service;
+package com.walkerholic.walkingpet.global.auth.util;
 
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
-import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import io.jsonwebtoken.Claims;
@@ -19,16 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-/*
-    1.AuthenticationProvider에서 UserDetailsService 인터페이스를 통해 loadUserByUsername을 호출
-    2. loadUserByUsername은 유저 정보를 db에서 불러온 후 해당 유저 정보를 검증
-    3. 인증이 성공할 경우 해당 유저정보로 authentication객체를 생성한 후 securityContext에 넣어줌. 그 후 AuthenticationSuccessHandle을 실행
-    4. 실패할 경우 AuthenticationFailureHandler을 실행
-    5. 그 뒤에는 토큰 검증 등의 작업
- */
-@Service("MySecurityLoginService")
+@Service
 @RequiredArgsConstructor
-public class SecurityLoginService {
+public class AuthService {
     private final JwtUtil jwtUtil;
 
     // 회원가입 및 로그인 시 사용 controller에서
