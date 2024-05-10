@@ -57,6 +57,15 @@ class StepCounter with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetStep() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentSteps = prefs.getInt('eventSteps') ?? 0;
+    await prefs.setInt(
+        'baseSteps', currentSteps); // baseSteps를 현재의 eventSteps 값으로 설정
+    _steps = 0; // 로컬 변수를 리셋
+    notifyListeners();
+  }
+
   @override
   @mustCallSuper
   void dispose() {}
