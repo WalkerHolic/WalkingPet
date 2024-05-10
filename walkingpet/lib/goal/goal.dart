@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/goal/widgets/daily.dart';
 import 'package:walkingpet/goal/widgets/weekly.dart';
 // 페이지 로드 시 목표 달성 여부를 로드
 import 'package:walkingpet/services/goal/get_goal_info.dart';
+import 'package:walkingpet/providers/step_counter.dart';
+import 'package:provider/provider.dart';
 
 class Goal extends StatefulWidget {
   const Goal({super.key});
@@ -12,7 +15,6 @@ class Goal extends StatefulWidget {
 }
 
 class _GoalState extends State<Goal> {
-  int steps = 00;
   List<bool> dailyGoals = [];
   List<bool> weeklyGoals = [];
   Map<String, bool> stampedDays = {};
@@ -24,6 +26,8 @@ class _GoalState extends State<Goal> {
   bool isWalked5000 = false;
   bool isWalked7000 = false;
   bool isWalked10000 = false;
+  // 걸음 수 초기화
+  int steps = 0;
 
   @override
   void initState() {
@@ -49,7 +53,7 @@ class _GoalState extends State<Goal> {
               '일요일': weeklyGoals[6]
             };
             // 초기 일일 목표 상태를 업데이트
-            updateDailyGoals();
+            updateDailyGoals(steps);
             isLoading = false;
           },
         );
@@ -57,7 +61,7 @@ class _GoalState extends State<Goal> {
     );
   }
 
-  void updateDailyGoals() {
+  void updateDailyGoals(int steps) {
     setState(() {
       isWalked3000 = steps >= 3000;
       isWalked5000 = steps >= 5000;
@@ -71,9 +75,11 @@ class _GoalState extends State<Goal> {
     // 현재 화면의 크기를 가져오기
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    // 걸음수 더미값
-
+    // 걸음수 가져오기
+    int steps = context.watch<StepCounter>().steps ?? 0; // 초기값으로 0 사용
     int goalStep = 10000;
+    // 현재 걸음 수를 기반으로 일일 목표 업데이트
+    updateDailyGoals(steps);
 
     return Scaffold(
       // appBar: AppBar(
