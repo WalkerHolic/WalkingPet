@@ -38,8 +38,8 @@ public class BattleController {
     @GetMapping("/start")
     @Operation(summary = "배틀 전체 과정 출력", description = "배틀 시작, 진행 과정, 결과, 보상 출력")
     public ResponseEntity<CommonResponseEntity> battleStart(@AuthenticationPrincipal CustomUserDetail userDetail){
-//        Integer userId = userDetail.getUsers().getUserId();
-        int userId = 47;
+        Integer userId = userDetail.getUsers().getUserId();
+//        int userId = 47;
         log.info("배틀 시작 BattleController battleStart - userId: {}", userId);
         BattleResponseDTO battleResponse = battleService.getBattleResponse(userId);
 
