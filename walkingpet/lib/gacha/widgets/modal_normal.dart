@@ -6,13 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/services/gacha/open_box.dart';
 import 'package:walkingpet/common/character_map.dart';
 
-void showGachaModal(BuildContext context) async {
+void showNormalModal(BuildContext context) async {
   double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;
   // characterId 에 일치하는 gif 파일 받아오기 위한 변수
   String animal = '';
   try {
-    var characterData = await openLuxuryBox();
+    var characterData = await openNormalBox();
     int characterId = characterData['characterId'];
     animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
     //캐릭터 아이디에 해당하는 동물 이름 가져오기 (gif 파일에 접근하기 위함)
