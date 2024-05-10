@@ -34,6 +34,8 @@ public class ItemService {
         userItem.addItemQuantity(-expItemQuantity);
         userItemRepository.save(userItem);
 
+
+        //2. 사용한만큼 캐릭터에 경험치 올리기
         UserCharacter userCharacter = getUserDetail(userId).getSelectUserCharacter();
         return levelUpService.getLevelUpResponseByObject(userId, userCharacter, expItemQuantity*EXP_ITEM_EXP_QUANTITY);
     }
