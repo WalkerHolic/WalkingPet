@@ -34,7 +34,7 @@ class MemberScrollableList extends StatelessWidget {
             title: Row(
               children: [
                 Image.asset(
-                  'assets/animals/dragons/red/red_dragon_ready.gif',
+                  'assets/animals/red_dragon/red_dragon_idle.gif',
                   height: 70,
                 ),
                 Text(member['nickName'], style: const TextStyle(fontSize: 25)),
