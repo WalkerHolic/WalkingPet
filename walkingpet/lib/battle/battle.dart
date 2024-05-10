@@ -56,7 +56,7 @@ class _BattleState extends State<Battle> {
                       power: widget.myCharacterData['power'],
                       defense: widget.myCharacterData['defense'],
                       rating: widget.myCharacterData['rating'],
-                      characterId: 8,
+                      characterId: widget.myCharacterData['characterId'],
                       //characterId: widget.myCharacterData['characterId'],
                       userCharacterLevel: widget.myCharacterData['level'],
                       nickname: widget.myCharacterData['nickname'],
