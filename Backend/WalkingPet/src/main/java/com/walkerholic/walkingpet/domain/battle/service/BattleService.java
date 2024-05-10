@@ -5,6 +5,8 @@ import com.walkerholic.walkingpet.domain.battle.dto.response.*;
 import com.walkerholic.walkingpet.domain.battle.function.BattleFunction;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
+import com.walkerholic.walkingpet.domain.item.entity.UserItem;
+import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -30,9 +33,9 @@ public class BattleService {
     private final UsersRepository usersRepository;
     private final UserCharacterRepository userCharacterRepository;
     private final UserDetailRepository userDetailRepository;
+    private final UserItemRepository userItemRepository;
 
     private final BattleFunction battleFunction;
-    private final LevelUpService levelUpService;
 
     /**
      * 사용자의 배틀 정보 반환
@@ -155,6 +158,16 @@ public class BattleService {
         UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
         selectUserCharacter.addExperience(battleResultInfo.getRewardExperience());
         userCharacterRepository.save(selectUserCharacter);
+
+        HashMap<String, Integer> reward = battleResultInfo.getRewardItem().getReward();
+        UserItem normalBoxUserItem = getUserItem(userDetail.getUser().getUserId(), "Normal Box");
+        normalBoxUserItem.addItemQuantity(reward.get("Normal Box"));
+
+        UserItem luxuryBoxUserItem = getUserItem(userDetail.getUser().getUserId(), "Normal Box");
+        luxuryBoxUserItem.addItemQuantity(reward.get("Luxury Box"));
+
+        UserItem expItemUserItem = getUserItem(userDetail.getUser().getUserId(), "Normal Box");
+        expItemUserItem.addItemQuantity(reward.get("Exp Box"));
     }
 
     /**
@@ -196,5 +209,10 @@ public class BattleService {
     private UserCharacter getUserCharacter(int userId, int userCharacterId){
         return userCharacterRepository.findUserCharacterByUserIdAndUserCharacterId(userId, userCharacterId)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
+    }
+
+    private UserItem getUserItem(int userId, String characterName){
+        return userItemRepository.findByUserItemWithUserAndItemFetch(userId, characterName)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_ITEM_NOT_EXIST));
     }
 }
