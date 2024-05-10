@@ -60,7 +60,7 @@ class LevelUpModal extends StatelessWidget {
                     children: [
                       Text(
                         'Lv.${levelUpInfo['nowLevel']}',
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       const Text('  >  '),
                       Text(
