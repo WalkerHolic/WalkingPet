@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/goal/widgets/daily.dart';
 import 'package:walkingpet/goal/widgets/weekly.dart';
@@ -103,6 +104,27 @@ class _GoalState extends State<Goal> {
                     width: screenWidth * 0.9,
                     height: screenHeight * 0.9,
                     color: const Color(0xfffff3dc).withOpacity(0.8),
+                  ),
+                ),
+                // 닫기 버튼
+                Positioned(
+                  top: screenHeight * 0.05, // 원하는 만큼 더 내리기
+                  right: screenWidth * 0.05,
+
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // Navigator.pushReplacementNamed(
+                      //     context, '/home'); // 현재 경로를 '/home'으로 교체
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                          EdgeInsets.zero), // 버튼의 내부 패딩 제거
+                    ),
+                    child: const Text(
+                      'X',
+                      style: TextStyle(fontSize: 50, color: Colors.black),
+                    ),
                   ),
                 ),
                 Column(
