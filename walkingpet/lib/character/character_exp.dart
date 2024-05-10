@@ -18,8 +18,15 @@ class _CharacterExpState extends State<CharacterExp> {
   String animal = "";
   int? characterLevel;
 
-  int experience = 0;
-  int maxExperience = 0;
+  //현재 레벨
+  int fixLevel = 0;
+  int fixExperience = 0;
+  int fixMaxExperience = 0;
+
+  //현재 레벨과 현재 경험치
+  int experience = 1;
+  int level = 0;
+  int maxExperience = 1;
   double? expValue;
 
   bool isLoading = true;
@@ -47,18 +54,43 @@ class _CharacterExpState extends State<CharacterExp> {
         characterLevel = characterInfoData['characterLevel'];
         experience = characterInfoData['experience'];
         maxExperience = characterInfoData['maxExperience'];
+        level = characterInfoData['characterLevel'];
+
+        fixLevel = characterInfoData['characterLevel'];
+        fixExperience = characterInfoData['experience'];
+
         expValue = experience / maxExperience;
-        // expValue = (characterInfoData['experience'] ?? 0).toDouble() /
-        //     (characterInfoData['maxExperience'] ?? 1).toDouble();
 
         quantity = characterInfoData['quantity'];
 
-        print(characterInfoData);
+        // print(characterInfoData);
         isLoading = false;
       });
     } catch (e) {
       isLoading = false;
     }
+  }
+
+  // Java에서 가져온 함수를 Dart로 변환
+  int getMaxExperience(int level) {
+    if (level == 1) {
+      return 10;
+    } else {
+      return level * (level - 1) * 5 ~/ 2 + 10;
+    }
+  }
+
+  List<int> getLevel(int fixExprience) {
+    int tempLevel = fixLevel;
+    int tempExperience = fixExprience;
+    int tempMaxExperience = getMaxExperience(tempLevel);
+    while (tempExperience >= tempMaxExperience) {
+      tempExperience -= tempMaxExperience;
+      tempLevel++;
+      tempMaxExperience = getMaxExperience(tempLevel);
+    }
+
+    return [tempLevel, tempExperience];
   }
 
   @override
@@ -145,10 +177,15 @@ class _CharacterExpState extends State<CharacterExp> {
                         children: [
                           // 3-1. 레벨
                           Text(
-                            'Lv.$characterLevel',
-                            style: const TextStyle(
-                              fontSize: 23,
-                            ),
+                            'Lv.$level',
+                            style: level == fixLevel
+                                ? const TextStyle(
+                                    fontSize: 23, color: Colors.black)
+                                : // 기본 스타일
+                                const TextStyle(
+                                    fontSize: 23,
+                                    color: Color.fromARGB(255, 88, 169, 38),
+                                    fontWeight: FontWeight.bold), // 변경된 스타일
                           ),
 
                           // 3-2. 경험치 바
@@ -167,9 +204,11 @@ class _CharacterExpState extends State<CharacterExp> {
                                     child: LinearProgressIndicator(
                                       value: expValue,
                                       backgroundColor: const Color(0xFF727272),
-                                      valueColor:
-                                          const AlwaysStoppedAnimation<Color>(
-                                              Color(0xFFF3A52F)),
+                                      valueColor: expitemCount == 0
+                                          ? const AlwaysStoppedAnimation<Color>(
+                                              Color(0xFFF3A52F))
+                                          : const AlwaysStoppedAnimation<Color>(
+                                              Color(0xFF69C62F)),
                                     ),
                                   ),
                                 ),
@@ -182,7 +221,8 @@ class _CharacterExpState extends State<CharacterExp> {
 
                                 // 3-2-3. 경험치 값
                                 Text(
-                                  '${characterInfoData['experience'] ?? 0}/${characterInfoData['maxExperience'] ?? 0}',
+                                  '$experience/$maxExperience',
+                                  // '${experience ?? 0}/${maxExperience ?? 1}',
                                   style: const TextStyle(color: Colors.white),
                                 )
                               ],
@@ -245,7 +285,15 @@ class _CharacterExpState extends State<CharacterExp> {
                               if (expitemCount > 0) {
                                 setState(() {
                                   expitemCount--;
-                                  experience -= (5 * expitemCount);
+                                  if (experience == 0) {
+                                    level--;
+                                    maxExperience = getMaxExperience(level);
+                                    experience = maxExperience - 5;
+                                  } else {
+                                    experience -= 5;
+                                  }
+                                  expValue = experience /
+                                      maxExperience; // expValue 값 변경
                                 });
                               }
                             },
@@ -281,7 +329,15 @@ class _CharacterExpState extends State<CharacterExp> {
                               if (expitemCount < quantity) {
                                 setState(() {
                                   expitemCount++;
-                                  experience += (5 * expitemCount);
+                                  experience += 5;
+                                  if (experience == maxExperience) {
+                                    level++;
+                                    experience = 0;
+                                    maxExperience = getMaxExperience(level);
+                                  }
+
+                                  expValue = experience /
+                                      maxExperience; // expValue 값 변경
                                 });
                               }
                             },
@@ -294,7 +350,20 @@ class _CharacterExpState extends State<CharacterExp> {
                           // 4-6. 'MAX' 버튼
                           GestureDetector(
                             onTap: expitemCount < quantity
-                                ? () => setState(() => expitemCount = quantity)
+                                ? () {
+                                    setState(() {
+                                      expitemCount = quantity;
+                                      fixExperience += quantity * 5; // 경험치 추가
+                                      List<int> levelData =
+                                          getLevel(fixExperience);
+                                      level = levelData[0]; // 레벨 업데이트
+                                      experience = levelData[1]; // 경험치 업데이트
+                                      maxExperience = getMaxExperience(
+                                          level); // 최대 경험치 업데이트
+                                      expValue = experience /
+                                          maxExperience; // expValue 수정
+                                    });
+                                  }
                                 : null,
                             child: Image.asset(
                               'assets/buttons/yellow_max_button.png',
