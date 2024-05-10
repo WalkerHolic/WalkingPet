@@ -120,7 +120,7 @@ class LevelUpModal extends StatelessWidget {
 
                             // 4-2-2. 고급 상자
                             if (levelUpInfo['levelUpReward']['itemReward']
-                                        ['Normal Box'] !=
+                                        ['Luxury Box'] !=
                                     null &&
                                 levelUpInfo['levelUpReward']['itemReward']
                                         ['Luxury Box'] >
@@ -133,7 +133,7 @@ class LevelUpModal extends StatelessWidget {
                                     height: 55,
                                   ),
                                   Text(
-                                    'X ${levelUpInfo['levelUpReward']['itemReward']['Normal Box']}',
+                                    'X ${levelUpInfo['levelUpReward']['itemReward']['Luxury Box']}',
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                 ],
