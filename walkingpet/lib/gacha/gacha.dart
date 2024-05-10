@@ -142,7 +142,7 @@ class _GachaState extends State<Gacha> {
           Positioned(
             top: screenWidth / 8, //화면 높이 기준 위치
             child: Image.asset(
-                'assets/animals/dragons/red/red_dragon_ready.gif',
+                'assets/animals/red_dragon/red_dragon_idle.gif',
                 width: 400,
                 fit: BoxFit.cover),
           ),
