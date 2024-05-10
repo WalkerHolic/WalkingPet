@@ -10,5 +10,4 @@ public class BattleResponseDTO {
     private EnemyInfo enemyInfo;
     private BattleProgressInfo battleProgressInfo;
     private BattleResultInfo battleResultInfo;
-    private LevelUpResponse levelUpResponse;
 }

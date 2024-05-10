@@ -3,11 +3,12 @@ package com.walkerholic.walkingpet.domain.battle.function;
 import com.walkerholic.walkingpet.domain.battle.dto.response.RewardItem;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Random;
 
 @Component
 public class RewardFunction {
-    static final int BOX_PROBABILITY = 10;
+    static final int BOX_PROBABILITY = 20;
     static final int LUXURY_BOX_PROBABILITY = 30;
     static final int NORMAL_BOX_PROBABILITY = 70;
     static final int WIN_EXP_ITEM_QUANTITY = 2;
@@ -17,27 +18,31 @@ public class RewardFunction {
         Random random = new Random();
         int boxProbability = random.nextInt(100);
 
-        String box = null;
+        HashMap<String, Integer> battleReward = new HashMap<>();
+        battleReward.put("Luxury Box", 0);
+        battleReward.put("Normal Box", 0);
+        battleReward.put("Exp Item", 0);
 
         if(batlleResult){
             if(boxProbability <= BOX_PROBABILITY){
                 int randomBoxCheck = random.nextInt(100);
                 if(randomBoxCheck <= LUXURY_BOX_PROBABILITY){
-                    box = "luxury";
+                    battleReward.replace("Exp Item", WIN_EXP_ITEM_QUANTITY);
+                    battleReward.replace("Luxury Box", 1);
                 }
                 else if(randomBoxCheck <= NORMAL_BOX_PROBABILITY){
-                    box = "normal";
+                    battleReward.replace("Exp Item", WIN_EXP_ITEM_QUANTITY);
+                    battleReward.replace("Normal Box", 1);
                 }
             }
             return RewardItem.builder()
-                    .expItem(LUXURY_BOX_PROBABILITY)
-                    .box(box)
+                    .reward(battleReward)
                     .build();
         }
         else{
+            battleReward.replace("Exp Item", LOSE_EXP_ITEM_QUANTITY);
             return RewardItem.builder()
-                    .expItem(LOSE_EXP_ITEM_QUANTITY)
-                    .box(box)
+                    .reward(battleReward)
                     .build();
         }
     }

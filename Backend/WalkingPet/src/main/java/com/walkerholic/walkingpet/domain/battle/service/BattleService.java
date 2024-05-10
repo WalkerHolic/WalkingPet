@@ -75,15 +75,10 @@ public class BattleService {
                 //4. 배틀 결과 저장하기
                 saveBattleResult(userDetail, battleResultInfo);
 
-                //5. 레벨업 여부 확인하기
-                LevelUpResponse levelUpResponse = levelUpService.getLevelUpResponseByObject(userId, userCharacter, battleResultInfo.getRewardExperience());
-
-
                 return BattleResponseDTO.builder()
                         .enemyInfo(enemyInfo)
                         .battleProgressInfo(battleProgressInfo)
                         .battleResultInfo(battleResultInfo)
-                        .levelUpResponse(levelUpResponse)
                         .build();
             }
             else throw new GlobalBaseException(GlobalErrorCode.USER_BATTLE_COUNT_LACK);
