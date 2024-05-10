@@ -132,7 +132,7 @@ class _CharacterBoxState extends State<CharacterBox> {
               Center(
                 child: Image.asset(
                   'assets/images/character_lock.png',
-                  scale: 10,
+                  scale: 18,
                 ),
               ),
           ],
