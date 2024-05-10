@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:walkingpet/providers/step_counter.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -94,7 +96,7 @@ Future<void> _saveTokens(String responseBody) async {
   final accessToken = jsonResponse['data']['accessToken'];
   final refreshToken = jsonResponse['data']['refreshToken'];
 
-  final storage = FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
   await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
   await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
 }
@@ -147,7 +149,6 @@ Future<void> _handleKakaoLogin(BuildContext context) async {
       print('카카오계정으로 로그인 실패 $error');
     }
   }
-
 }
 
 /*
@@ -156,7 +157,6 @@ Future<void> _handleKakaoLogin(BuildContext context) async {
     새로운 유저라면 회원가입 코드로 이동
    */
 Future<void> _checkIfUserIsRegistered(BuildContext context) async {
-
   final User user = await UserApi.instance.me();
   final email = user.kakaoAccount?.email;
   // const email = 'lhs26890011@naver.com';
@@ -164,7 +164,6 @@ Future<void> _checkIfUserIsRegistered(BuildContext context) async {
   const endpoint = '/user/emailCheck';
 
   try {
-
     final url = Uri.parse('$baseUrl$endpoint?userEmail=$email');
     final response = await http.get(url);
 
@@ -178,6 +177,7 @@ Future<void> _checkIfUserIsRegistered(BuildContext context) async {
           _login(context);
         } else {
           print("회원가입이 필요한 유저입니다.");
+          StepCounter().resetStep();
           await show(context: context);
         }
       } else {
@@ -193,7 +193,6 @@ Future<void> _checkIfUserIsRegistered(BuildContext context) async {
 
 // 기존 회원 로그인
 Future<void> _login(BuildContext context) async {
-
   final User user = await UserApi.instance.me();
   const baseUrl = 'https://walkingpet.co.kr';
   const endpoint = '/auth/social-login';
@@ -217,7 +216,3 @@ Future<void> _login(BuildContext context) async {
     print("네트워크 문제: $error");
   }
 }
-
-
-
-
