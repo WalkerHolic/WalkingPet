@@ -13,6 +13,9 @@ Future<Map<String, dynamic>> openLuxuryBox() async {
     var jsonData = jsonDecode(data);
     print(jsonData['data']);
     return jsonData['data'];
+  } else if (response.statusCode == 403) {
+    // 열 수 있는 상자가 없으면
+    throw Exception("열 수 있는 상자가 없습니다.");
   } else {
     //상태 코드와 함께 에러 메세지 출력
     //상자 없어도 에러남
@@ -33,6 +36,9 @@ Future<Map<String, dynamic>> openNormalBox() async {
     var jsonData = jsonDecode(data);
     print(jsonData['data']);
     return jsonData['data'];
+  } else if (response.statusCode == 403) {
+    // 열 수 있는 상자가 없으면
+    throw Exception("열 수 있는 상자가 없습니다.");
   } else {
     //상태 코드와 함께 에러 메세지 출력
     //상자 없어도 에러남

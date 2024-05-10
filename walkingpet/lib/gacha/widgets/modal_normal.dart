@@ -56,7 +56,7 @@ void showNormalModal(BuildContext context) async {
                             alignment:
                                 const Alignment(0, -0.3), // 세로축 값을 조정해 더 위로 이동
                             child: Image.asset(
-                              'assets/animals/$animal/${animal}_walk.gif',
+                              'assets/animals/$animal/${animal}_idle.gif',
                               height: screenHeight * 0.2,
                             ),
                           ),
@@ -113,11 +113,12 @@ void showNormalModal(BuildContext context) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Error'),
-          content: Text('Failed to load data: $e'),
+          title: const Text('알림'),
+          content: Text('$e',
+              style: const TextStyle(fontSize: 20)), //exception 혹은 오류를 띄움
           actions: <Widget>[
             TextButton(
-              child: const Text('Close'),
+              child: const Text('닫기', style: TextStyle(fontSize: 20)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
