@@ -24,14 +24,13 @@ public class RewardFunction {
         battleReward.put("Exp Item", 0);
 
         if(batlleResult){
+            battleReward.replace("Exp Item", WIN_EXP_ITEM_QUANTITY);
             if(boxProbability <= BOX_PROBABILITY){
                 int randomBoxCheck = random.nextInt(100);
                 if(randomBoxCheck <= LUXURY_BOX_PROBABILITY){
-                    battleReward.replace("Exp Item", WIN_EXP_ITEM_QUANTITY);
                     battleReward.replace("Luxury Box", 1);
                 }
                 else if(randomBoxCheck <= NORMAL_BOX_PROBABILITY){
-                    battleReward.replace("Exp Item", WIN_EXP_ITEM_QUANTITY);
                     battleReward.replace("Normal Box", 1);
                 }
             }
