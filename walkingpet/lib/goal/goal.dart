@@ -12,10 +12,12 @@ class Goal extends StatefulWidget {
 }
 
 class _GoalState extends State<Goal> {
-  int steps = 7500;
+  int steps = 00;
   List<bool> dailyGoals = [];
   List<bool> weeklyGoals = [];
   Map<String, bool> stampedDays = {};
+  //로딩 상태를 나타내는 변수
+  bool isLoading = true;
   //일일 목표 관련
   bool isAttended = true;
   bool isWalked3000 = false;
@@ -48,6 +50,7 @@ class _GoalState extends State<Goal> {
             };
             // 초기 일일 목표 상태를 업데이트
             updateDailyGoals();
+            isLoading = false;
           },
         );
       },
@@ -76,163 +79,167 @@ class _GoalState extends State<Goal> {
       // appBar: AppBar(
       //   title: const Text('목표'),
       // ),
-      body: Stack(
-        children: <Widget>[
-          //1. 배경 이미지
-          Positioned.fill(
-            child: Image.asset(
-              'assets/backgrounds/goal.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Center(
-            child: Container(
-              width: screenWidth * 0.9,
-              height: screenHeight * 0.9,
-              color: const Color(0xfffff3dc).withOpacity(0.8),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: screenHeight * 0.08,
-              ),
-              Center(
-                child: SizedBox(
-                  width: screenWidth * 0.6,
-                  height: screenWidth * 0.6,
-                  child: FittedBox(
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            CircularProgressIndicator(
-                              backgroundColor: const Color(0xffeeeeee),
-                              color: const Color(0xff47E1A9),
-                              value: steps / goalStep,
-                              strokeWidth: 3,
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Stack(
+              children: <Widget>[
+                //1. 배경 이미지
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/backgrounds/goal.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    width: screenWidth * 0.9,
+                    height: screenHeight * 0.9,
+                    color: const Color(0xfffff3dc).withOpacity(0.8),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: screenHeight * 0.08,
+                    ),
+                    Center(
+                      child: SizedBox(
+                        width: screenWidth * 0.6,
+                        height: screenWidth * 0.6,
+                        child: FittedBox(
+                          child: Column(
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  CircularProgressIndicator(
+                                    backgroundColor: const Color(0xffeeeeee),
+                                    color: const Color(0xff47E1A9),
+                                    value: steps / goalStep,
+                                    strokeWidth: 3,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        '$steps',
+                                        style: const TextStyle(
+                                          fontSize: 8,
+                                        ),
+                                      ),
+                                      const Text(
+                                        "오늘",
+                                        style: TextStyle(fontSize: 5),
+                                      ),
+                                      Text('목표 : $goalStep',
+                                          style: const TextStyle(fontSize: 3))
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "일일 목표",
+                              style: TextStyle(
+                                fontSize: screenHeight * 0.04,
+                              ),
+                            ),
+                            DailyGoalItem(
+                              title: "출석",
+                              isActivated: isAttended,
+                              isCompleted: dailyGoals[0],
+                              goalSteps: 0,
+                            ),
+                            DailyGoalItem(
+                              title: "3000 걸음",
+                              isActivated: isWalked3000,
+                              isCompleted: dailyGoals[1],
+                              goalSteps: 3000,
+                            ),
+                            DailyGoalItem(
+                              title: "5000 걸음",
+                              isActivated: isWalked5000,
+                              isCompleted: dailyGoals[2],
+                              goalSteps: 5000,
+                            ),
+                            DailyGoalItem(
+                              title: "7000 걸음",
+                              isActivated: isWalked7000,
+                              isCompleted: dailyGoals[3],
+                              goalSteps: 7000,
+                            ),
+                            DailyGoalItem(
+                              title: "10000 걸음",
+                              isActivated: isWalked10000,
+                              isCompleted: dailyGoals[4],
+                              goalSteps: 10000,
+                            ),
+                            Text(
+                              "주간 목표",
+                              style: TextStyle(
+                                fontSize: screenHeight * 0.04,
+                              ),
                             ),
                             Column(
                               children: [
-                                Text(
-                                  '$steps',
-                                  style: const TextStyle(
-                                    fontSize: 8,
-                                  ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      WeeklyGoalItem(
+                                          // 단축연산 - 왼쪽 값이 null이면 false 반환
+                                          text: '월요일',
+                                          isStamped:
+                                              stampedDays['월요일'] ?? false),
+                                      WeeklyGoalItem(
+                                          text: '화요일',
+                                          isStamped:
+                                              stampedDays['월요일'] ?? false),
+                                      WeeklyGoalItem(
+                                          text: '수요일',
+                                          isStamped:
+                                              stampedDays['수요일'] ?? false),
+                                      WeeklyGoalItem(
+                                          text: '목요일',
+                                          isStamped:
+                                              stampedDays['목요일'] ?? false),
+                                    ]),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    WeeklyGoalItem(
+                                        text: '금요일',
+                                        isStamped: stampedDays['금요일'] ?? false),
+                                    WeeklyGoalItem(
+                                        text: '토요일',
+                                        isStamped: stampedDays['토요일'] ?? false),
+                                    WeeklyGoalItem(
+                                        text: '일요일',
+                                        isStamped: stampedDays['일요일'] ?? false),
+                                  ],
                                 ),
-                                const Text(
-                                  "오늘",
-                                  style: TextStyle(fontSize: 5),
-                                ),
-                                Text('목표 : $goalStep',
-                                    style: const TextStyle(fontSize: 3))
                               ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "일일 목표",
-                        style: TextStyle(
-                          fontSize: screenHeight * 0.04,
-                        ),
-                      ),
-                      DailyGoalItem(
-                        title: "출석",
-                        isActivated: isAttended,
-                        isCompleted:
-                            dailyGoals.isNotEmpty ? dailyGoals[0] : false,
-                        goalSteps: 0,
-                      ),
-                      DailyGoalItem(
-                        title: "3000 걸음",
-                        isActivated: isWalked3000,
-                        isCompleted:
-                            dailyGoals.isNotEmpty ? dailyGoals[1] : false,
-                        goalSteps: 3000,
-                      ),
-                      DailyGoalItem(
-                        title: "5000 걸음",
-                        isActivated: isWalked5000,
-                        isCompleted:
-                            dailyGoals.isNotEmpty ? dailyGoals[2] : false,
-                        goalSteps: 5000,
-                      ),
-                      DailyGoalItem(
-                        title: "7000 걸음",
-                        isActivated: isWalked7000,
-                        isCompleted:
-                            dailyGoals.isNotEmpty ? dailyGoals[3] : false,
-                        goalSteps: 7000,
-                      ),
-                      DailyGoalItem(
-                        title: "10000 걸음",
-                        isActivated: isWalked10000,
-                        isCompleted:
-                            dailyGoals.isNotEmpty ? dailyGoals[4] : false,
-                        goalSteps: 10000,
-                      ),
-                      Text(
-                        "주간 목표",
-                        style: TextStyle(
-                          fontSize: screenHeight * 0.04,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                WeeklyGoalItem(
-                                    // 단축연산 - 왼쪽 값이 null이면 false 반환
-                                    text: '월요일',
-                                    isStamped: stampedDays['월요일'] ?? false),
-                                WeeklyGoalItem(
-                                    text: '화요일',
-                                    isStamped: stampedDays['월요일'] ?? false),
-                                WeeklyGoalItem(
-                                    text: '수요일',
-                                    isStamped: stampedDays['수요일'] ?? false),
-                                WeeklyGoalItem(
-                                    text: '목요일',
-                                    isStamped: stampedDays['목요일'] ?? false),
-                              ]),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WeeklyGoalItem(
-                                  text: '금요일',
-                                  isStamped: stampedDays['금요일'] ?? false),
-                              WeeklyGoalItem(
-                                  text: '토요일',
-                                  isStamped: stampedDays['토요일'] ?? false),
-                              WeeklyGoalItem(
-                                  text: '일요일',
-                                  isStamped: stampedDays['일요일'] ?? false),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
     );
   }
 }
