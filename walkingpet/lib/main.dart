@@ -16,6 +16,7 @@ import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -44,6 +45,10 @@ void main() async {
     javaScriptAppKey: '98dfecd4151782eef7342a07e95b9c57',
   );
 
+  // REFRESH_TOKEN 확인
+  const storage = FlutterSecureStorage();
+  String? refreshToken = await storage.read(key: 'REFRESH_TOKEN');
+
   runApp(
     MultiProvider(
       providers: [
@@ -51,7 +56,7 @@ void main() async {
             create: (context) => BoxCounterProvider()..initializeBoxCounts()),
         ChangeNotifierProvider(create: (context) => StepCounter()),
       ],
-      child: const MyApp(),
+      child: MyApp(startRoute: refreshToken != null ? '/home' : '/login'),
     ),
   );
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
@@ -99,7 +104,9 @@ void _requestPermissions() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String startRoute;
+
+  const MyApp({super.key, required this.startRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +152,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      initialRoute: '/login',
+      initialRoute: startRoute,
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
