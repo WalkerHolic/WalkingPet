@@ -19,9 +19,9 @@ public class StepScheduler {
 //        stepTask.dailyStepJob(jobRepository(), dailyStepStep()).execute(null);
 //    }
 
-    @Scheduled(cron = "0 0 16 * * ?") // 3시 55분
+    @Scheduled(cron = "0 47 20 * * ?") // 3시 55분
     public void schedulerTest() {
-        String date = "0400";
+        String date = "0844";
         System.out.println("스케줄러 테스트입니다. " + date);
     }
 

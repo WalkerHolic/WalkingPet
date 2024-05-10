@@ -2,16 +2,12 @@ package com.walkerholic.walkingpet.domain.data.Controller;
 
 import com.walkerholic.walkingpet.domain.item.service.ItemService;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
-import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
-import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.domain.users.service.UserService;
-import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.dto.request.SocialLoginDTO;
+import com.walkerholic.walkingpet.global.auth.util.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/data")
 public class DataController {
-    private final SecurityService securityService;
+    private final AuthService authService;
     private final LoginService loginService;
     private final UserService userService;
     private final ItemService itemService;
@@ -56,7 +52,7 @@ public class DataController {
             String testNickname = gameNicknames[i] + "중독";
             SocialLoginDTO socialLoginDTO = new SocialLoginDTO(testEmail,testNickname);
             UsersDto savedOrFindUser = loginService.socialLogin(socialLoginDTO);
-            securityService.saveUserInSecurityContext(savedOrFindUser);
+            authService.saveUserInSecurityContext(savedOrFindUser);
         }
     }
 }
