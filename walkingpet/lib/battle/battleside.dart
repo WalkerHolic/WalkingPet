@@ -22,25 +22,22 @@ class BattleSide extends StatefulWidget {
   final List<dynamic> userHealth;
   final List<dynamic> loseDamage;
   final Map<String, dynamic> battleResult;
-  final Map<String, dynamic> levelUpResponse;
 
-  const BattleSide({
-    super.key,
-    required this.health,
-    required this.power,
-    required this.defense,
-    required this.rating,
-    required this.characterId,
-    required this.userCharacterLevel,
-    required this.nickname,
-    required this.isLeft,
-    required this.attackDamage,
-    required this.receivedDamage,
-    required this.userHealth,
-    required this.loseDamage,
-    required this.battleResult,
-    required this.levelUpResponse,
-  });
+  const BattleSide(
+      {super.key,
+      required this.health,
+      required this.power,
+      required this.defense,
+      required this.rating,
+      required this.characterId,
+      required this.userCharacterLevel,
+      required this.nickname,
+      required this.isLeft,
+      required this.attackDamage,
+      required this.receivedDamage,
+      required this.userHealth,
+      required this.loseDamage,
+      required this.battleResult});
 
   @override
   State<BattleSide> createState() => _BattleSideState();
@@ -82,7 +79,6 @@ class _BattleSideState extends State<BattleSide> {
                   MaterialPageRoute(
                     builder: (context) => BattleResult(
                       battleResult: widget.battleResult,
-                      levelUpResponse: widget.levelUpResponse,
                       animal: animal,
                     ),
                   ),
