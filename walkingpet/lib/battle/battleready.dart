@@ -156,8 +156,22 @@ class _BattleReadyState extends State<BattleReady> {
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
-                              Image.asset(
-                                  'assets/buttons/battle_start_button.png'),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: ColorFiltered(
+                                  colorFilter: characterData['battleCount'] > 0
+                                      ? const ColorFilter.mode(
+                                          Colors.transparent,
+                                          BlendMode.multiply,
+                                        )
+                                      : const ColorFilter.mode(
+                                          Colors.grey,
+                                          BlendMode.saturation,
+                                        ),
+                                  child: Image.asset(
+                                      'assets/buttons/battle_start_button.png'),
+                                ),
+                              ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
