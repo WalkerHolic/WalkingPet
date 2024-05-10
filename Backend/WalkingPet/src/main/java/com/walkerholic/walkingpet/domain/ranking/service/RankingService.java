@@ -77,14 +77,14 @@ public class RankingService {
     @Transactional(readOnly = true)
     @Cacheable(value="yesterdayStepRankingTop10")
     public PersonalStepRankingResponse getYesterdayStepRankingTop10() {
-        log.info("RankingService getYesterdayStepRankingTop10 어제 걸음수 top10(캐싱 적용 x)");
-        List<UserStep> topUsers = userStepRepository.findTop10ByOrderByYesterdayStep();
+        log.info("RankingService getYesterdayStepRanking0Top10 어제 걸음수 top10(캐싱 적용 x)");
+        List<UserStep> topUsers = userStepRepository.findTop10ByOrderByYesterdayStepDesc();
 
         return PersonalStepRankingResponse.from(calculateYesterdayRanking(topUsers));
     }
 
     /*
-     * 어제 걸음수 기준으로 top 10 랭킹 가져오기 - redis 용
+     * 어제 걸음수 기준으로 top 3 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
     @Cacheable(value="yesterdayStepRankingTop3")

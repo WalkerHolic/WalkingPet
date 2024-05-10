@@ -42,18 +42,29 @@ public class RealtimeStepRankingRedisService {
 
     // 실시간 걸음수 기준 상위 랭킹 래스트 가져오기
     public RedisStepRankingResponse getRedisRealtimeStepRankingList(int startRanking, int endRanking) {
+        System.out.println("실시간 걸음수 redis 접근");
         List<StepRankingList> accStepRankingList = new ArrayList<>();
         Set<Integer> top10users = rankigRedisTemplate.opsForZSet().reverseRange(USERS_KEY, startRanking, endRanking);
         assert top10users != null;
+
+        int userRanking = 0;
+        int previousStep = -1;
         for (Integer userId: top10users) {
+            System.out.println("userId: " + userId);
             AccStepRankingInfo userStepInfo = getUser(userId);
 
             Double dStep = rankigRedisTemplate.opsForZSet().score(USERS_KEY, userId);
             int step = dStep != null ? dStep.intValue() : 0;
             AccStepRankingInfo changeAccStepRankingInfo = userStepInfo.changeStep(step);
 
-            int userRanking = getUserRanking(userId);
+            System.out.println("userId: " + userId + "userStepInfo: " + userStepInfo);
+            System.out.println("step: " + changeAccStepRankingInfo.getStep());
+
+            if (changeAccStepRankingInfo.getStep() != previousStep) userRanking++;
+
+//            int userRanking = getUserRanking(userId);
             accStepRankingList.add(StepRankingList.from(changeAccStepRankingInfo, userRanking));
+            previousStep = changeAccStepRankingInfo.getStep();
         }
 
         return RedisStepRankingResponse.from(accStepRankingList);
