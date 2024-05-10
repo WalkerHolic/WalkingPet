@@ -12,7 +12,7 @@ class AuthInterceptor extends http.BaseClient {
     final headers = request.headers;
 
     headers['Authorization'] = 'Bearer $accessToken';
-    headers['steps'] = '$steps';
+    headers['step'] = '$steps';
 
     request.headers.addAll(headers);
 
