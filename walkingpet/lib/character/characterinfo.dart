@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/character_exp.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
@@ -7,6 +8,9 @@ import 'package:walkingpet/common/character_map.dart';
 // import 'package:walkingpet/levelup/levelup.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/character/statpointreset.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:walkingpet/login/nes_input_dialog.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 // 캐릭터 정보
 class CharacterInfo extends StatefulWidget {
@@ -116,13 +120,31 @@ class _CharacterInfoState extends State<CharacterInfo> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // 1. 유저 닉네임
-                  Text(
-                    characterInfoData['nickname'] ?? '닉네임로딩중',
-                    style: const TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      fontSize: 35,
-                    ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text(
+                        '  ${characterInfoData['nickname'] ?? '닉네임 로딩중'}  ',
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      Positioned(
+                        left: getTextWidth(
+                                characterInfoData['nickname'] ?? '닉네임 로딩중',
+                                const TextStyle(fontSize: 24)) +
+                            screenWidth * 0.15, // 텍스트 너비의 절반을 더하고 5 픽셀 간격
+                        child: InkWell(
+                          onTap: () async {
+                            await show(context: context);
+                          },
+                          child: SvgPicture.asset(
+                            'assets/icons/pencil.svg', // 연필 아이콘
+                            width: screenWidth * 0.04,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
                   const SizedBox(height: 5),
 
                   // 2. 캐릭터 이미지
@@ -393,4 +415,29 @@ class _CharacterInfoState extends State<CharacterInfo> {
       ),
     );
   }
+}
+
+// 텍스트의 너비를 계산하는 함수
+double getTextWidth(String text, TextStyle style) {
+  final TextPainter textPainter = TextPainter(
+    text: TextSpan(text: text, style: style),
+    maxLines: 1,
+    textDirection: TextDirection.ltr,
+  )..layout(minWidth: 0, maxWidth: double.infinity);
+  return textPainter.size.width;
+}
+
+Future<String?> show({
+  required BuildContext context,
+  NesDialogFrame frame = const NesBasicDialogFrame(),
+}) {
+  return NesDialog.show<String?>(
+    context: context,
+    builder: (_) => const CustomNesInputDialog(
+      inputLabel: "  확인  ",
+      message: "닉네임을 정해주세요 (2~6자)",
+      isChange: true,
+    ),
+    frame: frame,
+  );
 }
