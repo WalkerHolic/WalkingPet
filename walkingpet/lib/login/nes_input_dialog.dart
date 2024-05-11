@@ -10,11 +10,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class CustomNesInputDialog extends StatefulWidget {
   final String inputLabel;
   final String message;
+  final bool isChange;
 
   const CustomNesInputDialog({
     super.key,
     required this.inputLabel,
     required this.message,
+    this.isChange = false,
   });
 
   static Future<String?> show({
@@ -105,6 +107,38 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
     }
   }
 
+  // 닉네임변경
+  Future<void> _changeNickname(BuildContext context, String nickname) async {
+    const baseUrl = 'https://walkingpet.co.kr';
+    var endpoint = '/user/modifyNickname?nickname=$nickname';
+
+    try {
+      final url = Uri.parse('$baseUrl$endpoint');
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var data = utf8.decode(response.bodyBytes);
+        // 디코딩된 문자열을 JSON으로 파싱
+        var jsonData = jsonDecode(data);
+        Map<String, dynamic> res = jsonData;
+        var success = res['data'];
+        if (success) {
+          Navigator.of(context).pop();
+          Navigator.pushReplacementNamed(context, '/characterinfo');
+        } else {
+          setErrorMessage();
+        }
+      } else {
+        print("200코드가 아님.");
+      }
+    } catch (error) {
+      print("네트워크 문제: $error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -149,7 +183,12 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
                 style: const TextStyle(color: Colors.white)),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                _signUp(context, _controller.text);
+                if (!widget.isChange) {
+                  _signUp(context, _controller.text);
+                } else {
+                  // 닉네임 변경 요청
+                  _changeNickname(context, _controller.text);
+                }
                 //Navigator.of(context).pop(_controller.text);
               }
             },
