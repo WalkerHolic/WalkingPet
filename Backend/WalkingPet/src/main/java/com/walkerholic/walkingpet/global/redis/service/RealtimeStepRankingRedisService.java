@@ -87,6 +87,14 @@ public class RealtimeStepRankingRedisService {
 //        return hashOperations.get(RANKING_KEY, userId);
 //    }
 
+
+    // 사용자의 실시간 걸음수 가져오기
+    public int getUserDailyStep(int userId) {
+        Double dStep = rankigRedisTemplate.opsForZSet().score(STEP_KEY, userId);
+        int step = dStep != null ? dStep.intValue() : 0;
+        return step;
+    }
+
     public int getUserRanking(int userId) {
         Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(STEP_KEY, userId);
 
@@ -111,16 +119,6 @@ public class RealtimeStepRankingRedisService {
                 userStepRepository.save(userStep);
             }
         }
-//        for (ValueOperations<String, Integer> entry : dailySteps.ent) {
-//            String userId = (String) entry.getKey();
-//            int dailyStep = (int) entry.getValue();
-//
-//            UserStep userStep = userStepRepository.findById(Integer.valueOf(userId)).orElse(null);
-//            if (userStep != null) {
-//                userStep.updateUserStepInfo(dailyStep);
-//                userStepRepository.save(userStep);
-//            }
-//        }
     }
 
     public void saveUserDailyStep() {

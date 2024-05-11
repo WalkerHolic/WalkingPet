@@ -103,7 +103,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         "/v3/api-docs",
                         "/v3/api-docs/swagger-config",
                         "/swagger-",
-                        "/actuator/prometheus"
+                        "/actuator/prometheus",
+//                        "/character/checkstep" //걸음수 가져오는 코드 시 redis에 저장x위함
         };
 //        String[] excludePath = {
 ////                "/character/test",
