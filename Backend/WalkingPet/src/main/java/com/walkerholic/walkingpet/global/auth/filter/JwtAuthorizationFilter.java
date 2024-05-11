@@ -69,7 +69,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String step = jwtUtil.extractStepFromHeader(request);
         if (step != null) {
             String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
-            System.out.println("필터에서의 step: " + step);
             saveRedisStep(socialId, step);
         } else {
             System.out.println("헤더에 step이 존재 하지 않음");
@@ -79,7 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // 헤더에 있는 step의 값을 redis 에 저장
     private void saveRedisStep(String socialId, String step) {
-        realtimeStepRankingRedisService.saveUserYesterdayStep(
+        realtimeStepRankingRedisService.saveUserDailyStep(
                 RealtimeStepRequest.builder()
                         .userId(Integer.parseInt(socialId))
                         .realtimeStep(Integer.parseInt(step))
@@ -98,13 +97,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String[] excludePath = {
                         "/auth/social-login",
                         "/auth/generate/user",
-                        "/user",
+                        "/user/emailCheck",
+                        "/user/nicknameCheck",
+                        "/user/checkstep",
                         "/redis",
                         "/init",
                         "/v3/api-docs",
                         "/v3/api-docs/swagger-config",
                         "/swagger-",
-                        "/actuator/prometheus"
+                        "/actuator/prometheus",
+//                        "/character/checkstep" //걸음수 가져오는 코드 시 redis에 저장x위함
         };
 //        String[] excludePath = {
 ////                "/character/test",

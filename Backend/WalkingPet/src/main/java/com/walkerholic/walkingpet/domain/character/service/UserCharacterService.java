@@ -2,7 +2,6 @@ package com.walkerholic.walkingpet.domain.character.service;
 
 import com.walkerholic.walkingpet.domain.character.dto.UserCharacterListInfo;
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
-import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
 import com.walkerholic.walkingpet.domain.character.dto.response.*;
 import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
@@ -16,6 +15,8 @@ import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
+import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
+import com.walkerholic.walkingpet.global.redis.service.UserInfoRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class UserCharacterService {
     private final UserDetailRepository userDetailRepository;
     private final CharacterRepository characterRepository;
     private final UserStepRepository userStepRepository;
+    private final UserInfoRedisService userInfoRedisService;
+    private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     /**
      * 사용자의 캐릭터 정보 가져오기(api)
@@ -91,7 +94,7 @@ public class UserCharacterService {
     }
 
     /**
-     * 사용자의 캐릭터 변경 메서드
+     * 사용자의 캐릭터 변경 메서드 + redis 도 변경
      */
     @Transactional(readOnly = false)
     public ChangeCharacterIdResponse changeUserCharacter(int userId, ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
@@ -102,6 +105,8 @@ public class UserCharacterService {
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_CHARACTER_NOT_FOUND));
 
         userDetail.changeUserCharacter(userCharacter);
+
+        userInfoRedisService.updateCharacterId(userId, changeUserCharacterIdRequest.getSelectCharacterId());
         return ChangeCharacterIdResponse.from(userDetail.getSelectUserCharacter().getCharacter().getCharacterId());
     }
 
@@ -137,12 +142,19 @@ public class UserCharacterService {
      * 유저의 일일 걸음수 가져오기
      */
     public UserStepResponse checkUserStep(int userId, int frontStep) {
-        UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+//        UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
+//                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+
+        int redisUserDailyStep = realtimeStepRankingRedisService.getUserDailyStep(userId);
 
         // 휴대폰이 재부팅 될 때를 가정
-        if (frontStep < userStep.getDailyStep()) {
-            return UserStepResponse.from(userStep.getDailyStep(), true);
+//        if (frontStep < userStep.getDailyStep()) {
+//            return UserStepResponse.from(userStep.getDailyStep(), true);
+//        } else {
+//            return UserStepResponse.from(frontStep, false);
+//        }
+        if (frontStep < redisUserDailyStep) {
+            return UserStepResponse.from(redisUserDailyStep, true);
         } else {
             return UserStepResponse.from(frontStep, false);
         }

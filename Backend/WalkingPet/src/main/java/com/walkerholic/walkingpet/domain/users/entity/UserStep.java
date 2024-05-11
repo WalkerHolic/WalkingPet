@@ -44,4 +44,8 @@ public class UserStep {
         this.accumulationStep += dailyStep;
         this.dailyStep = 0;
     }
+
+    public void updateUserDailyStep(int dailyStep) {
+        this.dailyStep = dailyStep;
+    }
 }

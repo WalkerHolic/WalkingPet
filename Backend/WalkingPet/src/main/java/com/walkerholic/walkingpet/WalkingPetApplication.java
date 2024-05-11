@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 //@EnableBatchProcessing
-//@EnableScheduling
 public class WalkingPetApplication {
 
     public static void main(String[] args) {

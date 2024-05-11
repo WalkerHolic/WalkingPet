@@ -1,6 +1,6 @@
 package com.walkerholic.walkingpet.domain.ranking.dto.response;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingAndUserInfo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 public class PersonalStepRankingAllInfoResponse {
     private UserPersonalStepRankingResponse myranking;
-    private List<AccStepRankingInfo> rankings;
+    private List<AccStepRankingAndUserInfo> rankings;
 
-    public static PersonalStepRankingAllInfoResponse from(UserPersonalStepRankingResponse userPersonalStepRanking, List<AccStepRankingInfo> accStepRanking) {
+    public static PersonalStepRankingAllInfoResponse from(UserPersonalStepRankingResponse userPersonalStepRanking, List<AccStepRankingAndUserInfo> accStepRanking) {
         return PersonalStepRankingAllInfoResponse.builder()
                 .myranking(userPersonalStepRanking)
                 .rankings(accStepRanking)
