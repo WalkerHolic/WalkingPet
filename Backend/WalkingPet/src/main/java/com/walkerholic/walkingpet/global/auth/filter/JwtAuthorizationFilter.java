@@ -99,7 +99,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         "/auth/social-login",
                         "/auth/generate/user",
                         "/user",
-                        "/data",
                         "/redis",
                         "/init",
                         "/v3/api-docs",
