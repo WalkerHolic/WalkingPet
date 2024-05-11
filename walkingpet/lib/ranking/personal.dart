@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
@@ -52,18 +53,25 @@ class _PersonalRankingState extends State<PersonalRanking> {
       child: isLoading
           ? const CircularProgressIndicator() // 로딩 중 인디케이터 추가
           : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // 1. 어제 / 실시간 / 누적 선택
-                Padding(
-                  // 기존의 bottom padding 값 10을 20으로 수정
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () => fetchData(timeframe: 'yesterday'),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'yesterday'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: const Text('  '),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'yesterday'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
                         child: Text(
                           ' 어제 ',
                           style: TextStyle(
@@ -76,9 +84,18 @@ class _PersonalRankingState extends State<PersonalRanking> {
                           ),
                         ),
                       ),
-                      const Text('|'),
-                      GestureDetector(
-                        onTap: () => fetchData(timeframe: 'realtime'),
+                    ),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'realtime'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: const Text('|'),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'realtime'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
                         child: Text(
                           ' 실시간 ',
                           style: TextStyle(
@@ -91,9 +108,18 @@ class _PersonalRankingState extends State<PersonalRanking> {
                           ),
                         ),
                       ),
-                      const Text('|'),
-                      GestureDetector(
-                        onTap: () => fetchData(timeframe: 'accumulation'),
+                    ),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'realtime'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: const Text('|'),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'accumulation'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
                         child: Text(
                           ' 누적 ',
                           style: TextStyle(
@@ -106,9 +132,15 @@ class _PersonalRankingState extends State<PersonalRanking> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 15),
-                    ],
-                  ),
+                    ),
+                    GestureDetector(
+                      onTap: () => fetchData(timeframe: 'accumulation'),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: const Text('  '),
+                      ),
+                    ),
+                  ],
                 ),
 
                 // 2. 1~3위 표시
