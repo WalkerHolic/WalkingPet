@@ -69,7 +69,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String step = jwtUtil.extractStepFromHeader(request);
         if (step != null) {
             String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
-            System.out.println("필터에서의 step: " + step);
             saveRedisStep(socialId, step);
         } else {
             System.out.println("헤더에 step이 존재 하지 않음");
@@ -79,7 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // 헤더에 있는 step의 값을 redis 에 저장
     private void saveRedisStep(String socialId, String step) {
-        realtimeStepRankingRedisService.saveUserYesterdayStep(
+        realtimeStepRankingRedisService.saveUserDailyStep(
                 RealtimeStepRequest.builder()
                         .userId(Integer.parseInt(socialId))
                         .realtimeStep(Integer.parseInt(step))

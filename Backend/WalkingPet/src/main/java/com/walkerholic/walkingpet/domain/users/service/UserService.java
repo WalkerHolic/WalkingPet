@@ -1,16 +1,22 @@
 package com.walkerholic.walkingpet.domain.users.service;
 
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingAndUserInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.UserInfoAndAllStepInfo;
+import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
+import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
+import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.FormatFlagsConversionMismatchException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +26,7 @@ public class UserService {
     private final LoginService loginService;
     private final UsersRepository usersRepository;
     private final UserDetailRepository userDetailRepository;
+    private final UserStepRepository userStepRepository;
 
     public boolean modifyNickname(int userId, String nickname){
         if(loginService.checkAvailableNickname(nickname)){
@@ -54,5 +61,32 @@ public class UserService {
     private UserDetail getUserDetail(int userId){
         return userDetailRepository.findUserDetailByJoinFetchByUserId(userId)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+    }
+
+    // mysql에 있는 가입상태인 모든 유저 정보 가져오기
+    public List<UserRedisDto> getAllUserDetail() {
+        List<UserRedisDto> userDetailList = new ArrayList<>();
+
+        List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
+        for (UserDetail userDetailInfo : allByUser) {
+            userDetailList.add(UserRedisDto.from(userDetailInfo));
+        }
+
+        return userDetailList;
+    }
+
+    // 모든 사용자들의 걸음수 정보 가져오기
+    @Transactional(readOnly = true)
+    public List<UserInfoAndAllStepInfo> getUserAccStepAndInfoList() {
+        List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
+
+        List<UserInfoAndAllStepInfo> userInfoAndAllStepInfos = new ArrayList<>();
+        for (UserDetail userDetailInfo : allByUser) {
+            UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+            userInfoAndAllStepInfos.add(UserInfoAndAllStepInfo.from(userDetailInfo, userStepInfo));
+        }
+
+        return userInfoAndAllStepInfos;
     }
 }

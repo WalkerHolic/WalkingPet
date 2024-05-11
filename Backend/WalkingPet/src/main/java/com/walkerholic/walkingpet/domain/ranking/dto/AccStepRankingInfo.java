@@ -12,40 +12,21 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccStepRankingInfo implements Serializable {
     private int userId;
-    private String nickname; // user
-    private int step; // user_step
-    private int characterId; // user_detail에서 character
+    private int accStep;
 
     @Builder
-    public AccStepRankingInfo(int userId, String nickname, int step, int characterId) {
+    public AccStepRankingInfo(int userId, int accStep) {
         this.userId = userId;
-        this.nickname = nickname;
-        this.step = step;
-        this.characterId = characterId;
+        this.accStep = accStep;
     }
 
-    public static AccStepRankingInfo entityFrom(UserDetail userDetail, UserStep userStep) {
+    public static AccStepRankingInfo entityFrom(UserStep userStep) {
         return AccStepRankingInfo.builder()
-                .userId(userDetail.getUser().getUserId())
-                .nickname(userDetail.getUser().getNickname())
-                .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
-                .step(userStep.getAccumulationStep())
+                .userId(userStep.getUser().getUserId())
+                .accStep(userStep.getAccumulationStep())
                 .build();
     }
 
-    public static AccStepRankingInfo redisFrom(AccStepRankingInfo accStepRankingInfo) {
-        return AccStepRankingInfo.builder()
-                .userId(1)
-                .nickname("test2")
-                .characterId(1)
-                .step(accStepRankingInfo.getStep())
-                .build();
-    }
-
-    public AccStepRankingInfo changeStep(int step) {
-        this.step = step;
-        return this;
-    }
 }
 
 

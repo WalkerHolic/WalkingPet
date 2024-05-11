@@ -1,6 +1,6 @@
 package com.walkerholic.walkingpet.global.redis.controller;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingAndUserInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
@@ -56,9 +56,9 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> saveRedisAccRankingInfo() {
         log.info("redis 누적 랭킹 저장 테스트 - redis test saveRedisAccRankingInfo");
 
-        List<AccStepRankingInfo> userAccStepList = rankingService.getUserAccStepList();
+        List<AccStepRankingAndUserInfo> userAccStepList = rankingService.getUserAccStepAndInfoList();
 
-        for (AccStepRankingInfo stepInfo : userAccStepList) {
+        for (AccStepRankingAndUserInfo stepInfo : userAccStepList) {
             accStepRankingRedisService.saveAccStepList(stepInfo);
         }
 
@@ -87,7 +87,7 @@ public class RedisController {
         List<ReailtimeStepRankingInfo> userRealtimeStepList = rankingService.getUserRealtimeStepList();
 
         for (ReailtimeStepRankingInfo stepInfo : userRealtimeStepList) {
-            realtimeStepRankingRedisService.saveAllUserYesterdayStepList(stepInfo);
+            realtimeStepRankingRedisService.saveAllUserDailyStepList(stepInfo);
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
@@ -100,7 +100,7 @@ public class RedisController {
         int step = 1114;
         log.info("redis 실시간 걸음수 저장 테스트 - redis test saveRedisRealtimeStep userId: {}", userId);
 
-        realtimeStepRankingRedisService.saveUserYesterdayStep(RealtimeStepRequest.builder().userId(userId).realtimeStep(step).build());
+        realtimeStepRankingRedisService.saveUserDailyStep(RealtimeStepRequest.builder().userId(userId).realtimeStep(step).build());
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
