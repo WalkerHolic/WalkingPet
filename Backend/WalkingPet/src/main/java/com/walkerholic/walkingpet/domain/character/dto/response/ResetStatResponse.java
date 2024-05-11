@@ -19,9 +19,9 @@ public class ResetStatResponse {
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
-                .addHealth(userCharacter.getCharacter().getFixHealth())
-                .addPower(userCharacter.getCharacter().getFixPower())
-                .addDefense(userCharacter.getCharacter().getFixDefense())
+                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth())
+                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
+                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
                 .statPoint(userCharacter.getStatPoint())
                 .build();
     }
