@@ -122,7 +122,7 @@ public class CharacterController {
 //        System.out.println("user: " + users.getEmail());
 //        System.out.println("user: " + users.getUserId());
 //        userCharacterService.saveUserStep(1, 1234);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트");
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트 - 1241");
     }
 
     @Operation(summary = "경험치 아이템 사용", description = "경험치가 5씩 증가하는 아이템을 사용한다.")
