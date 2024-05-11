@@ -72,7 +72,6 @@ class _BattleSideState extends State<BattleSide> {
           } else {
             _timer?.cancel();
             Timer(const Duration(seconds: 1), () {
-              // 여기에 지연 후 실행할 코드를 작성
               if (widget.isLeft) {
                 Navigator.pushReplacement(
                   context,
