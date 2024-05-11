@@ -6,6 +6,7 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:walkingpet/services/Interceptor.dart';
 
 class CustomNesInputDialog extends StatefulWidget {
   final String inputLabel;
@@ -61,6 +62,13 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
       });
       return false;
     }
+    if (value.length == 7 || value.length == 1) {
+      setState(() {
+        _errorMessage = '2~6자만 가능합니다.';
+      });
+      return false;
+    }
+
     RegExp regex = RegExp(r'^[가-힣A-Za-z0-9]{2,6}$');
     if (!regex.hasMatch(value)) {
       setState(() {
@@ -109,22 +117,24 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
 
   // 닉네임변경
   Future<void> _changeNickname(BuildContext context, String nickname) async {
+    final client = AuthInterceptor();
     const baseUrl = 'https://walkingpet.co.kr';
     var endpoint = '/user/modifyNickname?nickname=$nickname';
+    final url = Uri.parse('$baseUrl$endpoint');
 
     try {
-      final url = Uri.parse('$baseUrl$endpoint');
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-      );
+      final response = await client.get(url);
+      print(response.body);
 
       if (response.statusCode == 200) {
         var data = utf8.decode(response.bodyBytes);
         // 디코딩된 문자열을 JSON으로 파싱
         var jsonData = jsonDecode(data);
         Map<String, dynamic> res = jsonData;
-        var success = res['data'];
+        var success = res['data']['status'];
+        print(res);
+        print("찍어");
+        print(success);
         if (success) {
           Navigator.of(context).pop();
           Navigator.pushReplacementNamed(context, '/characterinfo');
@@ -155,7 +165,7 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
             controller: _controller,
             textAlign: TextAlign.center,
             autofocus: true,
-            maxLength: 6,
+            maxLength: 7,
             decoration: const InputDecoration(
               counterText: "", // 카운터 텍스트를 숨김
             ),

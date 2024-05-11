@@ -125,21 +125,21 @@ class _CharacterInfoState extends State<CharacterInfo> {
                     alignment: Alignment.center,
                     children: [
                       Text(
-                        '  ${characterInfoData['nickname'] ?? '닉네임 로딩중'}  ',
+                        '    ${characterInfoData['nickname'] ?? '닉네임 로딩중'}    ',
                         style: const TextStyle(fontSize: 24),
                       ),
                       Positioned(
                         left: getTextWidth(
                                 characterInfoData['nickname'] ?? '닉네임 로딩중',
                                 const TextStyle(fontSize: 24)) +
-                            screenWidth * 0.15, // 텍스트 너비의 절반을 더하고 5 픽셀 간격
+                            screenWidth * 0.2, // 텍스트 너비의 절반을 더하고 5 픽셀 간격
                         child: InkWell(
                           onTap: () async {
                             await show(context: context);
                           },
                           child: SvgPicture.asset(
                             'assets/icons/pencil.svg', // 연필 아이콘
-                            width: screenWidth * 0.04,
+                            width: screenWidth * 0.05,
                           ),
                         ),
                       ),
