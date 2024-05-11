@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.data.Controller;
 
+import com.walkerholic.walkingpet.domain.data.DataService;
 import com.walkerholic.walkingpet.domain.item.service.ItemService;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
@@ -21,6 +22,7 @@ public class DataController {
     private final LoginService loginService;
     private final UserService userService;
     private final ItemService itemService;
+    private final DataService dataService;
 
     @GetMapping("/set/battleRating")
     private void setBattleRating(){
@@ -54,5 +56,15 @@ public class DataController {
             UsersDto savedOrFindUser = loginService.socialLogin(socialLoginDTO);
             authService.saveUserInSecurityContext(savedOrFindUser);
         }
+    }
+
+    @GetMapping("/set/usercharacter")
+    public void setDummyCharacter(){
+        dataService.setUserCharacter();
+    }
+
+    @GetMapping("/set/reset/battlecount")
+    public void setBattleCount(){
+        dataService.resetBattleCount();
     }
 }
