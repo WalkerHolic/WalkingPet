@@ -15,6 +15,7 @@ public class UserCharacterInfoResponse {
     private String nickname;
     private int characterId;
     private int characterLevel;
+    private int characterGrade;
     private int experience;
     private int maxExperience;
     private int health;
@@ -34,6 +35,7 @@ public class UserCharacterInfoResponse {
                 .nickname(userDetail.getUser().getNickname())
                 .characterId(userCharacter.getCharacter().getCharacterId())
                 .characterLevel(userCharacter.getLevel())
+                .characterGrade(userCharacter.getCharacter().getGrade())
                 .experience(userCharacter.getExperience())
                 .maxExperience(UserCharacterFunction.getMaxExperience(userCharacter.getLevel()))
                 .health(userCharacter.getHealth())
