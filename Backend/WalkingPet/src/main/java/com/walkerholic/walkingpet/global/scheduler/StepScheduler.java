@@ -19,13 +19,13 @@ public class StepScheduler {
 //        stepTask.dailyStepJob(jobRepository(), dailyStepStep()).execute(null);
 //    }
 
-    @Scheduled(cron = "0 58 12 * * ?", zone = "Asia/Seoul") // 3시 55분
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // 3시 55분
     public void schedulerTest() {
         String date = "미국";
         System.out.println("스케줄러 테스트입니다. " + date);
     }
 
-//    @Scheduled(cron = "0 0 0 * * ?")
+//    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     public void updateMidnightUserStep() {
         System.out.println("업데이트 시작");
 //        stepService.updateUserStepInfo();
