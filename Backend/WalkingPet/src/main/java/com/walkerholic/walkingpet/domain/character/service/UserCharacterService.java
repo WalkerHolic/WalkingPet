@@ -16,6 +16,7 @@ import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
+import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class UserCharacterService {
     private final UserDetailRepository userDetailRepository;
     private final CharacterRepository characterRepository;
     private final UserStepRepository userStepRepository;
+    private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     /**
      * 사용자의 캐릭터 정보 가져오기(api)
@@ -140,12 +142,19 @@ public class UserCharacterService {
         UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
 
+//        int redisUserDailyStep = realtimeStepRankingRedisService.getUserDailyStep(userId);
+
         // 휴대폰이 재부팅 될 때를 가정
         if (frontStep < userStep.getDailyStep()) {
-            return UserStepResponse.from(userStep.getDailyStep(), true);
+            return UserStepResponse.from( userStep.getDailyStep(), true);
         } else {
             return UserStepResponse.from(frontStep, false);
         }
+//        if (frontStep < redisUserDailyStep) {
+//            return UserStepResponse.from(redisUserDailyStep, true);
+//        } else {
+//            return UserStepResponse.from(frontStep, false);
+//        }
     }
 
     /**
