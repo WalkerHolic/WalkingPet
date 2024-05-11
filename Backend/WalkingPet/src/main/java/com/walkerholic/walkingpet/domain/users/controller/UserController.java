@@ -1,9 +1,10 @@
 package com.walkerholic.walkingpet.domain.users.controller;
 
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
-import com.walkerholic.walkingpet.domain.gacha.service.GachaService;
+import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
+import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.domain.users.service.UserService;
+import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +25,7 @@ public class UserController {
 
     private final LoginService loginService;
     private final UserService userService;
+    private final UserCharacterService userCharacterService;
 
     @GetMapping("/emailCheck")
     @Operation(summary = "가입한 회원인지 확인", description = "유저의 이메일이 이미 회원가입한 이메일인지 확인하기 ")
@@ -53,5 +56,17 @@ public class UserController {
         int userId = 1;
         boolean checkChange = userService.modifyNickname(userId,nickname);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, checkChange);
+    }
+
+    @GetMapping("/checkstep")
+    @Operation(summary = "유저의 걸음수 측정", description = "앱 시작시 걸음수 측정")
+    @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
+    public ResponseEntity<CommonResponseEntity> getUserStep(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestHeader("step") int frontStep, @PathVariable("userId") int userId) {
+//        Integer userId = userDetail.getUsers().getUserId();
+
+        log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
+
+        UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userStepResponse);
     }
 }

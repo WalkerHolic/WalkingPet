@@ -107,18 +107,6 @@ public class CharacterController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, changeCharacter);
     }
 
-    @GetMapping("/checkstep")
-    @Operation(summary = "유저의 걸음수 측정", description = "앱 시작시 걸음수 측정")
-    @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
-    public ResponseEntity<CommonResponseEntity> getUserStep(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestHeader("step") int frontStep) {
-        Integer userId = userDetail.getUsers().getUserId();
-
-        log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
-
-        UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userStepResponse);
-    }
-
     @GetMapping("/test")
     @Operation(summary = "통신 테스트", description = "통신 테스트")
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
