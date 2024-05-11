@@ -52,6 +52,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
         int characterId = characterInfoData['characterId'] as int;
         animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
         statPoint = characterInfoData['statPoint'] as int;
+
         isLoading = false;
       });
     } catch (e) {
@@ -317,7 +318,32 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                         ),
                                       )
                                     : TextButton(
-                                        onPressed: null, // 버튼 비활성화
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Center(
+                                                    child: Text('안내')),
+                                                content: const Text(
+                                                  '능력치 초기화는\n하루에 한번만 가능합니다.',
+                                                  textAlign: TextAlign.center,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    child: const Text('확인'),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
                                         child: Image.asset(
                                           'assets/buttons/character_reset_button_pushed.png',
                                           scale: 0.8,
