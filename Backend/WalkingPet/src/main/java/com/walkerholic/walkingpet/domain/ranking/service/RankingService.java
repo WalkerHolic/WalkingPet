@@ -52,11 +52,11 @@ public class RankingService {
      */
     @Transactional(readOnly = true)
     @Cacheable(value="accStepRankingTop10", key = "'accStepTop10'")
-    public PersonalStepRankingResponse getAccStepRankingTop10() {
+    public StepRankingResponse getAccStepRankingTop10() {
         log.info("RankingService getAccStepRankingTop10 누적 걸음수 top10(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
-        return PersonalStepRankingResponse.from(calculateAccRanking(topUsers));
+        return StepRankingResponse.from(calculateAccRanking(topUsers));
     }
 
     /*
@@ -64,11 +64,11 @@ public class RankingService {
      */
     @Transactional(readOnly = true)
     @Cacheable(value="accStepRankingTop3", key = "'accStepTop3'")
-    public PersonalStepRankingResponse getAccStepRankingTop3() {
+    public StepRankingResponse getAccStepRankingTop3() {
         log.info("RankingService getAccStepRankingTop3 누적 걸음수 top3(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findByTop3OrderByAccumulationStepDesc();
 
-        return PersonalStepRankingResponse.from(calculateAccRanking(topUsers));
+        return StepRankingResponse.from(calculateAccRanking(topUsers));
     }
 
     /*
@@ -76,11 +76,11 @@ public class RankingService {
      */
     @Transactional(readOnly = true)
     @Cacheable(value="yesterdayStepRankingTop10", key = "'ydStepTop10'")
-    public PersonalStepRankingResponse getYesterdayStepRankingTop10() {
+    public StepRankingResponse getYesterdayStepRankingTop10() {
         log.info("RankingService getYesterdayStepRanking0Top10 어제 걸음수 top10(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByYesterdayStepDesc();
 
-        return PersonalStepRankingResponse.from(calculateYesterdayRanking(topUsers));
+        return StepRankingResponse.from(calculateYesterdayRanking(topUsers));
     }
 
     /*
@@ -88,11 +88,11 @@ public class RankingService {
      */
     @Transactional(readOnly = true)
     @Cacheable(value="yesterdayStepRankingTop3", key = "'ydStepTop3'")
-    public PersonalStepRankingResponse getYesterdayStepRankingTop3() {
+    public StepRankingResponse getYesterdayStepRankingTop3() {
         log.info("RankingService getYesterdayStepRankingTop3 어제 걸음수 top3(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findByTop3OrderByYesterdayStepDesc();
 
-        return PersonalStepRankingResponse.from(calculateYesterdayRanking(topUsers));
+        return StepRankingResponse.from(calculateYesterdayRanking(topUsers));
     }
 
 
@@ -203,6 +203,21 @@ public class RankingService {
         return TeamRankingResponse.from(myTeamRankingList);
     }
 
+    // 배틀 랭킹 top 10
+    public BattleRankingResponse getBattleRankingTop10() {
+        List<UserDetail> top10 = userDetailRepository.findTop10ByOrderByBattleRatingDesc();
+
+        return BattleRankingResponse.from(calculateBattleRanking(top10));
+    }
+
+    // 배틀 랭킹 top 3
+    public BattleRankingResponse getBattleRankingTop3() {
+        List<UserDetail> top3 = userDetailRepository.findByTop3OrderByBattleRatingDesc();
+
+        return BattleRankingResponse.from(calculateBattleRanking(top3));
+    }
+
+    // 누적 걸음수 랭킹 동점 계산
     public List<PersonalStepRankingInfo> calculateAccRanking(List<UserStep> topUsers) {
         int rank = 0;
         int previousStep = -1;
@@ -221,6 +236,7 @@ public class RankingService {
         return StepRankingList;
     }
 
+    // 어제 걸음수 랭킹 동점 계산
     public List<PersonalStepRankingInfo> calculateYesterdayRanking(List<UserStep> topUsers) {
         int rank = 0;
         int previousStep = -1;
@@ -239,8 +255,21 @@ public class RankingService {
         return StepRankingList;
     }
 
-    // 모든 사용자의 걸음수 정보 가져오기
-    public void getAllUserStepInfo() {
+    // 배틀 랭킹 동점 계산
+    public List<BattleRankingList> calculateBattleRanking(List<UserDetail> topUsers) {
+        int rank = 0;
+        int previousRating = -1;
+        List<BattleRankingList> battleRankingList = new ArrayList<>();
 
+        for (UserDetail userInfo: topUsers) {
+
+            if (userInfo.getBattleRating() != previousRating) rank++;
+
+            battleRankingList.add(BattleRankingList.from(userInfo, rank));
+            previousRating = userInfo.getBattleRating();
+        }
+
+        return battleRankingList;
     }
+
 }

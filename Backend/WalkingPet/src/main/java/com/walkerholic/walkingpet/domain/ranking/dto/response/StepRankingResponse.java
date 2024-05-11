@@ -10,16 +10,16 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PersonalStepRankingResponse {
+public class StepRankingResponse {
     private List<PersonalStepRankingInfo> topRanking;
 
     @Builder
-    public PersonalStepRankingResponse(List<PersonalStepRankingInfo> topRanking) {
+    public StepRankingResponse(List<PersonalStepRankingInfo> topRanking) {
         this.topRanking = topRanking;
     }
 
-    public static PersonalStepRankingResponse from(List<PersonalStepRankingInfo> accStepRanking) {
-        return PersonalStepRankingResponse.builder()
+    public static StepRankingResponse from(List<PersonalStepRankingInfo> accStepRanking) {
+        return StepRankingResponse.builder()
                 .topRanking(accStepRanking)
                 .build();
     }
