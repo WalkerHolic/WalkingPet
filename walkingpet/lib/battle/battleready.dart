@@ -90,7 +90,7 @@ class _BattleReadyState extends State<BattleReady> {
                           size: screenWidth * 0.08,
                           text: "점수: ${characterData['rating']}"),
                       SizedBox(
-                        height: screenHeight * 0.044,
+                        height: screenHeight * 0.06,
                       ),
 
                       // 캐릭터 등급(별)
@@ -116,13 +116,6 @@ class _BattleReadyState extends State<BattleReady> {
                             text: "Lv.${characterData['level']}"),
                       ),
 
-                      // 캐릭터 변경 버튼
-                      // Transform.translate(
-                      //   offset: const Offset(0, -15),
-                      //   child: Image.asset(
-                      //     'assets/buttons/character_change_button.png',
-                      //   ),
-                      // ),
                       TextButton(
                         onPressed: () {
                           showDialog(
@@ -150,7 +143,7 @@ class _BattleReadyState extends State<BattleReady> {
                       ),
 
                       SizedBox(
-                        height: screenHeight * 0.01,
+                        height: screenHeight * 0.12,
                       ),
 
                       InkWell(
