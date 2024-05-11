@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/rank.dart';
 import 'package:walkingpet/ranking/widgets/top1to3.dart';
 import 'package:walkingpet/services/ranking/personal.dart';
 
-class PersonalRanking extends StatefulWidget {
-  const PersonalRanking({super.key});
+class BattleRanking extends StatefulWidget {
+  const BattleRanking({super.key});
 
   @override
-  State<PersonalRanking> createState() => _PersonalRankingState();
+  State<BattleRanking> createState() => _PersonalRankingState();
 }
 
-class _PersonalRankingState extends State<PersonalRanking> {
+class _PersonalRankingState extends State<BattleRanking> {
   // 필요한 변수 만들기
   List top10 = [];
   Map<String, dynamic> myrank = {};
@@ -52,63 +53,13 @@ class _PersonalRankingState extends State<PersonalRanking> {
       child: isLoading
           ? const CircularProgressIndicator() // 로딩 중 인디케이터 추가
           : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // 1. 어제 / 실시간 / 누적 선택
-                Padding(
-                  // 기존의 bottom padding 값 10을 20으로 수정
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () => fetchData(timeframe: 'yesterday'),
-                        child: Text(
-                          ' 어제 ',
-                          style: TextStyle(
-                            fontWeight: selectedTimeFrame == 'yesterday'
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: selectedTimeFrame == 'yesterday'
-                                ? const Color.fromARGB(255, 9, 118, 208)
-                                : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Text('|'),
-                      GestureDetector(
-                        onTap: () => fetchData(timeframe: 'realtime'),
-                        child: Text(
-                          ' 실시간 ',
-                          style: TextStyle(
-                            fontWeight: selectedTimeFrame == 'realtime'
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: selectedTimeFrame == 'realtime'
-                                ? const Color.fromARGB(255, 9, 118, 208)
-                                : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Text('|'),
-                      GestureDetector(
-                        onTap: () => fetchData(timeframe: 'accumulation'),
-                        child: Text(
-                          ' 누적 ',
-                          style: TextStyle(
-                            fontWeight: selectedTimeFrame == 'accumulation'
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: selectedTimeFrame == 'accumulation'
-                                ? const Color.fromARGB(255, 9, 118, 208)
-                                : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                    ],
-                  ),
+                // 1. 개인랭킹과의 줄맞춤을 위한 영역
+                Container(
+                  margin: const EdgeInsets.only(top: 15, bottom: 15),
+                  child: const Text('  '),
                 ),
 
                 // 2. 1~3위 표시

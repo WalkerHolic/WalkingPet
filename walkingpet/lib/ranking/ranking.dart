@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
-import 'package:walkingpet/ranking/widgets/personal.dart';
-import 'package:walkingpet/ranking/widgets/group.dart';
-import 'package:walkingpet/ranking/widgets/battle.dart';
+import 'package:walkingpet/ranking/personal.dart';
+import 'package:walkingpet/ranking/group.dart';
+import 'package:walkingpet/ranking/battle.dart';
 
-// 랭킹 브랜치 TEST
 class Ranking extends StatelessWidget {
   const Ranking({super.key});
 
