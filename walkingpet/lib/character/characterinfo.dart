@@ -71,6 +71,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           // 1. 배경 이미지
