@@ -4,7 +4,6 @@ import 'package:walkingpet/ranking/widgets/personal.dart';
 import 'package:walkingpet/ranking/widgets/group.dart';
 import 'package:walkingpet/ranking/widgets/battle.dart';
 
-// 랭킹 브랜치 TEST
 class Ranking extends StatelessWidget {
   const Ranking({super.key});
 
