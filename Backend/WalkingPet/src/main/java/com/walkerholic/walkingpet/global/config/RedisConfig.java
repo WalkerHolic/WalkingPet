@@ -1,13 +1,13 @@
 package com.walkerholic.walkingpet.global.config;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
+import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingAndUserInfo;
+import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -28,11 +28,21 @@ public class RedisConfig {
 
     // 데이터 저장 가능
     @Bean
-    public RedisTemplate<String, AccStepRankingInfo> accStepRankingList(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, AccStepRankingInfo> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, AccStepRankingAndUserInfo> accStepRankingList(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, AccStepRankingAndUserInfo> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(AccStepRankingInfo.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(AccStepRankingAndUserInfo.class));
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, UserRedisDto> userList(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, UserRedisDto> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(UserRedisDto.class));
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }

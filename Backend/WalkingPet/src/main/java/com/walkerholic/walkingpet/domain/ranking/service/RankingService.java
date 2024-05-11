@@ -35,12 +35,12 @@ public class RankingService {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
-        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
+        List<AccStepRankingAndUserInfo> accStepRankingList = new ArrayList<>();
         for (UserStep userStepInfo : topUsers) {
             UserDetail userDetailInfo = userDetailRepository.findUserDetailByUser(userStepInfo.getUser())
                     .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
+            accStepRankingList.add(AccStepRankingAndUserInfo.entityFrom(userDetailInfo, userStepInfo));
         }
 
         UserPersonalStepRankingResponse userAccStepRanking = getUserAccStepRanking(userId);
@@ -110,22 +110,23 @@ public class RankingService {
     }
 
     /*
-    사용자들의 누적 걸음수 데이터 가져오기
+    사용자들의 누적 걸음수 데이터 및 사용자 데이터 가져오기
     userId, nickname, step
      */
     @Transactional(readOnly = true)
-    public List<AccStepRankingInfo> getUserAccStepList() {
+    public List<AccStepRankingAndUserInfo> getUserAccStepAndInfoList() {
         List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
 
-        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
+        List<AccStepRankingAndUserInfo> accStepRankingList = new ArrayList<>();
         for (UserDetail userDetailInfo : allByUser) {
             UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
                     .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
+            accStepRankingList.add(AccStepRankingAndUserInfo.entityFrom(userDetailInfo, userStepInfo));
         }
 
         return accStepRankingList;
     }
+
 
     /*
         사용자들의 어제 걸음수 데이터 가져오기
@@ -236,5 +237,10 @@ public class RankingService {
         }
 
         return StepRankingList;
+    }
+
+    // 모든 사용자의 걸음수 정보 가져오기
+    public void getAllUserStepInfo() {
+
     }
 }
