@@ -404,7 +404,7 @@ class _CharacterExpState extends State<CharacterExp> {
                       // 4-8-1. '취소' 버튼
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/characterinfo');
+                          Navigator.of(context).pop();
                         },
                         child: Image.asset(
                           'assets/buttons/red_cancle_button.png',
@@ -415,8 +415,13 @@ class _CharacterExpState extends State<CharacterExp> {
                       // 4-8-2. '사용' 버튼 => 5. API 요청
                       TextButton(
                         onPressed: () async {
+                          if (expitemCount == 0) {
+                            return;
+                          }
+
                           // 5-1. API 요청 및 데이터 처리
                           var responseExpitem = await getExpitem(expitemCount);
+                          print(responseExpitem);
                           var expitemData = responseExpitem['data'];
                           var isLevelUp = expitemData['isLevelUp'];
                           var levelUpInfo = expitemData['levelUpInfo'];
@@ -445,9 +450,9 @@ class _CharacterExpState extends State<CharacterExp> {
                               },
                             );
                           }
-
-                          // 5-3. 캐릭터 정보 페이지로 이동
-                          Navigator.pushNamed(context, '/characterinfo');
+                          Navigator.of(context).pop();
+                          Navigator.pushReplacementNamed(
+                              context, '/characterinfo');
                         },
                         child: Image.asset(
                           'assets/buttons/green_use_button.png',
