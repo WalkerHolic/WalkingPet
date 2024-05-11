@@ -144,22 +144,22 @@ public class UserCharacterService {
      * 유저의 일일 걸음수 가져오기
      */
     public UserStepResponse checkUserStep(int userId, int frontStep) {
-        UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
-                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
+//        UserStep userStep = userStepRepository.findUserStepByUserUserId(userId)
+//                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
 
-//        int redisUserDailyStep = realtimeStepRankingRedisService.getUserDailyStep(userId);
+        int redisUserDailyStep = realtimeStepRankingRedisService.getUserDailyStep(userId);
 
         // 휴대폰이 재부팅 될 때를 가정
-        if (frontStep < userStep.getDailyStep()) {
-            return UserStepResponse.from(userStep.getDailyStep(), true);
-        } else {
-            return UserStepResponse.from(frontStep, false);
-        }
-//        if (frontStep < redisUserDailyStep) {
-//            return UserStepResponse.from(redisUserDailyStep, true);
+//        if (frontStep < userStep.getDailyStep()) {
+//            return UserStepResponse.from(userStep.getDailyStep(), true);
 //        } else {
 //            return UserStepResponse.from(frontStep, false);
 //        }
+        if (frontStep < redisUserDailyStep) {
+            return UserStepResponse.from(redisUserDailyStep, true);
+        } else {
+            return UserStepResponse.from(frontStep, false);
+        }
     }
 
     /**
