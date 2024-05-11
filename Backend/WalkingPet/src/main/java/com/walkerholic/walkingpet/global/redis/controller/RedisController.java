@@ -41,6 +41,16 @@ public class RedisController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 
+    @GetMapping("/saveDailyStep")
+    @Operation(summary = "redis의 모든 걸음수 저장 테스트", description = "")
+    public ResponseEntity<CommonResponseEntity> saveRedisAllDailyStep() {
+        log.info("redis의 모든 걸음수 저장 테스트 - redis test saveRedisAllDailyStep");
+
+        realtimeStepRankingRedisService.saveUserDailyStep();
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+    }
+
     @GetMapping("/saveTest/accStepRanking")
     @Operation(summary = "redis 누적 랭킹 저장 테스트", description = "")
     public ResponseEntity<CommonResponseEntity> saveRedisAccRankingInfo() {
