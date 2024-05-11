@@ -53,6 +53,7 @@ class _HomeState extends State<Home> {
       child: ChangeNotifierProvider(
         create: (context) => StepCounter(),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent, // Scaffold 배경을 투명하게 설정
           body: Stack(
             children: [
