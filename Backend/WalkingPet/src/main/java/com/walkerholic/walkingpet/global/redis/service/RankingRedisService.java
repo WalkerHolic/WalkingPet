@@ -21,7 +21,7 @@ public class RankingRedisService {
     /*
         redis 모든 랭킹 및 사용자 정보 저장
     */
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public void saveRedisUserAndAllRanking() {
 
         List<UserInfoAndAllStepInfo> userAccStepAndInfoList = userService.getUserAccStepAndInfoList();
@@ -73,7 +73,7 @@ public class RankingRedisService {
 //        }
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public void saveRedisAllRanking() {
 
         List<UserInfoAndAllStepInfo> userAccStepAndInfoList = userService.getUserAccStepAndInfoList();
