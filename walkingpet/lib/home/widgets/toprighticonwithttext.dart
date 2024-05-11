@@ -13,7 +13,12 @@ class TopRightIconWithText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double svgWidth = screenWidth * 0.17;
+
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
           onPressed: () {
@@ -21,19 +26,18 @@ class TopRightIconWithText extends StatelessWidget {
           },
           icon: SvgPicture.asset(
             'assets/icons/$icon.svg',
-            width: 60,
-            height: 60,
+            width: svgWidth,
           ),
         ),
         Transform.translate(
-          offset: const Offset(0, -15),
+          offset: Offset(0, screenHeight * -0.02),
           child: Text(
             text,
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              shadows: [
+              shadows: const [
                 Shadow(
                   // 외곽선 색상 및 오프셋 설정
                   offset: Offset(-1.5, -1.5),
