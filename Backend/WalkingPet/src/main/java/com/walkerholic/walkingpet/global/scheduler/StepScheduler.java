@@ -31,7 +31,7 @@ public class StepScheduler {
     }
 
     // 오전 1시부터 밤 11시까지 1시간마다 redis에 있는 걸음수 mysql에 저장
-    @Scheduled(cron = "0 0 1-23 * * ?")
+    @Scheduled(cron = "0 0 1-23 * * ?", zone = "Asia/Seoul")
     public void saveDailyStepFromRedisToMysql() {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
