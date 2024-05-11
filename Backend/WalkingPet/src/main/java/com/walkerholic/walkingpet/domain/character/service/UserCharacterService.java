@@ -2,7 +2,6 @@ package com.walkerholic.walkingpet.domain.character.service;
 
 import com.walkerholic.walkingpet.domain.character.dto.UserCharacterListInfo;
 import com.walkerholic.walkingpet.domain.character.dto.request.ChangeUserCharacterIdRequest;
-import com.walkerholic.walkingpet.domain.character.dto.request.ResetInitStatusRequest;
 import com.walkerholic.walkingpet.domain.character.dto.response.*;
 import com.walkerholic.walkingpet.domain.character.entity.Character;
 import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
@@ -10,15 +9,14 @@ import com.walkerholic.walkingpet.domain.character.repository.CharacterRepositor
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
-import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
-import com.walkerholic.walkingpet.global.redis.service.UserInfoRedisService;
 import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
+import com.walkerholic.walkingpet.global.redis.service.UserInfoRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

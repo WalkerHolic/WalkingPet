@@ -97,7 +97,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String[] excludePath = {
                         "/auth/social-login",
                         "/auth/generate/user",
-                        "/user",
+                        "/user/emailCheck",
+                        "/user/nicknameCheck",
+                        "/user/checkstep",
                         "/redis",
                         "/init",
                         "/v3/api-docs",

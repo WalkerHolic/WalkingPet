@@ -1,5 +1,8 @@
 package com.walkerholic.walkingpet.domain.users.service;
 
+import com.walkerholic.walkingpet.domain.ranking.dto.UserInfoAndAllStepInfo;
+import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
+import com.walkerholic.walkingpet.domain.users.dto.response.ChangeNicknameResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingAndUserInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.UserInfoAndAllStepInfo;
 import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
@@ -28,14 +31,20 @@ public class UserService {
     private final UserDetailRepository userDetailRepository;
     private final UserStepRepository userStepRepository;
 
-    public boolean modifyNickname(int userId, String nickname){
+    @Transactional(readOnly = false)
+    public ChangeNicknameResponse modifyNickname(int userId, String nickname){
         if(loginService.checkAvailableNickname(nickname)){
-            return false;
+            return ChangeNicknameResponse.builder()
+                    .nickname("")
+                    .status(false)
+                    .build();
         }
         Users user = getUsers(userId);
         user.modifyNickname(nickname);
-        usersRepository.save(user);
-        return true;
+        return ChangeNicknameResponse.builder()
+                .nickname(user.getNickname())
+                .status(true)
+                .build();
     }
 
     public void setBattleRating(){
