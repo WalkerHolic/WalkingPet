@@ -36,7 +36,7 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> saveRedisAllRankingInfo() {
         log.info("redis 모든 랭킹 저장 테스트 - redis test saveRedisAccRankingInfo");
 
-        rankingRedisService.saveRedisAllRanking();
+        rankingRedisService.saveRedisUserAndAllRanking();
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }

@@ -1,10 +1,6 @@
 package com.walkerholic.walkingpet.global.redis.service;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingAndUserInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.UserInfoAndAllStepInfo;
-import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
-import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
 import com.walkerholic.walkingpet.domain.users.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +19,10 @@ public class RankingRedisService {
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     /*
-        redis 모든 랭킹 저장
+        redis 모든 랭킹 및 사용자 정보 저장
     */
     @Transactional(readOnly = false)
-    public void saveRedisAllRanking() {
+    public void saveRedisUserAndAllRanking() {
 
         List<UserInfoAndAllStepInfo> userAccStepAndInfoList = userService.getUserAccStepAndInfoList();
         for (UserInfoAndAllStepInfo info: userAccStepAndInfoList) {
@@ -76,4 +72,22 @@ public class RankingRedisService {
 //            realtimeStepRankingRedisService.saveAllUserDailyStepList(stepInfo);
 //        }
     }
+
+    @Transactional(readOnly = false)
+    public void saveRedisAllRanking() {
+
+        List<UserInfoAndAllStepInfo> userAccStepAndInfoList = userService.getUserAccStepAndInfoList();
+        for (UserInfoAndAllStepInfo info: userAccStepAndInfoList) {
+            // 누적 랭킹 저장
+            accStepRankingRedisService.saveAccStep(info.getUserId(), info.getAccStep());
+
+            // 실시간 걸음수 저장
+            realtimeStepRankingRedisService.saveUserDailyStep(info.getUserId(), info.getDailyStep());
+
+            // 어제 걸음수 저장
+            yesterdayStepRankingRedisService.saveYesterdayStep(info.getUserId(), info.getYesterdayStep());
+        }
+    }
+
+
 }
