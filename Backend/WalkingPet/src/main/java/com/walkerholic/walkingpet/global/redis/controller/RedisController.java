@@ -4,7 +4,7 @@ import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -111,7 +111,7 @@ public class RedisController {
         log.info("redis 누적 랭킹 Top 10 출력 테스트 - redis test getRedisAccRankingTop10");
 
         System.out.println("테스트");
-        StepRankingResponse accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
+        RedisStepRankingResponse accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }

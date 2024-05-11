@@ -11,6 +11,8 @@ import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RankingService {
     private final UserStepRepository userStepRepository;
     private final UserDetailRepository userDetailRepository;
@@ -28,7 +31,7 @@ public class RankingService {
      * 누적 걸음수 랭킹 가져오기
      */
     @Transactional(readOnly = true)
-    public PersonalStepRankingResponse getAccStepRanking(int userId) {
+    public PersonalStepRankingAllInfoResponse getAccStepRanking(int userId) {
         //TODO: 동점 순위 일경우 가입 시간순으로
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
@@ -41,43 +44,57 @@ public class RankingService {
         }
 
         UserPersonalStepRankingResponse userAccStepRanking = getUserAccStepRanking(userId);
-        return PersonalStepRankingResponse.from(userAccStepRanking, accStepRankingList);
+        return PersonalStepRankingAllInfoResponse.from(userAccStepRanking, accStepRankingList);
     }
 
     /*
-     * 누적 걸음수 기준으로 top 10 랭킹 가져오기
+     * 누적 걸음수 기준으로 top 10 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
-    public AccStepRankingResponse getAccStepRankingTop10() {
-        //TODO: 동점 순위 일경우 가입 시간순으로
+    @Cacheable(value="accStepRankingTop10", key = "'accStepTop10'")
+    public PersonalStepRankingResponse getAccStepRankingTop10() {
+        log.info("RankingService getAccStepRankingTop10 누적 걸음수 top10(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
 
-        List<AccStepRankingInfo> accStepRankingList = new ArrayList<>();
-        for (UserStep userStepInfo : topUsers) {
-            UserDetail userDetailInfo = userDetailRepository.findUserDetailByUser(userStepInfo.getUser())
-                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
-
-            accStepRankingList.add(AccStepRankingInfo.entityFrom(userDetailInfo, userStepInfo));
-        }
-
-        return AccStepRankingResponse.from(accStepRankingList);
+        return PersonalStepRankingResponse.from(calculateAccRanking(topUsers));
     }
 
     /*
-     * 누적 걸음수 기준으로 top 3 개인 랭킹 가져오기
+     * 누적 걸음수 기준으로 top 3 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
-    public AccStepTop3RankingResponse getAccStepRankingTop3() {
-        //TODO: Redis 데이터로 변경
-        List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
+    @Cacheable(value="accStepRankingTop3", key = "'accStepTop3'")
+    public PersonalStepRankingResponse getAccStepRankingTop3() {
+        log.info("RankingService getAccStepRankingTop3 누적 걸음수 top3(캐싱 적용 x)");
+        List<UserStep> topUsers = userStepRepository.findByTop3OrderByAccumulationStepDesc();
 
-        List<AccStepTop3Ranking> accStepRankingList = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            accStepRankingList.add(AccStepTop3Ranking.from(topUsers.get(i)));
-        }
-
-        return AccStepTop3RankingResponse.from(accStepRankingList);
+        return PersonalStepRankingResponse.from(calculateAccRanking(topUsers));
     }
+
+    /*
+     * 어제 걸음수 기준으로 top 10 랭킹 가져오기 - redis 용
+     */
+    @Transactional(readOnly = true)
+    @Cacheable(value="yesterdayStepRankingTop10", key = "'ydStepTop10'")
+    public PersonalStepRankingResponse getYesterdayStepRankingTop10() {
+        log.info("RankingService getYesterdayStepRanking0Top10 어제 걸음수 top10(캐싱 적용 x)");
+        List<UserStep> topUsers = userStepRepository.findTop10ByOrderByYesterdayStepDesc();
+
+        return PersonalStepRankingResponse.from(calculateYesterdayRanking(topUsers));
+    }
+
+    /*
+     * 어제 걸음수 기준으로 top 3 랭킹 가져오기 - redis 용
+     */
+    @Transactional(readOnly = true)
+    @Cacheable(value="yesterdayStepRankingTop3", key = "'ydStepTop3'")
+    public PersonalStepRankingResponse getYesterdayStepRankingTop3() {
+        log.info("RankingService getYesterdayStepRankingTop3 어제 걸음수 top3(캐싱 적용 x)");
+        List<UserStep> topUsers = userStepRepository.findByTop3OrderByYesterdayStepDesc();
+
+        return PersonalStepRankingResponse.from(calculateYesterdayRanking(topUsers));
+    }
+
 
     /*
      * 누적 걸음수 기준으로 개인 랭킹에서 해당 유저의 랭킹 가져오기
@@ -149,7 +166,9 @@ public class RankingService {
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
+    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
     public TeamRankingResponse getTeamRankingTop10() {
+        log.info("그룹 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
 
         List<TeamRanking> teamRankingTop10List = new ArrayList<>();
@@ -170,6 +189,7 @@ public class RankingService {
     // 나의 그룹 랭킹 가져오기
     @Transactional(readOnly = true)
     public TeamRankingResponse getMyTeamRanking(int userId) {
+        // TODO: redis에 그룹 포인트 저장 방식으로 변경
         List<Team> myTeamRanking = teamRepository.findTeamsByUserIdOrderByPointDesc(userId);
 
         List<TeamRanking> myTeamRankingList = new ArrayList<>();
@@ -180,5 +200,41 @@ public class RankingService {
         }
 
         return TeamRankingResponse.from(myTeamRankingList);
+    }
+
+    public List<PersonalStepRankingInfo> calculateAccRanking(List<UserStep> topUsers) {
+        int rank = 0;
+        int previousStep = -1;
+        List<PersonalStepRankingInfo> StepRankingList = new ArrayList<>();
+
+        for (UserStep userStepInfo: topUsers) {
+            UserDetail userDetailInfo = userDetailRepository.findUserAndSelectUserCharacterByUserId(userStepInfo.getUser().getUserId())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+            if (userStepInfo.getAccumulationStep() != previousStep) rank++;
+
+            StepRankingList.add(PersonalStepRankingInfo.entityFrom(userDetailInfo, userStepInfo, userStepInfo.getAccumulationStep(),rank));
+            previousStep = userStepInfo.getAccumulationStep();
+        }
+
+        return StepRankingList;
+    }
+
+    public List<PersonalStepRankingInfo> calculateYesterdayRanking(List<UserStep> topUsers) {
+        int rank = 0;
+        int previousStep = -1;
+        List<PersonalStepRankingInfo> StepRankingList = new ArrayList<>();
+
+        for (UserStep userStepInfo: topUsers) {
+            UserDetail userDetailInfo = userDetailRepository.findUserAndSelectUserCharacterByUserId(userStepInfo.getUser().getUserId())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+            if (userStepInfo.getYesterdayStep() != previousStep) rank++;
+
+            StepRankingList.add(PersonalStepRankingInfo.entityFrom(userDetailInfo, userStepInfo, userStepInfo.getYesterdayStep(), rank));
+            previousStep = userStepInfo.getYesterdayStep();
+        }
+
+        return StepRankingList;
     }
 }

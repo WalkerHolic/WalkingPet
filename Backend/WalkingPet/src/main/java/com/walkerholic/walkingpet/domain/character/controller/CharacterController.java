@@ -19,6 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -118,11 +124,26 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CommonResponseEntity> test() {
         log.info("통신 테스트");
-//        Users users = userDetail.getUsers();
-//        System.out.println("user: " + users.getEmail());
-//        System.out.println("user: " + users.getUserId());
-//        userCharacterService.saveUserStep(1, 1234);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트");
+
+        TimeZone serverTimeZone = TimeZone.getDefault();
+        System.out.println("스프링 서버의 현재 시간대: " + serverTimeZone.getID());
+
+        // 현재 시간을 밀리초로 가져옵니다.
+        long currentTimeMillis = System.currentTimeMillis();
+
+        // 밀리초를 인스턴트로 변환합니다.
+        Instant instant = Instant.ofEpochMilli(currentTimeMillis);
+
+        // 인스턴트를 현지 시간으로 변환합니다.
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+
+        // 출력할 형식 지정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // 현재 시간을 지정된 형식으로 출력
+        String formattedDateTime = localDateTime.format(formatter);
+        System.out.println("스프링 서버의 현재 시간: " + formattedDateTime);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트 - " + serverTimeZone.getID() + " , " + formattedDateTime);
     }
 
     @Operation(summary = "경험치 아이템 사용", description = "경험치가 5씩 증가하는 아이템을 사용한다.")

@@ -84,7 +84,7 @@ public class UserCharacter {
     }
 
     @Builder
-    public UserCharacter(Character character, Users user){
+    public UserCharacter (Character character, Users user){
         this.user = user;
         this.character = character;
         this.statPoint = 5;

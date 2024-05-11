@@ -1,13 +1,8 @@
 package com.walkerholic.walkingpet.domain.users.controller;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.response.PersonalStepRankingResponse;
 import com.walkerholic.walkingpet.domain.users.service.SignInService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

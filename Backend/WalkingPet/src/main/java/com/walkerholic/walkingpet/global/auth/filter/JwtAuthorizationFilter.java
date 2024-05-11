@@ -1,10 +1,9 @@
 package com.walkerholic.walkingpet.global.auth.filter;
 
-import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
-import com.walkerholic.walkingpet.global.auth.Service.SecurityService;
 import com.walkerholic.walkingpet.global.auth.error.TokenBaseException;
 import com.walkerholic.walkingpet.global.auth.error.TokenErrorCode;
+import com.walkerholic.walkingpet.global.auth.util.AuthService;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
 import io.jsonwebtoken.Claims;
@@ -32,7 +31,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-    private final SecurityService securityService;
+    private final AuthService authService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
     @Override
@@ -56,8 +55,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         try {
             result = jwtUtil.validateAccessToken(accessToken);
 
-            // SecurityContext 에 Authentication 객체를 저장합니다.
-            securityService.saveUserInSecurityContext(accessToken);
+            // SecurityContext 에 Authentication 객체를 저장
+            authService.saveUserInSecurityContext(accessToken);
         } catch (ExpiredJwtException e) {
             System.out.println("JwtAuthorizationFilter doFilterInternal 토큰 만료");
             throw new TokenBaseException(TokenErrorCode.TOKEN_EXPIRED);
@@ -66,7 +65,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throw new TokenBaseException(TokenErrorCode.INVALID_TOKEN);
         }
 
-        
+
         String step = jwtUtil.extractStepFromHeader(request);
         if (step != null) {
             String socialId = jwtUtil.extractClaim(accessToken,  Claims::getSubject);
@@ -77,7 +76,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         return true;
     }
-    
+
     // 헤더에 있는 step의 값을 redis 에 저장
     private void saveRedisStep(String socialId, String step) {
         realtimeStepRankingRedisService.saveUserYesterdayStep(
@@ -88,7 +87,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         );
     }
 
-    /* 
+    /*
         SecurityConfig 파일에서 해당 api에 접근시 permitAll로 해두었으나 
         permitAll과 상관없이 jwtAuthorizationFilter 로 계속 들어가서 JwtAuthorizationFilter에서 다시 설정
         -> Spring Security에서는 보안 필터 체인을 통해 모든 요청에 대한 보안 검사를 수행하기 때문

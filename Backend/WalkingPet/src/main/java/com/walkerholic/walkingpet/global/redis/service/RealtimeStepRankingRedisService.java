@@ -4,21 +4,18 @@ import com.walkerholic.walkingpet.domain.ranking.dto.AccStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.StepRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
-import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import jakarta.annotation.Resource;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -44,22 +41,33 @@ public class RealtimeStepRankingRedisService {
     }
 
     // 실시간 걸음수 기준 상위 랭킹 래스트 가져오기
-    public StepRankingResponse getRedisRealtimeStepRankingList(int startRanking, int endRanking) {
+    public RedisStepRankingResponse getRedisRealtimeStepRankingList(int startRanking, int endRanking) {
+        System.out.println("실시간 걸음수 redis 접근");
         List<StepRankingList> accStepRankingList = new ArrayList<>();
         Set<Integer> top10users = rankigRedisTemplate.opsForZSet().reverseRange(USERS_KEY, startRanking, endRanking);
         assert top10users != null;
+
+        int userRanking = 0;
+        int previousStep = -1;
         for (Integer userId: top10users) {
+            System.out.println("userId: " + userId);
             AccStepRankingInfo userStepInfo = getUser(userId);
 
             Double dStep = rankigRedisTemplate.opsForZSet().score(USERS_KEY, userId);
             int step = dStep != null ? dStep.intValue() : 0;
             AccStepRankingInfo changeAccStepRankingInfo = userStepInfo.changeStep(step);
 
-            int userRanking = getUserRanking(userId);
+            System.out.println("userId: " + userId + "userStepInfo: " + userStepInfo);
+            System.out.println("step: " + changeAccStepRankingInfo.getStep());
+
+            if (changeAccStepRankingInfo.getStep() != previousStep) userRanking++;
+
+//            int userRanking = getUserRanking(userId);
             accStepRankingList.add(StepRankingList.from(changeAccStepRankingInfo, userRanking));
+            previousStep = changeAccStepRankingInfo.getStep();
         }
 
-        return StepRankingResponse.from(accStepRankingList);
+        return RedisStepRankingResponse.from(accStepRankingList);
     }
 
     // 실시간 걸음수를 기준으로 특정 유저의 순위를 가져오기

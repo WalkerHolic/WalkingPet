@@ -71,7 +71,6 @@ public class JwtUtil {
 
         // true: 토큰 만료x, false: 토큰 만료
         boolean isTokenExpired = checkTokenExpired(accessToken);
-        System.out.println("validateAccessToken isTokenExpired: " + isTokenExpired);
         if(!isTokenExpired) {
 //        if(isTokenExpired) {
             System.out.println("토큰 만료");
@@ -143,7 +142,6 @@ public class JwtUtil {
         if(StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
         } else {
-            System.out.println("jwtutil - extractTokenFromHeader - access token 없음");
             throw new TokenBaseException(TokenErrorCode.ACCESS_TOKEN_NOT_FOUND);
         }
     }

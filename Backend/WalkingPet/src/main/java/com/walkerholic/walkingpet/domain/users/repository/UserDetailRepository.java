@@ -5,6 +5,7 @@ import com.walkerholic.walkingpet.domain.users.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,10 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
     @Modifying
     @Query("UPDATE UserDetail ud SET ud.selectUserCharacter.userCharacterId = :userCharacterId WHERE ud.user.userId = :userId")
     void updateUserCharacterIdByUserId(Integer userId, Integer userCharacterId);
+
+    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.user u LEFT JOIN FETCH ud.selectUserCharacter uc WHERE u.userId = :userId")
+//    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.selectUserCharacter uc WHERE ud.user.userId = :userId")
+    Optional<UserDetail> findUserAndSelectUserCharacterByUserId(Integer userId);
 
     /**
      * fetch join 사용해서 userId로 UserDetail 찾고 UserCharacter 정보도 가져오기
