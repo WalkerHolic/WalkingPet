@@ -29,8 +29,9 @@ public class UserInfoRedisService {
 
 
     // 사용자가 캐릭터 변경시 redis에도 값 변경
-    public void updateCharacterId(int characterId) {
-
+    public void updateCharacterId(int userId, int characterId) {
+        UserRedisDto user = getUser(userId);
+        rankigRedisTemplate.opsForHash().put(USER_KEY, userId, user.changeCharacterId(characterId));
     }
 
     public UserRedisDto getUser(int userId) {

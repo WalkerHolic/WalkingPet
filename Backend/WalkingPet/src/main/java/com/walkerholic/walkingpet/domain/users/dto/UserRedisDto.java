@@ -26,4 +26,9 @@ public class UserRedisDto implements Serializable {
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .build();
     }
+
+    public UserRedisDto changeCharacterId(int characterId) {
+        this.characterId = characterId;
+        return this;
+    }
 }
