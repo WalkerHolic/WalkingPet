@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/providers/step_counter.dart';
@@ -24,13 +25,12 @@ class _HomeState extends State<Home> {
   String animal = "cow";
   bool isLoading = true;
 
-// API 요청으로 데이터 불러오기
+// 캐릭처 초기화
   Future<void> initInfo() async {
     try {
       var responseInfo = await getCharacterInfo();
       var characterInfoData = responseInfo['data'];
       int characterId = characterInfoData['characterId'] as int;
-
       setState(() {
         animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
         isLoading = false;
@@ -40,6 +40,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -53,45 +56,61 @@ class _HomeState extends State<Home> {
           backgroundColor: Colors.transparent, // Scaffold 배경을 투명하게 설정
           body: Stack(
             children: [
+              Positioned(
+                bottom: screenHeight * 0.2, // 화면 아래에서 20% 위치
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: MainFontStyle(
+                    size: screenWidth * 0.033,
+                    text: "걸음수는 하루 첫 접속 기준으로 계산됩니다",
+                    color: Colors.yellow,
+                  ),
+                ),
+              ),
               Center(
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 30,
+                    SizedBox(
+                      height: screenHeight * 0.04,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Transform.translate(
-                          offset: const Offset(10, 0),
+                          offset: Offset(screenWidth * 0.04, 0),
                           child: const TopRightIconWithText(
                               icon: "ranking", text: "랭킹"),
                         ),
                         const TopRightIconWithText(icon: "goal", text: "목표"),
+                        SizedBox(
+                          width: screenWidth * 0.01,
+                        ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 40,
+                    SizedBox(
+                      height: screenHeight * 0.05,
                     ),
-                    const MainFontStyle(size: 48, text: "걸음수"),
+                    MainFontStyle(size: screenWidth * 0.13, text: "걸음수"),
                     Transform.translate(
-                      offset: const Offset(0, -20),
+                      offset: Offset(0, screenHeight * -0.03),
                       child: Consumer<StepCounter>(
                           builder: (context, provider, child) {
                         return MainFontStyle(
-                            size: 100, text: "${provider.steps}");
+                          size: screenWidth * 0.3,
+                          text: "${provider.steps}",
+                        );
                       }),
                     ),
                     if (!isLoading)
-                      Image.asset(
-                        //'assets/animals/wolf/wolf_run.gif',
-                        'assets/animals/$animal/${animal}_walk.gif',
+                      SizedBox(
+                        height: screenHeight * 0.22,
+                        child: Image.asset(
+                          //'assets/animals/wolf/wolf_run.gif',
+                          'assets/animals/$animal/${animal}_walk.gif',
+                          fit: BoxFit.fitHeight,
+                        ),
                       ),
-                    const MainFontStyle(
-                      size: 12,
-                      text: "걸음수는 하루 첫 접속 기준으로 계산됩니다",
-                      color: Colors.yellow,
-                    ),
                   ],
                 ),
               ),
