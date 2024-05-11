@@ -110,9 +110,9 @@ public class CharacterController {
     @GetMapping("/checkstep")
     @Operation(summary = "유저의 걸음수 측정", description = "앱 시작시 걸음수 측정")
     @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
-    public ResponseEntity<CommonResponseEntity> getUserStep(@AuthenticationPrincipal CustomUserDetail userDetail) {
+    public ResponseEntity<CommonResponseEntity> getUserStep(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestHeader("step") int frontStep) {
         Integer userId = userDetail.getUsers().getUserId();
-        int frontStep = 100;
+
         log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
 
         UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
