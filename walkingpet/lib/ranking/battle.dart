@@ -58,7 +58,7 @@ class _PersonalRankingState extends State<BattleRanking> {
               children: [
                 // 1. 개인랭킹과의 줄맞춤을 위한 영역
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.only(top: 15, bottom: 15),
                   child: const Text('  '),
                 ),
 
