@@ -81,19 +81,21 @@ class _CharacterBoxState extends State<CharacterBox> {
                     ),
 
                     // 2. 사용자의 캐릭터 보유 개수
-                    Row(
-                      children: [
-                        const Text(
-                          '+',
-                          style: TextStyle(color: Colors.yellow, fontSize: 10),
-                        ),
-                        Text(
-                          widget.userCharacterUpgrade.toString(),
-                          style: const TextStyle(
-                              color: Colors.yellow, fontSize: 10),
-                        ),
-                      ],
-                    ),
+                    if (widget.userCharacterLevel != 0)
+                      Row(
+                        children: [
+                          const Text(
+                            '+',
+                            style:
+                                TextStyle(color: Colors.yellow, fontSize: 10),
+                          ),
+                          Text(
+                            widget.userCharacterUpgrade.toString(),
+                            style: const TextStyle(
+                                color: Colors.yellow, fontSize: 10),
+                          ),
+                        ],
+                      )
                   ],
                 ),
 
