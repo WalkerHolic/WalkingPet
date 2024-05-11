@@ -24,7 +24,7 @@ import 'package:intl/intl.dart'; // 날짜 포맷을 위한 패키지
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _requestPermissions();
+  await _requestPermissions();
   await AndroidAlarmManager.initialize();
   //scheduleMinuteAlarm();
   scheduleMidnightReset();
@@ -76,15 +76,12 @@ Future<void> checkFirstVisitToday() async {
   String today = DateFormat('yyyy-MM-dd')
       .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
   String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
-  print(lastVisit);
 
   if (lastVisit == null || lastVisit != today) {
     // 마지막 접속 날짜가 없거나 오늘 날짜와 다른 경우
     await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
-    print("This is the first visit of the day.");
     StepCounter().resetStep();
   } else {
-    print("User has already visited today.");
     // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
     await prefs.setString('lastVisit', today);
   }
@@ -115,7 +112,7 @@ void triggerMidnightReset() async {
 }
 
 // 권한 요청 메소드 정의
-void _requestPermissions() async {
+Future<void> _requestPermissions() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.reload();
   if (prefs.getBool('isGranted') ?? false) {
@@ -127,11 +124,12 @@ void _requestPermissions() async {
   if (status.isGranted) {
     prefs.setBool('isGranted', true);
 
-    await StepCounter().initializePedometer();
-    Future.delayed(const Duration(seconds: 3), () async {
-      // 5초 후에 실행될 코드
-      await StepCounter().resetStep();
-    });
+    // await StepCounter().initializePedometer();
+
+    // Future.delayed(const Duration(seconds: 3), () async {
+    //   // 5초 후에 실행될 코드
+    //   await StepCounter().resetStep();
+    // });
   } else {
     // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
     SystemNavigator.pop();
