@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/services/character/checkstep.dart';
@@ -32,12 +34,13 @@ class StepCounter with ChangeNotifier {
     if (_baseSteps == 0) {
       await _prefs?.setInt('baseSteps', 0);
     }
+    await _fetchInitialSteps();
+
     _stepCountStream = Pedometer.stepCountStream;
     _stepCountStream.listen((event) {
       _prefs?.setInt('eventSteps', event.steps);
     });
     _stepCountStream.listen(_onStepCount);
-    _fetchInitialSteps();
     print("pedometer 초기화 완료");
   }
 
@@ -45,9 +48,10 @@ class StepCounter with ChangeNotifier {
     try {
       int serverSteps = await checkStep();
       StepCount event = await _stepCountStream.first;
-      if (serverSteps > event.steps) {
-        _baseSteps -= serverSteps;
+      if (serverSteps > _steps) {
+        _baseSteps = serverSteps * -1;
         await _prefs?.setInt('baseSteps', _baseSteps);
+        _steps = event.steps - _baseSteps;
       }
     } catch (e) {
       print("Failed to fetch initial steps: $e");
