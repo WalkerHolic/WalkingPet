@@ -34,9 +34,9 @@ class StepCounter with ChangeNotifier {
     if (_baseSteps == 0) {
       await _prefs?.setInt('baseSteps', 0);
     }
-    await _fetchInitialSteps();
 
     _stepCountStream = Pedometer.stepCountStream;
+    await _fetchInitialSteps();
     _stepCountStream.listen((event) {
       _prefs?.setInt('eventSteps', event.steps);
     });
@@ -47,8 +47,9 @@ class StepCounter with ChangeNotifier {
   Future<void> _fetchInitialSteps() async {
     try {
       int serverSteps = await checkStep();
+      print(serverSteps);
       StepCount event = await _stepCountStream.first;
-      if (serverSteps > _steps) {
+      if (serverSteps >= _steps) {
         _baseSteps = serverSteps * -1;
         await _prefs?.setInt('baseSteps', _baseSteps);
         _steps = event.steps - _baseSteps;
