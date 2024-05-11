@@ -143,7 +143,7 @@ class _BattleReadyState extends State<BattleReady> {
                       ),
 
                       SizedBox(
-                        height: screenHeight * 0.12,
+                        height: screenHeight * 0.05,
                       ),
 
                       InkWell(
