@@ -20,7 +20,7 @@ public class RankingScheduler {
         log.info("오전 12시 3분 - 어제/누적 top10, top3 및 그룹 랭킹 캐싱 제거 완료");
     }
 
-    @Scheduled(cron = "0 5 1 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 5 0 * * ?", zone = "Asia/Seoul")
     public void updateRedisRankingInfo() {
         log.info("오전 12시 5분 - mysql 걸음수 데이터 redis로 이동");
         rankingRedisService.saveRedisAllRanking();
