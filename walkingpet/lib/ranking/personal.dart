@@ -64,14 +64,14 @@ class _PersonalRankingState extends State<PersonalRanking> {
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'yesterday'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 10, bottom: 20),
                         child: const Text('  '),
                       ),
                     ),
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'yesterday'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
                         child: Text(
                           ' 어제 ',
                           style: TextStyle(
@@ -88,14 +88,14 @@ class _PersonalRankingState extends State<PersonalRanking> {
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'realtime'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
                         child: const Text('|'),
                       ),
                     ),
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'realtime'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
                         child: Text(
                           ' 실시간 ',
                           style: TextStyle(
@@ -112,14 +112,14 @@ class _PersonalRankingState extends State<PersonalRanking> {
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'realtime'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
                         child: const Text('|'),
                       ),
                     ),
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'accumulation'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
                         child: Text(
                           ' 누적 ',
                           style: TextStyle(
@@ -136,7 +136,7 @@ class _PersonalRankingState extends State<PersonalRanking> {
                     GestureDetector(
                       onTap: () => fetchData(timeframe: 'accumulation'),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
                         child: const Text('  '),
                       ),
                     ),
