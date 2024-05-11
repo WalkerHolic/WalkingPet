@@ -1,9 +1,10 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CustomNesInputDialog extends StatefulWidget {
@@ -31,10 +32,10 @@ class CustomNesInputDialog extends StatefulWidget {
   }
 
   @override
-  _CustomNesInputDialogState createState() => _CustomNesInputDialogState();
+  CustomNesInputDialogState createState() => CustomNesInputDialogState();
 }
 
-class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
+class CustomNesInputDialogState extends State<CustomNesInputDialog> {
   final TextEditingController _controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _errorMessage;
@@ -106,13 +107,16 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Form(
       key: _formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(widget.message),
-          const SizedBox(height: 16),
+          SizedBox(height: screenHeight * 0.03),
           TextFormField(
             controller: _controller,
             textAlign: TextAlign.center,
@@ -129,11 +133,16 @@ class _CustomNesInputDialogState extends State<CustomNesInputDialog> {
             },
           ),
           if (_errorMessage != null)
+            if (_errorMessage == "중복된 닉네임 입니다.")
+              SizedBox(
+                height: screenHeight * 0.03,
+              ),
+          if (_errorMessage != null)
             Text(
               _errorMessage!,
-              style: const TextStyle(color: Colors.red, fontSize: 12),
+              style: TextStyle(color: Colors.red, fontSize: screenWidth * 0.03),
             ),
-          const SizedBox(height: 12),
+          SizedBox(height: screenHeight * 0.03),
           NesButton(
             type: NesButtonType.primary,
             child: Text(widget.inputLabel,
@@ -162,7 +171,7 @@ Future<void> _saveTokens(String responseBody) async {
   await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
 }
 
-// 닉네임 중복 체크
+// 닉네임 중복 체크 (중복일 경우 true 반환)
 Future<bool> _checkNickname(String nickname) async {
   const baseUrl = 'https://walkingpet.co.kr';
   const endpoint = '/user/nicknameCheck';
@@ -177,10 +186,8 @@ Future<bool> _checkNickname(String nickname) async {
 
       if (data) {
         // data가 true인 경우는 중복된 닉네임이라는 뜻
-        print("중복된 닉네임 입니다.");
         return false;
       } else {
-        print("사용 가능한 닉네임 입니다.");
         return true;
       }
     } else {
