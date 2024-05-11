@@ -34,7 +34,8 @@ class _BattleReadyState extends State<BattleReady> {
         int characterId = characterData['characterId']
             as int; // API에서 characterId가 int 타입이라고 가정
         animal = CharacterMap.idToAnimal[characterId] ??
-            "Unknown"; // characterId에 해당하는 동물이 없을 경우 "Unknown"을 사용
+            "unKnown"; // characterId에 해당하는 동물이 없을 경우 "unKnown"을 사용
+
         isLoading = false;
       });
     } catch (e) {
@@ -61,10 +62,19 @@ class _BattleReadyState extends State<BattleReady> {
           children: [
             if (!isLoading)
               Container(
-                margin: const EdgeInsets.fromLTRB(
-                    20.0, 40.0, 20.0, 100.0), // 좌, 상, 우, 하 각각 다른 마진 적용
+                margin: EdgeInsets.fromLTRB(
+                  screenWidth * 0.055,
+                  screenHeight * 0.05,
+                  screenWidth * 0.055,
+                  screenHeight * 0.12,
+                ), // 좌, 상, 우, 하 각각 다른 마진 적용
 
-                padding: const EdgeInsets.all(16), // 모든 방향에 16.0의 패딩을 적용
+                padding: EdgeInsets.fromLTRB(
+                  screenWidth * 0.05,
+                  screenHeight * 0.02,
+                  screenWidth * 0.05,
+                  screenHeight * 0.02,
+                ), // 모든 방향에 16.0의 패딩을 적용
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.6), // 투명한 흰색 배경 추가
                   borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 처리
@@ -74,12 +84,13 @@ class _BattleReadyState extends State<BattleReady> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MainFontStyle(
-                          size: 40,
+                          size: screenWidth * 0.1,
                           text: characterData['nickname']), // 동적 데이터 사용
                       MainFontStyle(
-                          size: 30, text: "점수: ${characterData['rating']}"),
-                      const SizedBox(
-                        height: 30,
+                          size: screenWidth * 0.08,
+                          text: "점수: ${characterData['rating']}"),
+                      SizedBox(
+                        height: screenHeight * 0.044,
                       ),
 
                       // 캐릭터 등급(별)
@@ -99,9 +110,10 @@ class _BattleReadyState extends State<BattleReady> {
                       ),
 
                       Transform.translate(
-                        offset: const Offset(0, -20),
+                        offset: Offset(0, screenHeight * -0.02),
                         child: MainFontStyle(
-                            size: 30, text: "Lv.${characterData['level']}"),
+                            size: screenWidth * 0.08,
+                            text: "Lv.${characterData['level']}"),
                       ),
 
                       // 캐릭터 변경 버튼
@@ -137,8 +149,8 @@ class _BattleReadyState extends State<BattleReady> {
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 5,
+                      SizedBox(
+                        height: screenHeight * 0.01,
                       ),
 
                       InkWell(
@@ -175,13 +187,15 @@ class _BattleReadyState extends State<BattleReady> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
+                                  Text(
                                     "Battle Start!",
-                                    style: TextStyle(fontSize: 22),
+                                    style:
+                                        TextStyle(fontSize: screenWidth * 0.05),
                                   ),
                                   Text(
                                     "일일 배틀 횟수: ${characterData['battleCount']}/10",
-                                    style: const TextStyle(fontSize: 12),
+                                    style: TextStyle(
+                                        fontSize: screenWidth * 0.035),
                                   ),
                                 ],
                               ),
