@@ -186,10 +186,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_blue_plus
-      sha256: abb08b5a7e44202290ff3dfc8fbb33fde7d4a82c39b20f3803a7f14ce2420aa7
+      sha256: "9419ca515ddcbe19a87fa2c45df97833d258c939b0e39ee2f38688a6c1fdbfde"
       url: "https://pub.dev"
     source: hosted
-    version: "1.32.5"
+    version: "1.32.4"
   flutter_foreground_task:
     dependency: "direct main"
     description:
@@ -500,10 +500,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_foundation
-      sha256: f234384a3fdd67f989b4d54a5d73ca2a6c422fa55ae694381ae0f4375cd1ea16
+      sha256: "5a7999be66e000916500be4f15a3633ebceb8302719b47b9cc49ce924125350f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.3.2"
   path_provider_linux:
     dependency: transitive
     description:
@@ -636,10 +636,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
+      sha256: "79fbafed02cfdbe85ef3fd06c7f4bc2cbcba0177e61b765264853d4253b21744"
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.1"
+    version: "3.9.0"
   provider:
     dependency: "direct main"
     description:
