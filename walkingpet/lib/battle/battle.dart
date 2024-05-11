@@ -24,7 +24,6 @@ class _BattleState extends State<Battle> {
   Future<void> initBattleInfo() async {
     try {
       var response = await getBattleInfo();
-      print(response);
       setState(() {
         battleData = response['data']; // API 응답을 상태에 저장
         isLoading = false;
@@ -62,7 +61,6 @@ class _BattleState extends State<Battle> {
                         defense: widget.myCharacterData['defense'],
                         rating: widget.myCharacterData['rating'],
                         characterId: widget.myCharacterData['characterId'],
-                        //characterId: widget.myCharacterData['characterId'],
                         userCharacterLevel: widget.myCharacterData['level'],
                         nickname: widget.myCharacterData['nickname'],
                         isLeft: true, // 입은 데미지
