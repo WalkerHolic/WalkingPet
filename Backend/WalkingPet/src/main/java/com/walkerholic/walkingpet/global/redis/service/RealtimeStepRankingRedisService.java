@@ -105,7 +105,6 @@ public class RealtimeStepRankingRedisService {
         for (ZSetOperations.TypedTuple<Integer> tuple : rankingData) {
             String userId = String.valueOf(tuple.getValue()); // userId 가져오기
             double dailyStep = tuple.getScore() == null ? 0 : tuple.getScore(); // step 가져오기
-            System.out.println("User ID: " + userId + ", dailyStep: " + dailyStep);
 
             UserStep userStep = userStepRepository.findById(Integer.valueOf(userId)).orElse(null);
             if (userStep != null) {
@@ -123,5 +122,21 @@ public class RealtimeStepRankingRedisService {
 //                userStepRepository.save(userStep);
 //            }
 //        }
+    }
+
+    public void saveUserDailyStep() {
+        Set<ZSetOperations.TypedTuple<Integer>> rankingData = rankigRedisTemplate.opsForZSet()
+                .rangeByScoreWithScores(USERS_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        for (ZSetOperations.TypedTuple<Integer> tuple : rankingData) {
+            String userId = String.valueOf(tuple.getValue()); // userId 가져오기
+            double dailyStep = tuple.getScore() == null ? 0 : tuple.getScore(); // step 가져오기
+
+            UserStep userStep = userStepRepository.findById(Integer.valueOf(userId)).orElse(null);
+            if (userStep != null) {
+                userStep.updateDailyStep((int) dailyStep);
+                userStepRepository.save(userStep);
+            }
+        }
     }
 }
