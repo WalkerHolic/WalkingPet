@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@EnableScheduling
 public class StepScheduler {
     private final StepService stepService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
@@ -19,15 +18,14 @@ public class StepScheduler {
 //        stepTask.dailyStepJob(jobRepository(), dailyStepStep()).execute(null);
 //    }
 
-    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // 3시 55분
+//    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // 3시 55분
     public void schedulerTest() {
-        String date = "미국";
-        System.out.println("스케줄러 테스트입니다. " + date);
+        System.out.println("자정 스케줄러 테스트입니다. ");
     }
 
-//    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 58 23 * * ?", zone = "Asia/Seoul")
     public void updateMidnightUserStep() {
-        System.out.println("업데이트 시작");
+        System.out.println("오후 11시 58분 걸음수 업데이트 시작");
 //        stepService.updateUserStepInfo();
         realtimeStepRankingRedisService.updateUserStepInfo();
     }
