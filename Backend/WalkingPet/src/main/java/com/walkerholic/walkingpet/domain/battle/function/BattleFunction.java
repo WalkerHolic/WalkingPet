@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class BattleFunction {
     //데미지 배율
-    static final int DAMAGE_SCALE = 5;
+    static final int DAMAGE_SCALE = 3;
     //데미지 최소/최대 값 조정 상수
     static final int DAMAGE_GAP = 3;
     static final int WIN_EXP = 10;
