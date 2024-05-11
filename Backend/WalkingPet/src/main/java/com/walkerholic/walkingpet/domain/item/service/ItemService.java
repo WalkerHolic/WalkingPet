@@ -31,11 +31,21 @@ public class ItemService {
     public LevelUpResponse usingExpItem(int userId, int expItemQuantity){
         //1. 일단 사용한 경험치 아이템 갯수 만큼 db 값 변경
         UserItem userItem = getUserItem(userId, "Exp Item");
-        userItem.addItemQuantity(-expItemQuantity);
-        userItemRepository.save(userItem);
+        try {
+            if(userItem.getQuantity() > 0){
+                userItem.addItemQuantity(-expItemQuantity);
+                userItemRepository.save(userItem);
 
-        UserCharacter userCharacter = getUserDetail(userId).getSelectUserCharacter();
-        return levelUpService.getLevelUpResponseByObject(userId, userCharacter, expItemQuantity*EXP_ITEM_EXP_QUANTITY);
+                UserCharacter userCharacter = getUserDetail(userId).getSelectUserCharacter();
+                return levelUpService.getLevelUpResponseByObject(userId, userCharacter, expItemQuantity*EXP_ITEM_EXP_QUANTITY);
+            }
+            else
+                throw new Exception("경험치 아이템이 없습니다.");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     /**
