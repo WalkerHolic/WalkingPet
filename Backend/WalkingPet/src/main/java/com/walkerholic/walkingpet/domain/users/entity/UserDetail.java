@@ -50,6 +50,10 @@ public class UserDetail {
 
     public void setBattleRating(int battleRating){this.battleRating = battleRating;}
 
+    public void resetBattleCount(){
+        this.battleCount = 10;
+    }
+
     @Builder
     public UserDetail(Users user, UserCharacter selectUserCharacter){
         this.user = user;
