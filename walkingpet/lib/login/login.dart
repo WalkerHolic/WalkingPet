@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:walkingpet/login/nes_input_dialog.dart';
 import 'package:nes_ui/nes_ui.dart';
@@ -6,7 +8,6 @@ import 'dart:convert';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 
 class Login extends StatefulWidget {
@@ -19,6 +20,9 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -31,15 +35,15 @@ class _LoginState extends State<Login> {
         body: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 120,
+              SizedBox(
+                height: screenHeight * 0.14,
               ),
-              const Text(
+              Text(
                 "Walking Pet",
                 style: TextStyle(
-                  fontSize: 52,
-                  color: Color.fromRGBO(141, 198, 63, 1),
-                  shadows: [
+                  fontSize: screenWidth * 0.13,
+                  color: const Color.fromRGBO(141, 198, 63, 1),
+                  shadows: const [
                     Shadow(
                       offset: Offset(-1.5, -1.5),
                       color: Color.fromRGBO(54, 91, 18, 1),
@@ -63,23 +67,15 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 200,
+              SizedBox(
+                height: screenHeight * 0.26,
               ),
               Image.asset('assets/animals/cow/cow_run.gif'),
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: screenHeight * 0.06,
               ),
               InkWell(
                 onTap: () => _handleKakaoLogin(context),
-                // onTap: () async {
-                //   String? nickname = await show(context: context);
-                //   print("Entered nickname: $nickname"); // 사용자가 입력한 값을 출력
-                //   //Navigator.pushNamed(context, '/home');
-                //   if (nickname != null && mounted) {
-                //     Navigator.pushReplacementNamed(context, '/home');
-                //   }
-                // },
                 child: Image.asset('assets/icons/kakao_login_medium_wide.png'),
               ),
             ],
@@ -117,16 +113,11 @@ Future<String?> show({
 
 //  카카오 로그인 시작
 Future<void> _handleKakaoLogin(BuildContext context) async {
-  print('카카오톡으로 로그인 성공');
   if (await isKakaoTalkInstalled()) {
     try {
-      print('카카오톡으로 로그인 성공');
       await UserApi.instance.loginWithKakaoTalk();
-      print('카카오톡으로 로그인 성공');
       _checkIfUserIsRegistered(context);
     } catch (error) {
-      print('카카오톡으로 로그인 실패 $error');
-
       if (error is PlatformException && error.code == 'CANCELED') {
         return;
       }
@@ -134,19 +125,17 @@ Future<void> _handleKakaoLogin(BuildContext context) async {
       // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
       try {
         await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공');
         _checkIfUserIsRegistered(context);
       } catch (error) {
-        print('카카오계정으로 로그인 실패 $error');
+        print(error);
       }
     }
   } else {
     try {
       await UserApi.instance.loginWithKakaoAccount();
-      print('카카오계정으로 로그인 성공');
       _checkIfUserIsRegistered(context);
     } catch (error) {
-      print('카카오계정으로 로그인 실패 $error');
+      print(error);
     }
   }
 }
@@ -159,7 +148,6 @@ Future<void> _handleKakaoLogin(BuildContext context) async {
 Future<void> _checkIfUserIsRegistered(BuildContext context) async {
   final User user = await UserApi.instance.me();
   final email = user.kakaoAccount?.email;
-  // const email = 'lhs26890011@naver.com';
   const baseUrl = 'https://walkingpet.co.kr';
   const endpoint = '/user/emailCheck';
 
@@ -173,16 +161,14 @@ Future<void> _checkIfUserIsRegistered(BuildContext context) async {
 
       if (data != null && data is bool) {
         if (data) {
-          print("이미 회원가입을 한 유저입니다.");
           _login(context);
         } else {
-          print("회원가입이 필요한 유저입니다.");
+          // show 메서드는 닉네임을 정하는 모달을 보여줌 (= 회원가입)
+          // 회원가입을 하기 전 걸음 수를 초기화 한다
           StepCounter().resetStep();
           await show(context: context);
         }
-      } else {
-        print('유효하지 않은 응답입니다.');
-      }
+      } else {}
     } else {
       print('서버로부터 오류 응답을 받았습니다. 상태 코드: ${response.statusCode}');
     }
@@ -191,7 +177,7 @@ Future<void> _checkIfUserIsRegistered(BuildContext context) async {
   }
 }
 
-// 기존 회원 로그인
+// 기존 회원 로그인 (토큰이 존재하지 않을 때 실행)
 Future<void> _login(BuildContext context) async {
   final User user = await UserApi.instance.me();
   const baseUrl = 'https://walkingpet.co.kr';
