@@ -16,8 +16,7 @@ public class BattleFunction {
     //데미지 배율
     static final int DAMAGE_SCALE = 3;
     //데미지 최소/최대 값 조정 상수
-    static final int DAMAGE_GAP = 3;
-    static final int WIN_EXP = 10;
+    static final int DAMAGE_GAP = 2;
     static final int WIN_RATING = 10;
     static final int LOSE_EXP = 5;
     static final int LOSE_RATING = -5;
@@ -129,7 +128,7 @@ public class BattleFunction {
         int originAttackDamage = (int)(Math.random()*(maxDamage-minDamage+1)) + minDamage;
         System.out.println("originAttackDamage = " + originAttackDamage);
 
-        int resultAttackDamage = 100*originAttackDamage/(100+defense);
+        int resultAttackDamage = 100*originAttackDamage/(200+defense);
         System.out.println("result Attack damage = " + resultAttackDamage);
 
         return resultAttackDamage;
