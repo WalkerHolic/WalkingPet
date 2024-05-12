@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -43,6 +44,10 @@ public class UserCharacterService {
     public static final int GRADE_3_UPGRADE_HEALTH_STAT = 50;
     public static final int GRADE_3_UPGRADE_POWER_STAT = 10;
     public static final int GRADE_3_UPGRADE_DEFENSE_STAT = 5;
+
+    private static final int UPGRADE_HEALTH_STAT = 0;
+    private static final int UPGRADE_POWER_STAT = 0;
+    private static final int UPGRADE_DEFENSE_STAT = 0;
 
 
 
@@ -222,5 +227,38 @@ public class UserCharacterService {
         return userDetail.getSelectUserCharacter();
     }
 
+    /**
+     * 업그레이드된 수치를 반환해주는 메소드
+     * @param gradeValue 등급 수치
+     * @param upgradeValue 업그레이드 수치
+     * @return HashMap 형태로 체력/공격력/방어력이 얼마나 올랐는지
+     */
+    private HashMap<String, Integer> getUpgradeStatus(int gradeValue, int upgradeValue){
+        HashMap<String, Integer> response = new HashMap<>();
+        response.put("Health", 0);
+        response.put("Power", 0);
+        response.put("Defense", 0);
+
+        switch (gradeValue){
+            case 1:
+                response.replace("Health", GRADE_1_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("Power", GRADE_1_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("Defense", GRADE_1_UPGRADE_DEFENSE_STAT*upgradeValue);
+                break;
+            case 2:
+                response.replace("Health", GRADE_2_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("Power", GRADE_2_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("Defense", GRADE_2_UPGRADE_DEFENSE_STAT*upgradeValue);
+                break;
+            case 3:
+                response.replace("Health", GRADE_3_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("Power", GRADE_3_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("Defense", GRADE_3_UPGRADE_DEFENSE_STAT*upgradeValue);
+                break;
+
+        }//end of swith/case
+
+        return response;
+    }
 
 }
