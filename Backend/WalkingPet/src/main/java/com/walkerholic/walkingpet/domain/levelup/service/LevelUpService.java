@@ -92,7 +92,6 @@ public class LevelUpService {
 
         //1. 캐릭터 정보 업데이트하기
         selectUserCharacter.updateLevelUp(updateCharacterInfo.getNowLevel(), updateCharacterInfo.getNowExperience(), levelUpReward.getStatPoint());
-        selectUserCharacter.addStatPoint(levelUpReward.getStatPoint());
         userCharacterRepository.save(selectUserCharacter);
 
         //2. 레벨업 보상 업데이트하기
@@ -101,8 +100,6 @@ public class LevelUpService {
             userItem.addItemQuantity(levelUpReward.getItemReward().get(itemName));
             userItemRepository.save(userItem);
         }
-
-
         return LevelUpInfo.builder()
                 .nowLevel(nowLevel)
                 .nextLevel(updateCharacterInfo.getNowLevel())
