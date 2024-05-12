@@ -28,6 +28,7 @@ class MyRank extends StatelessWidget {
           Image.asset(
             'assets/animals/$animal/${animal}_idle.gif',
             height: 90,
+            width: 100,
           ),
 
           Column(

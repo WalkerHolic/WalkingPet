@@ -4,7 +4,6 @@ import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/top10.dart';
 import 'package:walkingpet/ranking/widgets/top3.dart';
 import 'package:walkingpet/services/ranking/battle.dart';
-import 'package:walkingpet/services/ranking/personal.dart';
 
 class BattleRanking extends StatefulWidget {
   const BattleRanking({super.key});
@@ -27,7 +26,7 @@ class _PersonalRankingState extends State<BattleRanking> {
   }
 
   // API 요청으로 데이터 불러오기 => 기본 realtime으로 설정
-  Future<void> fetchData({String timeframe = 'realtime'}) async {
+  Future<void> fetchData() async {
     try {
       var responseTop10 = await getBattleTop10();
       var responseMyRank = await getBattleMyRank();
