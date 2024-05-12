@@ -208,7 +208,7 @@ class _PersonalRankingState extends State<PersonalRanking> {
                                     ranking: item['ranking'] as int? ?? 0,
                                     nickname: item['nickname'] as String? ??
                                         'Unknown',
-                                    step: item['step'] as int? ?? 0,
+                                    score: item['step'] as int? ?? 0,
                                     rankingUnit: '걸음');
                               }),
                             ],
