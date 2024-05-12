@@ -17,9 +17,9 @@ public class BattleFunction {
     static final int DAMAGE_SCALE = 3;
     //데미지 최소/최대 값 조정 상수
     static final int DAMAGE_GAP = 2;
-    static final int WIN_RATING = 5;
     static final int LOSE_EXP = 5;
-    static final int LOSE_RATING = -3;
+    static final int WIN_RATING = 10;
+    static final int LOSE_RATING = -5;
     static private boolean battleResult = false;
 
     private final RewardFunction rewardfunction;
