@@ -21,9 +21,9 @@ public class RankingScheduler {
     }
 
     // mysql 걸음수 데이터를 redis로 이동
-    @Scheduled(cron = "0 5 0 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 4 0 * * ?", zone = "Asia/Seoul")
     public void updateRedisRankingInfo() {
-        log.info("오전 12시 5분 - mysql 걸음수 데이터 redis로 이동");
+        log.info("오전 12시 4분 - mysql 걸음수 데이터 redis로 이동");
         rankingRedisService.saveRedisAllRanking();
     }
 

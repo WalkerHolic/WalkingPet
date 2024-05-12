@@ -54,6 +54,11 @@ public class UserDetail {
         this.battleCount = 10;
     }
 
+    public void resetBattleCountAndInitStatus() {
+        this.battleCount = 10;
+        this.initStatus = 0;
+    }
+
     @Builder
     public UserDetail(Users user, UserCharacter selectUserCharacter){
         this.user = user;

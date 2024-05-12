@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @Slf4j
 public class StepScheduler {
-    private final StepService stepService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
 
 //    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // 3시 55분
