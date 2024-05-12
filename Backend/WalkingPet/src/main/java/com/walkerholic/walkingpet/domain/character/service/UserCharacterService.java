@@ -147,9 +147,13 @@ public class UserCharacterService {
         Character character = userCharacterInfo.getCharacter();
 
         int resetStatPoint = userCharacterInfo.getStatPoint();
-        resetStatPoint += userCharacterInfo.getPower() - character.getFixPower();
-        resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth();
-        resetStatPoint += userCharacterInfo.getDefense() - character.getFixDefense();
+        //캐릭터의 기본값, 업그레이드 된 수치 빼야함.
+
+        HashMap<String, Integer> upgradeValue = getUpgradeStatus(character.getGrade(),userCharacterInfo.getUpgrade());
+
+        resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth() - upgradeValue.get("health");
+        resetStatPoint += userCharacterInfo.getPower() - character.getFixPower() - upgradeValue.get("power");
+        resetStatPoint += userCharacterInfo.getDefense() - character.getFixDefense() - upgradeValue.get("defense");
 
         userCharacterInfo.resetStat(resetStatPoint, character.getFixPower(), character.getFixDefense(), character.getFixHealth());
         userDetail.changeInitStatus();
@@ -235,30 +239,46 @@ public class UserCharacterService {
      */
     private HashMap<String, Integer> getUpgradeStatus(int gradeValue, int upgradeValue){
         HashMap<String, Integer> response = new HashMap<>();
-        response.put("Health", 0);
-        response.put("Power", 0);
-        response.put("Defense", 0);
+        response.put("health", 0);
+        response.put("power", 0);
+        response.put("defense", 0);
 
         switch (gradeValue){
             case 1:
-                response.replace("Health", GRADE_1_UPGRADE_HEALTH_STAT*upgradeValue);
-                response.replace("Power", GRADE_1_UPGRADE_POWER_STAT*upgradeValue);
-                response.replace("Defense", GRADE_1_UPGRADE_DEFENSE_STAT*upgradeValue);
+                response.replace("health", GRADE_1_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("power", GRADE_1_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("defense", GRADE_1_UPGRADE_DEFENSE_STAT*upgradeValue);
                 break;
             case 2:
-                response.replace("Health", GRADE_2_UPGRADE_HEALTH_STAT*upgradeValue);
-                response.replace("Power", GRADE_2_UPGRADE_POWER_STAT*upgradeValue);
-                response.replace("Defense", GRADE_2_UPGRADE_DEFENSE_STAT*upgradeValue);
+                response.replace("health", GRADE_2_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("power", GRADE_2_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("defense", GRADE_2_UPGRADE_DEFENSE_STAT*upgradeValue);
                 break;
             case 3:
-                response.replace("Health", GRADE_3_UPGRADE_HEALTH_STAT*upgradeValue);
-                response.replace("Power", GRADE_3_UPGRADE_POWER_STAT*upgradeValue);
-                response.replace("Defense", GRADE_3_UPGRADE_DEFENSE_STAT*upgradeValue);
+                response.replace("health", GRADE_3_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("power", GRADE_3_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("defense", GRADE_3_UPGRADE_DEFENSE_STAT*upgradeValue);
                 break;
 
-        }//end of swith/case
-
+        }
         return response;
     }
 
+    //업그레이드 된 수치 싹 검사해야함.
+    public void setUpgradeValue(){
+        List<UserCharacter> userCharacterList = userCharacterRepository.findAll();
+        for(UserCharacter uc : userCharacterList){
+            int upgrade = uc.getUpgrade();
+            int grade = uc.getCharacter().getGrade();
+
+            HashMap<String, Integer> value = getUpgradeStatus(grade,upgrade);
+
+            if(uc.getUpgrade() != 0){
+                uc.raiseHealth(value.get("health"));
+                uc.raisePower(value.get("power"));
+                uc.raiseDefense(value.get("defense"));
+                userCharacterRepository.save(uc);
+            }
+        }
+    }
 }
