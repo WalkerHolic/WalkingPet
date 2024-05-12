@@ -96,7 +96,7 @@ public class BattleService {
      * 레이팅이 비슷한 유저와 매칭시키는 함수
      * @param userId 배틀 시작한 유저 아이디
      * @param userRating 유저 레이팅 점수
-     * @param userDetailList 유저 상세정보 리스트
+     * @param userDetailList 모든 유저 상세정보 리스트
      * @return 매칭이 확정된 유저의 유저아이디
      */
     public int matchingBattleUser(int userId, int userRating, List<UserDetail> userDetailList){
@@ -115,7 +115,9 @@ public class BattleService {
                 //본인을 제외하면서
                 if(enemyUserId != userId){
                     //레이팅 범위 내라면~
-                    if(userRating-ratingGap <= enemyRating || enemyRating <= userRating + ratingGap)
+                    //유저 레이팅이 1000이라면
+                    //상대 레이팅은 800 에서 1200 사이어야 함.
+                    if(userRating-ratingGap <= enemyRating && enemyRating <= userRating + ratingGap)
                         enemyUserIdList.add(enemyUserId);
                 }
             }
@@ -131,7 +133,13 @@ public class BattleService {
         int enemyCount = enemyUserIdList.size();
         Random random = new Random();
 
-        int enemyUserIdPos = random.nextInt(enemyCount-1);
+        //기본적으로 상대 매칭 index는 0번
+        int enemyUserIdPos = 0;
+
+        //상대가 될 유저의 수가 2명 이상이라면 랜덤으로 상대 출력
+        if(enemyCount >= 2){
+            enemyUserIdPos = random.nextInt(enemyCount);
+        }
 
         //매칭 확정된 적 유저 아이디 반환
         return enemyUserIdList.get(enemyUserIdPos);
