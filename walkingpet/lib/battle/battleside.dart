@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
@@ -140,7 +139,7 @@ class _BattleSideState extends State<BattleSide> {
                     child: LinearPercentIndicator(
                       backgroundColor: Colors.grey,
                       progressColor: Colors.green,
-                      width: screenWidth * 0.357,
+                      width: screenWidth * 0.352,
                       percent: 1,
                       animation: true,
                       lineHeight: screenHeight * 0.0083,
