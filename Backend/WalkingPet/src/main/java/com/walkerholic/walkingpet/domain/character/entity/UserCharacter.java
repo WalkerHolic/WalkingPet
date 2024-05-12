@@ -58,11 +58,11 @@ public class UserCharacter {
 
     public void raiseHealth(int statPoint) { this.health += statPoint; }
 
-    public void resetStat(int statPoint, int power, int defense, int health) {
+    public void resetStat(int statPoint, int health, int power, int defense) {
         this.statPoint = statPoint;
+        this.health = health;
         this.power = power;
         this.defense = defense;
-        this.health = health;
     }
 
     public void addExperience(int experience) {this.experience += experience;}

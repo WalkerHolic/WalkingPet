@@ -75,8 +75,6 @@ public class UserCharacterService {
         int grade = userDetail.getSelectUserCharacter().getCharacter().getGrade();
 
         HashMap<String, Integer> upgradeValue = getUpgradeStatus(grade, upgrade);
-        System.out.println("Grade = " + grade + "\nUpgrade = " + upgrade);
-        System.out.println(upgradeValue.get("health"));
 
         return UserCharacterInfoResponse.from(userDetail, upgradeValue.get("health"), upgradeValue.get("power"), upgradeValue.get("defense"));
     }
@@ -141,6 +139,7 @@ public class UserCharacterService {
     /**
      * 스탯 초기화 버튼 클릭
      */
+    //TODO line 161~174 리팩토링 필요(추가되는 스탯만 빼면 되는데 시간상 지저분하게 함.)
     @Transactional(readOnly = false)
     public ResetStatResponse resetInitStatus(int userId) {
         UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
@@ -159,15 +158,23 @@ public class UserCharacterService {
 
         HashMap<String, Integer> upgradeValue = getUpgradeStatus(character.getGrade(),userCharacterInfo.getUpgrade());
 
-        resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth() - upgradeValue.get("health");
-        resetStatPoint += userCharacterInfo.getPower() - character.getFixPower() - upgradeValue.get("power");
-        resetStatPoint += userCharacterInfo.getDefense() - character.getFixDefense() - upgradeValue.get("defense");
+        System.out.println("userCharacterInfo.getHealth() : " + userCharacterInfo.getHealth());
+        System.out.println("userCharacterInfo.getPower() : " + userCharacterInfo.getPower() );
+        System.out.println("userCharacterInfo.getDefense() : " + userCharacterInfo.getDefense());
 
-        userCharacterInfo.resetStat(resetStatPoint, character.getFixPower(), character.getFixDefense(), character.getFixHealth());
+        int upgradeHealth = upgradeValue.get("health");
+        int upgradePower = upgradeValue.get("power");
+        int upgradeDefense = upgradeValue.get("defense");
+
+        resetStatPoint += userCharacterInfo.getHealth() - character.getFixHealth() - upgradeHealth;
+        resetStatPoint += userCharacterInfo.getPower() - character.getFixPower() - upgradePower;
+        resetStatPoint += userCharacterInfo.getDefense() - character.getFixDefense() - upgradeDefense;
+
+        userCharacterInfo.resetStat(resetStatPoint, character.getFixHealth() + upgradeHealth, character.getFixPower() + upgradePower, character.getFixDefense() + upgradeDefense);
         userDetail.changeInitStatus();
         userDetailRepository.save(userDetail);
 
-        return ResetStatResponse.from(userCharacterInfo);
+        return ResetStatResponse.from(userCharacterInfo, upgradeHealth, upgradePower, upgradeDefense);
     }
 
     /**
@@ -270,23 +277,5 @@ public class UserCharacterService {
 
         }
         return response;
-    }
-
-    //업그레이드 된 수치 싹 검사해야함.
-    public void setUpgradeValue(){
-        List<UserCharacter> userCharacterList = userCharacterRepository.findAll();
-        for(UserCharacter uc : userCharacterList){
-            int upgrade = uc.getUpgrade();
-            int grade = uc.getCharacter().getGrade();
-
-            HashMap<String, Integer> value = getUpgradeStatus(grade,upgrade);
-
-            if(uc.getUpgrade() != 0){
-                uc.raiseHealth(value.get("health"));
-                uc.raisePower(value.get("power"));
-                uc.raiseDefense(value.get("defense"));
-                userCharacterRepository.save(uc);
-            }
-        }
     }
 }
