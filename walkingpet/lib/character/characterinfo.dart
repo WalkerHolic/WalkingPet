@@ -162,10 +162,29 @@ class _CharacterInfoState extends State<CharacterInfo> {
                 ),
 
                 // 2. 캐릭터 이미지
-                Image.asset(
-                  'assets/animals/$animal/${animal}_idle.gif',
-                  height: 200,
-                  // scale: 0.3,
+                Stack(
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        'assets/animals/$animal/${animal}_idle.gif',
+                        height: 200,
+                        // scale: 0.3,
+                      ),
+                    ),
+
+                    // 캐릭터 등급(별)
+                    Row(
+                      // mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                          characterInfoData['characterGrade'], (index) {
+                        return Image.asset(
+                          'assets/items/one_star.png',
+                          width: screenWidth * 0.08,
+                        );
+                      }),
+                    ),
+                  ],
                 ),
 
                 // 3. 캐릭터 변경 버튼
