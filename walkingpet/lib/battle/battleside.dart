@@ -233,80 +233,90 @@ class _BattleSideState extends State<BattleSide> {
             color: Colors.white.withOpacity(0.6), // 투명한 흰색 배경 추가
             borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 처리
           ),
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(
+            screenWidth * 0.05,
+            screenHeight * 0.01,
+            screenWidth * 0.05,
+            screenHeight * 0.01,
+          ),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: screenHeight * 0.016,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     MainFontStyle(
-                        size: 16, text: "Lv.${widget.userCharacterLevel}"),
-                    const SizedBox(
-                      width: 10,
+                        size: screenWidth * 0.04,
+                        text: "Lv.${widget.userCharacterLevel}"),
+                    SizedBox(
+                      width: screenWidth * 0.028,
                     ),
-                    MainFontStyle(size: 12, text: widget.nickname),
+                    MainFontStyle(
+                        size: screenWidth * 0.03, text: widget.nickname),
                   ],
                 ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-
+                SizedBox(
+                  height: screenHeight * 0.015,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(
                       'assets/icons/icon_health.png', // assets 폴더에 위치한 SVG 파일
-                      height: 20, // 높이 지정
-                      width: 20, // 너비 지정
+                      height: screenHeight * 0.025, // 높이 지정
+                      width: screenWidth * 0.06,
                     ),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: screenWidth * 0.04,
                     ),
                     MainFontStyle(
-                      size: 16,
+                      size: screenWidth * 0.047,
                       text: (widget.health).toString(),
                     ),
                   ],
                 ),
-                // const SizedBox(
-                //   height: 5,
-                // ),
-
+                SizedBox(
+                  height: screenHeight * 0.007,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(
                       'assets/icons/icon_power.png', // assets 폴더에 위치한 SVG 파일
-                      height: 20, // 높이 지정
-                      width: 20, // 너비 지정
+                      height: screenHeight * 0.025, // 높이 지정
+                      width: screenWidth * 0.06,
                     ),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: screenWidth * 0.04,
                     ),
-                    MainFontStyle(size: 16, text: (widget.power).toString()),
+                    MainFontStyle(
+                        size: screenWidth * 0.047,
+                        text: (widget.power).toString()),
                   ],
                 ),
-                // const SizedBox(
-                //   height: 5,
-                // ),
-
+                SizedBox(
+                  height: screenHeight * 0.007,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(
                       'assets/icons/icon_depense.png', // assets 폴더에 위치한 SVG 파일
-                      height: 20, // 높이 지정
-                      width: 20, // 너비 지정
+                      height: screenHeight * 0.025, // 높이 지정
+                      width: screenWidth * 0.06,
                     ),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: screenWidth * 0.04,
                     ),
-                    MainFontStyle(size: 16, text: (widget.defense).toString()),
+                    MainFontStyle(
+                        size: screenWidth * 0.047,
+                        text: (widget.defense).toString()),
                   ],
                 ),
               ],
