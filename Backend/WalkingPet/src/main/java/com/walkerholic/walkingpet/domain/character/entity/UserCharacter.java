@@ -76,7 +76,7 @@ public class UserCharacter {
     public void updateLevelUp(int nextLevel, int experience, int statPoint){
         this.level = nextLevel;
         this.experience = experience;
-        this.statPoint = statPoint;
+        this.statPoint += statPoint;
     }
 
     public void addStatPoint(int statPoint){
