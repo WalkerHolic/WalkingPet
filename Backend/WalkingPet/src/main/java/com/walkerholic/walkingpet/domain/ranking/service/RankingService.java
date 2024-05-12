@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -283,6 +284,17 @@ public class RankingService {
         }
 
         return battleRankingList;
+    }
+
+    // 배틀 랭킹 나의 순위 조회
+    public BattleRankingList getBattleRankingMyRank(int userId) {
+
+        UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        int myRank = userDetailRepository.findBattleRankingMyRankByBattleRating(userId);
+
+        return BattleRankingList.from(userDetail, myRank);
     }
 
 }
