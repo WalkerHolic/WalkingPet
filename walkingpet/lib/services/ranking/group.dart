@@ -13,7 +13,7 @@ Future<Map<String, dynamic>> getMyGroupCount() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    print(jsonData);
+    // print(jsonData);
     return jsonData;
   } else {
     print("그룹랭킹 가입한 그룹 수 오류: ${response.statusCode}");
@@ -24,13 +24,13 @@ Future<Map<String, dynamic>> getMyGroupCount() async {
 // 가입한 그룹 랭킹 조회
 Future<Map<String, dynamic>> getMyGroup() async {
   final client = AuthInterceptor();
-  final url = Uri.parse('$baseUrl/$groupUrl/MyGroup');
+  final url = Uri.parse('$baseUrl/$groupUrl/myGroup');
   final response = await client.get(url);
 
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    print(jsonData);
+    // print(jsonData);
     return jsonData;
   } else {
     print("그룹랭킹 가입한 그룹들 순위 조회 오류: ${response.statusCode}");
@@ -47,7 +47,7 @@ Future<Map<String, dynamic>> getGroup() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    print(jsonData);
+    // print(jsonData);
     return jsonData;
   } else {
     print("모든 그룹 랭킹 조회 오류: ${response.statusCode}");
