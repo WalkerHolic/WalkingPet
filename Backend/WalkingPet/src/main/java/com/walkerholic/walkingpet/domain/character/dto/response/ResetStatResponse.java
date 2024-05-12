@@ -14,14 +14,14 @@ public class ResetStatResponse {
     private int addPower;
     private int addDefense;
     private int statPoint;
-    public static ResetStatResponse from(UserCharacter userCharacter){
+    public static ResetStatResponse from(UserCharacter userCharacter, int upgradeHealth, int upgradePower, int upgradeDefense){
         return ResetStatResponse.builder()
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
-                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth())
-                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
-                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
+                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth() - upgradeHealth)
+                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower() - upgradePower)
+                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense() - upgradeDefense)
                 .statPoint(userCharacter.getStatPoint())
                 .build();
     }
