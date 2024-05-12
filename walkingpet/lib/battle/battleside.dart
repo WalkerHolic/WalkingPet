@@ -73,17 +73,15 @@ class _BattleSideState extends State<BattleSide> {
             _timer?.cancel();
             Timer(const Duration(seconds: 1), () {
               if (widget.isLeft) {
-                // 작업을 위해 잠시 넘기는 코드를 빼둠
-
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => BattleResult(
-                //       battleResult: widget.battleResult,
-                //       animal: animal,
-                //     ),
-                //   ),
-                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BattleResult(
+                      battleResult: widget.battleResult,
+                      animal: animal,
+                    ),
+                  ),
+                );
               }
             });
           }
