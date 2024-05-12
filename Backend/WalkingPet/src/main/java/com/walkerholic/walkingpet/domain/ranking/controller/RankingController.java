@@ -166,14 +166,6 @@ public class RankingController {
         Integer userId = userDetail.getUsers().getUserId();
         log.info("배틀 랭킹 나의 순위 조회 getMyBattleRanking - userId: {}", userId);
 
-        BattleRankingList dummy = BattleRankingList.builder()
-                .userId(userId)
-                .nickname("더미")
-                .battleRating(1234)
-                .characterId(1)
-                .ranking(1)
-                .build();
-
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, dummy);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getBattleRankingMyRank(userId));
     }
 }
