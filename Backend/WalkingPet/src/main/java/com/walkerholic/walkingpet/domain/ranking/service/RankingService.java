@@ -4,6 +4,7 @@ import com.walkerholic.walkingpet.domain.ranking.dto.*;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.*;
 import com.walkerholic.walkingpet.domain.team.entity.Team;
 import com.walkerholic.walkingpet.domain.team.repository.TeamRepository;
+import com.walkerholic.walkingpet.domain.team.repository.TeamUserRepository;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
@@ -26,6 +27,7 @@ public class RankingService {
     private final UserStepRepository userStepRepository;
     private final UserDetailRepository userDetailRepository;
     private final TeamRepository teamRepository;
+    private final TeamUserRepository teamUserRepository;
 
     /*
      * 누적 걸음수 랭킹 가져오기
@@ -201,6 +203,17 @@ public class RankingService {
         }
 
         return TeamRankingResponse.from(myTeamRankingList);
+    }
+
+    /**
+     * 나의 그룹 수 가져오기
+     * @param userId 가입 그룹 수 확인을 위한 유저 아이디
+     * @return int(가입한 그룹 수)
+     */
+    @Transactional(readOnly = true)
+    public GroupCountResponse getMyGroupCount(int userId) {
+        int groupCount = teamUserRepository.countByUserId(userId);
+        return GroupCountResponse.from(groupCount);
     }
 
     // 배틀 랭킹 top 10
