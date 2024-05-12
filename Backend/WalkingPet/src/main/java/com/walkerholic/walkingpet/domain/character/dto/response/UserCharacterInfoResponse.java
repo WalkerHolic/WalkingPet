@@ -28,7 +28,7 @@ public class UserCharacterInfoResponse {
     private int upgrade;
     private int initStatus;
 
-    public static UserCharacterInfoResponse from(UserDetail userDetail){
+    public static UserCharacterInfoResponse from(UserDetail userDetail, int upgradeHealth, int upgradePower, int upgradeDefense){
         UserCharacter userCharacter = userDetail.getSelectUserCharacter();
 
         return UserCharacterInfoResponse.builder()
@@ -38,9 +38,9 @@ public class UserCharacterInfoResponse {
                 .characterGrade(userCharacter.getCharacter().getGrade())
                 .experience(userCharacter.getExperience())
                 .maxExperience(UserCharacterFunction.getMaxExperience(userCharacter.getLevel()))
-                .health(userCharacter.getHealth())
-                .power(userCharacter.getPower())
-                .defense(userCharacter.getDefense())
+                .health(userCharacter.getHealth() + upgradeHealth)
+                .power(userCharacter.getPower() + upgradePower)
+                .defense(userCharacter.getDefense() + upgradeDefense)
                 .statPoint(userCharacter.getStatPoint())
                 .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth())
                 .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
