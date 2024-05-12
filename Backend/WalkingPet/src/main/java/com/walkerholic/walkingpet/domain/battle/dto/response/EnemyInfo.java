@@ -18,6 +18,7 @@ public class EnemyInfo {
 
     public static EnemyInfo from(UserDetail userDetail){
         return EnemyInfo.builder()
+                .level(userDetail.getSelectUserCharacter().getLevel())
                 .nickname(userDetail.getUser().getNickname())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .rating(userDetail.getBattleRating())
