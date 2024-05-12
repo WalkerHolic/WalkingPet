@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.ranking.controller;
 
+import com.walkerholic.walkingpet.domain.ranking.dto.BattleRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.StepRankingList;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.*;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
@@ -51,7 +52,7 @@ public class RankingController {
         log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
 //        RedisStepRankingResponse accStepRankingList;
-        PersonalStepRankingResponse accStepRankingList;
+        StepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
             accStepRankingList = rankingService.getYesterdayStepRankingTop10();
 //            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 9);
@@ -126,5 +127,42 @@ public class RankingController {
         TeamRankingResponse myTeamRanking = rankingService.getMyTeamRanking(userId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, myTeamRanking);
+    }
+
+    @GetMapping("/battle/top10")
+    @Operation(summary = "배틀 랭킹 top 10 조회", description = "배틀 랭킹 정보를 top 10 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 배틀 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = BattleRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getBattleRankingTop10() {
+        log.info("배틀 랭킹 top 10 조회 getBattleRankingTop10");
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getBattleRankingTop10());
+    }
+
+    @GetMapping("/battle/top3")
+    @Operation(summary = "배틀 랭킹 top 3 조회", description = "배틀 랭킹 정보를 top 3 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 배틀 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = BattleRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getBattleRankingTop3() {
+
+            log.info("배틀 걸음수 랭킹 top 3 조회 getBattleRankingTop3");
+
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getBattleRankingTop3());
+    }
+
+    @GetMapping("/battle/myrank")
+    @Operation(summary = "배틀 랭킹 나의 순위 조회", description = "배틀 랭킹에서 나의 순위 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 배틀 랭킹 나의 순위 조회 성공", content = @Content(schema = @Schema(implementation = BattleRankingList.class)))
+    public ResponseEntity<CommonResponseEntity> getMyBattleRanking(@AuthenticationPrincipal CustomUserDetail userDetail) {
+        Integer userId = userDetail.getUsers().getUserId();
+        log.info("배틀 랭킹 나의 순위 조회 getMyBattleRanking - userId: {}", userId);
+
+        BattleRankingList dummy = BattleRankingList.builder()
+                .userId(userId)
+                .nickname("더미")
+                .battleRating(1234)
+                .characterId(1)
+                .ranking(1)
+                .build();
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, dummy);
     }
 }

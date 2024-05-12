@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.users.repository;
 
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
+import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -52,4 +53,9 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
 
     @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.selectUserCharacter WHERE ud.user.userId = :userId")
     Optional<UserDetail> findUserCharacterByUserId(Integer userId);
+
+    List<UserDetail> findTop10ByOrderByBattleRatingDesc();
+
+    @Query("SELECT ud FROM UserDetail ud ORDER BY ud.battleRating DESC LIMIT 3")
+    List<UserDetail> findByTop3OrderByBattleRatingDesc();
 }
