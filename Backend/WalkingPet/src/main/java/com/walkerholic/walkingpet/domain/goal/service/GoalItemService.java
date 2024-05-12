@@ -255,26 +255,6 @@ public class GoalItemService {
         return result;
     }
 
-    //매일매일 개인목표 초기화
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
-    public void resetDailyGoal(){
-        List<Goal> goalList = goalRepository.findAll();
-        for(Goal goal : goalList){
-            goal.setDailyGoal(0);
-            goalRepository.save(goal);
-        }
-    }
-
-    //매주 목요일마다 주간목표 초기화
-    @Scheduled(cron = "0 0 0 * * 1", zone = "Asia/Seoul")
-    public void resetWeeklyGoal(){
-        List<Goal> goalList = goalRepository.findAll();
-        for(Goal goal : goalList){
-            goal.setWeeklyGoal(0);
-            goalRepository.save(goal);
-        }
-    }
-
     public Users getUserByUserId(int userId){
         return usersRepository.findById(userId)
                 .orElseThrow(()-> new GlobalBaseException(USER_NOT_FOUND));
