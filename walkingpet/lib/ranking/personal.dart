@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
-import 'package:walkingpet/ranking/widgets/rank.dart';
-import 'package:walkingpet/ranking/widgets/top1to3.dart';
+import 'package:walkingpet/ranking/widgets/top10.dart';
+import 'package:walkingpet/ranking/widgets/top3.dart';
 import 'package:walkingpet/services/ranking/personal.dart';
 
 class PersonalRanking extends StatefulWidget {
@@ -152,7 +152,6 @@ class _PersonalRankingState extends State<PersonalRanking> {
                         ranking: item['ranking'] as int? ?? 0,
                         characterId: item['characterId'] as int? ?? 0,
                         nickname: item['nickname'] as String? ?? 'Unknown',
-                        step: item['step'] as int? ?? 0,
                       );
                     }),
                   ],
@@ -170,9 +169,10 @@ class _PersonalRankingState extends State<PersonalRanking> {
                     margin: const EdgeInsets.symmetric(horizontal: 7),
                     child: MyRank(
                       ranking: myrank['ranking'] as int? ?? 0,
-                      step: myrank['step'] as int? ?? 0,
+                      score: myrank['step'] as int? ?? 0,
                       characterId: myrank['characterId'] as int? ?? 0,
                       nickname: myrank['nickname'] as String? ?? 'Unknown',
+                      rankingUnit: '걸음',
                     ),
                   ),
                 ),
@@ -205,11 +205,11 @@ class _PersonalRankingState extends State<PersonalRanking> {
                             children: [
                               ...top10.map((item) {
                                 return Rank(
-                                  ranking: item['ranking'] as int? ?? 0,
-                                  nickname:
-                                      item['nickname'] as String? ?? 'Unknown',
-                                  step: item['step'] as int? ?? 0,
-                                );
+                                    ranking: item['ranking'] as int? ?? 0,
+                                    nickname: item['nickname'] as String? ??
+                                        'Unknown',
+                                    score: item['step'] as int? ?? 0,
+                                    rankingUnit: '걸음');
                               }),
                             ],
                           ),

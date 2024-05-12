@@ -2,54 +2,55 @@ import 'dart:convert';
 import '../Interceptor.dart';
 
 const String baseUrl = "https://walkingpet.co.kr";
+const String groupUrl = "ranking";
 
-// 랭킹 Top10 조회
-Future<Map<String, dynamic>> getTop10({String timeframe = 'realtime'}) async {
+// 가입한 그룹 수 조회 (count)
+Future<Map<String, dynamic>> getMyGroupCount() async {
   final client = AuthInterceptor();
-  final url = Uri.parse('$baseUrl/ranking/person/top10?value=$timeframe');
+  final url = Uri.parse('$baseUrl/$groupUrl/group/count');
   final response = await client.get(url);
 
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
+    print(jsonData);
     return jsonData;
   } else {
-    print("개인랭킹 Top10 오류: ${response.statusCode}");
+    print("그룹랭킹 가입한 그룹 수 오류: ${response.statusCode}");
     throw Error();
   }
 }
 
-// 랭킹 본인 순위 조회
-Future<Map<String, dynamic>> getMyRank({String timeframe = 'realtime'}) async {
+// 가입한 그룹 랭킹 조회
+Future<Map<String, dynamic>> getMyGroup() async {
   final client = AuthInterceptor();
-  final url = Uri.parse('$baseUrl/ranking/person/myrank?value=$timeframe');
+  final url = Uri.parse('$baseUrl/$groupUrl/MyGroup');
   final response = await client.get(url);
 
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
+    print(jsonData);
     return jsonData;
   } else {
-    print("개인랭킹 유저순위(my rank) 오류: ${response.statusCode}");
+    print("그룹랭킹 가입한 그룹들 순위 조회 오류: ${response.statusCode}");
     throw Error();
   }
 }
 
-// 랭킹 1~3위 조회
-Future<Map<String, dynamic>> getTop3({String timeframe = 'realtime'}) async {
+// 모든 그룹 랭킹 조회
+Future<Map<String, dynamic>> getGroup() async {
   final client = AuthInterceptor();
-  final url = Uri.parse('$baseUrl/ranking/person/top3?value=$timeframe');
+  final url = Uri.parse('$baseUrl/$groupUrl/group');
   final response = await client.get(url);
 
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
+    print(jsonData);
     return jsonData;
   } else {
-    print("개인랭킹 Top3 오류: ${response.statusCode}");
+    print("모든 그룹 랭킹 조회 오류: ${response.statusCode}");
     throw Error();
   }
 }

@@ -99,12 +99,12 @@ class Ranking extends StatelessWidget {
                         label: '개인랭킹',
                       ),
                       NesTabItem(
-                        child: GroupRanking(),
-                        label: '그룹랭킹',
-                      ),
-                      NesTabItem(
                         child: BattleRanking(),
                         label: '배틀랭킹',
+                      ),
+                      NesTabItem(
+                        child: GroupRanking(),
+                        label: '그룹랭킹',
                       ),
                     ],
                   ),
