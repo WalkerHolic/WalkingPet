@@ -151,20 +151,39 @@ class _CharacterExpState extends State<CharacterExp> {
                 children: [
                   // 1. 유저 닉네임
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.only(top: 15, bottom: 10),
                     child: Text(
                       characterInfoData['nickname'] ?? '닉네임로딩중',
                       style: const TextStyle(
-                        fontSize: 35,
+                        fontSize: 32,
                       ),
                     ),
                   ),
 
                   // 2. 캐릭터 이미지
-                  Image.asset(
-                    'assets/animals/$animal/${animal}_idle.gif',
-                    height: 200,
-                    // scale: 0.3,
+                  Stack(
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          'assets/animals/$animal/${animal}_idle.gif',
+                          height: 200,
+                          // scale: 0.3,
+                        ),
+                      ),
+
+                      // 캐릭터 등급(별)
+                      Row(
+                        // mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                            characterInfoData['characterGrade'], (index) {
+                          return Image.asset(
+                            'assets/items/one_star.png',
+                            width: screenWidth * 0.08,
+                          );
+                        }),
+                      ),
+                    ],
                   ),
 
                   // 3. 레벨 & 경험치 바
