@@ -25,7 +25,7 @@ class _PersonalRankingState extends State<BattleRanking> {
     fetchData();
   }
 
-  // API 요청으로 데이터 불러오기 => 기본 realtime으로 설정
+  // API 요청으로 데이터 불러오기
   Future<void> fetchData() async {
     try {
       var responseTop10 = await getBattleTop10();
