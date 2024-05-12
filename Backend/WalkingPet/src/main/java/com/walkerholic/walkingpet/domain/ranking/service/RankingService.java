@@ -167,7 +167,7 @@ public class RankingService {
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
-    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
+//    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
     public TeamRankingResponse getTeamRankingTop10() {
         log.info("그룹 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
