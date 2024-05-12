@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
-import 'package:walkingpet/ranking/widgets/rank.dart';
-import 'package:walkingpet/ranking/widgets/top1to3.dart';
+import 'package:walkingpet/ranking/widgets/top10.dart';
+import 'package:walkingpet/ranking/widgets/top3.dart';
+import 'package:walkingpet/services/ranking/battle.dart';
 import 'package:walkingpet/services/ranking/personal.dart';
 
 class BattleRanking extends StatefulWidget {
@@ -18,7 +19,6 @@ class _PersonalRankingState extends State<BattleRanking> {
   Map<String, dynamic> myrank = {};
   List top3 = [];
   bool isLoading = true;
-  String selectedTimeFrame = 'realtime';
 
   @override
   void initState() {
@@ -29,16 +29,15 @@ class _PersonalRankingState extends State<BattleRanking> {
   // API 요청으로 데이터 불러오기 => 기본 realtime으로 설정
   Future<void> fetchData({String timeframe = 'realtime'}) async {
     try {
-      var responseTop10 = await getTop10(timeframe: timeframe);
-      var responseMyRank = await getMyRank(timeframe: timeframe);
-      var responseTop3 = await getTop3(timeframe: timeframe);
+      var responseTop10 = await getBattleTop10();
+      var responseMyRank = await getBattleMyRank();
+      var responseTop3 = await getBattleTop3();
 
       setState(() {
         top10 = responseTop10['data']['topRanking'];
         myrank = responseMyRank['data'];
         top3 = responseTop3['data']['topRanking'];
         isLoading = false;
-        selectedTimeFrame = timeframe;
       });
     } catch (e) {
       setState(() {
@@ -71,7 +70,6 @@ class _PersonalRankingState extends State<BattleRanking> {
                         ranking: item['ranking'] as int? ?? 0,
                         characterId: item['characterId'] as int? ?? 0,
                         nickname: item['nickname'] as String? ?? 'Unknown',
-                        step: item['step'] as int? ?? 0,
                       );
                     }),
                   ],
@@ -89,9 +87,10 @@ class _PersonalRankingState extends State<BattleRanking> {
                     margin: const EdgeInsets.symmetric(horizontal: 7),
                     child: MyRank(
                       ranking: myrank['ranking'] as int? ?? 0,
-                      step: myrank['step'] as int? ?? 0,
+                      score: myrank['battleRating'] as int? ?? 0,
                       characterId: myrank['characterId'] as int? ?? 0,
                       nickname: myrank['nickname'] as String? ?? 'Unknown',
+                      rankingUnit: '점',
                     ),
                   ),
                 ),
@@ -127,7 +126,8 @@ class _PersonalRankingState extends State<BattleRanking> {
                                   ranking: item['ranking'] as int? ?? 0,
                                   nickname:
                                       item['nickname'] as String? ?? 'Unknown',
-                                  step: item['step'] as int? ?? 0,
+                                  step: item['battleRating'] as int? ?? 0,
+                                  rankingUnit: '점',
                                 );
                               }),
                             ],

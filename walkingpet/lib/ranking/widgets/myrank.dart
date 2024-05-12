@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/common/character_map.dart';
 
 class MyRank extends StatelessWidget {
-  final int ranking, step, characterId;
-  final String nickname;
+  final int ranking, score, characterId;
+  final String nickname, rankingUnit;
 
   const MyRank(
       {super.key,
       required this.ranking,
-      required this.step,
+      required this.score,
       required this.nickname,
-      required this.characterId});
+      required this.characterId,
+      required this.rankingUnit});
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +69,16 @@ class MyRank extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      step.toString(),
+                      score.toString(),
                       style: const TextStyle(
                         fontSize: 24,
                         color: Color.fromARGB(255, 241, 86, 9),
                       ),
                     ),
                     const SizedBox(width: 5),
-                    const Text(
-                      '걸음',
-                      style: TextStyle(
+                    Text(
+                      rankingUnit,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
