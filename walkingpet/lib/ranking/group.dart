@@ -80,7 +80,6 @@ class _PersonalRankingState extends State<GroupRanking> {
                 // ),
 
                 // 2. 유저의 그룹 랭킹 표시
-
                 const Padding(
                   padding: EdgeInsets.only(top: 15, bottom: 5),
                   child: Text(

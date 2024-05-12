@@ -41,6 +41,7 @@ class GroupRank extends StatelessWidget {
                               width: 36,
                               height: 36,
                               fit: BoxFit.contain,
+                              alignment: Alignment.centerRight,
                             )
                           : ranking == 2
                               ? Image.asset(
@@ -48,6 +49,7 @@ class GroupRank extends StatelessWidget {
                                   width: 36,
                                   height: 36,
                                   fit: BoxFit.contain,
+                                  alignment: Alignment.centerRight,
                                 )
                               : ranking == 3
                                   ? Image.asset(
@@ -55,6 +57,7 @@ class GroupRank extends StatelessWidget {
                                       width: 36,
                                       height: 36,
                                       fit: BoxFit.contain,
+                                      alignment: Alignment.centerRight,
                                     )
                                   : Text(
                                       ranking.toString(),
@@ -101,7 +104,7 @@ class GroupRank extends StatelessWidget {
             child: Text(
               teamName,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 20,
               ),
               textAlign: TextAlign.center,
             ),
