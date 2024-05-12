@@ -8,6 +8,7 @@ class GachaBox extends StatelessWidget {
   final String boxImage; //박스 이미지 경로
   // final int totalBoxQuantity; //내가 가진 박스
   final String buttonImage; //버튼 이미지 경로
+  final String inactivedButtonImage; //비활성화된 버튼 이미지 경로
   final int remainCount; // 남은 상자 개수
   final VoidCallback onTap;
 
@@ -17,6 +18,7 @@ class GachaBox extends StatelessWidget {
     required this.boxImage,
     // required this.totalBoxQuantity,
     required this.buttonImage,
+    required this.inactivedButtonImage,
     required this.remainCount,
     required this.onTap,
   });
@@ -40,9 +42,11 @@ class GachaBox extends StatelessWidget {
           ],
         ),
         GestureDetector(
-          onTap: onTap,
+          onTap: remainCount > 0
+              ? onTap
+              : null, //onTap 속성에 null 을 할당하면 터치 이벤트를 받지 않음
           child: SvgPicture.asset(
-            buttonImage,
+            remainCount > 0 ? buttonImage : inactivedButtonImage,
             height: screenHeight * 0.06,
           ),
         ),

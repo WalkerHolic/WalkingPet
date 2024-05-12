@@ -108,6 +108,8 @@ class _GachaState extends State<Gacha> {
                           boxName: '일반 상자',
                           boxImage: 'assets/items/itembox_normal.png',
                           buttonImage: 'assets/buttons/button_gacha_normal.svg',
+                          inactivedButtonImage:
+                              'assets/buttons/normal_inactive.svg',
                           remainCount: boxCounter.normalBoxCount,
                           // onTap: () => showGachaModal(context),
                           onTap: () {
@@ -121,6 +123,8 @@ class _GachaState extends State<Gacha> {
                           boxImage: 'assets/items/itembox_special.png',
                           buttonImage:
                               'assets/buttons/button_gacha_special.svg',
+                          inactivedButtonImage:
+                              'assets/buttons/luxury_inactive.svg',
                           remainCount: boxCounter.luxuryBoxCount,
                           // onTap: () => showGachaModal(context),
                           onTap: () {
@@ -137,7 +141,8 @@ class _GachaState extends State<Gacha> {
           ),
           Positioned(
             top: screenWidth / 8, //화면 높이 기준 위치
-            child: Image.asset('assets/animals/red_dragon/red_dragon_idle.gif',
+
+            child: Image.asset('assets/animals/red_dragon/red_dragon_ready.gif',
                 width: 400, fit: BoxFit.cover),
           ),
         ],
