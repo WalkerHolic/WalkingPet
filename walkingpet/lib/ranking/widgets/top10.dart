@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Rank extends StatelessWidget {
-  final int ranking, step;
+  final int ranking, score;
   final String nickname, rankingUnit;
 
   const Rank({
     super.key,
     required this.ranking,
     required this.nickname,
-    required this.step,
+    required this.score,
     required this.rankingUnit,
   });
 
@@ -74,7 +74,7 @@ class Rank extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  step.toString(),
+                  score.toString(),
                   style: const TextStyle(
                     fontSize: 22,
                     color: Color.fromARGB(255, 241, 86, 9),
