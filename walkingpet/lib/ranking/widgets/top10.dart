@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 class Rank extends StatelessWidget {
   final int ranking, step;
-  final String nickname;
+  final String nickname, rankingUnit;
 
   const Rank({
     super.key,
     required this.ranking,
     required this.nickname,
     required this.step,
+    required this.rankingUnit,
   });
 
   @override
@@ -26,34 +27,33 @@ class Rank extends StatelessWidget {
             width: 36,
             child: ranking == 1
                 ? Image.asset(
-              'assets/icons/gold_medal.png',
-              width: 36,
-              height: 36,
-              fit: BoxFit.contain,
-            )
+                    'assets/icons/gold_medal.png',
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.contain,
+                  )
                 : ranking == 2
-                ? Image.asset(
-              'assets/icons/silver_medal.png',
-              width: 36,
-              height: 36,
-              fit: BoxFit.contain,
-            )
-                : ranking == 3
-                ? Image.asset(
-              'assets/icons/bronze_medal.png',
-              width: 36,
-              height: 36,
-              fit: BoxFit.contain,
-            )
-                : Text(
-              ranking.toString(),
-              style: const TextStyle(
-                fontSize: 22,
-              ),
-              textAlign: TextAlign.center,
-            ),
+                    ? Image.asset(
+                        'assets/icons/silver_medal.png',
+                        width: 36,
+                        height: 36,
+                        fit: BoxFit.contain,
+                      )
+                    : ranking == 3
+                        ? Image.asset(
+                            'assets/icons/bronze_medal.png',
+                            width: 36,
+                            height: 36,
+                            fit: BoxFit.contain,
+                          )
+                        : Text(
+                            ranking.toString(),
+                            style: const TextStyle(
+                              fontSize: 22,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
           ),
-
 
           // 2. 닉네임
           SizedBox(
@@ -81,9 +81,9 @@ class Rank extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 5),
-                const Text(
-                  '걸음',
-                  style: TextStyle(
+                Text(
+                  rankingUnit,
+                  style: const TextStyle(
                     fontSize: 14,
                   ),
                 ),
