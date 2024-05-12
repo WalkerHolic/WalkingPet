@@ -65,12 +65,20 @@ public class UserCharacterService {
     /**
      * 사용자의 캐릭터 정보 가져오기(api)
      */
+    //TODO 업그레이드 수치 적용 리팩토링
     @Transactional(readOnly = true)
     public UserCharacterInfoResponse getUserCharacterInfo(int userId) {
         UserDetail userDetail = userDetailRepository.findByJoinFetchByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-        return UserCharacterInfoResponse.from(userDetail);
+        int upgrade = userDetail.getSelectUserCharacter().getUpgrade();
+        int grade = userDetail.getSelectUserCharacter().getCharacter().getGrade();
+
+        HashMap<String, Integer> upgradeValue = getUpgradeStatus(grade, upgrade);
+        System.out.println("Grade = " + grade + "\nUpgrade = " + upgrade);
+        System.out.println(upgradeValue.get("health"));
+
+        return UserCharacterInfoResponse.from(userDetail, upgradeValue.get("health"), upgradeValue.get("power"), upgradeValue.get("defense"));
     }
 
     /**
