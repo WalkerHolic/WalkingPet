@@ -74,8 +74,9 @@ class _BattleState extends State<Battle> {
                             ['userLoseDamage'],
                         battleResult: battleData['battleResultInfo']),
                     Transform.translate(
-                      offset: const Offset(0, 280),
-                      child: const MainFontStyle(size: 16, text: "vs"),
+                      offset: Offset(0, screenHeight * 0.37),
+                      child:
+                          MainFontStyle(size: screenWidth * 0.05, text: "vs"),
                     ),
                     BattleSide(
                         health: battleData['enemyInfo']['health'],

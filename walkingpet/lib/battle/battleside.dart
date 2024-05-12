@@ -73,15 +73,17 @@ class _BattleSideState extends State<BattleSide> {
             _timer?.cancel();
             Timer(const Duration(seconds: 1), () {
               if (widget.isLeft) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BattleResult(
-                      battleResult: widget.battleResult,
-                      animal: animal,
-                    ),
-                  ),
-                );
+                // 작업을 위해 잠시 넘기는 코드를 빼둠
+
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => BattleResult(
+                //       battleResult: widget.battleResult,
+                //       animal: animal,
+                //     ),
+                //   ),
+                // );
               }
             });
           }
@@ -114,11 +116,12 @@ class _BattleSideState extends State<BattleSide> {
               Row(
                 children: [
                   Transform.translate(
-                    offset: const Offset(0, 3),
-                    child: const MainFontStyle(size: 16, text: "점수: "),
+                    offset: Offset(0, screenHeight * 0.004),
+                    child:
+                        MainFontStyle(size: screenWidth * 0.04, text: "점수: "),
                   ),
                   MainFontStyle(
-                    size: 32,
+                    size: screenWidth * 0.08,
                     text: widget.rating.toString(),
                   ),
                 ],
@@ -134,15 +137,15 @@ class _BattleSideState extends State<BattleSide> {
                   ),
                   Transform.translate(
                     offset: widget.isLeft
-                        ? const Offset(15.5, 0)
-                        : const Offset(-16, 0),
+                        ? Offset(screenWidth * 0.04, 0)
+                        : Offset(screenWidth * -0.04, 0),
                     child: LinearPercentIndicator(
                       backgroundColor: Colors.grey,
                       progressColor: Colors.green,
-                      width: 130,
+                      width: screenWidth * 0.357,
                       percent: 1,
                       animation: true,
-                      lineHeight: 6,
+                      lineHeight: screenHeight * 0.0083,
                       barRadius: const Radius.circular(2),
                     ),
                   ),
@@ -153,14 +156,14 @@ class _BattleSideState extends State<BattleSide> {
                         : Matrix4.identity(),
                     child: Transform.translate(
                       offset: widget.isLeft
-                          ? const Offset(-15, 0)
-                          : const Offset(-16, 0),
+                          ? Offset(screenWidth * -0.04, 0)
+                          : Offset(screenWidth * -0.045, 0),
                       child: LinearPercentIndicator(
                         backgroundColor: Colors.transparent,
-                        width: 130,
+                        width: screenWidth * 0.357,
                         percent: _currentPercent,
                         animation: true,
-                        lineHeight: 6,
+                        lineHeight: screenHeight * 0.0083,
                         barRadius: const Radius.circular(2),
                         animateFromLastPercent: true,
                         animationDuration: 500,
@@ -178,17 +181,20 @@ class _BattleSideState extends State<BattleSide> {
         ),
 
         SizedBox(
-          height: 150,
-          width: 160,
+          height: screenHeight * 0.22,
+          width: screenWidth * 0.44,
           child: Stack(
             children: [
               if (widget.attackDamage[_sequenceIndex] < 0)
-                Container(
-                  alignment: Alignment.center,
-                  child: MainFontStyle(
-                    size: 20,
-                    text: "-${widget.receivedDamage[_sequenceIndex]}",
-                    color: Colors.red,
+                Transform.translate(
+                  offset: Offset(screenWidth * -0.01, screenHeight * -0.03),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: MainFontStyle(
+                      size: screenWidth * 0.05,
+                      text: "-${widget.receivedDamage[_sequenceIndex]}",
+                      color: Colors.red,
+                    ),
                   ),
                 ),
               Transform(
@@ -198,12 +204,20 @@ class _BattleSideState extends State<BattleSide> {
                     : Matrix4.rotationY(math.pi),
                 // 여기서 올바르게 translate 적용
                 child: Transform.translate(
-                  offset: const Offset(58, 0),
-                  child: Image.asset(
-                    widget.attackDamage[_sequenceIndex] >= 0
-                        ? 'assets/animals/$animal/${animal}_attack.gif'
-                        : 'assets/animals/$animal/${animal}_hurt.gif',
-                    scale: 1.2,
+                  offset: Offset(screenWidth * 0.15,
+                      animal == "duck" || animal == "squirrel" ? 10 : 0),
+                  child: SizedBox(
+                    height: animal == "duck" || animal == "squirrel"
+                        ? screenHeight * 0.3
+                        : screenHeight * 0.2,
+                    child: Image.asset(
+                      widget.attackDamage[_sequenceIndex] >= 0
+                          ? 'assets/animals/$animal/${animal}_attack.gif'
+                          : 'assets/animals/$animal/${animal}_hurt.gif',
+                      fit: animal == "duck" || animal == "squirrel"
+                          ? BoxFit.scaleDown
+                          : BoxFit.fitHeight,
+                    ),
                   ),
                 ),
               ),
@@ -213,8 +227,8 @@ class _BattleSideState extends State<BattleSide> {
 
         // 캐릭터 정보 박스
         Container(
-          width: 150,
-          height: 150,
+          width: screenWidth * 0.42,
+          height: screenHeight * 0.22,
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.6), // 투명한 흰색 배경 추가
             borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 처리
