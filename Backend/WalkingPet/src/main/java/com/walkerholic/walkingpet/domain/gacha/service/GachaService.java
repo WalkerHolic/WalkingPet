@@ -18,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import static com.walkerholic.walkingpet.domain.character.service.UserCharacterService.*;
 import static com.walkerholic.walkingpet.global.error.GlobalErrorCode.*;
 
 @Service
@@ -59,6 +61,11 @@ public class GachaService {
 
         if(userCharacter.isPresent()){
             userCharacter.get().setUpgrade(userCharacter.get().getUpgrade() + UPGRADE_INCREMENT);
+            //업그레이드 된 만큼 능력치 증가
+            HashMap<String, Integer> upgradeStat = getUpgradeStatus(grade);
+            userCharacter.get().raiseHealth(upgradeStat.get("health"));
+            userCharacter.get().raisePower(upgradeStat.get("power"));
+            userCharacter.get().raiseDefense(upgradeStat.get("defense"));
             userCharacterRepository.save(userCharacter.get());
             duplication = true;
         }
@@ -116,4 +123,36 @@ public class GachaService {
         }
     }
 
+    /**
+     * 등급별 각 능력치에 업그레이드가 얼마나 되는지 반환해주는 함수
+     * @param grade 등급
+     * @return HashMap 형태로 체력/공격력/방어력이 얼마나 증가하는지
+     */
+    private HashMap<String, Integer> getUpgradeStatus(int grade){
+        HashMap<String, Integer> response = new HashMap<>();
+        response.put("health", 0);
+        response.put("power", 0);
+        response.put("defense", 0);
+
+        switch (grade){
+            case 1:
+                response.replace("health", GRADE_1_UPGRADE_HEALTH_STAT);
+                response.replace("power", GRADE_1_UPGRADE_POWER_STAT);
+                response.replace("defense", GRADE_1_UPGRADE_DEFENSE_STAT);
+                break;
+            case 2:
+                response.replace("health", GRADE_2_UPGRADE_HEALTH_STAT);
+                response.replace("power", GRADE_2_UPGRADE_POWER_STAT);
+                response.replace("defense", GRADE_2_UPGRADE_DEFENSE_STAT);
+                break;
+            case 3:
+                response.replace("health", GRADE_3_UPGRADE_HEALTH_STAT);
+                response.replace("power", GRADE_3_UPGRADE_POWER_STAT);
+                response.replace("defense", GRADE_3_UPGRADE_DEFENSE_STAT);
+                break;
+
+        }//end of swith/case
+
+        return response;
+    }
 }
