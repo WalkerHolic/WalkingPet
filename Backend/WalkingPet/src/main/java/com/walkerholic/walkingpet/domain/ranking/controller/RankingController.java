@@ -129,6 +129,17 @@ public class RankingController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, myTeamRanking);
     }
 
+    @GetMapping("/group/count")
+    @Operation(summary = "나의 그룹 수 조회", description = "내가 가입한 그룹의 수 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 나의 그룹 랭킹 조회 성공", content = @Content(schema = @Schema(implementation = TeamRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getMyGroupCount(@AuthenticationPrincipal CustomUserDetail userDetail) {
+        Integer userId = userDetail.getUsers().getUserId();
+        log.info("나의 그룹 수 조회 getMyGroupCount userId: {}", userId);
+
+        GroupCountResponse groupCount = rankingService.getMyGroupCount(userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, groupCount);
+    }
+
     @GetMapping("/battle/top10")
     @Operation(summary = "배틀 랭킹 top 10 조회", description = "배틀 랭킹 정보를 top 10 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 배틀 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = BattleRankingResponse.class)))
