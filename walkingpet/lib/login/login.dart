@@ -70,7 +70,7 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: screenHeight * 0.26,
               ),
-              Image.asset('assets/animals/cow/cow_run.gif'),
+              Image.asset('assets/animals/cow/cow_walk.gif'),
               SizedBox(
                 height: screenHeight * 0.06,
               ),
