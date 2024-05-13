@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/services/character/checkstep.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart'; // 날짜 포맷을 위한 패키지
 
 class StepCounter with ChangeNotifier {
   int _steps = 0;
@@ -36,6 +37,8 @@ class StepCounter with ChangeNotifier {
     }
 
     _stepCountStream = Pedometer.stepCountStream;
+
+    await checkFirstVisitToday(); // 오늘 첫 방문인지 확인
     await _fetchInitialSteps();
     _stepCountStream.listen((event) {
       _prefs?.setInt('eventSteps', event.steps);
@@ -88,6 +91,23 @@ class StepCounter with ChangeNotifier {
     _steps = 0; // 로컬 변수를 리셋
     notifyListeners();
     print("걸음수 초기화 완료");
+  }
+
+  Future<void> checkFirstVisitToday() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    String today = DateFormat('yyyy-MM-dd')
+        .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
+    String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
+
+    if (lastVisit == null || lastVisit != today) {
+      // 마지막 접속 날짜가 없거나 오늘 날짜와 다른 경우
+      await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
+      StepCounter().resetStep();
+    } else {
+      // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
+      await prefs.setString('lastVisit', today);
+    }
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/gacha/widgets/gacha_box.dart';
 import 'package:walkingpet/gacha/widgets/modal_luxury.dart';
 import 'package:walkingpet/gacha/widgets/modal_normal.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:walkingpet/services/gacha/count_remain_box.dart';
 
@@ -112,7 +113,12 @@ class _GachaState extends State<Gacha> {
                               'assets/buttons/normal_inactive.svg',
                           remainCount: boxCounter.normalBoxCount,
                           // onTap: () => showGachaModal(context),
-                          onTap: () {
+                          onTap: () async {
+                            bool isFirstVisit = await checkFirstVisitToday();
+                            if (isFirstVisit) {
+                              Navigator.pushNamed(context, '/home');
+                              return;
+                            }
                             boxCounter.openNormalBox(); // 상태 업데이트
                             showNormalModal(context); //모달창 표시
                           },
@@ -127,7 +133,12 @@ class _GachaState extends State<Gacha> {
                               'assets/buttons/luxury_inactive.svg',
                           remainCount: boxCounter.luxuryBoxCount,
                           // onTap: () => showGachaModal(context),
-                          onTap: () {
+                          onTap: () async {
+                            bool isFirstVisit = await checkFirstVisitToday();
+                            if (isFirstVisit) {
+                              Navigator.pushNamed(context, '/home');
+                              return;
+                            }
                             boxCounter.openLuxuryBox();
                             showLuxuryModal(context);
                           },

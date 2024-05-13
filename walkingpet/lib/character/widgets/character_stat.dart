@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/statupdate.dart';
 
 class CharacterInfoStat extends StatefulWidget {
@@ -124,6 +125,11 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
   }
 
   void _updateStats() async {
+    bool isFirstVisit = await checkFirstVisitToday();
+    if (isFirstVisit) {
+      Navigator.pushNamed(context, '/home');
+      return;
+    }
     try {
       var characterId = widget.characterId;
       var statnameEn = widget.statnameEn;

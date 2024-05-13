@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/character/widgets/levelup.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterexpitem.dart';
 
 // 캐릭터 경험치 아이템 사용 페이지
@@ -422,7 +423,7 @@ class _CharacterExpState extends State<CharacterExp> {
                     children: [
                       // 4-8-1. '취소' 버튼
                       TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.of(context).pop();
                         },
                         child: Image.asset(
@@ -434,6 +435,11 @@ class _CharacterExpState extends State<CharacterExp> {
                       // 4-8-2. '사용' 버튼 => 5. API 요청
                       TextButton(
                         onPressed: () async {
+                          bool isFirstVisit = await checkFirstVisitToday();
+                          if (isFirstVisit) {
+                            Navigator.pushNamed(context, '/home');
+                            return;
+                          }
                           if (expitemCount == 0) {
                             return;
                           }

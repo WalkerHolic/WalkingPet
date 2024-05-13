@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/goal/widgets/daily.dart';
 import 'package:walkingpet/goal/widgets/weekly.dart';
+import 'package:walkingpet/main.dart';
 // 페이지 로드 시 목표 달성 여부를 로드
 import 'package:walkingpet/services/goal/get_goal_info.dart';
 import 'package:walkingpet/providers/step_counter.dart';
@@ -112,7 +113,12 @@ class _GoalState extends State<Goal> {
                   right: screenWidth * 0.05,
 
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      bool isFirstVisit = await checkFirstVisitToday();
+                      if (isFirstVisit) {
+                        Navigator.pop(context);
+                        return;
+                      }
                       Navigator.pop(context);
                       // Navigator.pushReplacementNamed(
                       //     context, '/home'); // 현재 경로를 '/home'으로 교체

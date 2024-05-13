@@ -6,6 +6,7 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/Interceptor.dart';
 
 class CustomNesInputDialog extends StatefulWidget {
@@ -132,9 +133,6 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
         var jsonData = jsonDecode(data);
         Map<String, dynamic> res = jsonData;
         var success = res['data']['status'];
-        print(res);
-        print("찍어");
-        print(success);
         if (success) {
           Navigator.of(context).pop();
           Navigator.pushReplacementNamed(context, '/characterinfo');
@@ -191,7 +189,13 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
             type: NesButtonType.primary,
             child: Text(widget.inputLabel,
                 style: const TextStyle(color: Colors.white)),
-            onPressed: () {
+            onPressed: () async {
+              bool isFirstVisit = await checkFirstVisitToday();
+              if (isFirstVisit) {
+                Navigator.pushNamed(context, '/home');
+                return;
+              }
+
               if (_formKey.currentState!.validate()) {
                 if (!widget.isChange) {
                   _signUp(context, _controller.text);
