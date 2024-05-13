@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/ranking/personal.dart';
 import 'package:walkingpet/ranking/group.dart';
 import 'package:walkingpet/ranking/battle.dart';
@@ -72,7 +73,12 @@ class Ranking extends StatelessWidget {
                         style: TextStyle(fontSize: 30),
                       ),
                       TextButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          bool isFirstVisit = await checkFirstVisitToday();
+                          if (isFirstVisit) {
+                            Navigator.pop(context);
+                            return;
+                          }
                           Navigator.pop(context);
                           // Navigator.pushReplacementNamed(
                           //     context, '/home'); // 현재 경로를 '/home'으로 교체

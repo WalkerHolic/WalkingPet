@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkingpet/character/widgets/character_box.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterchange.dart';
 
 class CharacterChange extends StatefulWidget {
@@ -146,6 +147,11 @@ class _CharacterChangeState extends State<CharacterChange> {
             right: screenWidth * 0.1,
             child: TextButton(
               onPressed: () async {
+                bool isFirstVisit = await checkFirstVisitToday();
+                if (isFirstVisit) {
+                  Navigator.pushNamed(context, '/home');
+                  return;
+                }
                 await postCharacterChange(selectCharacterId as int);
                 Navigator.pushNamed(context, '/characterinfo');
               },

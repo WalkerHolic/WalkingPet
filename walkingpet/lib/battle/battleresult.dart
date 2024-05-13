@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:walkingpet/battle/resultfontstyle.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
+import 'package:walkingpet/main.dart';
 
 class BattleResult extends StatelessWidget {
   final Map<String, dynamic> battleResult;
@@ -158,7 +159,12 @@ class BattleResult extends StatelessWidget {
                   height: screenHeight * 0.015,
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    bool isFirstVisit = await checkFirstVisitToday();
+                    if (isFirstVisit) {
+                      Navigator.pushReplacementNamed(context, '/home');
+                      return;
+                    }
                     Navigator.pushReplacementNamed(context, '/battleready');
                   },
                   child: Image.asset(

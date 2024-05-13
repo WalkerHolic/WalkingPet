@@ -70,20 +70,31 @@ void main() async {
   // }
 }
 
-Future<void> checkFirstVisitToday() async {
+Future<bool> checkFirstVisitToday() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.reload();
   String today = DateFormat('yyyy-MM-dd')
       .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
   String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
 
+  //테스트용
+  DateTime now = DateTime.now(); // 현재 시간을 가져옵니다.
+  // print(now);
+  // if (now.hour > 16 || (now.hour == 16 && now.minute >= 0)) {
+  //   StepCounter().resetStep();
+  //   return true;
+  // }
+  // 여기까지 테스트
+
   if (lastVisit == null || lastVisit != today) {
     // 마지막 접속 날짜가 없거나 오늘 날짜와 다른 경우
     await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
     StepCounter().resetStep();
+    return true;
   } else {
     // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
     await prefs.setString('lastVisit', today);
+    return false;
   }
 }
 

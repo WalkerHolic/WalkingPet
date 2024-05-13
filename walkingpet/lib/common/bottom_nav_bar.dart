@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkingpet/main.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -64,9 +65,15 @@ class BottomNavBar extends StatelessWidget {
 }
 
 // 이 함수 내에 네비게이션 로직 추가
-void _onItemTapped(BuildContext context, int index, int selectedIndex) {
+void _onItemTapped(BuildContext context, int index, int selectedIndex) async {
   if (index == selectedIndex) {
     // 현재 선택된 인덱스와 동일하므로 아무런 작업도 수행하지 않음
+    return;
+  }
+
+  bool isFirstVisit = await checkFirstVisitToday();
+  if (isFirstVisit) {
+    Navigator.pushNamed(context, '/home');
     return;
   }
 
