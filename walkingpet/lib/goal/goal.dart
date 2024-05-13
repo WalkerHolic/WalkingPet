@@ -234,7 +234,7 @@ class _GoalState extends State<Goal> {
                                       WeeklyGoalItem(
                                           text: '화요일',
                                           isStamped:
-                                              stampedDays['월요일'] ?? false),
+                                              stampedDays['화요일'] ?? false),
                                       WeeklyGoalItem(
                                           text: '수요일',
                                           isStamped:
