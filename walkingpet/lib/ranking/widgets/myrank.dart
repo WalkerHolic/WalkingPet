@@ -41,7 +41,7 @@ class MyRank extends StatelessWidget {
                   SizedBox(
                     width: 60,
                     child: Text(
-                      '$ranking위',
+                      score > 0 ? '$ranking위' : '-',
                       style: const TextStyle(
                         fontSize: 22,
                       ),
@@ -70,7 +70,7 @@ class MyRank extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      score.toString(),
+                      score >= 0 ? score.toString() : '-',
                       style: const TextStyle(
                         fontSize: 24,
                         color: Color.fromARGB(255, 241, 86, 9),
