@@ -5,11 +5,15 @@ import com.walkerholic.walkingpet.domain.ranking.dto.ReailtimeStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.YesterdayStepRankingInfo;
 import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
+import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import com.walkerholic.walkingpet.global.redis.service.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -122,6 +126,28 @@ public class RedisController {
 
         System.out.println("테스트");
         RedisStepRankingResponse accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
+    }
+
+    @GetMapping("/person/top10Test")
+    @Operation(summary = "개인 랭킹 top 10 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 10 가져오기")
+    @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = RedisStepRankingResponse.class)))
+    public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value, @RequestParam("start") Integer start, @RequestParam("end") Integer end) {
+        log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
+
+//        RedisStepRankingResponse accStepRankingList;
+        StepRankingResponse accStepRankingList;
+        if (value.equals("yesterday")) {
+            accStepRankingList = rankingService.getYesterdayStepRankingTop10();
+//            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 9);
+        } else if (value.equals("accumulation")) {
+            accStepRankingList = rankingService.getAccStepRankingTop10();
+//            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
+        } else {
+            RedisStepRankingResponse redisRealtimeStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(start, end);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, redisRealtimeStepRankingList);
+        }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
     }
