@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -217,17 +218,33 @@ public class RankingService {
     }
 
     // 배틀 랭킹 top 10
+    @Cacheable(value="battleRankingTop10", key = "'battleTop10'")
     public BattleRankingResponse getBattleRankingTop10() {
+        log.info("배틀 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<UserDetail> top10 = userDetailRepository.findTop10ByOrderByBattleRatingDesc();
 
         return BattleRankingResponse.from(calculateBattleRanking(top10));
     }
 
     // 배틀 랭킹 top 3
+    @Cacheable(value="battleRankingTop3", key = "'battleTop3'")
     public BattleRankingResponse getBattleRankingTop3() {
+        log.info("배틀 랭킹 상위 3개 Mysql 데이터(캐싱 적용 x)");
         List<UserDetail> top3 = userDetailRepository.findByTop3OrderByBattleRatingDesc();
 
         return BattleRankingResponse.from(calculateBattleRanking(top3));
+    }
+
+    // 배틀 랭킹 나의 순위 조회
+    @Cacheable(value = "battleMyRank", key = "#userId")
+    public BattleRankingList getBattleRankingMyRank(int userId) {
+        log.info("배틀 랭킹 나의 순위 Mysql 데이터(캐싱 적용 x)");
+        UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        int myRank = userDetailRepository.findBattleRankingMyRankByBattleRating(userId);
+
+        return BattleRankingList.from(userDetail, myRank);
     }
 
     // 누적 걸음수 랭킹 동점 계산

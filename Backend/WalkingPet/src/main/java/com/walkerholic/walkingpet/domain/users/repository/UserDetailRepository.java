@@ -54,8 +54,21 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
     @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.selectUserCharacter WHERE ud.user.userId = :userId")
     Optional<UserDetail> findUserCharacterByUserId(Integer userId);
 
+    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.user LEFT JOIN FETCH ud.selectUserCharacter ORDER BY ud.battleRating DESC LIMIT 10")
     List<UserDetail> findTop10ByOrderByBattleRatingDesc();
 
-    @Query("SELECT ud FROM UserDetail ud ORDER BY ud.battleRating DESC LIMIT 3")
+    @Query("SELECT ud FROM UserDetail ud LEFT JOIN FETCH ud.user LEFT JOIN FETCH ud.selectUserCharacter ORDER BY ud.battleRating DESC LIMIT 3")
     List<UserDetail> findByTop3OrderByBattleRatingDesc();
+
+    @Query("""
+        SELECT COUNT(*) + 1
+        FROM UserDetail ud1
+        WHERE ud1.battleRating >
+        (
+            SELECT ud2.battleRating
+            FROM UserDetail ud2
+            WHERE ud2.user.userId = :userId
+        )
+        """)
+    int findBattleRankingMyRankByBattleRating(Integer userId);
 }
