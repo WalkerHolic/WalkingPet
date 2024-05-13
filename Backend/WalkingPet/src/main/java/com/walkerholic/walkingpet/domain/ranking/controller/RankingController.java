@@ -48,7 +48,7 @@ public class RankingController {
     @GetMapping("/person/top10")
     @Operation(summary = "개인 랭킹 top 10 조회", description = "어제/누적/실시간 개인 랭킹 정보를 top 10 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 개인 랭킹 top 10 조회 조회 성공", content = @Content(schema = @Schema(implementation = RedisStepRankingResponse.class)))
-    public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value) {
+    public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value, @RequestParam("start") Integer start, @RequestParam("end") Integer end) {
         log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
 //        RedisStepRankingResponse accStepRankingList;
@@ -60,7 +60,7 @@ public class RankingController {
             accStepRankingList = rankingService.getAccStepRankingTop10();
 //            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
         } else {
-            RedisStepRankingResponse redisRealtimeStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(0, 9);
+            RedisStepRankingResponse redisRealtimeStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(start, end);
             return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, redisRealtimeStepRankingList);
         }
 
