@@ -55,6 +55,7 @@ public class RealtimeStepRankingRedisService {
         int previousStep = -1;
         for (Integer userId: top10users) {
 //            AccStepRankingAndUserInfo userStepInfo = getUser(userId);
+            System.out.println("redis userId: " + userId);
             UserRedisDto user = userInfoRedisService.getUser(userId);
 
             Double dStep = rankigRedisTemplate.opsForZSet().score(STEP_KEY, userId);
