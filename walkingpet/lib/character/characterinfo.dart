@@ -6,6 +6,7 @@ import 'package:walkingpet/character/character_exp.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/character/statpointreset.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -125,6 +126,12 @@ class _CharacterInfoState extends State<CharacterInfo> {
                   padding: const EdgeInsets.only(top: 15, bottom: 10),
                   child: InkWell(
                     onTap: () async {
+                      bool isFirstVisit = await checkFirstVisitToday();
+                      if (isFirstVisit) {
+                        Navigator.pushNamed(context, '/home');
+                        return;
+                      }
+
                       await show(context: context);
                     },
                     child: Row(
@@ -189,7 +196,12 @@ class _CharacterInfoState extends State<CharacterInfo> {
 
                 // 3. 캐릭터 변경 버튼
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    bool isFirstVisit = await checkFirstVisitToday();
+                    if (isFirstVisit) {
+                      Navigator.pushNamed(context, '/home');
+                      return;
+                    }
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -277,7 +289,12 @@ class _CharacterInfoState extends State<CharacterInfo> {
                         SizedBox(
                           width: 30,
                           child: TextButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              bool isFirstVisit = await checkFirstVisitToday();
+                              if (isFirstVisit) {
+                                Navigator.pushNamed(context, '/home');
+                                return;
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -362,6 +379,13 @@ class _CharacterInfoState extends State<CharacterInfo> {
                               child: characterInfoData['initStatus'] == 0
                                   ? TextButton(
                                       onPressed: () async {
+                                        bool isFirstVisit =
+                                            await checkFirstVisitToday();
+                                        if (isFirstVisit) {
+                                          Navigator.pushNamed(context, '/home');
+                                          return;
+                                        }
+
                                         await getStatReset();
                                         Navigator.pushNamed(
                                             context, '/characterinfo');
@@ -372,7 +396,13 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                       ),
                                     )
                                   : TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        bool isFirstVisit =
+                                            await checkFirstVisitToday();
+                                        if (isFirstVisit) {
+                                          Navigator.pushNamed(context, '/home');
+                                          return;
+                                        }
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {

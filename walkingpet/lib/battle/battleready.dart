@@ -5,6 +5,7 @@ import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 // import 'package:walkingpet/common/star.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/battle/getmyinfo.dart';
 
 class BattleReady extends StatefulWidget {
@@ -117,7 +118,13 @@ class _BattleReadyState extends State<BattleReady> {
                       ),
 
                       TextButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          bool isFirstVisit = await checkFirstVisitToday();
+                          if (isFirstVisit) {
+                            Navigator.pushNamed(context, '/home');
+                            return;
+                          }
+
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -147,7 +154,13 @@ class _BattleReadyState extends State<BattleReady> {
                       ),
 
                       InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            bool isFirstVisit = await checkFirstVisitToday();
+                            if (isFirstVisit) {
+                              Navigator.pushNamed(context, '/home');
+                              return;
+                            }
+
                             if (characterData['battleCount'] > 0) {
                               Navigator.pushReplacement(
                                 context,

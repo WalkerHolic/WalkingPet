@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:walkingpet/main.dart';
 
 class TopRightIconWithText extends StatelessWidget {
   final String icon;
@@ -21,8 +22,13 @@ class TopRightIconWithText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/$icon');
+          onPressed: () async {
+            bool isFirstVisit = await checkFirstVisitToday();
+            if (isFirstVisit) {
+              Navigator.pushReplacementNamed(context, '/home');
+            } else {
+              Navigator.pushNamed(context, '/$icon');
+            }
           },
           icon: SvgPicture.asset(
             'assets/icons/$icon.svg',
