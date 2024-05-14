@@ -164,7 +164,6 @@ public class BattleService {
         userDetailRepository.save(userDetail);
 
         UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
-        selectUserCharacter.addExperience(battleResultInfo.getRewardExperience());
         userCharacterRepository.save(selectUserCharacter);
 
         System.out.println("보상을 저장합니다.");
