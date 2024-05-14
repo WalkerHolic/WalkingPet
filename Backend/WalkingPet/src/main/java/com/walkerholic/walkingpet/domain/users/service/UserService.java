@@ -14,6 +14,7 @@ import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
+import com.walkerholic.walkingpet.global.redis.service.UserInfoRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class UserService {
     private final UsersRepository usersRepository;
     private final UserDetailRepository userDetailRepository;
     private final UserStepRepository userStepRepository;
+    private final UserInfoRedisService userInfoRedisService;
 
     @Transactional(readOnly = false)
     public ChangeNicknameResponse modifyNickname(int userId, String nickname){
@@ -39,8 +41,14 @@ public class UserService {
                     .status(false)
                     .build();
         }
+
+        // mysql 닉네임 변경
         Users user = getUsers(userId);
         user.modifyNickname(nickname);
+
+        // redis 닉네임 변경
+        userInfoRedisService.updateNickname(userId, nickname);
+
         return ChangeNicknameResponse.builder()
                 .nickname(user.getNickname())
                 .status(true)

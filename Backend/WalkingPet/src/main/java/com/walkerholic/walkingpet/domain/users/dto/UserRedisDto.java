@@ -31,4 +31,9 @@ public class UserRedisDto implements Serializable {
         this.characterId = characterId;
         return this;
     }
+
+    public UserRedisDto changeNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
 }
