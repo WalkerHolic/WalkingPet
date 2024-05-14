@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
@@ -36,6 +42,13 @@ class _HomeState extends State<Home> {
         isLoading = false;
       });
     } catch (e) {}
+  }
+
+  // 로그아웃
+  Future<void> deleteTokens() async {
+    const storage = FlutterSecureStorage();
+    await storage.delete(key: 'ACCESS_TOKEN');
+    await storage.delete(key: 'REFRESH_TOKEN');
   }
 
   @override
@@ -76,21 +89,88 @@ class _HomeState extends State<Home> {
                       height: screenHeight * 0.04,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // 로그아웃 아이콘
                         Transform.translate(
-                          offset: Offset(screenWidth * 0.08, 0),
-                          child: const TopRightIconWithText(
-                              icon: "record", text: "기록"),
+                          offset: Offset(screenWidth * 0.01, 0),
+                          child: IconButton(
+                            onPressed: () async {
+                              // 로그아웃 여부 확인 모달
+                              bool? confirmLogout = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  // return const LogoutDialog(
+                                  //   confirmLabel: '확인',
+                                  //   cancelLabel: '취소',
+                                  //   message: '로그아웃 하시겠습니까?',
+                                  // );
+                                  return AlertDialog(
+                                    title: const Text('로그아웃'),
+                                    content: const Text('로그아웃 하시겠습니까?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(false); // 취소
+                                        },
+                                        child: const Text('취소'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(true); // 확인
+                                        },
+                                        child: const Text('확인'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+
+                              // 사용자가 로그아웃을 확인했을 때만 로그아웃을 진행
+                              if (confirmLogout == true) {
+                                // 로그아웃 함수
+                                try {
+                                  await UserApi.instance.logout();
+                                  await deleteTokens(); // 로그아웃 시 토큰 삭제
+                                  Navigator.pushNamed(
+                                      context, '/login'); // 로그인 페이지로 이동
+                                  print('로그아웃 성공, SDK에서 토큰 삭제');
+                                } catch (error) {
+                                  AccessTokenInfo tokenInfo =
+                                      await UserApi.instance.accessTokenInfo();
+                                  print(
+                                      '토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn}');
+                                  print('로그아웃 실패, SDK에서 토큰 삭제 $error');
+                                }
+                              }
+                            },
+                            icon: SvgPicture.asset(
+                              'assets/icons/record.svg',
+                              width: screenWidth * 0.10,
+                            ),
+                          ),
                         ),
-                        Transform.translate(
-                          offset: Offset(screenWidth * 0.04, 0),
-                          child: const TopRightIconWithText(
-                              icon: "ranking", text: "랭킹"),
-                        ),
-                        const TopRightIconWithText(icon: "goal", text: "목표"),
-                        SizedBox(
-                          width: screenWidth * 0.01,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Transform.translate(
+                              offset: Offset(screenWidth * 0.08, 0),
+                              child: const TopRightIconWithText(
+                                  icon: "record", text: "기록"),
+                            ),
+                            Transform.translate(
+                              offset: Offset(screenWidth * 0.04, 0),
+                              child: const TopRightIconWithText(
+                                  icon: "ranking", text: "랭킹"),
+                            ),
+                            const TopRightIconWithText(
+                                icon: "goal", text: "목표"),
+                            SizedBox(
+                              width: screenWidth * 0.01,
+                            ),
+                          ],
                         ),
                       ],
                     ),
