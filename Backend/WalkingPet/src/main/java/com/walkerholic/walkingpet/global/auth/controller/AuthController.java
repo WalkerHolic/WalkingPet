@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.global.auth.controller;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.global.auth.dto.request.SocialLoginDTO;
+import com.walkerholic.walkingpet.global.auth.dto.response.AuthResponse;
 import com.walkerholic.walkingpet.global.auth.util.AuthService;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -33,7 +34,13 @@ public class AuthController {
 //        securityService.saveUserInSecurityContext(socialLoginDTO);
         authService.saveUserInSecurityContext(savedOrFindUser);
         Map<String, String> tokenMap = jwtUtil.initToken(savedOrFindUser);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, tokenMap);
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,
+                AuthResponse.builder()
+                .accessToken(tokenMap.get("accessToken"))
+                .refreshToken((tokenMap.get("refreshToken")))
+                .userId(savedOrFindUser.getUserId())
+                .build());
     }
 
     @GetMapping("/generate/user")
