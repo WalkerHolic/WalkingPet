@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/member_scrollable_list.dart';
 import 'package:walkingpet/services/group/get_group_detail.dart';
@@ -158,8 +159,10 @@ class _GroupDetailState extends State<GroupDetail> {
                       height: 20,
                     ),
                     MemberScrollableList(),
-                    ElevatedButton(
-                        onPressed: () {}, child: const Text("그룹 나가기"))
+                    SvgPicture.asset(
+                      'assets/buttons/leave_group.svg',
+                      height: screenWidth * 0.1,
+                    )
                   ],
                 ),
               ),
