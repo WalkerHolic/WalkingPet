@@ -1,14 +1,10 @@
 package com.walkerholic.walkingpet.domain.users.controller;
 
-import com.walkerholic.walkingpet.domain.character.dto.response.UserCharacterInfoResponse;
-import com.walkerholic.walkingpet.domain.gacha.service.GachaService;
-import com.walkerholic.walkingpet.domain.users.dto.response.ChangeNicknameResponse;
 import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
 import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
+import com.walkerholic.walkingpet.domain.users.dto.response.ChangeNicknameResponse;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.domain.users.service.UserService;
-import com.walkerholic.walkingpet.domain.users.service.UserService;
-import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -19,12 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

@@ -34,6 +34,12 @@ public class UserInfoRedisService {
         rankigRedisTemplate.opsForHash().put(USER_KEY, userId, user.changeCharacterId(characterId));
     }
 
+    // 사용자가 닉네임 변경시 redis에도 값 변경
+    public void updateNickname(int userId, String nickname) {
+        UserRedisDto user = getUser(userId);
+        rankigRedisTemplate.opsForHash().put(USER_KEY, userId, user.changeNickname(nickname));
+    }
+
     public UserRedisDto getUser(int userId) {
         HashOperations<String, Integer, UserRedisDto> hashOperations = rankigRedisTemplate.opsForHash();
 
