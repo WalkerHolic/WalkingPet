@@ -216,6 +216,11 @@ public class TeamService {
         }
     }
 
+
+    public boolean checkAvailableNickname(String teamName) {
+        return teamRepository.existsByName(teamName);
+    }
+
     // 주어진 사용자 ID에 해당하는 사용자를 데이터베이스에서 검색합니다.
     public Users getUserById(int userId) {
         return usersRepository.findById(userId)
@@ -254,6 +259,7 @@ public class TeamService {
 
         return TeamUsersResponse.from(userDetail,userStep);
     }
+
 
 
 }
