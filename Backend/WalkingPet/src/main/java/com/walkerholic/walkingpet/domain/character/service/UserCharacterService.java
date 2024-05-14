@@ -13,6 +13,7 @@ import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.UserStep;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UserStepRepository;
+import com.walkerholic.walkingpet.global.auth.dto.response.MainResponse;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
 import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -277,5 +279,12 @@ public class UserCharacterService {
 
         }
         return response;
+    }
+
+    public MainResponse getUserCharacterId(int userId) {
+        UserDetail userDetail = userDetailRepository.findUserDetailByJoinFetchByUserId(userId)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+        return MainResponse.from(userDetail.getSelectUserCharacter().getCharacter().getCharacterId());
     }
 }

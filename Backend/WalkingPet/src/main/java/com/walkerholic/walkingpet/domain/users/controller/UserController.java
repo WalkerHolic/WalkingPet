@@ -68,16 +68,4 @@ public class UserController {
         ChangeNicknameResponse checkChange = userService.modifyNickname(userId,nickname);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, checkChange);
     }
-
-    @GetMapping("/checkstep")
-    @Operation(summary = "유저의 걸음수 측정", description = "앱 시작시 걸음수 측정")
-    @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
-    public ResponseEntity<CommonResponseEntity> getUserStep(@RequestHeader("step") int frontStep, @RequestParam("userId") int userId) {
-//        Integer userId = userDetail.getUsers().getUserId();
-
-        log.info("CharacterController getUserStep - userId: {}, step: {}", userId, frontStep);
-
-        UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userStepResponse);
-    }
 }

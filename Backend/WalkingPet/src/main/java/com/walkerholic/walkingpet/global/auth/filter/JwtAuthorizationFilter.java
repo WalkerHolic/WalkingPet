@@ -95,11 +95,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
                 String[] excludePath = {
+                        "/auth",
                         "/auth/social-login",
                         "/auth/generate/user",
                         "/user/emailCheck",
                         "/user/nicknameCheck",
-                        "/user/checkstep",
+//                        "/user/checkstep",
                         "/redis",
                         "/init",
                         "/v3/api-docs",
