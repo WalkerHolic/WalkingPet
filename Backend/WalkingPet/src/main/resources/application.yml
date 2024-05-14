@@ -14,7 +14,7 @@ spring:
   data:
     redis:
       host: redis
-      port: 6379
+      port: 7368
       password: fpeltmanswptodrlwlakwpqkf!!emeutjdrhdgoTtmqslek
   #      host: localhost
 #      host: walkingpet.co.kr
