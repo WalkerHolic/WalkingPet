@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.global.scheduler;
 
+import com.walkerholic.walkingpet.global.redis.service.RankingRedisService;
 import com.walkerholic.walkingpet.global.redis.service.RealtimeStepRankingRedisService;
 import com.walkerholic.walkingpet.global.redis.service.StepService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class StepScheduler {
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
+    private final RankingRedisService rankingRedisService;
 
 //    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // 3시 55분
     public void schedulerTest() {
@@ -38,6 +40,13 @@ public class StepScheduler {
 
         log.info("{} - 사용자 걸음수 mysql 저장", formattedTime);
         realtimeStepRankingRedisService.saveUserDailyStep();
+    }
+
+    // mysql 걸음수 데이터를 redis로 이동
+    @Scheduled(cron = "0 59 23 * * ?", zone = "Asia/Seoul")
+    public void updateRedisRankingInfo() {
+        log.info("오후 11시 59분 - mysql 걸음수 데이터 redis로 이동");
+        rankingRedisService.saveRedisAllRanking();
     }
 
     //    @Scheduled(cron = "0 0 0 * * ?")

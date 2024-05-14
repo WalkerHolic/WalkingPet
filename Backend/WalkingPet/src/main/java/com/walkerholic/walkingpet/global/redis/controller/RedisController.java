@@ -7,6 +7,7 @@ import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest
 import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
+import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import com.walkerholic.walkingpet.global.redis.service.*;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class RedisController {
     private final YesterdayStepRankingRedisService yesterdayStepRankingRedisService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
     private final RankingRedisService rankingRedisService;
+    private final UserInfoRedisService userInfoRedisService;
 
     @GetMapping("/saveTest")
     @Operation(summary = "redis 모든 랭킹 저장 테스트", description = "")
@@ -150,5 +153,21 @@ public class RedisController {
         }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
+    }
+
+    // 해당 사용자 redis에서 step 값 원하는 값으로 변경
+    @GetMapping("/resetStep")
+    public ResponseEntity<CommonResponseEntity> resetStepByUserId(@RequestParam("userId") int userId, @RequestParam("step") int step) {
+        log.info("해당 사용자 redis에서 step 값 원하는 값으로 변경 userId: {}", userId);
+        realtimeStepRankingRedisService.saveUserDailyStep(userId, step);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
+    }
+
+    // 해당 사용자 redis에서 userId에 대한 값 가져오기
+    @GetMapping("/getUser")
+    public ResponseEntity<CommonResponseEntity> getUserInfo(@RequestParam("userId") int userId) {
+        log.info("해당 사용자 redis에서 userId에 대한 값 가져오기 userId: {}", userId);
+        Map<String, String> dailyStepAndUser = realtimeStepRankingRedisService.getDailyStepAndUser(userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, dailyStepAndUser);
     }
 }

@@ -14,9 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -136,5 +134,19 @@ public class RealtimeStepRankingRedisService {
                 userStepRepository.save(userStep);
             }
         }
+    }
+
+    public Map<String, String> getDailyStepAndUser(int userId) {
+        Map<String, String> result = new HashMap<>();
+
+        Double dStep = rankigRedisTemplate.opsForZSet().score(STEP_KEY, userId);
+        int step = dStep != null ? dStep.intValue() : 0;
+        UserRedisDto user = userInfoRedisService.getUser(userId);
+        result.put("userId", String.valueOf(user.getUserId()));
+        result.put("nickname", String.valueOf(user.getNickname()));
+        result.put("characterId", String.valueOf(user.getCharacterId()));
+        result.put("step", String.valueOf(step));
+
+        return result;
     }
 }
