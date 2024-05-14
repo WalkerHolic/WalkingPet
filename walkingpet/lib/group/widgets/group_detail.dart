@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/member_scrollable_list.dart';
 import 'package:walkingpet/services/group/get_group_detail.dart';
+import 'package:walkingpet/services/group/leave_group.dart';
 
 class GroupDetail extends StatefulWidget {
   final int groupId; //팀 이름
@@ -159,9 +160,13 @@ class _GroupDetailState extends State<GroupDetail> {
                       height: 20,
                     ),
                     MemberScrollableList(),
-                    SvgPicture.asset(
-                      'assets/buttons/leave_group.svg',
-                      height: screenWidth * 0.1,
+                    //나가기 버튼
+                    GestureDetector(
+                      onTap: () => leaveGroup(widget.groupId),
+                      child: SvgPicture.asset(
+                        'assets/buttons/leave_group.svg',
+                        height: screenWidth * 0.1,
+                      ),
                     )
                   ],
                 ),
