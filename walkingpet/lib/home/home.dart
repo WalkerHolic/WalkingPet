@@ -79,6 +79,11 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Transform.translate(
+                          offset: Offset(screenWidth * 0.08, 0),
+                          child: const TopRightIconWithText(
+                              icon: "record", text: "기록"),
+                        ),
+                        Transform.translate(
                           offset: Offset(screenWidth * 0.04, 0),
                           child: const TopRightIconWithText(
                               icon: "ranking", text: "랭킹"),
