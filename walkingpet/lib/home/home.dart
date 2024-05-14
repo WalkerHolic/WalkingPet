@@ -12,7 +12,6 @@ import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
-import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/home/gethomecharacter.dart';
 
 class Home extends StatefulWidget {
@@ -190,6 +189,9 @@ class _HomeState extends State<Home> {
                           text: "${provider.steps}",
                         );
                       }),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.06,
                     ),
                     if (!isLoading)
                       SizedBox(
