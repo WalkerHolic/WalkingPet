@@ -11,12 +11,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GoalScheduler {
-    private GoalRepository goalRepository;
+    private final GoalRepository goalRepository;
 
     //매일매일 개인목표 초기화
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 1 0 * * *", zone = "Asia/Seoul")
     public void resetDailyGoal(){
+        log.info("오전 12시 1분 - 매일매일 개인목표 초기화");
         List<Goal> goalList = goalRepository.findAll();
         for(Goal goal : goalList){
             goal.setDailyGoal(0);
@@ -25,8 +27,9 @@ public class GoalScheduler {
     }
 
     //매주 월요일마다 주간목표 초기화
-    @Scheduled(cron = "0 0 0 * * 1", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 1 0 * * 1", zone = "Asia/Seoul")
     public void resetWeeklyGoal(){
+        log.info("오전 12시 1분 - 매주 월요일마다 주간목표 초기화");
         List<Goal> goalList = goalRepository.findAll();
         for(Goal goal : goalList){
             goal.setWeeklyGoal(0);
