@@ -131,7 +131,7 @@ public class CharacterController {
         // 현재 시간을 지정된 형식으로 출력
         String formattedDateTime = localDateTime.format(formatter);
         System.out.println("스프링 서버의 현재 시간: " + formattedDateTime);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트 - " + serverTimeZone.getID() + " , " + formattedDateTime);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트2 - " + serverTimeZone.getID() + " , " + formattedDateTime);
     }
 
     @Operation(summary = "경험치 아이템 사용", description = "경험치가 5씩 증가하는 아이템을 사용한다.")
