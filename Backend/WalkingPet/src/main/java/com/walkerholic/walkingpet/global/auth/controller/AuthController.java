@@ -1,5 +1,7 @@
 package com.walkerholic.walkingpet.global.auth.controller;
 
+import com.walkerholic.walkingpet.domain.character.dto.response.UserStepResponse;
+import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.domain.users.dto.UsersDto;
 import com.walkerholic.walkingpet.domain.users.service.LoginService;
 import com.walkerholic.walkingpet.global.auth.dto.request.SocialLoginDTO;
@@ -8,6 +10,8 @@ import com.walkerholic.walkingpet.global.auth.util.AuthService;
 import com.walkerholic.walkingpet.global.auth.util.JwtUtil;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,7 @@ public class AuthController {
     private final AuthService authService;
 //    @Autowired()
     private final JwtUtil jwtUtil;
+    private final UserCharacterService userCharacterService;
 
     @PostMapping("/social-login")
     public ResponseEntity<CommonResponseEntity> socialLogin(@RequestBody SocialLoginDTO socialLoginDTO) //TODO: @Valid 추가
@@ -67,5 +72,23 @@ public class AuthController {
             UsersDto savedOrFindUser = loginService.socialLogin(socialLoginDTO);
             authService.saveUserInSecurityContext(savedOrFindUser);
         }
+    }
+
+    @GetMapping("/checkstep")
+    @Operation(summary = "유저의 걸음수 측정", description = "앱 시작시 걸음수 측정")
+    @ApiResponse(responseCode = "200", description = "S200 - 걸음수 측정 성공")
+    public ResponseEntity<CommonResponseEntity> getUserStep(@RequestHeader("step") int frontStep, @RequestParam("userId") int userId) {
+//        Integer userId = userDetail.getUsers().getUserId();
+
+        log.info("AuthController getUserStep - userId: {}, step: {}", userId, frontStep);
+
+        UserStepResponse userStepResponse = userCharacterService.checkUserStep(userId, frontStep);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userStepResponse);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<CommonResponseEntity> getMainInfo(@RequestParam("userId") int userId) {
+        log.info("메인 페이지용 캐릭터 정보 받기 AuthController getUserStep - userId: {}", userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterService.getUserCharacterId(userId));
     }
 }
