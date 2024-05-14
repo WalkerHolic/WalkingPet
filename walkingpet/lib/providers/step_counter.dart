@@ -32,7 +32,6 @@ class StepCounter with ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     await _prefs?.reload();
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
-    print("앱이켜진순간 baseSteps: $_baseSteps");
     if (_baseSteps == 0) {
       StepCount event = await _stepCountStream.first;
       await _prefs?.setInt('baseSteps', event.steps);
@@ -47,7 +46,6 @@ class StepCounter with ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     await _prefs?.reload();
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
-    print("onStepCount에서 baseSteps값: $_baseSteps");
     _steps = event.steps - _baseSteps;
     notifyListeners();
   }
@@ -55,18 +53,14 @@ class StepCounter with ChangeNotifier {
   Future<void> _fetchInitialSteps() async {
     try {
       int serverSteps = await checkStep();
-      print("서버걸음수: $serverSteps");
       StepCount event = await _stepCountStream.first;
       _prefs = await SharedPreferences.getInstance();
       await _prefs?.reload();
       _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
-      print("fetch에서 baseStep값: $_baseSteps");
-      print("eventStep값: ${event.steps}");
 
       if (serverSteps > event.steps - _baseSteps) {
         int diff = serverSteps - (event.steps - _baseSteps);
         _baseSteps -= diff;
-        print("바뀐 baseSteps: $_baseSteps");
         await _prefs?.setInt('baseSteps', _baseSteps);
         _steps = event.steps - _baseSteps;
       }
@@ -79,7 +73,6 @@ class StepCounter with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     StepCount event = await _stepCountStream.first;
-    print("리셋함수 이벤트 걸음수: ${event.steps}");
     await prefs.setInt(
         'baseSteps', event.steps); // baseSteps를 현재의 event.steps 값으로 설정
     await prefs.reload();
@@ -91,29 +84,28 @@ class StepCounter with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.reload();
 
-    // 테스트 코드
-    DateTime now = DateTime.now();
-    DateTime today =
-        DateTime(now.year, now.month, now.day, 16, 52); // 오늘 오전 9시 7분
+    // // 테스트 코드
+    // DateTime now = DateTime.now();
+    // DateTime today =
+    //     DateTime(now.year, now.month, now.day, 17, 5); // 오늘 오전 9시 7분
 
-    // 기준 시간보다 이전이면 어제를 기준 날짜로 설정
-    if (now.isBefore(today)) {
-      today = today.subtract(const Duration(days: 1));
-    }
+    // // 기준 시간보다 이전이면 어제를 기준 날짜로 설정
+    // if (now.isBefore(today)) {
+    //   today = today.subtract(const Duration(days: 1));
+    // }
 
-    String todayStr =
-        DateFormat('yyyy-MM-dd').format(today); // 기준 날짜를 'yyyy-MM-dd' 형식으로 포맷
-    String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
+    // String todayStr =
+    //     DateFormat('yyyy-MM-dd').format(today); // 기준 날짜를 'yyyy-MM-dd' 형식으로 포맷
+    // String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
 
-    /*
     String today = DateFormat('yyyy-MM-dd')
         .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
     String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
-    */
+
     print("lastVisit있니? $lastVisit");
     if (lastVisit == null) {
       //await prefs.setString('lastVisit', today);
-      await prefs.setString('lastVisit', todayStr);
+      await prefs.setString('lastVisit', today);
 
       // 지웠다 다시 깔았을 경우 서버 데이터로 초기화
       int serverSteps = await checkStep();
@@ -126,18 +118,14 @@ class StepCounter with ChangeNotifier {
       return;
     }
 
-    print("오늘: $todayStr");
-    print("어제: $lastVisit");
-
     // todayStr(테스트) -> today(실제)
-    if (lastVisit != todayStr) {
-      print("달라");
+    if (lastVisit != today) {
       // 자정이 넘어갔다! 걸음수를 초기화 하자!!
-      await prefs.setString('lastVisit', todayStr); // 오늘 날짜로 마지막 접속 날짜를 업데이트
+      await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
       await StepCounter().resetStep();
     } else {
       // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
-      await prefs.setString('lastVisit', todayStr);
+      await prefs.setString('lastVisit', today);
     }
   }
 
