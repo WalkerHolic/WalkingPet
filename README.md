@@ -1,4 +1,6 @@
-# Linked List
+# Walking Pet
+
+나만의 캐릭터와 함께 걷는, 워킹펫
 
 <br>
 
@@ -77,3 +79,10 @@
 | 임현승 | ![](Docs/members/임현승.png) | BE        |
 | 장세영 | ![](Docs/members/장세영.png) | FE        |
 | 정연우 | ![](Docs/members/정연우.png) | BE        |
+
+<!-- 팀 프로젝트 진행 -->
+<!-- Git -->
+<!-- Jira -->
+
+<!-- 프로젝트 성과 -->
+<!-- 유저 수 NN명 확보 등 -->
