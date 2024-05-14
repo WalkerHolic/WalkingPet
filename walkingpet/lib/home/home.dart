@@ -13,6 +13,7 @@ import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
+import 'package:walkingpet/services/home/gethomecharacter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -34,7 +35,7 @@ class _HomeState extends State<Home> {
 // 캐릭처 초기화
   Future<void> initInfo() async {
     try {
-      var responseInfo = await getCharacterInfo();
+      var responseInfo = await getHomeCharacter();
       var characterInfoData = responseInfo['data'];
       int characterId = characterInfoData['characterId'] as int;
       setState(() {
@@ -157,11 +158,11 @@ class _HomeState extends State<Home> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Transform.translate(
-                              offset: Offset(screenWidth * 0.10, 0),
-                              child: const TopRightIconWithText(
-                                  icon: "record", text: "기록"),
-                            ),
+                            // Transform.translate(
+                            //   offset: Offset(screenWidth * 0.10, 0),
+                            //   child: const TopRightIconWithText(
+                            //       icon: "record", text: "기록"),
+                            // ),
                             Transform.translate(
                               offset: Offset(screenWidth * 0.05, 0),
                               child: const TopRightIconWithText(
