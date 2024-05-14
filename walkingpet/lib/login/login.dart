@@ -91,10 +91,12 @@ Future<void> _saveTokens(String responseBody) async {
   final jsonResponse = json.decode(responseBody);
   final accessToken = jsonResponse['data']['accessToken'];
   final refreshToken = jsonResponse['data']['refreshToken'];
+  final userId = jsonResponse['data']['userId'].toString();
 
   const storage = FlutterSecureStorage();
   await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
   await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
+  await storage.write(key: 'USER_ID', value: userId);
 }
 
 Future<String?> show({
@@ -165,7 +167,6 @@ Future<void> _checkIfUserIsRegistered(BuildContext context) async {
         } else {
           // show 메서드는 닉네임을 정하는 모달을 보여줌 (= 회원가입)
           // 회원가입을 하기 전 걸음 수를 초기화 한다
-          StepCounter().resetStep();
           await show(context: context);
         }
       } else {}
