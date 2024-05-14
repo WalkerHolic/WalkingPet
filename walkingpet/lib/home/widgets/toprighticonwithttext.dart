@@ -17,6 +17,7 @@ class TopRightIconWithText extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double svgWidth = screenWidth * 0.17;
+    double svgHeight = screenHeight * 0.05;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -30,13 +31,18 @@ class TopRightIconWithText extends StatelessWidget {
               Navigator.pushNamed(context, '/$icon');
             }
           },
-          icon: SvgPicture.asset(
-            'assets/icons/$icon.svg',
+          icon: Image.asset(
+            'assets/icons/$icon.png',
             width: svgWidth,
+            height: svgHeight,
           ),
+          // icon: SvgPicture.asset(
+          //   'assets/icons/$icon.svg',
+          //   width: svgWidth,
+          // ),
         ),
         Transform.translate(
-          offset: Offset(0, screenHeight * -0.02),
+          offset: Offset(0, screenHeight * -0.005),
           child: Text(
             text,
             style: TextStyle(
