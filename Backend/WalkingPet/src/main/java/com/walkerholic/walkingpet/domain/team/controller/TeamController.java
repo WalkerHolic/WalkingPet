@@ -112,4 +112,14 @@ public class TeamController {
         log.info("그룹 나가기 exitGroup - exitGroupRequest:{}, userId:{}", exitGroupRequest,userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
+
+    @GetMapping("/teamnamecheck")
+    @Operation(summary = "그룹 이름 중복 체크", description = "입력한 그룹 이름이 기존 그룹 이름들과 중복되지 않는지 확인하기 ")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 이름 중복 체크 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 그룹 이름 중복 체크 실패")
+    public ResponseEntity<CommonResponseEntity> checkAvailableTeamname(@RequestParam("teamName") String teamName) {
+        log.info("그룹 이름 중복 체크 checkAvailableTeamname - teamName: {}", teamName);
+        boolean isAvailable = teamService.checkAvailableNickname(teamName);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, isAvailable);
+    }
 }
