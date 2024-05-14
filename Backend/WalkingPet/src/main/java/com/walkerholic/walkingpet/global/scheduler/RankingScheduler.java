@@ -20,13 +20,6 @@ public class RankingScheduler {
         log.info("오전 12시 3분 - 어제/누적 top10, top3 및 그룹 랭킹 캐싱 제거 완료");
     }
 
-    // mysql 걸음수 데이터를 redis로 이동
-    @Scheduled(cron = "0 4 0 * * ?", zone = "Asia/Seoul")
-    public void updateRedisRankingInfo() {
-        log.info("오전 12시 4분 - mysql 걸음수 데이터 redis로 이동");
-        rankingRedisService.saveRedisAllRanking();
-    }
-
     // 배틀 랭킹 top10, top3, 유저 랭킹 캐싱 제거 battleRankingTop10 battleRankingTop3 battleMyRank
     @Scheduled(cron = "0 3 * * * ?", zone = "Asia/Seoul")  // 초, 분, 시, 일, 월, 요일, 연도(생략 가능)
     @CacheEvict(value = {"battleRankingTop10", "battleRankingTop3", "battleMyRank"}, allEntries = true)
