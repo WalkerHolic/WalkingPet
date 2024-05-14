@@ -43,9 +43,9 @@ public class StepScheduler {
     }
 
     // mysql 걸음수 데이터를 redis로 이동
-    @Scheduled(cron = "0 59 23 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     public void updateRedisRankingInfo() {
-        log.info("오후 11시 59분 - mysql 걸음수 데이터 redis로 이동");
+        log.info("오전 12시 0분 - mysql 걸음수 데이터 redis로 이동");
         rankingRedisService.saveRedisAllRanking();
     }
 
