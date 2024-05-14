@@ -1,3 +1,4 @@
+import 'package:eventflux/models/reconnect.dart';
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
@@ -14,22 +15,17 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:eventflux/eventflux.dart';
 
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:intl/intl.dart';
-import 'package:walkingpet/record/record.dart'; // 날짜 포맷을 위한 패키지
+import 'package:walkingpet/record/record.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _requestPermissions();
-  await AndroidAlarmManager.initialize();
-  //scheduleMinuteAlarm();
-  scheduleMidnightReset();
-  await checkFirstVisitToday(); // 오늘 첫 방문인지 확인
+  //_initSSE();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -69,83 +65,6 @@ void main() async {
   //   }
   //   return Future.value(true);
   // }
-}
-
-Future<bool> checkFirstVisitToday() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.reload();
-  String today = DateFormat('yyyy-MM-dd')
-      .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
-  String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
-
-  //테스트용
-  DateTime now = DateTime.now(); // 현재 시간을 가져옵니다.
-  // print(now);
-  // if (now.hour > 16 || (now.hour == 16 && now.minute >= 0)) {
-  //   StepCounter().resetStep();
-  //   return true;
-  // }
-  // 여기까지 테스트
-
-  if (lastVisit == null || lastVisit != today) {
-    // 마지막 접속 날짜가 없거나 오늘 날짜와 다른 경우
-    await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
-    StepCounter().resetStep();
-    return true;
-  } else {
-    // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
-    await prefs.setString('lastVisit', today);
-    return false;
-  }
-}
-
-void scheduleMidnightReset() {
-  tz.initializeTimeZones();
-  final korea = tz.getLocation('Asia/Seoul');
-
-  final now = tz.TZDateTime.now(korea);
-  var midnight = tz.TZDateTime(korea, now.year, now.month, now.day + 1);
-
-  AndroidAlarmManager.periodic(
-      const Duration(days: 1),
-      1, // Ensure that the alarm ID is unique within your application.
-      triggerMidnightReset,
-      startAt: midnight,
-      exact: true,
-      wakeup: true);
-}
-
-@pragma('vm:entry-point')
-void triggerMidnightReset() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.reload();
-  var es = prefs.getInt('eventSteps') ?? 0;
-  await prefs.setInt('baseSteps', es);
-}
-
-// 권한 요청 메소드 정의
-Future<void> _requestPermissions() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.reload();
-  if (prefs.getBool('isGranted') ?? false) {
-    return;
-  }
-
-  // ACTIVITY_RECOGNITION 권한 요청
-  var status = await Permission.activityRecognition.request();
-  if (status.isGranted) {
-    prefs.setBool('isGranted', true);
-
-    // await StepCounter().initializePedometer();
-
-    // Future.delayed(const Duration(seconds: 3), () async {
-    //   // 5초 후에 실행될 코드
-    //   await StepCounter().resetStep();
-    // });
-  } else {
-    // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
-    SystemNavigator.pop();
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -212,4 +131,77 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+Future<bool> checkFirstVisitToday() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.reload();
+  String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
+  String today = DateFormat('yyyy-MM-dd')
+      .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
+
+  //테스트용
+  DateTime now = DateTime.now(); // 현재 시간을 가져옵니다.
+  // print(now);
+  // if (now.hour > 16 || (now.hour == 16 && now.minute >= 0)) {
+  //   StepCounter().resetStep();
+  //   return true;
+  // }
+  // 여기까지 테스트
+
+  if (lastVisit != today) {
+    await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
+    await StepCounter().resetStep();
+    return true;
+  } else {
+    // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
+    await prefs.setString('lastVisit', today);
+    return false;
+  }
+}
+
+// 권한 요청 메소드 정의
+Future<void> _requestPermissions() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.reload();
+  if (prefs.getBool('isGranted') ?? false) {
+    return;
+  }
+
+  // ACTIVITY_RECOGNITION 권한 요청
+  var status = await Permission.activityRecognition.request();
+  if (status.isGranted) {
+    prefs.setBool('isGranted', true);
+  } else {
+    // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
+    SystemNavigator.pop();
+  }
+}
+
+void _initSSE() {
+  // Connect and start the magic!
+  EventFlux.instance.connect(
+    EventFluxConnectionType.get,
+    'https://example.com/events',
+    onSuccessCallback: (EventFluxResponse? response) {
+      response?.stream?.listen((data) {
+        // Your data is now in the spotlight!
+        // stepCounter 클래스에 걸음수 초기화 코드 만들어놓기
+      });
+    },
+    onError: (oops) {
+      // Oops! Time to handle those little hiccups.
+      // You can also choose to disconnect here
+    },
+    autoReconnect: true, // Keep the party going, automatically!
+    reconnectConfig: ReconnectConfig(
+        mode: ReconnectMode.linear, // or exponential,
+        interval: const Duration(seconds: 5),
+        maxAttempts: 5, // or -1 for infinite,
+        onReconnect: () {
+          // Things to execute when reconnect happens
+          // FYI: for network changes, the `onReconnect` will not be called.
+          // It will only be called when the connection is interupted by the server and eventflux is trying to reconnect.
+        }),
+  );
 }

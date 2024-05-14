@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:walkingpet/main.dart';
+import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/services/Interceptor.dart';
 
 class CustomNesInputDialog extends StatefulWidget {
@@ -104,6 +105,7 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
 
         if (response.statusCode == 200) {
           await _saveTokens(response.body);
+          await StepCounter().resetStep();
           Navigator.pushReplacementNamed(context, '/home');
         } else {
           print("서버로부터 응답이 없습니다");
@@ -125,7 +127,6 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
 
     try {
       final response = await client.get(url);
-      print(response.body);
 
       if (response.statusCode == 200) {
         var data = utf8.decode(response.bodyBytes);
@@ -190,17 +191,16 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
             child: Text(widget.inputLabel,
                 style: const TextStyle(color: Colors.white)),
             onPressed: () async {
-              bool isFirstVisit = await checkFirstVisitToday();
-              if (isFirstVisit) {
-                Navigator.pushNamed(context, '/home');
-                return;
-              }
-
               if (_formKey.currentState!.validate()) {
                 if (!widget.isChange) {
                   _signUp(context, _controller.text);
                 } else {
                   // 닉네임 변경 요청
+                  bool isFirstVisit = await checkFirstVisitToday();
+                  if (isFirstVisit) {
+                    Navigator.pushNamed(context, '/home');
+                    return;
+                  }
                   _changeNickname(context, _controller.text);
                 }
                 //Navigator.of(context).pop(_controller.text);
@@ -218,10 +218,12 @@ Future<void> _saveTokens(String responseBody) async {
   final jsonResponse = json.decode(responseBody);
   final accessToken = jsonResponse['data']['accessToken'];
   final refreshToken = jsonResponse['data']['refreshToken'];
+  final userId = jsonResponse['data']['userId'].toString();
 
   const storage = FlutterSecureStorage();
   await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
   await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
+  await storage.write(key: 'USER_ID', value: userId);
 }
 
 // 닉네임 중복 체크 (중복일 경우 true 반환)

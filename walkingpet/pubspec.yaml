@@ -29,6 +29,7 @@ dependencies:
   android_alarm_manager_plus: ^4.0.3
   timezone: ^0.9.3
   intl: ^0.19.0
+  eventflux: ^2.0.1
 
 dev_dependencies:
   flutter_test:
