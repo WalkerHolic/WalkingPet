@@ -30,4 +30,6 @@ public interface TeamRepository extends JpaRepository<Team, Integer> {
         """)
     Integer findUserTeamRanking(Integer teamId);
 
+    boolean existsByName(String name);
+
 }
