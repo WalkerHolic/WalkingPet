@@ -20,7 +20,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:intl/intl.dart'; // 날짜 포맷을 위한 패키지
+import 'package:intl/intl.dart';
+import 'package:walkingpet/record/record.dart'; // 날짜 포맷을 위한 패키지
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -207,6 +208,7 @@ class MyApp extends StatelessWidget {
         '/gacha': (context) => const Gacha(),
         '/battleready': (context) => const BattleReady(),
         '/group': (context) => const Group(),
+        '/record': (context) => const Record(),
       },
     );
   }
