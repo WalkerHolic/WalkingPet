@@ -94,7 +94,7 @@ class StepCounter with ChangeNotifier {
     // 테스트 코드
     DateTime now = DateTime.now();
     DateTime today =
-        DateTime(now.year, now.month, now.day, 16, 32); // 오늘 오전 9시 7분
+        DateTime(now.year, now.month, now.day, 16, 52); // 오늘 오전 9시 7분
 
     // 기준 시간보다 이전이면 어제를 기준 날짜로 설정
     if (now.isBefore(today)) {
