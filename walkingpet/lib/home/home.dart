@@ -146,22 +146,24 @@ class _HomeState extends State<Home> {
                                 }
                               }
                             },
-                            icon: SvgPicture.asset(
-                              'assets/icons/record.svg',
-                              width: screenWidth * 0.10,
+                            icon: Image.asset(
+                              'assets/icons/logout.png',
+                              // width: svgWidth,
+                              height: screenHeight * 0.07,
                             ),
                           ),
                         ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Transform.translate(
-                              offset: Offset(screenWidth * 0.08, 0),
+                              offset: Offset(screenWidth * 0.10, 0),
                               child: const TopRightIconWithText(
                                   icon: "record", text: "기록"),
                             ),
                             Transform.translate(
-                              offset: Offset(screenWidth * 0.04, 0),
+                              offset: Offset(screenWidth * 0.05, 0),
                               child: const TopRightIconWithText(
                                   icon: "ranking", text: "랭킹"),
                             ),
@@ -177,7 +179,7 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: screenHeight * 0.05,
                     ),
-                    MainFontStyle(size: screenWidth * 0.13, text: "걸음수"),
+                    MainFontStyle(size: screenWidth * 0.1, text: "걸음수"),
                     Transform.translate(
                       offset: Offset(0, screenHeight * -0.03),
                       child: Consumer<StepCounter>(
