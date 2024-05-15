@@ -7,8 +7,9 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-public class JoinGroupRequest {
+public class EnterGroupRequest {
 
     private Integer teamId;
+    private String password;
 
 }

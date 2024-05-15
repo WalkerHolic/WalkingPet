@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.team.service;
 
 import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
+import com.walkerholic.walkingpet.domain.team.dto.request.EnterGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.ExitGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamDetailResponse;
@@ -47,16 +48,12 @@ public class TeamService {
     private final UserStepRepository userStepRepository;
 
     @Transactional(readOnly = true)
-    public List<TeamResponse> getAllTeam() {
+    public List<TeamResponse> getAllTeam(int userId) {
 
-        List<Team> teams = teamRepository.findAll();
+        // 사용자가 가입한 팀들을 제외한 모든 팀 조회
+        List<Team> allTeams = teamRepository.findNotJoinedTeams(userId);
 
-        if (teams.isEmpty()) {
-            // 현재 등록된 그룹이 없으면 빈 배열 반환
-            return Collections.emptyList();
-        } else {
-            return getTeamResponses(teams);
-        }
+        return getTeamResponses(allTeams);
     }
 
     @Transactional(readOnly = true)
@@ -94,6 +91,21 @@ public class TeamService {
                     return TeamResponse.from(team, userCount);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public void enterGroup(EnterGroupRequest enterGroupRequest, Integer userId) {
+        Team team = getTeamById(enterGroupRequest.getTeamId());
+
+        if (team == null) {
+            // 팀이 존재하지 않는 경우
+            throw new GlobalBaseException(TEAM_NOT_FOUND);
+        }
+
+        if(!enterGroupRequest.getPassword().equals(team.getPassword())){
+            // 받아온 비밀번호와 팀의 비밀번호가 일치하지 않는 경우
+            throw new GlobalBaseException(TEAM_PASSWORD_INCORRECT);
+        }
     }
 
     @Transactional(readOnly = true)
