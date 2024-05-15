@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:eventflux/models/reconnect.dart';
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
@@ -162,16 +164,10 @@ Future<bool> checkFirstVisitToday() async {
 
 // 권한 요청 메소드 정의
 Future<void> _requestPermissions() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.reload();
-  if (prefs.getBool('isGranted') ?? false) {
-    return;
-  }
-
   // ACTIVITY_RECOGNITION 권한 요청
   var status = await Permission.activityRecognition.request();
   if (status.isGranted) {
-    prefs.setBool('isGranted', true);
+    return;
   } else {
     // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
     SystemNavigator.pop();
