@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
+import 'package:walkingpet/group/group.dart';
 import 'package:walkingpet/group/widgets/member_scrollable_list.dart';
 import 'package:walkingpet/services/group/get_group_detail.dart';
 import 'package:walkingpet/services/group/leave_group.dart';
+import 'package:walkingpet/services/group/get_member_info.dart';
 
 class GroupDetail extends StatefulWidget {
   final int groupId; //팀 이름
@@ -22,26 +24,60 @@ class GroupDetail extends StatefulWidget {
 class _GroupDetailState extends State<GroupDetail> {
   //nullable 타입의 데이터 선언
   Map<String, dynamic>? groupData;
+  List<dynamic>? memberData;
   //null인지 상태 체크해야 함
-  bool isLoading = true;
+  bool isDetailLoading = true;
+  bool isMemberLoading = true;
   @override
   void initState() {
     super.initState();
     _fetchGroupDetail();
+    // getGroupMember(widget.groupId);
+    _fetchMembers();
   }
 
+  // 그룹 디테일 정보 가져오기
   Future<void> _fetchGroupDetail() async {
     try {
-      final data = await getGroupDetail(widget.groupId);
+      final detailData = await getGroupDetail(widget.groupId);
       setState(() {
-        groupData = data; // 데이터를 가져와 상태 변수에 저장
-        isLoading = false; //로딩 완료
+        groupData = detailData; // 데이터를 가져와 상태 변수에 저장
+        isDetailLoading = false; //로딩 완료
       });
     } catch (e) {
       setState(() {
-        isLoading = false; // 에러 발생 시 로딩 중지
+        isDetailLoading = false; // 에러 발생 시 로딩 중지
       });
       print("데이터 가져오기 에러 : $e");
+    }
+  }
+
+  // 그룹 멤버 정보 가져오기
+  Future<void> _fetchMembers() async {
+    try {
+      final data = await getGroupMember(widget.groupId);
+      setState(() {
+        memberData = data;
+        isMemberLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isMemberLoading = false; // 에러 발생 시 로딩 중지
+      });
+      print("멤버 데이터 가져오기 에러 : $e");
+    }
+  }
+
+  // 회원 탈퇴 성공/실패 여부 유저에게 전달
+  Future<void> _leaveGroupAndNavigate() async {
+    try {
+      await leaveGroup(widget.groupId);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const Group()),
+      );
+    } catch (e) {
+      // 오류 처리
+      print("에러발생 : $e");
     }
   }
 
@@ -51,7 +87,8 @@ class _GroupDetailState extends State<GroupDetail> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     // 로딩 중이면 스피너
-    if (isLoading) {
+    if (isDetailLoading || isMemberLoading) {
+      //한쪽이라도 데이터 덜 가져왔으면 로딩 표시
       return const Scaffold(
           body: Center(
         child: CircularProgressIndicator(),
@@ -159,10 +196,10 @@ class _GroupDetailState extends State<GroupDetail> {
                     const SizedBox(
                       height: 20,
                     ),
-                    MemberScrollableList(),
+                    MemberScrollableList(groupMemberInfo: memberData ?? []),
                     //나가기 버튼
                     GestureDetector(
-                      onTap: () => leaveGroup(widget.groupId),
+                      onTap: () => _leaveGroupAndNavigate(),
                       child: SvgPicture.asset(
                         'assets/buttons/leave_group.svg',
                         height: screenWidth * 0.1,

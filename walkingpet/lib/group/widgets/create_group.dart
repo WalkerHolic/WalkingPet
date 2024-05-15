@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/services/group/create_group_api.dart';
+import 'package:walkingpet/group/group.dart'; // group으로 이동하기 위해
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({super.key});
@@ -37,7 +38,9 @@ class _CreateGroupState extends State<CreateGroup> {
       print("비밀번호가 일치하지 않습니다.");
       return;
     }
-    await createGroupService(teamName, explanation, password);
+    await createGroupService(teamName, explanation, password); //그룹 생성이 완료되면
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const Group()));
   }
 
   @override

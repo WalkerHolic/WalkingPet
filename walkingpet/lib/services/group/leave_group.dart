@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
 import '../Interceptor.dart';
 
 Future<void> leaveGroup(int teamId) async {
@@ -17,3 +19,4 @@ Future<void> leaveGroup(int teamId) async {
     print("그룹 탈퇴 요청 중 오류 발생 : $e");
   }
 }
+
