@@ -10,6 +10,5 @@ import lombok.ToString;
 public class JoinGroupRequest {
 
     private Integer teamId;
-    private String password;
 
 }
