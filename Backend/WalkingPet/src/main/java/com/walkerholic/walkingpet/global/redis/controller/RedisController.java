@@ -91,11 +91,11 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> saveRedisAllUserRealtimeRankingInfo() {
         log.info("redis 어제 걸음수 랭킹 저장 테스트 - redis test saveRedisYesterdayRankingInfo");
 
-        List<ReailtimeStepRankingInfo> userRealtimeStepList = rankingService.getUserRealtimeStepList();
-
-        for (ReailtimeStepRankingInfo stepInfo : userRealtimeStepList) {
-            realtimeStepRankingRedisService.saveAllUserDailyStepList(stepInfo);
-        }
+//        List<ReailtimeStepRankingInfo> userRealtimeStepList = rankingService.getUserRealtimeStepList();
+//
+//        for (ReailtimeStepRankingInfo stepInfo : userRealtimeStepList) {
+//            realtimeStepRankingRedisService.saveAllUserDailyStepList(stepInfo);
+//        }
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }

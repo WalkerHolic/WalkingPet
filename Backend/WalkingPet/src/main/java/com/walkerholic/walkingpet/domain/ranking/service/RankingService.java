@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -150,23 +149,36 @@ public class RankingService {
     }
 
     /*
-    사용자들의 실시간 걸음수 데이터 가져오기
+    사용자들의 실시간 걸음수 데이터 top 10 가져오기
     yesterdayStep
     */
     @Transactional(readOnly = true)
-    public List<ReailtimeStepRankingInfo> getUserRealtimeStepList() {
-        List<UserDetail> allByUser = userDetailRepository.findAllByUserStatus(1);
+    public StepRankingResponse getUserRealtimeStepTop10() {
+        log.info("RankingService getUserRealtimeStepList 실시간 걸음수 top10(캐싱 적용 x)");
+//        List<UserStep> topUsers = userStepRepository.findTop10ByOrderByDailyStepDesc();
 
-        List<ReailtimeStepRankingInfo> reailtimeStepRankingList = new ArrayList<>();
-        for (UserDetail userDetailInfo : allByUser) {
-            UserStep userStepInfo = userStepRepository.findUserStepByUser(userDetailInfo.getUser())
-                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_STEP_NOT_FOUND));
-
-            reailtimeStepRankingList.add(ReailtimeStepRankingInfo.entityFrom(userStepInfo));
-        }
-
-        return reailtimeStepRankingList;
+        return StepRankingResponse.from(calculateRealRanking(getRealTop10()));
     }
+
+    /*
+    사용자들의 실시간 걸음수 데이터 top 3 가져오기
+    yesterdayStep
+    */
+    @Transactional(readOnly = true)
+    public StepRankingResponse getUserRealtimeStepTo3() {
+        log.info("RankingService getUserRealtimeStepList 실시간 걸음수 top3(캐싱 적용 x)");
+
+        List<PersonalStepRankingInfo> personalStepRankingInfos = calculateRealRanking(getRealTop10()).subList(0,3);
+
+        return StepRankingResponse.from(personalStepRankingInfos);
+    }
+
+    // 실시간 걸음수 top10, top3 캐싱을 위한 내부 메서드
+    // TODO: 캐싱 추가
+    public List<UserStep> getRealTop10() {
+         return userStepRepository.findTop10ByOrderByDailyStepDesc();
+    }
+
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
@@ -300,6 +312,25 @@ public class RankingService {
         }
 
         return battleRankingList;
+    }
+
+    // 실시간 랭킹 동점 계산
+    public List<PersonalStepRankingInfo> calculateRealRanking(List<UserStep> topUsers) {
+        int rank = 0;
+        int previousStep = -1;
+        List<PersonalStepRankingInfo> StepRankingList = new ArrayList<>();
+
+        for (UserStep userStepInfo: topUsers) {
+            UserDetail userDetailInfo = userDetailRepository.findUserAndSelectUserCharacterByUserId(userStepInfo.getUser().getUserId())
+                    .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
+
+            if (userStepInfo.getYesterdayStep() != previousStep) rank++;
+
+            StepRankingList.add(PersonalStepRankingInfo.entityFrom(userDetailInfo, userStepInfo, userStepInfo.getDailyStep(), rank));
+            previousStep = userStepInfo.getYesterdayStep();
+        }
+
+        return StepRankingList;
     }
 
 }
