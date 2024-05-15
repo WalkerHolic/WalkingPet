@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:eventflux/models/reconnect.dart';
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
@@ -19,7 +18,6 @@ import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:eventflux/eventflux.dart';
 
 import 'package:intl/intl.dart';
 import 'package:walkingpet/record/record.dart';
@@ -172,32 +170,4 @@ Future<void> _requestPermissions() async {
     // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
     SystemNavigator.pop();
   }
-}
-
-void _initSSE() {
-  // Connect and start the magic!
-  EventFlux.instance.connect(
-    EventFluxConnectionType.get,
-    'https://example.com/events',
-    onSuccessCallback: (EventFluxResponse? response) {
-      response?.stream?.listen((data) {
-        // Your data is now in the spotlight!
-        // stepCounter 클래스에 걸음수 초기화 코드 만들어놓기
-      });
-    },
-    onError: (oops) {
-      // Oops! Time to handle those little hiccups.
-      // You can also choose to disconnect here
-    },
-    autoReconnect: true, // Keep the party going, automatically!
-    reconnectConfig: ReconnectConfig(
-        mode: ReconnectMode.linear, // or exponential,
-        interval: const Duration(seconds: 5),
-        maxAttempts: 5, // or -1 for infinite,
-        onReconnect: () {
-          // Things to execute when reconnect happens
-          // FYI: for network changes, the `onReconnect` will not be called.
-          // It will only be called when the connection is interupted by the server and eventflux is trying to reconnect.
-        }),
-  );
 }
