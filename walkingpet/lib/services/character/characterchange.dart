@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:walkingpet/providers/character_info.dart';
 import '../Interceptor.dart';
 
 const String baseUrl = "https://walkingpet.co.kr";
@@ -27,7 +28,8 @@ Future<Map<String, dynamic>> getCharacterChange() async {
 }
 
 // 2. 유저의 현재 장착 캐릭터 변경하기 (post)
-Future<void> postCharacterChange(int selectCharacterId) async {
+Future<void> postCharacterChange(
+    BuildContext context, selectCharacterId) async {
   final client = AuthInterceptor();
   final url = Uri.parse('$baseUrl/$characterChange');
 
@@ -41,6 +43,12 @@ Future<void> postCharacterChange(int selectCharacterId) async {
     // print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
+      var data = utf8.decode(response.bodyBytes);
+      var jsonData = jsonDecode(data);
+      final characterProvider =
+          Provider.of<CharacterProvider>(context, listen: false);
+      characterProvider.characterId = jsonData['data']['changeCharacterId'];
+
       print('캐릭터 변경 성공: ${response.body}');
     } else {
       print('캐릭터 변경 실패: ${response.statusCode}');

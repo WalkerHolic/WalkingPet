@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/battle/battleready.dart';
 import 'package:walkingpet/character/characterinfo.dart';
+import 'package:walkingpet/providers/character_info.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/gacha/gacha.dart';
 import 'package:walkingpet/goal/goal.dart';
@@ -54,6 +55,9 @@ void main() async {
         ChangeNotifierProvider(
             create: (context) => BoxCounterProvider()..initializeBoxCounts()),
         ChangeNotifierProvider(create: (context) => StepCounter()),
+        ChangeNotifierProvider<CharacterProvider>(
+          create: (context) => CharacterProvider(),
+        ),
       ],
       child: MyApp(startRoute: refreshToken != null ? '/home' : '/login'),
     ),

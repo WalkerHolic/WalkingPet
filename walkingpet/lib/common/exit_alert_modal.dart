@@ -34,6 +34,7 @@ class ExitModal extends StatelessWidget {
             height: screenHeight * 0.04,
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               NesButton(
                 type: NesButtonType.primary,
