@@ -7,8 +7,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:walkingpet/main.dart';
+import 'package:walkingpet/providers/character_info.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/services/Interceptor.dart';
+import 'package:provider/provider.dart';
 
 class CustomNesInputDialog extends StatefulWidget {
   final String inputLabel;
@@ -134,7 +136,11 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
         var jsonData = jsonDecode(data);
         Map<String, dynamic> res = jsonData;
         var success = res['data']['status'];
+        print(jsonData['data']);
         if (success) {
+          final characterProvider =
+              Provider.of<CharacterProvider>(context, listen: false);
+          characterProvider.nickname = jsonData['data']['nickname'];
           Navigator.of(context).pop();
           Navigator.pushReplacementNamed(context, '/characterinfo');
         } else {

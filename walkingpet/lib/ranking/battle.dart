@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:walkingpet/providers/character_info.dart';
 import 'package:walkingpet/ranking/widgets/myrank.dart';
 import 'package:walkingpet/ranking/widgets/top10.dart';
 import 'package:walkingpet/ranking/widgets/top3.dart';
 import 'package:walkingpet/services/ranking/battle.dart';
+import 'package:provider/provider.dart';
 
 class BattleRanking extends StatefulWidget {
   const BattleRanking({super.key});
@@ -84,13 +86,16 @@ class _PersonalRankingState extends State<BattleRanking> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     margin: const EdgeInsets.symmetric(horizontal: 7),
-                    child: MyRank(
-                      ranking: myrank['ranking'] as int? ?? 0,
-                      score: myrank['battleRating'] as int? ?? 0,
-                      characterId: myrank['characterId'] as int? ?? 0,
-                      nickname: myrank['nickname'] as String? ?? 'Unknown',
-                      rankingUnit: '점',
-                    ),
+                    child: Consumer<CharacterProvider>(
+                        builder: (context, characterProvider, child) {
+                      return MyRank(
+                        ranking: myrank['ranking'] as int? ?? 0,
+                        score: myrank['battleRating'] as int? ?? 0,
+                        characterId: characterProvider.characterId,
+                        nickname: characterProvider.nickname,
+                        rankingUnit: '점',
+                      );
+                    }),
                   ),
                 ),
 

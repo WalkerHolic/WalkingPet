@@ -152,7 +152,7 @@ class _CharacterChangeState extends State<CharacterChange> {
                   Navigator.pushNamed(context, '/home');
                   return;
                 }
-                await postCharacterChange(selectCharacterId as int);
+                await postCharacterChange(context, selectCharacterId as int);
                 Navigator.pushNamed(context, '/characterinfo');
               },
               child: Stack(

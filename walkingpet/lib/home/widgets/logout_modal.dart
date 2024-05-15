@@ -25,6 +25,7 @@ class LogoutModal extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
             "로그아웃하시겠습니까?",
@@ -33,6 +34,7 @@ class LogoutModal extends StatelessWidget {
             height: screenHeight * 0.04,
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               NesButton(
                 type: NesButtonType.primary,

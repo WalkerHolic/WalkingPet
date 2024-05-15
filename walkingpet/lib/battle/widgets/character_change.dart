@@ -146,7 +146,7 @@ class _CharacterChangeState extends State<BattleCharacterChange> {
             right: screenWidth * 0.1,
             child: TextButton(
               onPressed: () async {
-                await postCharacterChange(selectCharacterId as int);
+                await postCharacterChange(context, selectCharacterId as int);
                 Navigator.pushNamed(context, '/battleready');
               },
               child: Stack(

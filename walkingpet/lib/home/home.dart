@@ -10,6 +10,7 @@ import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/home/widgets/logout_modal.dart';
 import 'package:walkingpet/main.dart';
+import 'package:walkingpet/providers/character_info.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
@@ -24,23 +25,33 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    initInfo();
+    final characterProvider =
+        Provider.of<CharacterProvider>(context, listen: false);
+    if (characterProvider.nickname.isEmpty) {
+      initInfo();
+    } else {
+      isLoading = false;
+    }
   }
 
-  String animal = "cow";
-  bool isLoading = true;
-
-// 캐릭처 초기화
+// 캐릭터 초기화
   Future<void> initInfo() async {
+    final characterProvider =
+        Provider.of<CharacterProvider>(context, listen: false);
+
     try {
       var responseInfo = await getHomeCharacter();
       var characterInfoData = responseInfo['data'];
       int characterId = characterInfoData['characterId'] as int;
+      String nickname = characterInfoData['nickname'] as String;
+      characterProvider.updateCharacter(characterId, nickname);
+
       setState(() {
-        animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
         isLoading = false;
       });
     } catch (e) {}
@@ -117,14 +128,10 @@ class _HomeState extends State<Home> {
                                     await deleteTokens(); // 로그아웃 시 토큰 삭제
                                     Navigator.pushNamed(
                                         context, '/login'); // 로그인 페이지로 이동
-                                    print('로그아웃 성공, SDK에서 토큰 삭제');
                                   } catch (error) {
                                     AccessTokenInfo tokenInfo = await UserApi
                                         .instance
                                         .accessTokenInfo();
-                                    print(
-                                        '토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn}');
-                                    print('로그아웃 실패, SDK에서 토큰 삭제 $error');
                                   }
                                 }
                               },
@@ -176,13 +183,19 @@ class _HomeState extends State<Home> {
                         height: screenHeight * 0.06,
                       ),
                       if (!isLoading)
-                        SizedBox(
-                          height: screenHeight * 0.22,
-                          child: Image.asset(
-                            //'assets/animals/wolf/wolf_run.gif',
-                            'assets/animals/$animal/${animal}_walk.gif',
-                            fit: BoxFit.fitHeight,
-                          ),
+                        Consumer<CharacterProvider>(
+                          builder: (context, characterProvider, child) {
+                            String animal = CharacterMap.idToAnimal[
+                                    characterProvider.characterId] ??
+                                "bunny";
+                            return SizedBox(
+                              height: screenHeight * 0.22,
+                              child: Image.asset(
+                                'assets/animals/$animal/${animal}_walk.gif',
+                                fit: BoxFit.fitHeight,
+                              ),
+                            );
+                          },
                         ),
                     ],
                   ),
