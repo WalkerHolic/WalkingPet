@@ -49,6 +49,9 @@ public enum GlobalErrorCode {
     //목표 관련(goal)
     USER_GOAL_NOT_FOUND(404, "G400", "유저의 목표 정보를 찾을 수 없습니다."),
 
+    //파일 업로드 관련
+    UPLOAD_FILE_NOT_FOUND(404, "F400", "업로드랄 파일을 찾을 수 없습니다."),
+
     // 정의하지 않은 그 외의 에러
     USER_BATTLE_COUNT_LACK(404, "B400", "일일 배틀 횟수 초과");
 
