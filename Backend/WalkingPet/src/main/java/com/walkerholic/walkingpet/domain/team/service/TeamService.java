@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.team.service;
 
 import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
+import com.walkerholic.walkingpet.domain.team.dto.request.EnterGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.ExitGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamDetailResponse;
@@ -94,6 +95,21 @@ public class TeamService {
                     return TeamResponse.from(team, userCount);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public void enterGroup(EnterGroupRequest enterGroupRequest, Integer userId) {
+        Team team = getTeamById(enterGroupRequest.getTeamId());
+
+        if (team == null) {
+            // 팀이 존재하지 않는 경우
+            throw new GlobalBaseException(TEAM_NOT_FOUND);
+        }
+
+        if(!enterGroupRequest.getPassword().equals(team.getPassword())){
+            // 받아온 비밀번호와 팀의 비밀번호가 일치하지 않는 경우
+            throw new GlobalBaseException(TEAM_PASSWORD_INCORRECT);
+        }
     }
 
     @Transactional(readOnly = true)

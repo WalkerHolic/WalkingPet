@@ -32,7 +32,7 @@ public enum GlobalErrorCode {
     JOIN_TEAMS_EXCEEDED(403, "G402", "한 유저가 가입 가능한 최대 그룹 수를 초과했습니다."),
     TEAM_MEMBER_EXCEEDED(403, "G403", "한 그룹에 가입 가능한 최대 인원 수를 초과했습니다."),
     ALREADY_JOINED_GROUP(403, "G404", "이미 그룹에 가입한 사용자입니다."),
-
+    TEAM_PASSWORD_INCORRECT(404, "G405", "입력하신 그룹의 비밀번호가 일치하지 않습니다."),
 
     // 아이템 관련
     ITEM_NOT_FOUND(404, "I400", "해당 아이템을 찾을 수 없습니다."),

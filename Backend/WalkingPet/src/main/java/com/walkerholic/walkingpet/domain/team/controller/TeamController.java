@@ -1,6 +1,7 @@
 package com.walkerholic.walkingpet.domain.team.controller;
 
 import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
+import com.walkerholic.walkingpet.domain.team.dto.request.EnterGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.ExitGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.JoinGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamDetailResponse;
@@ -58,6 +59,17 @@ public class TeamController {
         List<TeamResponse> searchTeams = teamService.getSearchTeams(content);
         log.info("그룹 검색 getSearchTeams -  content: {}", content);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,searchTeams);
+    }
+
+    @Operation(summary = "그룹 입장", description = "teamId와 비밀번호를 가지고 그룹에 입장하기")
+    @ApiResponse(responseCode = "200", description = "S200 - 그룹 입장 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "C400 - 그룹 입장 실패")
+    @PostMapping("/enter")
+    public ResponseEntity<CommonResponseEntity> enterGroup(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody EnterGroupRequest enterGroupRequest){
+        Integer userId = userDetail.getUsers().getUserId();
+        teamService.enterGroup(enterGroupRequest,userId);
+        log.info("그룹 입장 enterGroup -  enterGroupRequest: {}, userId:{}", enterGroupRequest,userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
 
     @Operation(summary = "그룹 상세보기", description = "특정 teamId를 통해 그룹 정보 상세보기")
