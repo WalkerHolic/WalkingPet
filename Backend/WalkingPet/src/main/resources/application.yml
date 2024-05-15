@@ -11,13 +11,6 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 1000  # select 배치 조회 크기
-  data:
-    redis:
-      host: redis
-      port: 7368
-      password: fpeltmanswptodrlwlakwpqkf!!emeutjdrhdgoTtmqslek
-  #      host: localhost
-#      host: walkingpet.co.kr
 
   batch:
     job:
@@ -34,5 +27,5 @@ management:
       exposure:
         include: "*"
 
-#server:
-#  port: 9090
+server:
+  port: 9090
