@@ -276,9 +276,9 @@ public class UserCharacterService {
     }
 
     public MainResponse getUserCharacterId(int userId) {
-        UserDetail userDetail = userDetailRepository.findUserDetailByJoinFetchByUserId(userId)
+        UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
                 .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-        return MainResponse.from(userDetail.getSelectUserCharacter().getCharacter().getCharacterId());
+        return MainResponse.from(userDetail.getSelectUserCharacter().getCharacter().getCharacterId(), userDetail.getUser().getNickname());
     }
 }
