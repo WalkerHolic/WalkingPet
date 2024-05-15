@@ -48,16 +48,12 @@ public class TeamService {
     private final UserStepRepository userStepRepository;
 
     @Transactional(readOnly = true)
-    public List<TeamResponse> getAllTeam() {
+    public List<TeamResponse> getAllTeam(int userId) {
 
-        List<Team> teams = teamRepository.findAll();
+        // 사용자가 가입한 팀들을 제외한 모든 팀 조회
+        List<Team> allTeams = teamRepository.findNotJoinedTeams(userId);
 
-        if (teams.isEmpty()) {
-            // 현재 등록된 그룹이 없으면 빈 배열 반환
-            return Collections.emptyList();
-        } else {
-            return getTeamResponses(teams);
-        }
+        return getTeamResponses(allTeams);
     }
 
     @Transactional(readOnly = true)

@@ -34,8 +34,9 @@ public class TeamController {
     @ApiResponse(responseCode = "200", description = "S200 - 전체 그룹 조회 성공", content = @Content(schema = @Schema(implementation = TeamResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 전체 그룹 조회 실패")
     @GetMapping("/all")
-    public ResponseEntity<CommonResponseEntity> getAllTeam(){
-        List<TeamResponse> allTeam = teamService.getAllTeam();
+    public ResponseEntity<CommonResponseEntity> getAllTeam(@AuthenticationPrincipal CustomUserDetail userDetail){
+        Integer userId = userDetail.getUsers().getUserId();
+        List<TeamResponse> allTeam = teamService.getAllTeam(userId);
         log.info("전체 그룹 확인 getAllTeam");
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,allTeam);
     }

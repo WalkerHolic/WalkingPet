@@ -32,4 +32,7 @@ public interface TeamRepository extends JpaRepository<Team, Integer> {
 
     boolean existsByName(String name);
 
+    @Query("SELECT t FROM Team t WHERE t.teamId NOT IN (SELECT tu.team.teamId FROM TeamUser tu WHERE tu.user.userId = :userId)")
+    List<Team> findNotJoinedTeams(@Param("userId") int userId);
+
 }
