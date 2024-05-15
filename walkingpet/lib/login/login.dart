@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool dippop) {
-        showExitModal(context);
+        handleExit(context);
       },
       child: Container(
         decoration: const BoxDecoration(

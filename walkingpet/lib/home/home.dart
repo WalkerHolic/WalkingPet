@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        showExitModal(context);
+        handleExit(context);
       },
       child: Container(
         decoration: const BoxDecoration(
