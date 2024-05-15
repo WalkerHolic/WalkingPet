@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/login/nes_input_dialog.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:flutter/services.dart';
@@ -23,62 +24,69 @@ class _LoginState extends State<Login> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/backgrounds/day.png"), // 배경 이미지 파일 경로 지정
-          fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool dippop) {
+        showExitModal(context);
+      },
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/backgrounds/day.png"), // 배경 이미지 파일 경로 지정
+            fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent, // Scaffold 배경을 투명하게 설정
-        body: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: screenHeight * 0.14,
-              ),
-              Text(
-                "Walking Pet",
-                style: TextStyle(
-                  fontSize: screenWidth * 0.13,
-                  color: const Color.fromRGBO(141, 198, 63, 1),
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(-1.5, -1.5),
-                      color: Color.fromRGBO(54, 91, 18, 1),
-                      blurRadius: 1,
-                    ),
-                    Shadow(
-                      offset: Offset(1.5, -1.5),
-                      color: Color.fromRGBO(54, 91, 18, 1),
-                      blurRadius: 1,
-                    ),
-                    Shadow(
-                      offset: Offset(1.5, 1.5),
-                      color: Color.fromRGBO(54, 91, 18, 1),
-                      blurRadius: 1,
-                    ),
-                    Shadow(
-                      offset: Offset(-1.5, 1.5),
-                      color: Color.fromRGBO(54, 91, 18, 1),
-                      blurRadius: 1,
-                    ),
-                  ],
+        child: Scaffold(
+          backgroundColor: Colors.transparent, // Scaffold 배경을 투명하게 설정
+          body: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: screenHeight * 0.14,
                 ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.26,
-              ),
-              Image.asset('assets/animals/cow/cow_walk.gif'),
-              SizedBox(
-                height: screenHeight * 0.06,
-              ),
-              InkWell(
-                onTap: () => _handleKakaoLogin(context),
-                child: Image.asset('assets/icons/kakao_login_medium_wide.png'),
-              ),
-            ],
+                Text(
+                  "Walking Pet",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.13,
+                    color: const Color.fromRGBO(141, 198, 63, 1),
+                    shadows: const [
+                      Shadow(
+                        offset: Offset(-1.5, -1.5),
+                        color: Color.fromRGBO(54, 91, 18, 1),
+                        blurRadius: 1,
+                      ),
+                      Shadow(
+                        offset: Offset(1.5, -1.5),
+                        color: Color.fromRGBO(54, 91, 18, 1),
+                        blurRadius: 1,
+                      ),
+                      Shadow(
+                        offset: Offset(1.5, 1.5),
+                        color: Color.fromRGBO(54, 91, 18, 1),
+                        blurRadius: 1,
+                      ),
+                      Shadow(
+                        offset: Offset(-1.5, 1.5),
+                        color: Color.fromRGBO(54, 91, 18, 1),
+                        blurRadius: 1,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.26,
+                ),
+                Image.asset('assets/animals/cow/cow_walk.gif'),
+                SizedBox(
+                  height: screenHeight * 0.06,
+                ),
+                InkWell(
+                  onTap: () => _handleKakaoLogin(context),
+                  child:
+                      Image.asset('assets/icons/kakao_login_medium_wide.png'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

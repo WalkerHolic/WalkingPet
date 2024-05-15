@@ -102,7 +102,6 @@ class StepCounter with ChangeNotifier {
         .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
     String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
 
-    print("lastVisit있니? $lastVisit");
     if (lastVisit == null) {
       //await prefs.setString('lastVisit', today);
       await prefs.setString('lastVisit', today);
