@@ -8,6 +8,7 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
+import 'package:walkingpet/home/widgets/logout_modal.dart';
 import 'package:walkingpet/main.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
@@ -60,7 +61,7 @@ class _HomeState extends State<Home> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        showExitModal(context);
+        handleExit(context);
       },
       child: Container(
         decoration: const BoxDecoration(
@@ -104,36 +105,9 @@ class _HomeState extends State<Home> {
                             child: IconButton(
                               onPressed: () async {
                                 // 로그아웃 여부 확인 모달
-                                bool? confirmLogout = await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    // return const LogoutDialog(
-                                    //   confirmLabel: '확인',
-                                    //   cancelLabel: '취소',
-                                    //   message: '로그아웃 하시겠습니까?',
-                                    // );
-                                    return AlertDialog(
-                                      title: const Text('로그아웃'),
-                                      content: const Text('로그아웃 하시겠습니까?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(false); // 취소
-                                          },
-                                          child: const Text('취소'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(true); // 확인
-                                          },
-                                          child: const Text('확인'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                                bool? confirmLogout =
+                                    await LogoutModal.showLogoutModal(
+                                        context: context);
 
                                 // 사용자가 로그아웃을 확인했을 때만 로그아웃을 진행
                                 if (confirmLogout == true) {

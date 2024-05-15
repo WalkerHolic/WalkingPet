@@ -44,7 +44,7 @@ class _GachaState extends State<Gacha> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        showExitModal(context);
+        handleExit(context);
       },
       child: Scaffold(
         // appBar: AppBar(

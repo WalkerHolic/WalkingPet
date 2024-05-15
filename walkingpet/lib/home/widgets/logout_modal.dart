@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:flutter/services.dart';
 
-class ExitModal extends StatelessWidget {
-  const ExitModal({super.key});
+class LogoutModal extends StatelessWidget {
+  const LogoutModal({super.key});
 
-  static Future<bool?> showExitModal({
+  static Future<bool?> showLogoutModal({
     required BuildContext context,
     NesDialogFrame frame = const NesBasicDialogFrame(),
-    bool isLogout = false,
   }) {
     return NesDialog.show<bool?>(
       context: context,
-      builder: (_) => const ExitModal(),
+      builder: (_) => const LogoutModal(),
       frame: frame,
     );
   }
@@ -28,7 +27,7 @@ class ExitModal extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            "종료하시겠습니까?",
+            "로그아웃하시겠습니까?",
           ),
           SizedBox(
             height: screenHeight * 0.04,
@@ -57,18 +56,5 @@ class ExitModal extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-Future<void> handleExit(BuildContext context) async {
-  bool? result = await ExitModal.showExitModal(context: context);
-
-  if (result == true) {
-    // 종료를 눌렀을 때 앱을 종료
-    if (Platform.isAndroid) {
-      SystemNavigator.pop();
-    } else if (Platform.isIOS) {
-      exit(0);
-    }
   }
 }

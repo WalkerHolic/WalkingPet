@@ -53,7 +53,7 @@ class _BattleReadyState extends State<BattleReady> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        showExitModal(context);
+        handleExit(context);
       },
       child: Container(
         decoration: const BoxDecoration(

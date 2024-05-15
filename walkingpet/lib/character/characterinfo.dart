@@ -75,7 +75,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        showExitModal(context);
+        handleExit(context);
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
