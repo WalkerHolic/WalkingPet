@@ -47,12 +47,6 @@ public class UserCharacterService {
     public static final int GRADE_3_UPGRADE_POWER_STAT = 10;
     public static final int GRADE_3_UPGRADE_DEFENSE_STAT = 5;
 
-    private static final int UPGRADE_HEALTH_STAT = 0;
-    private static final int UPGRADE_POWER_STAT = 0;
-    private static final int UPGRADE_DEFENSE_STAT = 0;
-
-
-
     private static final int REDUCE_STAT_POINT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
     private static final int ADD_STAT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
 
