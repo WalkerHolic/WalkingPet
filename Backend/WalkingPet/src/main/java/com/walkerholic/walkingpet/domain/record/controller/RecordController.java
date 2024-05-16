@@ -29,9 +29,9 @@ public class RecordController {
 
     //1. 기록 올리기
     @PostMapping("/upload")
-    @Operation(summary = "가입한 회원인지 확인", description = "유저의 이메일이 이미 회원가입한 이메일인지 확인하기 ")
-    @ApiResponse(responseCode = "200", description = "S200 - 가입한 회원인지 확인 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
-    @ApiResponse(responseCode = "404", description = "C400 - 가입한 회원인지 확인 실패")
+    @Operation(summary = "기록 업로드하기", description = "유저가 찍은 이미지와 유저의 정보를 저장")
+    @ApiResponse(responseCode = "200", description = "S200 - 업로드 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "R400 - 업로드 실패")
     public ResponseEntity<CommonResponseEntity> uploadRecord(@AuthenticationPrincipal CustomUserDetail userDetail,
                                                              @RequestParam("image") MultipartFile multipartFile,
                                                              @RequestParam("characterId") int characterId,
@@ -44,20 +44,29 @@ public class RecordController {
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, uploadRecordResponse);
     }
 
-
-    //2. 사진과 텍스트 캐릭터 아이디 가져오기(userId 와 recordId로 가져오기)
-
-
-    //3. 유저가 올린 모든 사진 가져오기(유저 id로 저장되어 있는 모든 사진 가져오기)
+    //2. 유저가 올린 모든 사진 가져오기(유저 id로 저장되어 있는 모든 사진 가져오기)
     @GetMapping("/my-record")
-    @Operation(summary = "가입한 회원인지 확인", description = "유저의 이메일이 이미 회원가입한 이메일인지 확인하기 ")
+    @Operation(summary = "유저의 모든 기록 가져오기", description = "유저가 작성하고 업로드한 모든 기록을 가져옵니다.")
     @ApiResponse(responseCode = "200", description = "S200 - 가입한 회원인지 확인 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
-    @ApiResponse(responseCode = "404", description = "C400 - 가입한 회원인지 확인 실패")
-    public ResponseEntity<CommonResponseEntity> getAllRecord(@AuthenticationPrincipal CustomUserDetail userDetail){
+    @ApiResponse(responseCode = "404", description = "R400 - 유저가 작성한 기록 없음")
+    public ResponseEntity<CommonResponseEntity> getAllRecord(@AuthenticationPrincipal CustomUserDetail userDetail) {
         int userId = userDetail.getUsers().getUserId();
         log.info("유저가 등록한 모든 기록 가져오기 - userId: {}", userId);
         AllUserRecordResponse allUserRecordResponse = recordService.getAllRecord(userId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, allUserRecordResponse);
+    }
+
+    //3. 기록 삭제하기
+    @PostMapping("/delete")
+    @Operation(summary = "기록 삭제", description = "유저가 등록한 기록 삭제")
+    @ApiResponse(responseCode = "200", description = "S200 - 기록 삭제 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "R400 - 기록 삭제 실패")
+    public ResponseEntity<CommonResponseEntity> deleteRecord(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("fileName") String fileName){
+        int userId = userDetail.getUsers().getUserId();
+        log.info("유저가 등록한 기록 삭제하기 - userId: {}", userId);
+        Boolean canDelete = recordService.deleteImage(userId, fileName);
+
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, canDelete);
     }
 }
