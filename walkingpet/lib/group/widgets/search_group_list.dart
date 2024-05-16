@@ -31,31 +31,36 @@ class _SearchGroupState extends State<SearchGroup> {
           numOfMember: group['userCount'],
           isProtected: group['hasPassword']);
     }).toList();
-    return SingleChildScrollView(
-        child: Column(children: [
-      Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: EdgeInsets.all(screenHeight * 0.015),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const CreateGroup()));
-            },
-            child: SvgPicture.asset(
-              'assets/buttons/create_group_button.svg',
-              width: screenWidth * 0.3,
+    return SizedBox(
+      height: screenHeight, //스크롤뷰 기본 크기 지정 
+      child: SingleChildScrollView(
+          child: Column(children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.all(screenHeight * 0.015),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateGroup()));
+              },
+              child: SvgPicture.asset(
+                'assets/buttons/create_group_button.svg',
+                width: screenWidth * 0.3,
+              ),
             ),
           ),
         ),
-      ),
-      ...groupCards,
-    ])
-        // return Container(
-        //   child: const Center(
-        //     child: Text("공사 중입니다."),
-        //   ),
-        // );
-        );
+        ...groupCards,
+      ])
+          // return Container(
+          //   child: const Center(
+          //     child: Text("공사 중입니다."),
+          //   ),
+          // );
+          ),
+    );
   }
 }

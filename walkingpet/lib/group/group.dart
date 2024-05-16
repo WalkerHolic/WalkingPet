@@ -114,7 +114,7 @@ class _GroupState extends State<Group> {
                         child: SearchGroup(
                           incommingAllGroups: searchGroups,
                         ),
-                        label: "그룹 검색",
+                        label: "그룹 탐색",
                       ),
                     ],
                   ),
