@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:nes_ui/nes_ui.dart';
-import 'package:flutter/services.dart';
 
 class LogoutModal extends StatelessWidget {
   const LogoutModal({super.key});
