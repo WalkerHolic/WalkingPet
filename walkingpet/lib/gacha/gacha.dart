@@ -41,6 +41,12 @@ class _GachaState extends State<Gacha> {
     //새로 나온 캐릭터 홍보
     const String itemName = "레드 드래곤";
     const int rating = 3; //별의 개수
+    List<Widget> stars = List.generate(
+        rating,
+        (index) => Image.asset(
+              'assets/items/one_star.png',
+              width: screenWidth * 0.08,
+            ));
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -74,14 +80,15 @@ class _GachaState extends State<Gacha> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ...List.generate(
-                            rating,
-                            (_) => Icon(
-                              Icons.star,
-                              color: const Color(0xffff004c),
-                              size: screenWidth * 0.07,
-                            ),
-                          ),
+                          Row(children: stars),
+                          // ...List.generate(
+                          //   rating,
+                          //   (_) => Icon(
+                          //     Icons.star,
+                          //     color: const Color(0xffff004c),
+                          //     size: screenWidth * 0.07,
+                          //   ),
+                          // ),
                           SizedBox(width: screenHeight * 0.02), //텍스트와 별 사이 여백
                           Text(
                             itemName,
