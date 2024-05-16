@@ -16,9 +16,9 @@ public class GoalScheduler {
     private final GoalRepository goalRepository;
 
     //매일매일 개인목표 초기화
-    @Scheduled(cron = "0 1 0 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void resetDailyGoal(){
-        log.info("오전 12시 1분 - 매일매일 개인목표 초기화");
+        log.info("오전 12시 0분 - 매일매일 개인목표 초기화");
         List<Goal> goalList = goalRepository.findAll();
         for(Goal goal : goalList){
             goal.setDailyGoal(0);
