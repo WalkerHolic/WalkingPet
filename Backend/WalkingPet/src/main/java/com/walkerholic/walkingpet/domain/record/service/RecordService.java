@@ -99,6 +99,18 @@ public class RecordService {
                 .build());
     }
 
+    public boolean deleteImage(int userId, String fileName){
+        Record record = getRecordByUserIdAndFileName(userId, fileName);
+        if(record == null){
+            return  false;
+        }
+        else{
+            recordRepository.delete(record);
+            s3Service.deleteImage(fileName);
+            return true;
+        }
+    }
+
     /**
      * UploadRecordResponse의 세팅
      * @param s3FileUpload s3를 통해 업로드할때의 반환값
@@ -120,4 +132,8 @@ public class RecordService {
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
     }
 
+    public Record getRecordByUserIdAndFileName(int userId, String fileName){
+        return recordRepository.findByUserIdAndImageName(userId, fileName)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.RECORD_NOT_FOUND));
+    }
 }
