@@ -46,7 +46,7 @@ class LogoutModal extends StatelessWidget {
               ),
               NesButton(
                 type: NesButtonType.error,
-                child: const Text("종료", style: TextStyle(color: Colors.white)),
+                child: const Text("확인", style: TextStyle(color: Colors.white)),
                 onPressed: () {
                   Navigator.of(context).pop(true); // 종료
                 },
