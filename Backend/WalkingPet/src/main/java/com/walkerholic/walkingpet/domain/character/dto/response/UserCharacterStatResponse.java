@@ -15,14 +15,14 @@ public class UserCharacterStatResponse {
     private int addDefense;
     private int statPoint;
 
-    public static UserCharacterStatResponse from(UserCharacter userCharacter){
+    public static UserCharacterStatResponse from(UserCharacter userCharacter, int upgradeHealth, int upgradeAttack, int upgradeDefense){
         return UserCharacterStatResponse.builder()
                 .health(userCharacter.getHealth())
                 .power(userCharacter.getPower())
                 .defense(userCharacter.getDefense())
-                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth())
-                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower())
-                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense())
+                .addHealth(userCharacter.getHealth() - userCharacter.getCharacter().getFixHealth() - upgradeHealth)
+                .addPower(userCharacter.getPower() - userCharacter.getCharacter().getFixPower() - upgradeAttack)
+                .addDefense(userCharacter.getDefense() - userCharacter.getCharacter().getFixDefense() - upgradeDefense)
                 .statPoint(userCharacter.getStatPoint())
                 .build();
     }

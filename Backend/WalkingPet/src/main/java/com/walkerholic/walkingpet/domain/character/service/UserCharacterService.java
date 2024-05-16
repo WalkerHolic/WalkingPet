@@ -112,7 +112,12 @@ public class UserCharacterService {
             userCharacterInfo.raisePower(ADD_STAT);
         }
 
-        return UserCharacterStatResponse.from(userCharacterInfo);
+        HashMap<String, Integer> upgradeValue = getUpgradeStatus(userCharacterInfo.getCharacter().getGrade(),userCharacterInfo.getUpgrade());
+        int upgradeHealth = upgradeValue.get("health");
+        int upgradePower = upgradeValue.get("power");
+        int upgradeDefense = upgradeValue.get("defense");
+
+        return UserCharacterStatResponse.from(userCharacterInfo, upgradeHealth, upgradePower, upgradeDefense);
     }
 
     /**
