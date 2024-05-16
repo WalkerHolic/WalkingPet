@@ -51,6 +51,6 @@ public class S3Service {
         if (originalFileName != null && originalFileName.contains(".")) {
             fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
         }
-        return "wlakingpet"+UUID.randomUUID().toString() + fileExtension;
+        return "walkingpet"+UUID.randomUUID().toString() + fileExtension;
     }
 }
