@@ -143,15 +143,14 @@ class _HomeState extends State<Home> {
                             ),
                           ),
 
-<<<<<<< HEAD
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              // Transform.translate(
-                              //   offset: Offset(screenWidth * 0.10, 0),
-                              //   child: const TopRightIconWithText(
-                              //       icon: "record", text: "기록"),
-                              // ),
+                              Transform.translate(
+                                offset: Offset(screenWidth * 0.10, 0),
+                                child: const TopRightIconWithText(
+                                    icon: "record", text: "기록"),
+                              ),
                               Transform.translate(
                                 offset: Offset(screenWidth * 0.05, 0),
                                 child: const TopRightIconWithText(
@@ -165,55 +164,7 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                         ],
-=======
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Transform.translate(
-                              offset: Offset(screenWidth * 0.10, 0),
-                              child: const TopRightIconWithText(
-                                  icon: "record", text: "기록"),
-                            ),
-                            Transform.translate(
-                              offset: Offset(screenWidth * 0.05, 0),
-                              child: const TopRightIconWithText(
-                                  icon: "ranking", text: "랭킹"),
-                            ),
-                            const TopRightIconWithText(
-                                icon: "goal", text: "목표"),
-                            SizedBox(
-                              width: screenWidth * 0.01,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.05,
-                    ),
-                    MainFontStyle(size: screenWidth * 0.1, text: "걸음수"),
-                    Transform.translate(
-                      offset: Offset(0, screenHeight * -0.03),
-                      child: Consumer<StepCounter>(
-                          builder: (context, provider, child) {
-                        return MainFontStyle(
-                          size: screenWidth * 0.3,
-                          text: "${provider.steps}",
-                        );
-                      }),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.06,
-                    ),
-                    if (!isLoading)
-                      SizedBox(
-                        height: screenHeight * 0.22,
-                        child: Image.asset(
-                          //'assets/animals/wolf/wolf_run.gif',
-                          'assets/animals/$animal/${animal}_walk.gif',
-                          fit: BoxFit.fitHeight,
-                        ),
->>>>>>> 8749965 ([FE] 기록 페이지 퍼블리싱)
+
                       ),
                       SizedBox(
                         height: screenHeight * 0.05,
