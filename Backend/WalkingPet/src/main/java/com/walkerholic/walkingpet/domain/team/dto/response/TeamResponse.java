@@ -15,6 +15,7 @@ public class TeamResponse {
     private String teamExplain;
     private Integer teamPoint;
     private Integer userCount;
+    private boolean hasPassword;
 
     public static TeamResponse from(Team team, Integer userCount){
         return TeamResponse.builder()
@@ -23,6 +24,7 @@ public class TeamResponse {
                 .teamExplain(team.getExplanation())
                 .teamPoint(team.getPoint())
                 .userCount(userCount)
+                .hasPassword(!team.getPassword().isEmpty())
                 .build();
     }
 }
