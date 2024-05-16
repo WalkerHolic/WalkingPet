@@ -52,7 +52,6 @@ public class TeamService {
 
         // 사용자가 가입한 팀들을 제외한 모든 팀 조회
         List<Team> allTeams = teamRepository.findNotJoinedTeams(userId);
-
         return getTeamResponses(allTeams);
     }
 
@@ -109,22 +108,25 @@ public class TeamService {
     }
 
     @Transactional(readOnly = true)
-    public TeamDetailResponse getTeamDetail(int teamId) {
+    public TeamDetailResponse getTeamDetail(int teamId, int userId) {
 
         Team team = getTeamById(teamId);
 
         Integer userCount = getUserCountByTeamId(team.getTeamId());
 
+
         TeamResponse teamResponse = TeamResponse.from(team,userCount);
 
         List<TeamUsersResponse> teamUsersResponses = getGroupMembersInfo(teamId);
+
+        boolean isJoin = teamUsersResponses.stream().anyMatch(teamUser -> teamUser.getUserId().equals(userId));
 
         int teamTotalSteps = teamUsersResponses.stream()
                 .mapToInt(TeamUsersResponse::getStep)
                 .sum();
 
 
-        return TeamDetailResponse.from(teamResponse, teamUsersResponses,teamTotalSteps);
+        return TeamDetailResponse.from(teamResponse, teamUsersResponses,teamTotalSteps,isJoin);
     }
 
     @Transactional(readOnly = false)

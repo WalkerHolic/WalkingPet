@@ -20,9 +20,10 @@ public class TeamDetailResponse {
     private Integer teamPoint;
     private Integer userCount;
     private Integer teamTotalSteps;
+    private boolean isJoin;
     private List<TeamUsersResponse> teamUsers;
 
-    public static TeamDetailResponse from(TeamResponse teamResponse, List<TeamUsersResponse> teamUsers,Integer teamTotalSteps){
+    public static TeamDetailResponse from(TeamResponse teamResponse, List<TeamUsersResponse> teamUsers,Integer teamTotalSteps,boolean isJoin){
         return TeamDetailResponse.builder()
                 .teamId(teamResponse.getTeamId())
                 .teamName(teamResponse.getTeamName())
@@ -30,6 +31,7 @@ public class TeamDetailResponse {
                 .teamPoint(teamResponse.getTeamPoint())
                 .userCount(teamResponse.getUserCount())
                 .teamTotalSteps(teamTotalSteps)
+                .isJoin(isJoin)
                 .teamUsers(teamUsers)
                 .build();
     }
