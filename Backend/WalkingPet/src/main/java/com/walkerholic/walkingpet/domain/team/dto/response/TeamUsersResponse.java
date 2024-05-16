@@ -12,6 +12,7 @@ import lombok.ToString;
 @Getter
 public class TeamUsersResponse {
 
+    private Integer userId;
     private Integer characterId;
     private String nickname;
     private Integer characterLevel;
@@ -19,6 +20,7 @@ public class TeamUsersResponse {
 
     public static TeamUsersResponse from(UserDetail userDetail,UserStep userStep){
         return TeamUsersResponse.builder()
+                .userId(userDetail.getUser().getUserId())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .nickname(userDetail.getUser().getNickname())
                 .characterLevel(userDetail.getSelectUserCharacter().getLevel())
