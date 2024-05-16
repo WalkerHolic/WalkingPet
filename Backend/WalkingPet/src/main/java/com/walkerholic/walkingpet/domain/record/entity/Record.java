@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.record.entity;
 
+import com.walkerholic.walkingpet.domain.record.dto.response.UploadRecordResponse;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -18,34 +18,54 @@ import java.util.Date;
 public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "goal_id")
+    @Column(name = "record_id")
     private Integer recordId;
 
     @Column(name = "detail", nullable = true)
-    private Integer detail;
+    private String detail;
+
+    @Column(name = "image_name", nullable = false)
+    private String imageName;
 
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @Column(name = "character_id", nullable = false)
+    private int character_id;
+
     @Column(name = "record_reg_date", nullable = false)
     private LocalDateTime recordRegDate;
 
-    @Column(name = "latitude", nullable = false)
+    @Column(name = "latitude", nullable = true, precision = 13, scale = 10)
     private BigDecimal latitude;
 
-    @Column(name = "longitude", nullable = false)
+    @Column(name = "longitude", nullable = true, precision = 13, scale = 10)
     private BigDecimal longitude;
 
-    @Column(name = "city", nullable = false)
+    @Column(name = "city", nullable = true)
     private String city;
 
-    @Column(name = "area", nullable = false)
-    private String area;
+    @Column(name = "district", nullable = true)
+    private String district;
+
+    @Column(name = "region", nullable = true)
+    private String region;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
-//    @Builder
-//    public Record(Users user){
-//    }
+
+    @Builder
+    public Record(Users user, UploadRecordResponse uploadRecordResponse, BigDecimal latitude, BigDecimal longitude, String city, String district, String region){
+        this.user = user;
+        this.character_id = uploadRecordResponse.getCharacterId();
+        this.imageName = uploadRecordResponse.getImageName();
+        this.imageUrl = uploadRecordResponse.getImageUrl();
+        this.recordRegDate = uploadRecordResponse.getRegDate();
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.city = city;
+        this.district = district;
+        this.region = region;
+    }
 }
