@@ -134,7 +134,8 @@ public class UserCharacterService {
         userDetail.changeUserCharacter(userCharacter);
 
         userInfoRedisService.updateCharacterId(userId, changeUserCharacterIdRequest.getSelectCharacterId());
-        return ChangeCharacterIdResponse.from(userDetail.getSelectUserCharacter().getCharacter().getCharacterId());
+//        return ChangeCharacterIdResponse.from(userDetail);
+        return ChangeCharacterIdResponse.from(userDetail.getSelectUserCharacter());
     }
 
     /**
