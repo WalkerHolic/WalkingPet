@@ -53,8 +53,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (context) => BoxCounterProvider()..initializeBoxCounts()),
+        ChangeNotifierProvider(create: (context) => BoxCounterProvider()),
         ChangeNotifierProvider<StepCounter>(create: (context) => StepCounter()),
         ChangeNotifierProvider<CharacterProvider>(
           create: (context) => CharacterProvider(),
@@ -175,7 +174,6 @@ Future<void> _requestPermissions() async {
 
 // 11시 59분부터 12시 까지 1초마다 StepCounter().resetStep() 실행
 void _scheduleDailyTask() {
-  print("실행은되니?");
   DateTime now = DateTime.now();
   DateTime firstRun = DateTime(now.year, now.month, now.day, 23, 59, 00);
 
