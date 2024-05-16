@@ -6,7 +6,6 @@ import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/home/widgets/logout_modal.dart';
 import 'package:walkingpet/providers/character_info.dart';
-import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
@@ -30,7 +29,6 @@ class _HomeState extends State<Home> {
         Provider.of<CharacterProvider>(context, listen: false);
     if (characterProvider.nickname.isEmpty) {
       initInfo();
-      BoxCounterProvider().initializeBoxCounts();
     } else {
       isLoading = false;
     }
