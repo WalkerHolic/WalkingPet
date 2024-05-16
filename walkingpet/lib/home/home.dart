@@ -1,15 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/home/widgets/logout_modal.dart';
-import 'package:walkingpet/main.dart';
 import 'package:walkingpet/providers/character_info.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:walkingpet/providers/step_counter.dart';
