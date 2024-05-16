@@ -54,4 +54,8 @@ public class Team {
         this.point = 0;
     }
 
+    public void addPoint(int point) {
+        this.point += point;
+    }
+
 }

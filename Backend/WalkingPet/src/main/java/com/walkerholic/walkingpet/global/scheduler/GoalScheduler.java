@@ -2,6 +2,7 @@ package com.walkerholic.walkingpet.global.scheduler;
 
 import com.walkerholic.walkingpet.domain.goal.entity.Goal;
 import com.walkerholic.walkingpet.domain.goal.repository.GoalRepository;
+import com.walkerholic.walkingpet.domain.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +15,7 @@ import java.util.List;
 @Slf4j
 public class GoalScheduler {
     private final GoalRepository goalRepository;
+    private final TeamService teamService;
 
     //매일매일 개인목표 초기화
     @Scheduled(cron = "0 1 0 * * *", zone = "Asia/Seoul")
@@ -35,5 +37,12 @@ public class GoalScheduler {
             goal.setWeeklyGoal(0);
             goalRepository.save(goal);
         }
+    }
+
+    // 매일 그룹 목표 달성 검사
+    @Scheduled(cron = "0 17 2 * * *", zone = "Asia/Seoul")
+    public void checkAllGroupGoal() {
+        log.info("오전 12시 5분 - 매일 그룹 목표 달성 검사");
+        teamService.checkAllGroupGoal();
     }
 }

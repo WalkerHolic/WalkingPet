@@ -40,4 +40,7 @@ public interface UserStepRepository extends JpaRepository<UserStep, Integer> {
         )
         """)
     int findUserPersonalRankingByAccStep(Integer userId);
+
+    @Query("SELECT us.yesterdayStep FROM UserStep us WHERE us.user.userId = :userId")
+    Integer findUserYesterdayStep(int userId);
 }

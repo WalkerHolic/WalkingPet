@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.domain.team.service;
 
+import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.team.dto.request.CreateGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.EnterGroupRequest;
 import com.walkerholic.walkingpet.domain.team.dto.request.ExitGroupRequest;
@@ -39,6 +40,9 @@ public class TeamService {
     private static final int MAX_TEAM_PEOPLE  = 6;
     private static final byte STATUS_NO_PASSWORD = 0;
     private static final byte STATUS_WITH_PASSWORD = 1;
+    private final int GROUP_GOAL_STEP = 20000;
+    private final int GROUP_GOAL_REWARD_POINT = 50;
+    private final int GROUP_GOAL_REWARD_BOX= 2;
 
 
     private final TeamRepository teamRepository;
@@ -46,6 +50,7 @@ public class TeamService {
     private final UsersRepository usersRepository;
     private final UserDetailRepository userDetailRepository;
     private final UserStepRepository userStepRepository;
+    private final UserItemRepository userItemRepository;
 
     @Transactional(readOnly = true)
     public List<TeamResponse> getAllTeam(int userId) {
@@ -112,12 +117,10 @@ public class TeamService {
 
         Team team = getTeamById(teamId);
 
-        Integer userCount = getUserCountByTeamId(team.getTeamId());
-
-
-        TeamResponse teamResponse = TeamResponse.from(team,userCount);
-
+//        Integer userCount = getUserCountByTeamId(team.getTeamId());
         List<TeamUsersResponse> teamUsersResponses = getGroupMembersInfo(teamId);
+
+        TeamResponse teamResponse = TeamResponse.from(team, teamUsersResponses.size()); // -> count query가 아닌 list 사이즈로 변경
 
         boolean isJoin = teamUsersResponses.stream().anyMatch(teamUser -> teamUser.getUserId().equals(userId));
 
@@ -274,6 +277,35 @@ public class TeamService {
         return TeamUsersResponse.from(userDetail,userStep);
     }
 
+    // 자정에 모든 그룹의 목표 달성 여부 확인을 위한 메서드
+    public void checkAllGroupGoal() {
+        List<Team> teams = teamRepository.findAll();
 
+        // 모든 그룹 탐색
+        for (Team team: teams) {
+            checkGoalGroupStep(team);
+        }
+    }
+    
+    // 그룹의 걸음수 확인하는 메서드
+    @Transactional(readOnly = false)
+    public void checkGoalGroupStep(Team team) {
+        List<TeamUser> teamUsers = teamUserRepository.findByTeamId(team.getTeamId());
 
+        // 그룹 내 유저들의 어제 걸음수 탐색
+        int totalStep = 0;
+        for (TeamUser teamUser: teamUsers) {
+            totalStep += userStepRepository.findUserYesterdayStep(teamUser.getUser().getUserId());
+        }
+
+        System.out.println("teamId: " + team.getTeamId() + ", totalStep: " + totalStep);
+        if (totalStep < GROUP_GOAL_STEP) return;
+
+        // 해당 그룹이 그룹 목표 걸음수를 달성했을 경우 -> 그룹 포인트 50, 각 무지개 상자 + 1
+        team.addPoint(GROUP_GOAL_REWARD_POINT);
+        teamRepository.save(team);
+
+        List<Integer> userIds = teamUsers.stream().map(teamUser -> teamUser.getUser().getUserId()).collect(Collectors.toList());
+        userItemRepository.addUserLuxuryBoxQuantity(userIds, GROUP_GOAL_REWARD_BOX);
+    }
 }
