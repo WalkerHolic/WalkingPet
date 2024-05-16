@@ -11,7 +11,6 @@ Future<int> checkStep() async {
   final client = AuthInterceptor();
   const FlutterSecureStorage storage = FlutterSecureStorage();
   String userId = await storage.read(key: 'USER_ID') ?? "0";
-  print(userId);
   int userIdInt = int.parse(userId);
 
   final response = await client.get(

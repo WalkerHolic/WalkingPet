@@ -26,6 +26,7 @@ import 'package:walkingpet/record/record.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _requestPermissions();
+  _scheduleDailyTask();
   //_initSSE();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
@@ -52,9 +53,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (context) => BoxCounterProvider()..initializeBoxCounts()),
-        ChangeNotifierProvider(create: (context) => StepCounter()),
+        ChangeNotifierProvider(create: (context) => BoxCounterProvider()),
+        ChangeNotifierProvider<StepCounter>(create: (context) => StepCounter()),
         ChangeNotifierProvider<CharacterProvider>(
           create: (context) => CharacterProvider(),
         ),
@@ -141,25 +141,21 @@ Future<bool> checkFirstVisitToday() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.reload();
   String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
-  String today = DateFormat('yyyy-MM-dd')
-      .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
+  // String today = DateFormat('yyyy-MM-dd')
+  //     .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
 
   //테스트용
   DateTime now = DateTime.now(); // 현재 시간을 가져옵니다.
-  // print(now);
-  // if (now.hour > 16 || (now.hour == 16 && now.minute >= 0)) {
-  //   StepCounter().resetStep();
-  //   return true;
-  // }
-  // 여기까지 테스트
 
-  if (lastVisit != today) {
-    await prefs.setString('lastVisit', today); // 오늘 날짜로 마지막 접속 날짜를 업데이트
+  if (lastVisit != DateFormat('yyyy-MM-dd').format(DateTime.now())) {
+    await prefs.setString(
+        'lastVisit',
+        DateFormat('yyyy-MM-dd')
+            .format(DateTime.now())); // 오늘 날짜로 마지막 접속 날짜를 업데이트
     await StepCounter().resetStep();
     return true;
   } else {
     // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
-    await prefs.setString('lastVisit', today);
     return false;
   }
 }
@@ -174,4 +170,36 @@ Future<void> _requestPermissions() async {
     // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
     SystemNavigator.pop();
   }
+}
+
+// 11시 59분부터 12시 까지 1초마다 StepCounter().resetStep() 실행
+void _scheduleDailyTask() {
+  DateTime now = DateTime.now();
+  DateTime firstRun = DateTime(now.year, now.month, now.day, 23, 59, 00);
+
+  if (now.isAfter(firstRun) &&
+      now.isBefore(DateTime(now.year, now.month, now.day, 0, 0, 0)
+          .add(const Duration(days: 1)))) {
+    // 현재 시간이 23:59:55와 00:00:00 사이에 들어오면 즉시 실행
+    StepCounter().resetStep();
+    // 이후 매일 같은 시간에 실행되도록 타이머 재설정
+    firstRun = firstRun.add(const Duration(days: 1));
+  } else if (now.isAfter(firstRun)) {
+    // 현재 시간이 23:59:55를 넘었으면 다음 날로 설정
+    firstRun = firstRun.add(const Duration(days: 1));
+  }
+
+  Duration initialDelay = firstRun.difference(now);
+  Timer(initialDelay, () {
+    DateTime endRun =
+        DateTime(firstRun.year, firstRun.month, firstRun.day, 0, 0);
+    Timer.periodic(const Duration(seconds: 1), (timer) async {
+      DateTime currentTime = DateTime.now();
+      if (currentTime.isAfter(endRun)) {
+        timer.cancel();
+      } else {
+        await StepCounter().resetStep();
+      }
+    });
+  });
 }
