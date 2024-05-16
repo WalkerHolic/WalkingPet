@@ -39,7 +39,7 @@ class _GachaState extends State<Gacha> {
     final boxCounter = Provider.of<BoxCounterProvider>(context);
 
     //새로 나온 캐릭터 홍보
-    const String itemName = "레드 드래곤";
+    const String itemName = "브론즈 드래곤";
     const int rating = 3; //별의 개수
     List<Widget> stars = List.generate(
         rating,
@@ -168,7 +168,7 @@ class _GachaState extends State<Gacha> {
               top: screenWidth / 8, //화면 높이 기준 위치
 
               child: Image.asset(
-                  'assets/animals/red_dragon/red_dragon_ready.gif',
+                  'assets/animals/bronze_dragon/bronze_dragon_ready.gif',
                   width: 400,
                   fit: BoxFit.cover),
             ),
