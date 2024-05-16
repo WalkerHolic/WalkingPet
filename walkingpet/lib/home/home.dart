@@ -81,136 +81,131 @@ class _HomeState extends State<Home> {
             fit: BoxFit.cover, // 배경 이미지가 전체 화면을 채우도록 설정
           ),
         ),
-        child: ChangeNotifierProvider(
-          create: (context) => StepCounter(),
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.transparent, // Scaffold 배경을 투명하게 설정
-            body: Stack(
-              children: [
-                Positioned(
-                  bottom: screenHeight * 0.2, // 화면 아래에서 20% 위치
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: MainFontStyle(
-                      size: screenWidth * 0.033,
-                      text: "걸음수는 하루 첫 접속 기준으로 계산됩니다",
-                      color: Colors.yellow,
-                    ),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.transparent, // Scaffold 배경을 투명하게 설정
+          body: Stack(
+            children: [
+              Positioned(
+                bottom: screenHeight * 0.2, // 화면 아래에서 20% 위치
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: MainFontStyle(
+                    size: screenWidth * 0.033,
+                    text: "걸음수는 하루 첫 접속 기준으로 계산됩니다",
+                    color: Colors.yellow,
                   ),
                 ),
-                Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: screenHeight * 0.04,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 로그아웃 아이콘
-                          Transform.translate(
-                            offset: Offset(screenWidth * 0.01, 0),
-                            child: IconButton(
-                              onPressed: () async {
-                                // 로그아웃 여부 확인 모달
-                                bool? confirmLogout =
-                                    await LogoutModal.showLogoutModal(
-                                        context: context);
+              ),
+              Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: screenHeight * 0.04,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 로그아웃 아이콘
+                        Transform.translate(
+                          offset: Offset(screenWidth * 0.01, 0),
+                          child: IconButton(
+                            onPressed: () async {
+                              // 로그아웃 여부 확인 모달
+                              bool? confirmLogout =
+                                  await LogoutModal.showLogoutModal(
+                                      context: context);
 
-                                // 사용자가 로그아웃을 확인했을 때만 로그아웃을 진행
-                                if (confirmLogout == true) {
-                                  // 로그아웃 함수
-                                  try {
-                                    await UserApi.instance.logout();
-                                    await deleteTokens(); // 로그아웃 시 토큰 삭제
-                                    Navigator.pushNamed(
-                                        context, '/login'); // 로그인 페이지로 이동
-                                  } catch (error) {
-                                    AccessTokenInfo tokenInfo = await UserApi
-                                        .instance
-                                        .accessTokenInfo();
-                                  }
+                              // 사용자가 로그아웃을 확인했을 때만 로그아웃을 진행
+                              if (confirmLogout == true) {
+                                // 로그아웃 함수
+                                try {
+                                  await UserApi.instance.logout();
+                                  await deleteTokens(); // 로그아웃 시 토큰 삭제
+                                  Navigator.pushNamed(
+                                      context, '/login'); // 로그인 페이지로 이동
+                                } catch (error) {
+                                  AccessTokenInfo tokenInfo =
+                                      await UserApi.instance.accessTokenInfo();
                                 }
-                              },
-                              icon: Image.asset(
-                                'assets/icons/logout.png',
-                                // width: svgWidth,
-                                height: screenHeight * 0.07,
-                              ),
+                              }
+                            },
+                            icon: Image.asset(
+                              'assets/icons/logout.png',
+                              // width: svgWidth,
+                              height: screenHeight * 0.07,
                             ),
                           ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Transform.translate(
-                                offset: Offset(screenWidth * 0.10, 0),
-                                child: const TopRightIconWithText(
-                                    icon: "record", text: "기록"),
-                              ),
-                              Transform.translate(
-                                offset: Offset(screenWidth * 0.05, 0),
-                                child: const TopRightIconWithText(
-                                    icon: "ranking", text: "랭킹"),
-                              ),
-                              const TopRightIconWithText(
-                                  icon: "goal", text: "목표"),
-                              SizedBox(
-                                width: screenWidth * 0.01,
-                              ),
-                            ],
-                          ),
-                        ],
-
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.05,
-                      ),
-                      MainFontStyle(size: screenWidth * 0.1, text: "걸음수"),
-                      Transform.translate(
-                        offset: Offset(0, screenHeight * -0.03),
-                        child: Consumer<StepCounter>(
-                            builder: (context, provider, child) {
-                          return MainFontStyle(
-                            size: screenWidth * 0.3,
-                            text: "${provider.steps}",
-                          );
-                        }),
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.06,
-                      ),
-                      if (!isLoading)
-                        Consumer<CharacterProvider>(
-                          builder: (context, characterProvider, child) {
-                            String animal = CharacterMap.idToAnimal[
-                                    characterProvider.characterId] ??
-                                "bunny";
-                            return SizedBox(
-                              height: screenHeight * 0.22,
-                              child: Image.asset(
-                                'assets/animals/$animal/${animal}_walk.gif',
-                                fit: BoxFit.fitHeight,
-                              ),
-                            );
-                          },
                         ),
-                    ],
-                  ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // Transform.translate(
+                            //   offset: Offset(screenWidth * 0.10, 0),
+                            //   child: const TopRightIconWithText(
+                            //       icon: "record", text: "기록"),
+                            // ),
+                            Transform.translate(
+                              offset: Offset(screenWidth * 0.05, 0),
+                              child: const TopRightIconWithText(
+                                  icon: "ranking", text: "랭킹"),
+                            ),
+                            const TopRightIconWithText(
+                                icon: "goal", text: "목표"),
+                            SizedBox(
+                              width: screenWidth * 0.01,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.05,
+                    ),
+                    MainFontStyle(size: screenWidth * 0.1, text: "걸음수"),
+                    Transform.translate(
+                      offset: Offset(0, screenHeight * -0.03),
+                      child: Consumer<StepCounter>(
+                          builder: (context, provider, child) {
+                        return MainFontStyle(
+                          size: screenWidth * 0.3,
+                          text: "${provider.steps}",
+                        );
+                      }),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.06,
+                    ),
+                    if (!isLoading)
+                      Consumer<CharacterProvider>(
+                        builder: (context, characterProvider, child) {
+                          String animal = CharacterMap
+                                  .idToAnimal[characterProvider.characterId] ??
+                              "bunny";
+                          return SizedBox(
+                            height: screenHeight * 0.22,
+                            child: Image.asset(
+                              'assets/animals/$animal/${animal}_walk.gif',
+                              fit: BoxFit.fitHeight,
+                            ),
+                          );
+                        },
+                      ),
+                  ],
                 ),
-                const Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: BottomNavBar(
-                    selectedIndex: 2,
-                  ),
+              ),
+              const Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: BottomNavBar(
+                  selectedIndex: 2,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
