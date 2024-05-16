@@ -8,6 +8,7 @@ import 'package:walkingpet/group/widgets/member_scrollable_list.dart';
 import 'package:walkingpet/services/group/get_group_detail.dart';
 import 'package:walkingpet/services/group/leave_group.dart';
 import 'package:walkingpet/services/group/get_member_info.dart';
+import 'package:walkingpet/services/group/join_group.dart';
 
 class GroupDetail extends StatefulWidget {
   final int groupId; //팀 이름
@@ -81,6 +82,19 @@ class _GroupDetailState extends State<GroupDetail> {
     }
   }
 
+  //회원가입 로직
+  Future<void> joinGroupAndNavigate() async {
+    try {
+      await joinGroup(widget.groupId);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const Group()),
+      );
+    } catch (e) {
+      // 오류 처리
+      print("에러발생 : $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -108,6 +122,7 @@ class _GroupDetailState extends State<GroupDetail> {
     String description = groupData!['explain'] ?? '설명 없음';
     int groupTotalStep = groupData!['teamTotalSteps'] ?? 0;
     int groupRank = groupData!['teamPoint'] ?? 0;
+    bool isJoined = groupData!['join'] ?? false;
 
     return Scaffold(
       body: Stack(
@@ -201,14 +216,24 @@ class _GroupDetailState extends State<GroupDetail> {
                     SizedBox(
                       height: screenHeight * 0.04,
                     ),
-                    //나가기 버튼
-                    GestureDetector(
-                      onTap: () => _leaveGroupAndNavigate(),
-                      child: SvgPicture.asset(
-                        'assets/buttons/leave_group_button.svg',
-                        height: screenWidth * 0.1,
-                      ),
-                    )
+                    //나가기 버튼 or 가입하기 버튼
+                    Container(
+                      child: isJoined
+                          ? GestureDetector(
+                              onTap: () => _leaveGroupAndNavigate(),
+                              child: SvgPicture.asset(
+                                'assets/buttons/leave_group_button.svg',
+                                height: screenWidth * 0.1,
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () => joinGroupAndNavigate(),
+                              child: SvgPicture.asset(
+                                'assets/buttons/join_group_button.svg',
+                                height: screenWidth * 0.1,
+                              ),
+                            ),
+                    ),
                   ],
                 ),
               ),

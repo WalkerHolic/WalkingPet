@@ -30,7 +30,7 @@ class _MyGroupState extends State<MyGroup> {
         groupName: group['teamName'],
         description: group['teamExplain'],
         numOfMember: group['userCount'],
-        isProtected: true,
+        isProtected: group['hasPassword'],
       );
     }).toList();
     return Container(
@@ -47,7 +47,7 @@ class _MyGroupState extends State<MyGroup> {
                         builder: (context) => const CreateGroup()));
               },
               child: SvgPicture.asset(
-                'assets/buttons/group_join_button.svg',
+                'assets/buttons/create_group_button.svg',
                 width: screenWidth * 0.3,
               ),
             ),

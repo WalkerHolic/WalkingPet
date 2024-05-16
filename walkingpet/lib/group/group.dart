@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/group/widgets/my_group_list.dart';
-import 'package:walkingpet/group/widgets/search_group.dart';
+import 'package:walkingpet/group/widgets/search_group_list.dart';
 import 'package:walkingpet/services/group/get_group_info.dart';
 
 class Group extends StatefulWidget {
