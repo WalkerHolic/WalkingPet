@@ -43,7 +43,7 @@ class _SearchGroupState extends State<SearchGroup> {
                   MaterialPageRoute(builder: (context) => const CreateGroup()));
             },
             child: SvgPicture.asset(
-              'assets/buttons/group_join_button.svg',
+              'assets/buttons/create_group_button.svg',
               width: screenWidth * 0.3,
             ),
           ),
