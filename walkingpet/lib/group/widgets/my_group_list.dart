@@ -24,6 +24,9 @@ class _MyGroupState extends State<MyGroup> {
     //스크린 크기 받아오기
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    //그룹 수 n/3형식으로 표시
+    String groupCountDisplay = "${widget.myGroups.length}/3";
+
     final List<GroupCard> groupCards = widget.myGroups.map((group) {
       return GroupCard(
         groupId: group['teamId'],
@@ -33,39 +36,55 @@ class _MyGroupState extends State<MyGroup> {
         isProtected: group['hasPassword'],
       );
     }).toList();
-    return Container(
-      child: Column(children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.all(screenHeight * 0.015),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateGroup()));
-              },
-              child: SvgPicture.asset(
-                'assets/buttons/create_group_button.svg',
-                width: screenWidth * 0.3,
+    return SizedBox(
+      height: screenHeight,
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.all(screenHeight * 0.015),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CreateGroup()));
+                  },
+                  child: SvgPicture.asset(
+                    'assets/buttons/create_group_button.svg',
+                    width: screenWidth * 0.3,
+                  ),
+                ),
               ),
             ),
-          ),
+            widget.myGroups.isEmpty
+                ? Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.05),
+                    child: const Text(
+                      "아직 가입한 그룹이 없습니다",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  )
+                : Column(
+                    children: [
+                      Text(groupCountDisplay),
+                      Column(children: groupCards),
+                      Padding(
+                        padding: EdgeInsets.all(screenWidth * 0.03),
+                        child: Text("그룹은 최대 3개까지 \n 가입할 수 있습니다.",
+                            style: TextStyle(fontSize: screenWidth * 0.05)),
+                      )
+                    ],
+                  ),
+          ]),
+          // child: const Center(
+          //   child: Text("공사 중입니다."),
+          // ),
         ),
-        widget.myGroups.isEmpty
-            ? Padding(
-                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.05),
-                child: const Text(
-                  "아직 가입한 그룹이 없습니다",
-                  style: TextStyle(fontSize: 24),
-                ),
-              )
-            : Column(children: groupCards),
-      ]),
-      // child: const Center(
-      //   child: Text("공사 중입니다."),
-      // ),
+      ),
     );
   }
 }
