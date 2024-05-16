@@ -209,8 +209,8 @@ class _GroupDetailState extends State<GroupDetail> {
                         fontSize: 25,
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: screenHeight * 0.02,
                     ),
                     MemberScrollableList(groupMemberInfo: memberData ?? []),
                     SizedBox(
@@ -241,9 +241,9 @@ class _GroupDetailState extends State<GroupDetail> {
           ),
           Positioned(
             left: screenWidth * 0.9 / 2 - 50,
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             child: Image.asset(
-              'assets/items/stars.png',
+              'assets/images/three_star.png',
               width: 150,
             ),
           ),
