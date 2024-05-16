@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
+import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/group/widgets/my_group_list.dart';
 import 'package:walkingpet/group/widgets/search_group_list.dart';
 import 'package:walkingpet/services/group/get_group_info.dart';
@@ -62,70 +63,76 @@ class _GroupState extends State<Group> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: Image.asset(
-              'assets/backgrounds/group.png',
-              fit: BoxFit.cover,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        handleExit(context);
+      },
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: Image.asset(
+                'assets/backgrounds/group.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Positioned.fill(
-            child: Container(
-              color: Colors.white.withOpacity(0.6),
+            Positioned.fill(
+              child: Container(
+                color: Colors.white.withOpacity(0.6),
+              ),
             ),
-          ),
-          Center(
-            child: Container(
-              width: screenWidth * 0.9,
-              height: screenHeight * 0.7,
-              decoration: BoxDecoration(
-                  color: const Color(0xffffe6b6).withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(20)),
-              // child: const Column(
-              //   children: [
-              //     GroupCard(groupName: "야호"),
-              //   ],
-              // ), //컨테이너 안 child
+            Center(
+              child: Container(
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.7,
+                decoration: BoxDecoration(
+                    color: const Color(0xffffe6b6).withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(20)),
+                // child: const Column(
+                //   children: [
+                //     GroupCard(groupName: "야호"),
+                //   ],
+                // ), //컨테이너 안 child
+              ),
             ),
-          ),
-          Positioned(
-            top: screenHeight * 0.09,
-            left: screenWidth * 0.05,
-            child: Material(
-              color: Colors.transparent,
-              child: DefaultTextStyle(
-                style: const TextStyle(
-                  fontSize: 25,
-                  color: Colors.black,
-                  fontFamily: "DungGeunMo",
-                ),
-                child: SizedBox(
-                  width: screenWidth * 0.9,
-                  height: screenHeight * 0.73,
-                  child: NesTabView(
-                    tabs: [
-                      NesTabItem(
-                        child: MyGroup(myGroups: myGroups), //인자 넘겨주기
-                        label: "내 그룹",
-                      ),
-                      NesTabItem(
-                        child: SearchGroup(
-                          incommingAllGroups: searchGroups,
+            Positioned(
+              top: screenHeight * 0.09,
+              left: screenWidth * 0.05,
+              child: Material(
+                color: Colors.transparent,
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 25,
+                    color: Colors.black,
+                    fontFamily: "DungGeunMo",
+                  ),
+                  child: SizedBox(
+                    width: screenWidth * 0.9,
+                    height: screenHeight * 0.73,
+                    child: NesTabView(
+                      tabs: [
+                        NesTabItem(
+                          child: MyGroup(myGroups: myGroups), //인자 넘겨주기
+                          label: "내 그룹",
                         ),
-                        label: "그룹 탐색",
-                      ),
-                    ],
+                        NesTabItem(
+                          child: SearchGroup(
+                            incommingAllGroups: searchGroups,
+                          ),
+                          label: "그룹 탐색",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: const BottomNavBar(
-        selectedIndex: 4,
+            )
+          ],
+        ),
+        bottomNavigationBar: const BottomNavBar(
+          selectedIndex: 4,
+        ),
       ),
     );
   }
