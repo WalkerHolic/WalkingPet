@@ -27,6 +27,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _requestPermissions();
   _scheduleDailyTask();
+  _scheduleDailyTask();
   //_initSSE();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
@@ -161,7 +162,7 @@ Future<bool> checkFirstVisitToday() async {
 }
 
 // 권한 요청 메소드 정의
-Future<void> _requestPermissions() async {
+Future<void> requestPermissions() async {
   // ACTIVITY_RECOGNITION 권한 요청
   var status = await Permission.activityRecognition.request();
   if (status.isGranted) {
@@ -173,7 +174,7 @@ Future<void> _requestPermissions() async {
 }
 
 // 11시 59분부터 12시 까지 1초마다 StepCounter().resetStep() 실행
-void _scheduleDailyTask() {
+void scheduleDailyTask() {
   DateTime now = DateTime.now();
   DateTime firstRun = DateTime(now.year, now.month, now.day, 23, 59, 00);
 
