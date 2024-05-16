@@ -9,6 +9,7 @@ class GroupCard extends StatelessWidget {
   final String groupName;
   final String description; // 그룹 한줄 설명
   final int numOfMember; //그룹 내 멤버 수
+  final bool isProtected; //비밀방인지 여부
 
   const GroupCard({
     super.key,
@@ -16,17 +17,20 @@ class GroupCard extends StatelessWidget {
     required this.groupName,
     required this.description,
     required this.numOfMember,
+    required this.isProtected,
   });
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Card(
           elevation: 3,
           shadowColor: const Color.fromARGB(238, 95, 31, 2),
-          color: const Color.fromARGB(255, 255, 207, 135),
+          color: const Color.fromARGB(255, 255, 203, 155),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -44,12 +48,22 @@ class GroupCard extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(
-                    groupName,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        groupName,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      if (isProtected)
+                        Image.asset(
+                          'assets/images/character_lock.png',
+                          width: screenWidth * 0.05,
+                        )
+                    ],
                   ),
                   const SizedBox(
                     height: 5,

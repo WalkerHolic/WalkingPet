@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:walkingpet/common/character_map.dart';
 
 class MemberScrollableList extends StatelessWidget {
-  final List<Map<String, dynamic>> groupMembers = [
-    //캐릭터 아이디 : 동물 종류
-    {'nickName': '팀원1', 'step': 10000},
-    {'nickName': '팀원2', 'step': 5000},
-    {'nickName': '팀원3', 'step': 2500},
-    {'nickName': '팀원4', 'step': 1250},
-    {'nickName': '팀원5', 'step': 625},
-    {'nickName': '팀원6', 'step': 300},
-  ];
-  MemberScrollableList({super.key});
+  final List<dynamic> groupMemberInfo;
+  //캐릭터 아이디 : 동물 종류
+
+  const MemberScrollableList({
+    super.key,
+    required this.groupMemberInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +25,20 @@ class MemberScrollableList extends StatelessWidget {
       ),
       child: ListView.builder(
         //스크롤 가능한 리스트
-        itemCount: groupMembers.length,
+        itemCount: groupMemberInfo.length,
         itemBuilder: (context, index) {
-          var member = groupMembers[index];
+          var member = groupMemberInfo[index];
+          String animal =
+              CharacterMap.idToAnimal[member['characterId']] ?? 'unknown';
+          String imagePath = 'assets/animals/$animal/${animal}_idle.gif';
           return ListTile(
             title: Row(
               children: [
                 Image.asset(
-                  'assets/animals/red_dragon/red_dragon_idle.gif',
+                  imagePath,
                   height: 70,
                 ),
-                Text(member['nickName'], style: const TextStyle(fontSize: 25)),
+                Text(member['nickname'], style: const TextStyle(fontSize: 25)),
               ],
             ),
             trailing: Row(
