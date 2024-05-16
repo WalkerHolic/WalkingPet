@@ -15,6 +15,10 @@ class MyRank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 현재 화면의 크기 가져오기
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     String animal = CharacterMap.idToAnimal[characterId] ?? "Unknown";
 
     return Padding(
@@ -27,8 +31,10 @@ class MyRank extends StatelessWidget {
           // 1. 캐릭터 이미지
           Image.asset(
             'assets/animals/$animal/${animal}_idle.gif',
-            height: 90,
-            width: 100,
+            // height: 90,
+            // width: 100,
+            height: screenHeight * 0.11,
+            width: screenWidth * 0.25,
           ),
 
           Column(
@@ -39,7 +45,8 @@ class MyRank extends StatelessWidget {
                 children: [
                   // 2. 순위
                   SizedBox(
-                    width: 60,
+                    // width: 60,
+                    width: screenWidth * 0.15,
                     child: Text(
                       score > 0 ? '$ranking위' : '-',
                       style: const TextStyle(
@@ -51,7 +58,8 @@ class MyRank extends StatelessWidget {
 
                   // 3. 닉네임
                   SizedBox(
-                    width: 130,
+                    // width: 130,
+                    width: screenWidth * 0.35,
                     child: Text(
                       nickname,
                       style: const TextStyle(
@@ -65,7 +73,8 @@ class MyRank extends StatelessWidget {
 
               // 4. 걸음 수
               SizedBox(
-                width: 160,
+                // width: 160,
+                width: screenWidth * 0.43,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -76,14 +85,14 @@ class MyRank extends StatelessWidget {
                         color: Color.fromARGB(255, 241, 86, 9),
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: screenWidth * 0.01),
                     Text(
                       rankingUnit,
                       style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: screenWidth * 0.01),
                   ],
                 ),
               ),
