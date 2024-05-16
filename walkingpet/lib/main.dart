@@ -27,7 +27,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _requestPermissions();
   _scheduleDailyTask();
-  _scheduleDailyTask();
   //_initSSE();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
@@ -174,7 +173,7 @@ Future<void> requestPermissions() async {
 }
 
 // 11시 59분부터 12시 까지 1초마다 StepCounter().resetStep() 실행
-void scheduleDailyTask() {
+void _scheduleDailyTask() {
   DateTime now = DateTime.now();
   DateTime firstRun = DateTime(now.year, now.month, now.day, 23, 59, 00);
 

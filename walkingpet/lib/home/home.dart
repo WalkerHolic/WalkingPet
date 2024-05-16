@@ -35,6 +35,7 @@ class _HomeState extends State<Home> {
         Provider.of<CharacterProvider>(context, listen: false);
     if (characterProvider.nickname.isEmpty) {
       initInfo();
+      BoxCounterProvider().initializeBoxCounts();
     } else {
       isLoading = false;
     }
