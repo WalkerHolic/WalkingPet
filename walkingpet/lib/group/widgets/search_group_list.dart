@@ -32,7 +32,7 @@ class _SearchGroupState extends State<SearchGroup> {
           isProtected: group['hasPassword']);
     }).toList();
     return SizedBox(
-      height: screenHeight, //스크롤뷰 기본 크기 지정 
+      height: screenHeight, //스크롤뷰 기본 크기 지정
       child: SingleChildScrollView(
           child: Column(children: [
         Align(
@@ -47,7 +47,7 @@ class _SearchGroupState extends State<SearchGroup> {
                         builder: (context) => const CreateGroup()));
               },
               child: SvgPicture.asset(
-                'assets/buttons/create_group_button.svg',
+                'assets/buttons/new_create_group.svg',
                 width: screenWidth * 0.3,
               ),
             ),

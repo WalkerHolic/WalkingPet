@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/group/widgets/group_detail.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class GroupCard extends StatelessWidget {
   final int groupId;
@@ -30,7 +31,7 @@ class GroupCard extends StatelessWidget {
         child: Card(
           elevation: 3,
           shadowColor: const Color.fromARGB(238, 95, 31, 2),
-          color: const Color.fromARGB(255, 255, 203, 155),
+          color: const Color.fromARGB(255, 255, 216, 155),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -51,13 +52,14 @@ class GroupCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        groupName,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      MainFontStyle(size: screenHeight * 0.03, text: groupName),
+                      // Text(
+                      //   groupName,
+                      //   style: const TextStyle(
+                      //     fontSize: 20,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
                       if (isProtected)
                         Image.asset(
                           'assets/images/character_lock.png',

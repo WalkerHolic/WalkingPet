@@ -58,7 +58,7 @@ class _MyGroupState extends State<MyGroup> {
                                 builder: (context) => const CreateGroup()));
                       },
                       child: SvgPicture.asset(
-                        'assets/buttons/create_group_button.svg',
+                        'assets/buttons/new_create_group.svg',
                         width: screenWidth * 0.3,
                       ),
                     ),

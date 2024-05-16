@@ -87,7 +87,8 @@ class _GroupState extends State<Group> {
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.7,
                 decoration: BoxDecoration(
-                    color: const Color(0xffffe6b6).withOpacity(0.75),
+                    color: const Color.fromARGB(255, 255, 222, 173)
+                        .withOpacity(0.75),
                     borderRadius: BorderRadius.circular(20)),
                 // child: const Column(
                 //   children: [
