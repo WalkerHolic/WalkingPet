@@ -293,10 +293,9 @@ public class TeamService {
         List<TeamUser> teamUsers = teamUserRepository.findByTeamId(team.getTeamId());
 
         // 그룹 내 유저들의 어제 걸음수 탐색
-        int totalStep = 0;
-        for (TeamUser teamUser: teamUsers) {
-            totalStep += userStepRepository.findUserYesterdayStep(teamUser.getUser().getUserId());
-        }
+        int totalStep = teamUsers.stream()
+                .mapToInt(teamUser -> userStepRepository.findUserYesterdayStep(teamUser.getUser().getUserId()))
+                .sum();
 
         System.out.println("teamId: " + team.getTeamId() + ", totalStep: " + totalStep);
         if (totalStep < GROUP_GOAL_STEP) return;
