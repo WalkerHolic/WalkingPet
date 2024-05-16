@@ -11,10 +11,10 @@ class BattleRanking extends StatefulWidget {
   const BattleRanking({super.key});
 
   @override
-  State<BattleRanking> createState() => _PersonalRankingState();
+  State<BattleRanking> createState() => _BattleRankingState();
 }
 
-class _PersonalRankingState extends State<BattleRanking> {
+class _BattleRankingState extends State<BattleRanking> {
   // 필요한 변수 만들기
   List top10 = [];
   Map<String, dynamic> myrank = {};
