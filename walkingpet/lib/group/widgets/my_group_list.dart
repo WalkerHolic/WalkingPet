@@ -30,6 +30,7 @@ class _MyGroupState extends State<MyGroup> {
         groupName: group['teamName'],
         description: group['teamExplain'],
         numOfMember: group['userCount'],
+        isProtected: true,
       );
     }).toList();
     return Container(
@@ -52,7 +53,15 @@ class _MyGroupState extends State<MyGroup> {
             ),
           ),
         ),
-        ...groupCards,
+        widget.myGroups.isEmpty
+            ? Padding(
+                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.05),
+                child: const Text(
+                  "아직 가입한 그룹이 없습니다",
+                  style: TextStyle(fontSize: 24),
+                ),
+              )
+            : Column(children: groupCards),
       ]),
       // child: const Center(
       //   child: Text("공사 중입니다."),

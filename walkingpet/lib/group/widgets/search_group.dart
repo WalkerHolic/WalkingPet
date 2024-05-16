@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:walkingpet/group/widgets/group_card.dart';
+import 'package:walkingpet/group/widgets/search_group_card.dart';
 import 'package:walkingpet/group/widgets/create_group.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,13 +21,15 @@ class _SearchGroupState extends State<SearchGroup> {
     //스크린 크기 받아오기
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    final List<GroupCard> groupCards = widget.incommingAllGroups.map((group) {
-      return GroupCard(
-        groupId: group['teamId'],
-        groupName: group['teamName'],
-        description: group['teamExplain'],
-        numOfMember: group['userCount'],
-      );
+
+    final List<SearchGroupCard> groupCards =
+        widget.incommingAllGroups.map((group) {
+      return SearchGroupCard(
+          groupId: group['teamId'],
+          groupName: group['teamName'],
+          description: group['teamExplain'],
+          numOfMember: group['userCount'],
+          isProtected: group['hasPassword']);
     }).toList();
     return SingleChildScrollView(
         child: Column(children: [
