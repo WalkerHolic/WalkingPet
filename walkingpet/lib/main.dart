@@ -161,7 +161,7 @@ Future<bool> checkFirstVisitToday() async {
 }
 
 // 권한 요청 메소드 정의
-Future<void> requestPermissions() async {
+Future<void> _requestPermissions() async {
   // ACTIVITY_RECOGNITION 권한 요청
   var status = await Permission.activityRecognition.request();
   if (status.isGranted) {
