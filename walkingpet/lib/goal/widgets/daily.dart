@@ -63,9 +63,10 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
         _isPressed = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("보상이 지급되었습니다. : $reward"),
-          duration: const Duration(seconds: 2),
+        const SnackBar(
+          content: Text("보상이 지급되었습니다."),
+          // content: Text("보상이 지급되었습니다. : $reward"),
+          duration: Duration(seconds: 2),
         ),
       );
     });
