@@ -36,28 +36,35 @@ class _MyGroupState extends State<MyGroup> {
         isProtected: group['hasPassword'],
       );
     }).toList();
+
     return SizedBox(
       height: screenHeight,
       child: SingleChildScrollView(
-        child: Container(
-          child: Column(children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: EdgeInsets.all(screenHeight * 0.015),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateGroup()));
-                  },
-                  child: SvgPicture.asset(
-                    'assets/buttons/create_group_button.svg',
-                    width: screenWidth * 0.3,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('  $groupCountDisplay'),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(screenHeight * 0.015),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CreateGroup()));
+                      },
+                      child: SvgPicture.asset(
+                        'assets/buttons/create_group_button.svg',
+                        width: screenWidth * 0.3,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
             widget.myGroups.isEmpty
                 ? Padding(
@@ -70,19 +77,16 @@ class _MyGroupState extends State<MyGroup> {
                   )
                 : Column(
                     children: [
-                      Text(groupCountDisplay),
                       Column(children: groupCards),
                       Padding(
                         padding: EdgeInsets.all(screenWidth * 0.03),
-                        child: Text("그룹은 최대 3개까지 \n 가입할 수 있습니다.",
-                            style: TextStyle(fontSize: screenWidth * 0.05)),
-                      )
+                        child: Text("그룹은 최대 3개까지 가입할 수 있습니다.",
+                            style: TextStyle(fontSize: screenWidth * 0.03)),
+                      ),
+                      const SizedBox(height: 20)
                     ],
                   ),
-          ]),
-          // child: const Center(
-          //   child: Text("공사 중입니다."),
-          // ),
+          ],
         ),
       ),
     );

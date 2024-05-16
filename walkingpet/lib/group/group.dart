@@ -79,7 +79,7 @@ class _GroupState extends State<Group> {
             ),
             Positioned.fill(
               child: Container(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withOpacity(0.65),
               ),
             ),
             Center(
@@ -87,7 +87,7 @@ class _GroupState extends State<Group> {
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.7,
                 decoration: BoxDecoration(
-                    color: const Color(0xffffe6b6).withOpacity(0.9),
+                    color: const Color(0xffffe6b6).withOpacity(0.75),
                     borderRadius: BorderRadius.circular(20)),
                 // child: const Column(
                 //   children: [

@@ -105,7 +105,7 @@ class SearchGroupCard extends StatelessWidget {
                       Text(
                         groupName,
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -122,12 +122,12 @@ class SearchGroupCard extends StatelessWidget {
                   Text(
                     description,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       backgroundColor: Colors.white.withOpacity(0.6),
                     ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -135,7 +135,7 @@ class SearchGroupCard extends StatelessWidget {
                       Text(
                         '멤버: $numOfMember/6',
                         style: const TextStyle(
-                          fontSize: 23,
+                          fontSize: 18,
                           color: Color.fromARGB(255, 88, 37, 19),
                         ),
                       ),
@@ -150,7 +150,7 @@ class SearchGroupCard extends StatelessWidget {
                         },
                         child: SvgPicture.asset(
                           'assets/buttons/enter_button.svg',
-                          height: 30,
+                          height: 27,
                         ),
                       )
                     ],
