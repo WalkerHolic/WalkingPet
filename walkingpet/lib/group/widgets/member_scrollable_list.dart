@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:walkingpet/common/character_map.dart';
 
 class MemberScrollableList extends StatelessWidget {
   final List<dynamic> groupMemberInfo;
@@ -27,11 +28,14 @@ class MemberScrollableList extends StatelessWidget {
         itemCount: groupMemberInfo.length,
         itemBuilder: (context, index) {
           var member = groupMemberInfo[index];
+          String animal =
+              CharacterMap.idToAnimal[member['characterId']] ?? 'unknown';
+          String imagePath = 'assets/animals/$animal/${animal}_idle.gif';
           return ListTile(
             title: Row(
               children: [
                 Image.asset(
-                  'assets/animals/red_dragon/red_dragon_idle.gif',
+                  imagePath,
                   height: 70,
                 ),
                 Text(member['nickname'], style: const TextStyle(fontSize: 25)),

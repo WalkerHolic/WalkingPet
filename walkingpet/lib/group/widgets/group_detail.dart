@@ -102,11 +102,12 @@ class _GroupDetailState extends State<GroupDetail> {
       ));
     }
 
-    int goalStep = 10000; // 목표 걸음수
-    int currStep = 3000; // 현재 결음수
+    int goalStep = 20000; // 목표 걸음수
+
     String groupName = groupData!['teamName'] ?? '그룹 이름 없음';
     String description = groupData!['explain'] ?? '설명 없음';
-    int groupTotalStep = groupData!['teamTotalStep'] ?? 0;
+    int groupTotalStep = groupData!['teamTotalSteps'] ?? 0;
+    int groupRank = groupData!['teamPoint'] ?? 0;
 
     return Scaffold(
       body: Stack(
@@ -139,9 +140,9 @@ class _GroupDetailState extends State<GroupDetail> {
                       style: const TextStyle(fontSize: 33),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      "그룹의 홈",
-                      style: TextStyle(fontSize: 20),
+                    Text(
+                      "그룹 순위 : $groupRank",
+                      style: const TextStyle(fontSize: 20),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -175,7 +176,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                   ),
                                 ),
                                 Text(
-                                  "$currStep / $goalStep",
+                                  "$groupTotalStep / $goalStep",
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 25,
@@ -197,11 +198,14 @@ class _GroupDetailState extends State<GroupDetail> {
                       height: 20,
                     ),
                     MemberScrollableList(groupMemberInfo: memberData ?? []),
+                    SizedBox(
+                      height: screenHeight * 0.04,
+                    ),
                     //나가기 버튼
                     GestureDetector(
                       onTap: () => _leaveGroupAndNavigate(),
                       child: SvgPicture.asset(
-                        'assets/buttons/leave_group.svg',
+                        'assets/buttons/leave_group_button.svg',
                         height: screenWidth * 0.1,
                       ),
                     )
