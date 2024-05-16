@@ -53,6 +53,9 @@ dependencies {
 
     //S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    //kakao map json
+    implementation 'org.json:json:20240303'
 }
 
 tasks.named('test') {
