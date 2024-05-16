@@ -171,3 +171,35 @@ Future<void> _requestPermissions() async {
     SystemNavigator.pop();
   }
 }
+
+// 11시 59분부터 12시 까지 1초마다 StepCounter().resetStep() 실행
+void _scheduleDailyTask() {
+  DateTime now = DateTime.now();
+  DateTime firstRun = DateTime(now.year, now.month, now.day, 23, 59, 00);
+
+  if (now.isAfter(firstRun) &&
+      now.isBefore(DateTime(now.year, now.month, now.day, 0, 0, 0)
+          .add(const Duration(days: 1)))) {
+    // 현재 시간이 23:59:55와 00:00:00 사이에 들어오면 즉시 실행
+    StepCounter().resetStep();
+    // 이후 매일 같은 시간에 실행되도록 타이머 재설정
+    firstRun = firstRun.add(const Duration(days: 1));
+  } else if (now.isAfter(firstRun)) {
+    // 현재 시간이 23:59:55를 넘었으면 다음 날로 설정
+    firstRun = firstRun.add(const Duration(days: 1));
+  }
+
+  Duration initialDelay = firstRun.difference(now);
+  Timer(initialDelay, () {
+    DateTime endRun =
+        DateTime(firstRun.year, firstRun.month, firstRun.day, 0, 0);
+    Timer.periodic(const Duration(seconds: 1), (timer) async {
+      DateTime currentTime = DateTime.now();
+      if (currentTime.isAfter(endRun)) {
+        timer.cancel();
+      } else {
+        await StepCounter().resetStep();
+      }
+    });
+  });
+}
