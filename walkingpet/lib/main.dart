@@ -20,6 +20,7 @@ import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:walkingpet/record/record.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // env 관련 코드
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -43,12 +44,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await _requestPermissions();
+<<<<<<< HEAD
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await setFCM3();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
+=======
+  await dotenv.load(fileName: ".env"); // .env 추가
+>>>>>>> 6000b2e ([FE] Feat: 기록 페이지, 지도 관련 기능 퍼블리싱 및 .env 적용)
   _scheduleDailyTask();
   //_initSSE();
 
@@ -65,8 +70,8 @@ void main() async {
   ]);
 
   KakaoSdk.init(
-    nativeAppKey: '779b15a502d5db79f97478c1a0076650',
-    javaScriptAppKey: '98dfecd4151782eef7342a07e95b9c57',
+    nativeAppKey: dotenv.env['NATIVE_APP_KEY'],
+    javaScriptAppKey: dotenv.env['JS_APP_KEY'],
   );
 
   // REFRESH_TOKEN 확인
