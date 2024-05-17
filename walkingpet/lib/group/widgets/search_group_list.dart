@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:walkingpet/group/widgets/search_group_card.dart';
 import 'package:walkingpet/group/widgets/create_group.dart';
@@ -52,6 +53,34 @@ class _SearchGroupState extends State<SearchGroup> {
               ),
             ),
           ),
+        ),
+        Row(
+          //여기 textfield 추가하나끼 오류남
+          children: [
+            Expanded(
+                //검색창 영역
+                child: Padding(
+              padding: EdgeInsets.only(
+                  left: screenWidth * 0.05, right: screenWidth * 0.02),
+              child: SizedBox(
+                height: screenHeight * 0.09, //textFiled 높이 조정 sizedbox로 가능 
+                child: TextField(
+                  maxLength: 10,
+                  decoration: InputDecoration(
+                    labelText: "그룹 이름으로 검색하세요.",
+                    fillColor: Colors.white.withOpacity(0.6),
+                    filled: true,
+                  ),
+                ),
+              ),
+            )),
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: screenHeight * 0.03, right: screenWidth * 0.05),
+              child: Image.asset('assets/buttons/search_icon.png',
+                  width: screenWidth * 0.12),
+            )
+          ],
         ),
         ...groupCards,
       ])
