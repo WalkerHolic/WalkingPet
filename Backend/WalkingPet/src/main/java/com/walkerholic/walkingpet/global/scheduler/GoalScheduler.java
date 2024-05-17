@@ -42,7 +42,7 @@ public class GoalScheduler {
     // 매일 그룹 목표 달성 검사
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void checkAllGroupGoal() {
-        log.info("오전 12시 5분 - 매일 그룹 목표 달성 검사");
+        log.info("오전 12시 - 매일 그룹 목표 달성 검사");
         teamService.checkAllGroupGoal();
     }
 }

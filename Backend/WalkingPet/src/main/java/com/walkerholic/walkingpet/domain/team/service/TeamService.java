@@ -40,7 +40,7 @@ public class TeamService {
     private static final int MAX_TEAM_PEOPLE  = 6;
     private static final byte STATUS_NO_PASSWORD = 0;
     private static final byte STATUS_WITH_PASSWORD = 1;
-    private final int GROUP_GOAL_STEP = 20000;
+    private final int GROUP_GOAL_STEP = 10000;
     private final int GROUP_GOAL_REWARD_POINT = 50;
     private final int GROUP_GOAL_REWARD_BOX= 2;
 
@@ -297,7 +297,6 @@ public class TeamService {
                 .mapToInt(teamUser -> userStepRepository.findUserYesterdayStep(teamUser.getUser().getUserId()))
                 .sum();
 
-        System.out.println("teamId: " + team.getTeamId() + ", totalStep: " + totalStep);
         if (totalStep < GROUP_GOAL_STEP) return;
 
         // 해당 그룹이 그룹 목표 걸음수를 달성했을 경우 -> 그룹 포인트 50, 각 무지개 상자 + 1
