@@ -28,7 +28,17 @@ public class FcmTokenService {
                 .orElseThrow(() -> new GlobalBaseException(USER_NOT_FOUND));
 
 
-            fcmTokenRepository.save(new FcmToken(user,token));
+        FcmToken existingToken = fcmTokenRepository.findByUser(user);
+
+        if (existingToken != null) {
+            // 기존 토큰이 존재하면 업데이트
+            existingToken.updateToken(token);
+            fcmTokenRepository.save(existingToken);
+        } else {
+            // 기존 토큰이 존재하지 않으면 새로 저장
+            FcmToken newToken = new FcmToken(user, token);
+            fcmTokenRepository.save(newToken);
+        }
     }
 
     public List<FcmToken> getAllTokens() {
