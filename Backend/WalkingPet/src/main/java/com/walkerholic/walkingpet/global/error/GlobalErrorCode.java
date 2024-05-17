@@ -53,7 +53,9 @@ public enum GlobalErrorCode {
     UPLOAD_FILE_NOT_FOUND(404, "F400", "업로드할 파일을 찾을 수 없습니다."),
 
     //기록 관련(record)
-    RECORD_NOT_FOUND(404,"R400", "삭제할 기록을 찾을 수 없습니다."),
+    RECORD_NOT_FOUND(404,"R400", "기록을 찾을 수 없습니다."),
+    DELETE_RECORD_NOT_FOUND(404,"R401", "삭제할 기록을 찾을 수 없습니다."),
+    EVENT_NOT_FOUND(404, "R402", "이벤트 기록을 찾을 수 없습니다."),
 
     // 정의하지 않은 그 외의 에러
     USER_BATTLE_COUNT_LACK(404, "B400", "일일 배틀 횟수 초과");
