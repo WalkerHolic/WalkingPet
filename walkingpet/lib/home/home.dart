@@ -138,18 +138,18 @@ class _HomeState extends State<Home> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            // Transform.translate(
-                            //   offset: Offset(screenWidth * 0.10, 0),
-                            //   child: const TopRightIconWithText(
-                            //       icon: "record", text: "기록"),
-                            // ),
+                            Transform.translate(
+                              offset: Offset(screenWidth * 0.10, 0),
+                              child: const TopRightIconWithText(
+                                  icon: "record", text: "기록"),
+                            ),
                             Transform.translate(
                               offset: Offset(screenWidth * 0.05, 0),
                               child: const TopRightIconWithText(
-                                  icon: "ranking", text: "랭킹"),
+                                  icon: "goal", text: "목표"),
                             ),
                             const TopRightIconWithText(
-                                icon: "goal", text: "목표"),
+                                icon: "ranking", text: "랭킹"),
                             SizedBox(
                               width: screenWidth * 0.01,
                             ),
