@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:walkingpet/battle/battleresult.dart';
 import 'package:walkingpet/battle/battleside.dart';
+import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/services/battle/getbattleinfo.dart';
 
@@ -49,55 +53,90 @@ class _BattleState extends State<Battle> {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent, // Scaffold의 배경을 투명하게 설정
-          body: Column(
+          body: Stack(
             children: [
-              if (!isLoading)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    BattleSide(
-                        health: widget.myCharacterData['health'],
-                        power: widget.myCharacterData['power'],
-                        defense: widget.myCharacterData['defense'],
-                        rating: widget.myCharacterData['rating'],
-                        characterId: widget.myCharacterData['characterId'],
-                        userCharacterLevel: widget.myCharacterData['level'],
-                        nickname: widget.myCharacterData['nickname'],
-                        isLeft: true, // 입은 데미지
-                        attackDamage: battleData['battleProgressInfo']
-                            ['userAttackDamage'],
-                        receivedDamage: battleData['battleProgressInfo']
-                            ['enemyAttackDamage'],
-                        userHealth: battleData['battleProgressInfo']
-                            ['userHealth'],
-                        loseDamage: battleData['battleProgressInfo']
-                            ['userLoseDamage'],
-                        battleResult: battleData['battleResultInfo']),
-                    Transform.translate(
-                      offset: Offset(0, screenHeight * 0.37),
-                      child:
-                          MainFontStyle(size: screenWidth * 0.05, text: "vs"),
+              InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BattleResult(
+                        battleResult: battleData['battleResultInfo'],
+                        animal: CharacterMap.idToAnimal[
+                                widget.myCharacterData['characterId']] ??
+                            "cow",
+                      ),
                     ),
-                    BattleSide(
-                        health: battleData['enemyInfo']['health'],
-                        power: battleData['enemyInfo']['power'],
-                        defense: battleData['enemyInfo']['defense'],
-                        rating: battleData['enemyInfo']['rating'],
-                        characterId: battleData['enemyInfo']['characterId'],
-                        userCharacterLevel: battleData['enemyInfo']['level'],
-                        nickname: battleData['enemyInfo']['nickname'],
-                        isLeft: false,
-                        attackDamage: battleData['battleProgressInfo']
-                            ['enemyAttackDamage'],
-                        receivedDamage: battleData['battleProgressInfo']
-                            ['userAttackDamage'],
-                        userHealth: battleData['battleProgressInfo']
-                            ['userHealth'],
-                        loseDamage: battleData['battleProgressInfo']
-                            ['enemyLoseDamage'],
-                        battleResult: battleData['battleResultInfo']),
-                  ],
+                  );
+                },
+                child: Transform.translate(
+                  offset: Offset(0, -screenHeight * 0.3),
+                  child: Center(
+                    child: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Image.asset(
+                          'assets/buttons/skip_button.png',
+                          scale: 1.8,
+                        ),
+                        MainFontStyle(size: screenWidth * 0.05, text: "SKIP")
+                      ],
+                    ),
+                  ),
                 ),
+              ),
+              Column(
+                children: [
+                  if (!isLoading)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        BattleSide(
+                            health: widget.myCharacterData['health'],
+                            power: widget.myCharacterData['power'],
+                            defense: widget.myCharacterData['defense'],
+                            rating: widget.myCharacterData['rating'],
+                            characterId: widget.myCharacterData['characterId'],
+                            userCharacterLevel: widget.myCharacterData['level'],
+                            nickname: widget.myCharacterData['nickname'],
+                            isLeft: true, // 입은 데미지
+                            attackDamage: battleData['battleProgressInfo']
+                                ['userAttackDamage'],
+                            receivedDamage: battleData['battleProgressInfo']
+                                ['enemyAttackDamage'],
+                            userHealth: battleData['battleProgressInfo']
+                                ['userHealth'],
+                            loseDamage: battleData['battleProgressInfo']
+                                ['userLoseDamage'],
+                            battleResult: battleData['battleResultInfo']),
+                        Transform.translate(
+                          offset: Offset(0, screenHeight * 0.37),
+                          child: MainFontStyle(
+                              size: screenWidth * 0.05, text: "vs"),
+                        ),
+                        BattleSide(
+                            health: battleData['enemyInfo']['health'],
+                            power: battleData['enemyInfo']['power'],
+                            defense: battleData['enemyInfo']['defense'],
+                            rating: battleData['enemyInfo']['rating'],
+                            characterId: battleData['enemyInfo']['characterId'],
+                            userCharacterLevel: battleData['enemyInfo']
+                                ['level'],
+                            nickname: battleData['enemyInfo']['nickname'],
+                            isLeft: false,
+                            attackDamage: battleData['battleProgressInfo']
+                                ['enemyAttackDamage'],
+                            receivedDamage: battleData['battleProgressInfo']
+                                ['userAttackDamage'],
+                            userHealth: battleData['battleProgressInfo']
+                                ['userHealth'],
+                            loseDamage: battleData['battleProgressInfo']
+                                ['enemyLoseDamage'],
+                            battleResult: battleData['battleResultInfo']),
+                      ],
+                    ),
+                ],
+              ),
             ],
           ),
         ),
