@@ -36,9 +36,10 @@ class MemberScrollableList extends StatelessWidget {
               children: [
                 Image.asset(
                   imagePath,
-                  height: 70,
+                  height: screenWidth * 0.2,
                 ),
-                Text(member['nickname'], style: const TextStyle(fontSize: 25)),
+                Text(member['nickname'],
+                    style: TextStyle(fontSize: screenWidth * 0.044)),
               ],
             ),
             trailing: Row(
@@ -46,8 +47,12 @@ class MemberScrollableList extends StatelessWidget {
               children: [
                 Text(
                   "${member['step']} ",
-                  style: const TextStyle(
-                      fontSize: 45, color: Color.fromARGB(255, 243, 48, 5)),
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.08,
+                      color: const Color.fromARGB(255, 243, 48, 5)),
+                ),
+                SizedBox(
+                  width: screenWidth * 0.02,
                 ),
                 const Text("걸음",
                     style: TextStyle(
