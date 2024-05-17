@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:walkingpet/main.dart';
 
 class Record extends StatelessWidget {
@@ -9,6 +12,8 @@ class Record extends StatelessWidget {
     // 현재 화면의 크기 가져오기
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    final String? kakaoMapKey = dotenv.env['MAP_APP_KEY'];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -87,10 +92,62 @@ class Record extends StatelessWidget {
             ),
           ),
 
-          // 3-2. 지도
-          // RecordMap();
-          // void main() {AuthRepository.initialize(appKey: '98dfecd4151782eef7342a07e95b9c57');}
-          // KakaoMap(),
+          // 3-2. 지도 KakaoMapView
+          Positioned(
+            left: screenWidth * 0.05,
+            top: screenHeight * 0.15,
+            child: KakaoMapView(
+              width: screenWidth * 0.9,
+              height: screenHeight * 0.7,
+              kakaoMapKey: kakaoMapKey!,
+              lat: 36.355387454337716, // 위도
+              lng: 127.29839622974396, // 경도
+              zoomLevel: 3, // 초기 줌 레벨
+              markerImageURL: 'https://ifh.cc/g/6FTDpn.png',
+              // customScript: '''
+              //   var markers = [];
+
+              //   function addMarker(position) {
+              //     var marker = new kakao.maps.Marker({position: position});
+              //     marker.setMap(map);
+              //     markers.push(marker);
+              //   }
+
+              //   for(var i = 0 ; i < 3 ; i++){
+              //     addMarker(new kakao.maps.LatLng(36.355387454337716 + 0.0003 * i, 127.29839622974396 + 0.0003 * i));
+              //     kakao.maps.event.addListener(markers[i], 'click', (function(i) {
+              //       return function(){
+              //         onTapMarker.postMessage('marker ' + i + ' is tapped');
+              //       };
+              //     })(i));
+              //   }
+
+              //   var zoomControl = new kakao.maps.ZoomControl();
+              //   map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+              //   var mapTypeControl = new kakao.maps.MapTypeControl();
+              //   map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+              // ''',
+
+              onTapMarker: (message) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(message.message)));
+              },
+            ),
+          ),
+
+          // 3-3. 내 기록 / 기록 생성
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: screenHeight * 0.1,
+            child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('내 기록'),
+                  Text('기록하기'),
+                ]),
+          ),
         ],
       ),
     );

@@ -10,6 +10,7 @@ package = "com.walkerholic.walkingpet">
         android:label="워킹펫"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
         android:enableOnBackInvokedCallback="true">
         <service
             android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmService"
