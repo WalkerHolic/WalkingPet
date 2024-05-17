@@ -70,6 +70,7 @@ class _GroupState extends State<Group> {
         handleExit(context);
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: <Widget>[
             Positioned.fill(
