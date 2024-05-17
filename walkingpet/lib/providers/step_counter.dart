@@ -3,6 +3,7 @@ import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/services/character/checkstep.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:walkingpet/services/localnotification/notification_service.dart';
 
 class StepCounter with ChangeNotifier {
   int _steps = 0;
@@ -11,6 +12,7 @@ class StepCounter with ChangeNotifier {
   static SharedPreferences? _prefs;
   static final StepCounter _instance = StepCounter._internal();
   bool _resetting = false;
+  NotificationService? notificationService;
 
   // Private constructor
   StepCounter._internal() {
@@ -36,6 +38,9 @@ class StepCounter with ChangeNotifier {
 
     await checkFirstVisitToday();
     await _fetchInitialSteps();
+    notificationService = NotificationService();
+    await notificationService?.initialize();
+
     _stepCountStream.listen(_onStepCount);
   }
 
@@ -46,6 +51,10 @@ class StepCounter with ChangeNotifier {
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
     _steps = event.steps - _baseSteps;
     notifyListeners();
+    if (_steps == 3000 || _steps == 5000 || _steps == 7000 || _steps == 10000) {
+      notificationService?.showNotification('축하합니다! 걸음수 목표 달성 🎉',
+          '$_steps 걸음을 달성했습니다! 지금 들어와서 보상을 확인해보세요!', 'Payload');
+    }
   }
 
   Future<void> _fetchInitialSteps() async {

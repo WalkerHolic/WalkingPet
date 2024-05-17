@@ -23,6 +23,7 @@ import 'package:walkingpet/record/record.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // env 관련 코드
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:walkingpet/services/fcm/fcm.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -35,6 +36,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> setFCM3() async {
   String token = await FirebaseMessaging.instance.getToken() ?? '';
   debugPrint("fcmToken : $token");
+  await sendTokenToServer(token);
 
   // 해당 토큰을 서버에 저장하는 api를 만들어서 요청 보내자
   //print("fcmToken : $token");
@@ -47,10 +49,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await setFCM3();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await dotenv.load(fileName: ".env"); // .env 추가
   _scheduleDailyTask();
+
   //_initSSE();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
@@ -83,7 +85,9 @@ void main() async {
           create: (context) => CharacterProvider(),
         ),
       ],
-      child: MyApp(startRoute: refreshToken != null ? '/home' : '/login'),
+      child: MyApp(
+        startRoute: refreshToken != null ? '/home' : '/login',
+      ),
     ),
   );
 }

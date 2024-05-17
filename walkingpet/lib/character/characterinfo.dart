@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/character_exp.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
@@ -6,6 +7,7 @@ import 'package:walkingpet/character/widgets/stat_reset_modal.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
+import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/character/statpointreset.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,6 +61,14 @@ class _CharacterInfoState extends State<CharacterInfo> {
 
         isLoading = false;
       });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
+      bool firstCharacterVisit = prefs.getBool('firstCharacterVisit') ?? true;
+      if (firstCharacterVisit) {
+        prefs.setBool('firstCharacterVisit', false);
+        await setFCM3();
+      }
     } catch (e) {
       isLoading = false;
     }
