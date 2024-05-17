@@ -21,9 +21,34 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:walkingpet/record/record.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // 백그라운드에서 FCM을 수신했을 때의 동작 (아마 사용 안할듯)
+  //print('A background message just showed up :  ${message.messageId}');
+  //print("백그라운드 FCM 수신 완료!");
+}
+
+Future<void> setFCM3() async {
+  String token = await FirebaseMessaging.instance.getToken() ?? '';
+  debugPrint("fcmToken : $token");
+
+  // 해당 토큰을 서버에 저장하는 api를 만들어서 요청 보내자
+  //print("fcmToken : $token");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await _requestPermissions();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await setFCM3();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   _scheduleDailyTask();
   //_initSSE();
 
@@ -60,13 +85,6 @@ void main() async {
       child: MyApp(startRoute: refreshToken != null ? '/home' : '/login'),
     ),
   );
-  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  // SystemChannels.navigation.setMethodCallHandler((MethodCall call) async {
-  //   if (call.method == 'popRoute') {
-  //     return Future.value(false); // 뒤로 가기 이벤트를 무시합니다.
-  //   }
-  //   return Future.value(true);
-  // }
 }
 
 class MyApp extends StatelessWidget {
@@ -118,7 +136,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      //initialRoute: startRoute,
       initialRoute: startRoute,
       routes: {
         '/login': (context) => const Login(),
@@ -139,7 +156,8 @@ class MyApp extends StatelessWidget {
 Future<void> _requestPermissions() async {
   // ACTIVITY_RECOGNITION 권한 요청
   var status = await Permission.activityRecognition.request();
-  if (status.isGranted) {
+  var notificationStatus = await Permission.notification.request();
+  if (status.isGranted && notificationStatus.isGranted) {
     return;
   } else {
     // 사용자가 권한을 거부한 경우 처리할 로직 추가 가능
