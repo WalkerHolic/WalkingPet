@@ -12,6 +12,7 @@ import com.walkerholic.walkingpet.domain.item.repository.ItemRepository;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
+import com.walkerholic.walkingpet.domain.util.UpgradeValue;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -136,19 +137,19 @@ public class GachaService {
 
         switch (grade){
             case 1:
-                response.replace("health", GRADE_1_UPGRADE_HEALTH_STAT);
-                response.replace("power", GRADE_1_UPGRADE_POWER_STAT);
-                response.replace("defense", GRADE_1_UPGRADE_DEFENSE_STAT);
+                response.replace("health", UpgradeValue.GRADE_1_UPGRADE_HEALTH_STAT);
+                response.replace("power", UpgradeValue.GRADE_1_UPGRADE_POWER_STAT);
+                response.replace("defense", UpgradeValue.GRADE_1_UPGRADE_DEFENSE_STAT);
                 break;
             case 2:
-                response.replace("health", GRADE_2_UPGRADE_HEALTH_STAT);
-                response.replace("power", GRADE_2_UPGRADE_POWER_STAT);
-                response.replace("defense", GRADE_2_UPGRADE_DEFENSE_STAT);
+                response.replace("health", UpgradeValue.GRADE_2_UPGRADE_HEALTH_STAT);
+                response.replace("power", UpgradeValue.GRADE_2_UPGRADE_POWER_STAT);
+                response.replace("defense", UpgradeValue.GRADE_2_UPGRADE_DEFENSE_STAT);
                 break;
             case 3:
-                response.replace("health", GRADE_3_UPGRADE_HEALTH_STAT);
-                response.replace("power", GRADE_3_UPGRADE_POWER_STAT);
-                response.replace("defense", GRADE_3_UPGRADE_DEFENSE_STAT);
+                response.replace("health", UpgradeValue.GRADE_3_UPGRADE_HEALTH_STAT);
+                response.replace("power", UpgradeValue.GRADE_3_UPGRADE_POWER_STAT);
+                response.replace("defense", UpgradeValue.GRADE_3_UPGRADE_DEFENSE_STAT);
                 break;
 
         }//end of swith/case
