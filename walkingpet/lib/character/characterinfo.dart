@@ -43,16 +43,9 @@ class _CharacterInfoState extends State<CharacterInfo> {
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await initInfo();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    bool firstCharacterVisit = prefs.getBool('firstCharacterVisit') ?? true;
-    if (firstCharacterVisit) {
-      await prefs.setBool('firstCharacterVisit', false);
-      await setFCM3();
-    }
+    initInfo();
   }
 
   // API 요청으로 데이터 불러오기
@@ -68,6 +61,14 @@ class _CharacterInfoState extends State<CharacterInfo> {
 
         isLoading = false;
       });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
+      bool firstCharacterVisit = prefs.getBool('firstCharacterVisit') ?? true;
+      if (firstCharacterVisit) {
+        prefs.setBool('firstCharacterVisit', false);
+        await setFCM3();
+      }
     } catch (e) {
       isLoading = false;
     }
