@@ -21,8 +21,8 @@ public class Record {
     @Column(name = "record_id")
     private Integer recordId;
 
-    @Column(name = "detail", nullable = true)
-    private String detail;
+    @Column(name = "content", nullable = true)
+    private String content;
 
     @Column(name = "image_name", nullable = false)
     private String imageName;
@@ -31,7 +31,7 @@ public class Record {
     private String imageUrl;
 
     @Column(name = "character_id", nullable = false)
-    private int character_id;
+    private int characterId;
 
     @Column(name = "record_reg_date", nullable = false)
     private LocalDateTime recordRegDate;
@@ -51,6 +51,9 @@ public class Record {
     @Column(name = "region", nullable = true)
     private String region;
 
+    @Column(name = "is_event", nullable = false)
+    private byte isEvent;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
@@ -58,7 +61,7 @@ public class Record {
     @Builder
     public Record(Users user, UploadRecordResponse uploadRecordResponse, BigDecimal latitude, BigDecimal longitude, String city, String district, String region){
         this.user = user;
-        this.character_id = uploadRecordResponse.getCharacterId();
+        this.characterId = uploadRecordResponse.getCharacterId();
         this.imageName = uploadRecordResponse.getImageName();
         this.imageUrl = uploadRecordResponse.getImageUrl();
         this.recordRegDate = uploadRecordResponse.getRegDate();
@@ -67,5 +70,14 @@ public class Record {
         this.city = city;
         this.district = district;
         this.region = region;
+        this.isEvent = 0;
+    }
+
+    public void setIsEvent(){
+        this.isEvent = 1;
+    }
+
+    public void setContent(String content){
+        this.content = content;
     }
 }

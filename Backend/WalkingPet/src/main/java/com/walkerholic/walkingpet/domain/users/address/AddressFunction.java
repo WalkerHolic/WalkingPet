@@ -15,56 +15,6 @@ import java.net.URLEncoder;
 @Component
 public class AddressFunction {
 
-    public static String[] getKakaoApiFromAddress(String roadFullAddress) {
-        String apiKey = "c9c2f06932c7e5e50d6d7b8a5fa845f4";
-        String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json";
-        String jsonString = null;
-
-        try {
-
-            // URL 인코딩 - URL로 사용할 수 없는 문자를 '%XX'의 형태로 변환
-            // ex. 파라미터 address를 한글로 사용하기 때문에 인코딩을 해주자
-            roadFullAddress = URLEncoder.encode(roadFullAddress, "UTF-8");
-
-            // 요청 URL을 만들기
-            String address = apiUrl + "?query=" + roadFullAddress;
-
-            // URL 객체 생성
-            URL url = new URL(address);
-
-            // URL connection 생성
-            URLConnection connection = url.openConnection();
-
-            // 헤더값 설정
-            connection.setRequestProperty("Authorization", "KakaoAK " + apiKey);
-
-            // StringBuffer에 값을 넣고 String 형태로 변환하고 jsonString을 return
-            BufferedReader br = null;
-            br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-
-            StringBuffer docJson = new StringBuffer();
-            String line;
-
-            while ((line=br.readLine()) != null) {
-                docJson.append(line);
-//                System.out.println(line);
-            }
-
-            jsonString = docJson.toString();
-            br.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-//        String[] point = jsonToPoint(jsonString);
-
-        String[] answer = new String[5];
-        answer = jsonToAddress(jsonString);
-
-        return answer;
-    }
-
     public static String[] getDistrictFromAddress(String x, String y) {
         String apiKey = "c9c2f06932c7e5e50d6d7b8a5fa845f4";
         String apiUrl = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json";
