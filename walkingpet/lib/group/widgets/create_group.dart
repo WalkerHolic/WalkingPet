@@ -49,6 +49,7 @@ class _CreateGroupState extends State<CreateGroup> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned.fill(
@@ -120,6 +121,10 @@ class _CreateGroupState extends State<CreateGroup> {
                             fillColor: Colors.white.withOpacity(0.7),
                             filled: true,
                             counterStyle: const TextStyle(fontSize: 15),
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: screenHeight * 0.01,
+                              horizontal: screenWidth * 0.02,
+                            ),
                           ),
                         ),
                       ),

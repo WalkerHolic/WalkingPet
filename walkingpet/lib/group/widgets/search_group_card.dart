@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/group/widgets/group_detail.dart';
+import 'package:walkingpet/group/widgets/password_input.dart';
 import 'package:walkingpet/services/group/enter_group.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
@@ -34,60 +35,6 @@ class SearchGroupCard extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) => GroupDetail(groupId: groupId),
         ),
-      );
-    }
-
-    Future<void> showPasswordDialog(BuildContext context, int groupId) async {
-      TextEditingController passwordController = TextEditingController();
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // 사용자가 다이얼로그 바깥을 터치해도 닫히지 않음
-        builder: (BuildContext dialogContext) {
-          return AlertDialog(
-            title: const Text('비밀번호를 입력하세요.'),
-            content: TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(hintText: "Password"),
-              obscureText: true,
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('취소'),
-                onPressed: () {
-                  Navigator.of(dialogContext).pop(); // 다이얼로그 닫기
-                },
-              ),
-              TextButton(
-                child: const Text('입장'),
-                onPressed: () async {
-                  Navigator.of(dialogContext).pop();
-                  bool passwordMatch =
-                      await enterGroup(groupId, passwordController.text);
-                  //비밀번호가 일치하면
-                  if (passwordMatch) {
-                    navigateToGroupDetail(context, groupId);
-                  }
-                  //비밀번호 틀리거나 다른 오류 처리
-                  else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("그룹 일장 실패 : 패스워드가 일치하지 않습니다."),
-                      duration: Duration(seconds: 1),
-                    ));
-                  }
-
-                  // Navigator.of(dialogContext).pop(); // 먼저 다이얼로그 닫고 처리
-                  // await enterGroup(groupId, passwordController.text).then((_) {
-                  //   navigateToGroupDetail(context, groupId);
-                  // }).catchError((error) {
-                  //   // 비밀번호 오류나 다른 오류 처리
-                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //       content: Text("Failed to enter group: $error")));
-                  // });
-                },
-              ),
-            ],
-          );
-        },
       );
     }
 
@@ -160,7 +107,8 @@ class SearchGroupCard extends StatelessWidget {
                         //상세페이지로 이동
                         onTap: () {
                           if (isProtected) {
-                            showPasswordDialog(context, groupId);
+                            passwordInputShow(
+                                context: context, groupId: groupId);
                           } else {
                             navigateToGroupDetail(context, groupId);
                           }
