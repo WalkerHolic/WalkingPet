@@ -13,4 +13,10 @@ public interface RecordRepository extends JpaRepository<Record, Integer> {
 
     @Query("SELECT R FROM Record R WHERE R.user.userId = :userId AND R.imageName = :imageName")
     Optional<Record> findByUserIdAndImageName(int userId, String imageName);
+
+    @Query("SELECT R FROM Record R WHERE R.isEvent = 1")
+    Optional<List<Record>> findByIsEvent();
+
+    @Query("SELECT R FROM Record R WHERE R.isEvent = 1 AND R.city = :city")
+    Optional<List<Record>> findByIsEventAndCity(String city);
 }
