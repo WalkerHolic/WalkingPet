@@ -9,6 +9,7 @@ import 'package:walkingpet/services/group/get_group_detail.dart';
 import 'package:walkingpet/services/group/leave_group.dart';
 import 'package:walkingpet/services/group/get_member_info.dart';
 import 'package:walkingpet/services/group/join_group.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart'; //메인폰트스타일
 
 class GroupDetail extends StatefulWidget {
   final int groupId; //팀 이름
@@ -116,7 +117,7 @@ class _GroupDetailState extends State<GroupDetail> {
       ));
     }
 
-    int goalStep = 20000; // 목표 걸음수
+    int goalStep = 10000; // 목표 걸음수
 
     String groupName = groupData!['teamName'] ?? '그룹 이름 없음';
     String description = groupData!['explain'] ?? '설명 없음';
@@ -150,10 +151,10 @@ class _GroupDetailState extends State<GroupDetail> {
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: Column(
                   children: <Widget>[
-                    Text(
-                      groupName,
-                      style: const TextStyle(fontSize: 33),
-                    ),
+                    MainFontStyle(
+                        size: screenHeight * 0.04,
+                        text: groupName,
+                        color: const Color.fromARGB(255, 232, 249, 255)), //제목
                     const SizedBox(height: 10),
                     Text(
                       "그룹 순위 : $groupRank",
@@ -181,7 +182,7 @@ class _GroupDetailState extends State<GroupDetail> {
                               children: <Widget>[
                                 SizedBox(
                                   // 선형 프로그래스 바의 크기 조절을 위해
-                                  width: 250,
+                                  width: screenWidth * 0.6,
                                   child: LinearProgressIndicator(
                                     // 그룹 목표
                                     value: groupTotalStep / goalStep,
@@ -240,11 +241,11 @@ class _GroupDetailState extends State<GroupDetail> {
             ),
           ),
           Positioned(
-            left: screenWidth * 0.9 / 2 - 50,
+            left: screenWidth * 0.5 - (screenWidth * 0.3 / 2),
             top: screenHeight * 0.36,
             child: Image.asset(
               'assets/images/three_star.png',
-              width: 150,
+              width: screenWidth * 0.3,
             ),
           ),
         ],

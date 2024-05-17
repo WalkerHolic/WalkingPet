@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/group/widgets/group_detail.dart';
 import 'package:walkingpet/services/group/enter_group.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class SearchGroupCard extends StatelessWidget {
   final int groupId;
@@ -59,14 +60,29 @@ class SearchGroupCard extends StatelessWidget {
               TextButton(
                 child: const Text('입장'),
                 onPressed: () async {
-                  Navigator.of(dialogContext).pop(); // 먼저 다이얼로그 닫고 처리
-                  await enterGroup(groupId, passwordController.text).then((_) {
+                  Navigator.of(dialogContext).pop();
+                  bool passwordMatch =
+                      await enterGroup(groupId, passwordController.text);
+                  //비밀번호가 일치하면
+                  if (passwordMatch) {
                     navigateToGroupDetail(context, groupId);
-                  }).catchError((error) {
-                    // 비밀번호 오류나 다른 오류 처리
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Failed to enter group: $error")));
-                  });
+                  }
+                  //비밀번호 틀리거나 다른 오류 처리
+                  else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("그룹 일장 실패 : 패스워드가 일치하지 않습니다."),
+                      duration: Duration(seconds: 1),
+                    ));
+                  }
+
+                  // Navigator.of(dialogContext).pop(); // 먼저 다이얼로그 닫고 처리
+                  // await enterGroup(groupId, passwordController.text).then((_) {
+                  //   navigateToGroupDetail(context, groupId);
+                  // }).catchError((error) {
+                  //   // 비밀번호 오류나 다른 오류 처리
+                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  //       content: Text("Failed to enter group: $error")));
+                  // });
                 },
               ),
             ],
@@ -81,7 +97,7 @@ class SearchGroupCard extends StatelessWidget {
         child: Card(
           elevation: 3,
           shadowColor: const Color.fromARGB(238, 95, 31, 2),
-          color: const Color.fromARGB(255, 255, 207, 135),
+          color: const Color.fromARGB(255, 255, 216, 155),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -102,13 +118,14 @@ class SearchGroupCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        groupName,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      MainFontStyle(size: screenHeight * 0.03, text: groupName),
+                      // Text(
+                      //   groupName,
+                      //   style: const TextStyle(
+                      //     fontSize: 20,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
                       if (isProtected)
                         Image.asset(
                           'assets/images/character_lock.png',

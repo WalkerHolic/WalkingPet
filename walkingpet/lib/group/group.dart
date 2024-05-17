@@ -7,6 +7,7 @@ import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/group/widgets/my_group_list.dart';
 import 'package:walkingpet/group/widgets/search_group_list.dart';
 import 'package:walkingpet/services/group/get_group_info.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class Group extends StatefulWidget {
   const Group({super.key});
@@ -87,7 +88,8 @@ class _GroupState extends State<Group> {
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.7,
                 decoration: BoxDecoration(
-                    color: const Color(0xffffe6b6).withOpacity(0.75),
+                    color: const Color.fromARGB(255, 255, 222, 173)
+                        .withOpacity(0.75),
                     borderRadius: BorderRadius.circular(20)),
                 // child: const Column(
                 //   children: [
