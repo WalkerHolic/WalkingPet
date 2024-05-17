@@ -92,12 +92,6 @@ class Record extends StatelessWidget {
             ),
           ),
 
-<<<<<<< HEAD
-          // 3-2. 지도
-          // RecordMap();
-          // void main() {AuthRepository.initialize(appKey: '98dfecd4151782eef7342a07e95b9c57');}
-          // KakaoMap(),
-=======
           // 3-2. 지도 KakaoMapView
           Positioned(
             left: screenWidth * 0.05,
@@ -154,7 +148,6 @@ class Record extends StatelessWidget {
                   Text('기록하기'),
                 ]),
           ),
->>>>>>> 6000b2e ([FE] Feat: 기록 페이지, 지도 관련 기능 퍼블리싱 및 .env 적용)
         ],
       ),
     );

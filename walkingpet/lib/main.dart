@@ -44,16 +44,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await _requestPermissions();
-<<<<<<< HEAD
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await setFCM3();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-=======
   await dotenv.load(fileName: ".env"); // .env 추가
->>>>>>> 6000b2e ([FE] Feat: 기록 페이지, 지도 관련 기능 퍼블리싱 및 .env 적용)
   _scheduleDailyTask();
   //_initSSE();
 
