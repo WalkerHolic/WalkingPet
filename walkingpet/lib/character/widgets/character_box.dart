@@ -102,7 +102,7 @@ class _CharacterBoxState extends State<CharacterBox> {
                 // 3. 캐릭터 이미지(id)
                 Image.asset(
                   'assets/animals/$animal/${animal}_idle.gif',
-                  height: 70,
+                  height: 68,
                   // scale: 1,
                 ),
 
