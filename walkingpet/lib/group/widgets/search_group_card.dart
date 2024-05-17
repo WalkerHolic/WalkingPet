@@ -60,14 +60,29 @@ class SearchGroupCard extends StatelessWidget {
               TextButton(
                 child: const Text('입장'),
                 onPressed: () async {
-                  Navigator.of(dialogContext).pop(); // 먼저 다이얼로그 닫고 처리
-                  await enterGroup(groupId, passwordController.text).then((_) {
+                  Navigator.of(dialogContext).pop();
+                  bool passwordMatch =
+                      await enterGroup(groupId, passwordController.text);
+                  //비밀번호가 일치하면
+                  if (passwordMatch) {
                     navigateToGroupDetail(context, groupId);
-                  }).catchError((error) {
-                    // 비밀번호 오류나 다른 오류 처리
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Failed to enter group: $error")));
-                  });
+                  }
+                  //비밀번호 틀리거나 다른 오류 처리
+                  else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("그룹 일장 실패 : 패스워드가 일치하지 않습니다."),
+                      duration: Duration(seconds: 1),
+                    ));
+                  }
+
+                  // Navigator.of(dialogContext).pop(); // 먼저 다이얼로그 닫고 처리
+                  // await enterGroup(groupId, passwordController.text).then((_) {
+                  //   navigateToGroupDetail(context, groupId);
+                  // }).catchError((error) {
+                  //   // 비밀번호 오류나 다른 오류 처리
+                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  //       content: Text("Failed to enter group: $error")));
+                  // });
                 },
               ),
             ],
