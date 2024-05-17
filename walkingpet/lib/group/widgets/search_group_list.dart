@@ -125,7 +125,7 @@ class _SearchGroupState extends State<SearchGroup> {
         //검색 활성화, 검색 결과 없음
         if (isSearchActive && displayedGroups.isEmpty)
           SizedBox(
-            height: screenHeight * 0.6,
+            height: screenHeight * 0.5,
             child: const Text("검색 결과가 없습니다"),
           ),
         if (isSearchActive && displayedGroups.isNotEmpty)

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/services/group/create_group_api.dart';
 import 'package:walkingpet/group/group.dart'; // group으로 이동하기 위해
+import 'package:walkingpet/home/widgets/mainfontstyle.dart'; //메인폰트스타일
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({super.key});
@@ -79,40 +80,47 @@ class _CreateGroupState extends State<CreateGroup> {
                 child: Column(
                   children: [
                     SizedBox(height: screenHeight * 0.02),
-                    const Text("그룹 만들기", style: TextStyle(fontSize: 32)),
+                    const MainFontStyle(size: 32, text: "그룹 만들기"),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: screenHeight * 0.005,
+                        top: screenHeight * 0.02,
                       ),
                       child: SizedBox(
-                        width: screenWidth * 0.5,
+                        width: screenWidth * 0.6,
+                        height: screenHeight * 0.09,
                         // height: screenHeight * 0.6,
                         child: TextField(
                           controller: _teamNameController,
                           //그룹 이름
                           maxLength: 10, //입력 길이 제한 :10자
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: '그룹 이름',
-                            fillColor: Colors.white,
+                            fillColor: Colors.white.withOpacity(0.7),
                             filled: true,
-                            counterStyle: TextStyle(fontSize: 15),
+                            counterStyle: const TextStyle(fontSize: 15),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: screenWidth * 0.7,
-                      child: TextField(
-                        controller: _explanationController,
-                        //그룹 이름
-                        maxLength: 20, //입력 길이 제한 :10자
-                        minLines: 2,
-                        maxLines: 3, // 칸 세로로 확장
-                        decoration: const InputDecoration(
-                          labelText: '한줄 소개',
-                          fillColor: Colors.white,
-                          filled: true,
-                          counterStyle: TextStyle(fontSize: 15),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: screenHeight * 0.02,
+                      ),
+                      child: SizedBox(
+                        width: screenWidth * 0.7,
+                        height: screenHeight * 0.09,
+                        child: TextField(
+                          controller: _explanationController,
+                          //그룹 이름
+                          maxLength: 20, //입력 길이 제한 :10자
+                          minLines: 2,
+                          maxLines: 3, // 칸 세로로 확장
+                          decoration: InputDecoration(
+                            labelText: '한줄 소개',
+                            fillColor: Colors.white.withOpacity(0.7),
+                            filled: true,
+                            counterStyle: const TextStyle(fontSize: 15),
+                          ),
                         ),
                       ),
                     ),
@@ -133,28 +141,36 @@ class _CreateGroupState extends State<CreateGroup> {
                     ),
                     Visibility(
                       visible: isPrivate,
-                      child: TextField(
-                        controller: _passwordController,
-                        decoration: const InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: "비밀번호",
+                      child: SizedBox(
+                        width: screenWidth * 0.4,
+                        height: screenHeight * 0.06,
+                        child: TextField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.7),
+                            labelText: "비밀번호",
+                          ),
+                          obscureText: true,
                         ),
-                        obscureText: true,
                       ),
                     ),
                     // 비밀번호 <-> 비밀번호 확인 사이 공간
                     SizedBox(height: screenHeight * 0.02),
                     Visibility(
                       visible: isPrivate,
-                      child: TextField(
-                        controller: _confirmPasswordController,
-                        decoration: const InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: "비밀번호 확인",
+                      child: SizedBox(
+                        width: screenWidth * 0.4,
+                        height: screenHeight * 0.06,
+                        child: TextField(
+                          controller: _confirmPasswordController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.7),
+                            labelText: "비밀번호 확인",
+                          ),
+                          obscureText: true,
                         ),
-                        obscureText: true,
                       ),
                     ),
                     SizedBox(
