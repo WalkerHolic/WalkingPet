@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @Getter
 public class MyRecordResponse {
     private String imageUrl;
-    private String detail;
+    private String content;
     private int characterId;
     private LocalDateTime regDate;
 
     public static MyRecordResponse from(Record record){
         return MyRecordResponse.builder()
                 .imageUrl(record.getImageUrl())
-                .detail(record.getDetail())
-                .characterId(record.getRecordId())
+                .content(record.getContent())
+                .characterId(record.getCharacterId())
                 .regDate(record.getRecordRegDate())
                 .build();
     }
