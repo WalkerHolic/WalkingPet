@@ -17,10 +17,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/gachabox_count_provider.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:intl/intl.dart';
 import 'package:walkingpet/record/record.dart';
 
 void main() async {
@@ -134,29 +132,6 @@ class MyApp extends StatelessWidget {
         '/record': (context) => const Record(),
       },
     );
-  }
-}
-
-Future<bool> checkFirstVisitToday() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.reload();
-  String? lastVisit = prefs.getString('lastVisit'); // 마지막 접속 날짜를 가져옴
-  // String today = DateFormat('yyyy-MM-dd')
-  //     .format(DateTime.now()); // 오늘 날짜를 'yyyy-MM-dd' 형식으로 포맷
-
-  //테스트용
-  DateTime now = DateTime.now(); // 현재 시간을 가져옵니다.
-
-  if (lastVisit != DateFormat('yyyy-MM-dd').format(DateTime.now())) {
-    await prefs.setString(
-        'lastVisit',
-        DateFormat('yyyy-MM-dd')
-            .format(DateTime.now())); // 오늘 날짜로 마지막 접속 날짜를 업데이트
-    await StepCounter().resetStep();
-    return true;
-  } else {
-    // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
-    return false;
   }
 }
 

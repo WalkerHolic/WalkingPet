@@ -159,12 +159,7 @@ class BattleResult extends StatelessWidget {
                   height: screenHeight * 0.015,
                 ),
                 InkWell(
-                  onTap: () async {
-                    bool isFirstVisit = await checkFirstVisitToday();
-                    if (isFirstVisit) {
-                      Navigator.pushReplacementNamed(context, '/home');
-                      return;
-                    }
+                  onTap: () {
                     Navigator.pushReplacementNamed(context, '/battleready');
                   },
                   child: Image.asset(

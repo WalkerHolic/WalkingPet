@@ -128,11 +128,6 @@ class _GachaState extends State<Gacha> {
                             remainCount: boxCounter.normalBoxCount,
                             // onTap: () => showGachaModal(context),
                             onTap: () async {
-                              bool isFirstVisit = await checkFirstVisitToday();
-                              if (isFirstVisit) {
-                                Navigator.pushNamed(context, '/home');
-                                return;
-                              }
                               boxCounter.openNormalBox(); // 상태 업데이트
                               showNormalModal(context); //모달창 표시
                             },
@@ -148,11 +143,6 @@ class _GachaState extends State<Gacha> {
                             remainCount: boxCounter.luxuryBoxCount,
                             // onTap: () => showGachaModal(context),
                             onTap: () async {
-                              bool isFirstVisit = await checkFirstVisitToday();
-                              if (isFirstVisit) {
-                                Navigator.pushNamed(context, '/home');
-                                return;
-                              }
                               boxCounter.openLuxuryBox();
                               showLuxuryModal(context);
                             },
