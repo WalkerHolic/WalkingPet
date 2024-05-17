@@ -51,6 +51,7 @@ public class RealtimeStepRankingRedisService {
 
         int userRanking = 0;
         int previousStep = -1;
+        int sameRankCount = 0;
         for (Integer userId: top10users) {
 //            AccStepRankingAndUserInfo userStepInfo = getUser(userId);
             System.out.println("redis userId: " + userId);
@@ -59,7 +60,12 @@ public class RealtimeStepRankingRedisService {
             Double dStep = rankigRedisTemplate.opsForZSet().score(STEP_KEY, userId);
             int curStep = dStep != null ? dStep.intValue() : 0;
 
-            if (curStep != previousStep) userRanking++;
+            if (curStep != previousStep) {
+                userRanking += sameRankCount + 1;
+                sameRankCount = 0;
+            } else {
+                sameRankCount++;
+            }
 
             accStepRankingList.add(StepRankingList.from(user, curStep, userRanking));
             previousStep = curStep;

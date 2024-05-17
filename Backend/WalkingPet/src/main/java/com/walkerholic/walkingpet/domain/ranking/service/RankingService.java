@@ -170,7 +170,7 @@ public class RankingService {
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
-//    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
+    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
     public TeamRankingResponse getTeamRankingTop10() {
         log.info("그룹 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
@@ -251,13 +251,19 @@ public class RankingService {
     public List<PersonalStepRankingInfo> calculateAccRanking(List<UserStep> topUsers) {
         int rank = 0;
         int previousStep = -1;
+        int sameRankCount = 0;
         List<PersonalStepRankingInfo> StepRankingList = new ArrayList<>();
 
         for (UserStep userStepInfo: topUsers) {
             UserDetail userDetailInfo = userDetailRepository.findUserAndSelectUserCharacterByUserId(userStepInfo.getUser().getUserId())
                     .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-            if (userStepInfo.getAccumulationStep() != previousStep) rank++;
+            if (userStepInfo.getAccumulationStep() != previousStep) {
+                rank += sameRankCount + 1;
+                sameRankCount = 0;
+            } else {
+                sameRankCount++;
+            }
 
             StepRankingList.add(PersonalStepRankingInfo.entityFrom(userDetailInfo, userStepInfo, userStepInfo.getAccumulationStep(),rank));
             previousStep = userStepInfo.getAccumulationStep();
@@ -270,13 +276,20 @@ public class RankingService {
     public List<PersonalStepRankingInfo> calculateYesterdayRanking(List<UserStep> topUsers) {
         int rank = 0;
         int previousStep = -1;
+        int sameRankCount = 0;
         List<PersonalStepRankingInfo> StepRankingList = new ArrayList<>();
 
         for (UserStep userStepInfo: topUsers) {
             UserDetail userDetailInfo = userDetailRepository.findUserAndSelectUserCharacterByUserId(userStepInfo.getUser().getUserId())
                     .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_DETAIL_NOT_FOUND));
 
-            if (userStepInfo.getYesterdayStep() != previousStep) rank++;
+            if (userStepInfo.getYesterdayStep() != previousStep) {
+                rank += sameRankCount + 1;
+                sameRankCount = 0;
+            } else {
+                sameRankCount++;
+            }
+
 
             StepRankingList.add(PersonalStepRankingInfo.entityFrom(userDetailInfo, userStepInfo, userStepInfo.getYesterdayStep(), rank));
             previousStep = userStepInfo.getYesterdayStep();
@@ -289,11 +302,17 @@ public class RankingService {
     public List<BattleRankingList> calculateBattleRanking(List<UserDetail> topUsers) {
         int rank = 0;
         int previousRating = -1;
+        int sameRankCount = 0;
         List<BattleRankingList> battleRankingList = new ArrayList<>();
 
         for (UserDetail userInfo: topUsers) {
 
-            if (userInfo.getBattleRating() != previousRating) rank++;
+            if (userInfo.getBattleRating() != previousRating) {
+                rank += sameRankCount + 1;
+                sameRankCount = 0;
+            } else {
+                sameRankCount++;
+            }
 
             battleRankingList.add(BattleRankingList.from(userInfo, rank));
             previousRating = userInfo.getBattleRating();
