@@ -122,8 +122,12 @@ class _SearchGroupState extends State<SearchGroup> {
             )
           ],
         ),
+        //검색 활성화, 검색 결과 없음
         if (isSearchActive && displayedGroups.isEmpty)
-          const Text("검색 결과가 없습니다"),
+          SizedBox(
+            height: screenHeight * 0.6,
+            child: const Text("검색 결과가 없습니다"),
+          ),
         if (isSearchActive && displayedGroups.isNotEmpty)
           ...displayedGroups.map((group) => SearchGroupCard(
                 groupId: group['teamId'],
