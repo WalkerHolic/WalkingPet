@@ -7,6 +7,7 @@ import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/group/widgets/my_group_list.dart';
 import 'package:walkingpet/group/widgets/search_group_list.dart';
 import 'package:walkingpet/services/group/get_group_info.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class Group extends StatefulWidget {
   const Group({super.key});
