@@ -179,9 +179,15 @@ public class RankingService {
 
         int rank = 0;
         int previousPoints = -1;
+        int sameRankCount = 0;
         for (Team team: teamTop10) {
             // 동점 계산
-            if (team.getPoint() != previousPoints) rank++;
+            if (team.getPoint() != previousPoints) {
+                rank += sameRankCount + 1;
+                sameRankCount = 0;
+            } else {
+                sameRankCount++;
+            }
 
             teamRankingTop10List.add(TeamRanking.from(team, rank));
             previousPoints = team.getPoint();
