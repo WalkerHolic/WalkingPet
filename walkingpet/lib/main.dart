@@ -24,6 +24,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart'; // env 관련 코드
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:walkingpet/services/fcm/fcm.dart';
+import 'package:walkingpet/services/localnotification/notification_service.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -53,6 +54,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await dotenv.load(fileName: ".env"); // .env 추가
   _scheduleDailyTask();
+
   //_initSSE();
 
   /* 상단바, 하단바 모두 표시 & 상단바 투명하게 */
@@ -85,7 +87,9 @@ void main() async {
           create: (context) => CharacterProvider(),
         ),
       ],
-      child: MyApp(startRoute: refreshToken != null ? '/home' : '/login'),
+      child: MyApp(
+        startRoute: refreshToken != null ? '/home' : '/login',
+      ),
     ),
   );
 }
