@@ -17,6 +17,7 @@ public class UserBattleInfoDTO {
     private int defense;
     private int rating;
     private int battleCount;
+    private int upgrade;
 
     public static UserBattleInfoDTO from(UserDetail userDetail){
         return UserBattleInfoDTO.builder()
@@ -30,6 +31,7 @@ public class UserBattleInfoDTO {
                 .power(userDetail.getSelectUserCharacter().getPower())
                 .defense(userDetail.getSelectUserCharacter().getDefense())
                 .battleCount(userDetail.getBattleCount())
+                .upgrade(userDetail.getSelectUserCharacter().getUpgrade())
                 .build();
     }
 }
