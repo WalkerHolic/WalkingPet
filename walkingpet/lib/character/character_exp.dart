@@ -311,6 +311,7 @@ class _CharacterExpState extends State<CharacterExp> {
                                   } else {
                                     experience -= 5;
                                   }
+                                  fixExperience -= 5;
                                   expValue = experience /
                                       maxExperience; // expValue 값 변경
                                 });
@@ -354,7 +355,7 @@ class _CharacterExpState extends State<CharacterExp> {
                                     experience = 0;
                                     maxExperience = getMaxExperience(level);
                                   }
-
+                                  fixExperience += 5;
                                   expValue = experience /
                                       maxExperience; // expValue 값 변경
                                 });
@@ -371,8 +372,12 @@ class _CharacterExpState extends State<CharacterExp> {
                             onTap: expitemCount < quantity
                                 ? () {
                                     setState(() {
+                                      int remainingItems =
+                                          quantity - expitemCount;
+                                      fixExperience +=
+                                          remainingItems * 5; // 경험치 추가
                                       expitemCount = quantity;
-                                      fixExperience += quantity * 5; // 경험치 추가
+
                                       List<int> levelData =
                                           getLevel(fixExperience);
                                       level = levelData[0]; // 레벨 업데이트
