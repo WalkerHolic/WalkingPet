@@ -24,7 +24,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart'; // env 관련 코드
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:walkingpet/services/fcm/fcm.dart';
-import 'package:walkingpet/services/localnotification/notification_service.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
