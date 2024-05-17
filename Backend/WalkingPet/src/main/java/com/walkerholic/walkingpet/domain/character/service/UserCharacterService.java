@@ -22,31 +22,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.walkerholic.walkingpet.domain.util.UpgradeValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserCharacterService {
-
-    //1성 업그레이드 추가 스탯
-    public static final int GRADE_1_UPGRADE_HEALTH_STAT = 5;
-    public static final int GRADE_1_UPGRADE_POWER_STAT = 1;
-    public static final int GRADE_1_UPGRADE_DEFENSE_STAT = 1;
-    //2성 업그레이드 추가 스탯
-    public static final int GRADE_2_UPGRADE_HEALTH_STAT = 10;
-    public static final int GRADE_2_UPGRADE_POWER_STAT = 2;
-    public static final int GRADE_2_UPGRADE_DEFENSE_STAT = 2;
-    //3성 업그레이드 추가 스탯
-    public static final int GRADE_3_UPGRADE_HEALTH_STAT = 50;
-    public static final int GRADE_3_UPGRADE_POWER_STAT = 10;
-    public static final int GRADE_3_UPGRADE_DEFENSE_STAT = 5;
-
     private static final int REDUCE_STAT_POINT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
     private static final int ADD_STAT = 1; // 스탯 사용시 줄어 드는 스탯 포인트
 
@@ -262,19 +248,19 @@ public class UserCharacterService {
 
         switch (gradeValue){
             case 1:
-                response.replace("health", GRADE_1_UPGRADE_HEALTH_STAT*upgradeValue);
-                response.replace("power", GRADE_1_UPGRADE_POWER_STAT*upgradeValue);
-                response.replace("defense", GRADE_1_UPGRADE_DEFENSE_STAT*upgradeValue);
+                response.replace("health", UpgradeValue.GRADE_1_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("power", UpgradeValue.GRADE_1_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("defense", UpgradeValue.GRADE_1_UPGRADE_DEFENSE_STAT*upgradeValue);
                 break;
             case 2:
-                response.replace("health", GRADE_2_UPGRADE_HEALTH_STAT*upgradeValue);
-                response.replace("power", GRADE_2_UPGRADE_POWER_STAT*upgradeValue);
-                response.replace("defense", GRADE_2_UPGRADE_DEFENSE_STAT*upgradeValue);
+                response.replace("health", UpgradeValue.GRADE_2_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("power", UpgradeValue.GRADE_2_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("defense", UpgradeValue.GRADE_2_UPGRADE_DEFENSE_STAT*upgradeValue);
                 break;
             case 3:
-                response.replace("health", GRADE_3_UPGRADE_HEALTH_STAT*upgradeValue);
-                response.replace("power", GRADE_3_UPGRADE_POWER_STAT*upgradeValue);
-                response.replace("defense", GRADE_3_UPGRADE_DEFENSE_STAT*upgradeValue);
+                response.replace("health", UpgradeValue.GRADE_3_UPGRADE_HEALTH_STAT*upgradeValue);
+                response.replace("power", UpgradeValue.GRADE_3_UPGRADE_POWER_STAT*upgradeValue);
+                response.replace("defense", UpgradeValue.GRADE_3_UPGRADE_DEFENSE_STAT*upgradeValue);
                 break;
 
         }
