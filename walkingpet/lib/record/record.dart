@@ -70,11 +70,6 @@ class Record extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
-                    bool isFirstVisit = await checkFirstVisitToday();
-                    if (isFirstVisit) {
-                      Navigator.pop(context);
-                      return;
-                    }
                     Navigator.pop(context);
                     // Navigator.pushReplacementNamed(
                     //     context, '/home'); // 현재 경로를 '/home'으로 교체
@@ -96,7 +91,6 @@ class Record extends StatelessWidget {
           // RecordMap();
           // void main() {AuthRepository.initialize(appKey: '98dfecd4151782eef7342a07e95b9c57');}
           // KakaoMap(),
-          
         ],
       ),
     );

@@ -71,12 +71,6 @@ void _onItemTapped(BuildContext context, int index, int selectedIndex) async {
     return;
   }
 
-  bool isFirstVisit = await checkFirstVisitToday();
-  if (isFirstVisit) {
-    Navigator.pushNamed(context, '/home');
-    return;
-  }
-
   switch (index) {
     case 0:
       Navigator.pushNamed(context, '/characterinfo');

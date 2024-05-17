@@ -125,11 +125,6 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
   }
 
   void _updateStats() async {
-    bool isFirstVisit = await checkFirstVisitToday();
-    if (isFirstVisit) {
-      Navigator.pushNamed(context, '/home');
-      return;
-    }
     try {
       var characterId = widget.characterId;
       var statnameEn = widget.statnameEn;
