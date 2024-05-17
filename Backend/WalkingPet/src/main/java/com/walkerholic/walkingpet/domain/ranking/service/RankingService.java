@@ -54,7 +54,7 @@ public class RankingService {
      * 누적 걸음수 기준으로 top 10 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
-//    @Cacheable(value="accStepRankingTop10", key = "'accStepTop10'")
+    @Cacheable(value="accStepRankingTop10", key = "'accStepTop10'")
     public StepRankingResponse getAccStepRankingTop10() {
         log.info("RankingService getAccStepRankingTop10 누적 걸음수 top10(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByAccumulationStepDesc();
@@ -66,7 +66,7 @@ public class RankingService {
      * 누적 걸음수 기준으로 top 3 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
-//    @Cacheable(value="accStepRankingTop3", key = "'accStepTop3'")
+    @Cacheable(value="accStepRankingTop3", key = "'accStepTop3'")
     public StepRankingResponse getAccStepRankingTop3() {
         log.info("RankingService getAccStepRankingTop3 누적 걸음수 top3(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findByTop3OrderByAccumulationStepDesc();
@@ -78,7 +78,7 @@ public class RankingService {
      * 어제 걸음수 기준으로 top 10 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
-//    @Cacheable(value="yesterdayStepRankingTop10", key = "'ydStepTop10'")
+    @Cacheable(value="yesterdayStepRankingTop10", key = "'ydStepTop10'")
     public StepRankingResponse getYesterdayStepRankingTop10() {
         log.info("RankingService getYesterdayStepRanking0Top10 어제 걸음수 top10(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findTop10ByOrderByYesterdayStepDesc();
@@ -90,7 +90,7 @@ public class RankingService {
      * 어제 걸음수 기준으로 top 3 랭킹 가져오기 - redis 용
      */
     @Transactional(readOnly = true)
-//    @Cacheable(value="yesterdayStepRankingTop3", key = "'ydStepTop3'")
+    @Cacheable(value="yesterdayStepRankingTop3", key = "'ydStepTop3'")
     public StepRankingResponse getYesterdayStepRankingTop3() {
         log.info("RankingService getYesterdayStepRankingTop3 어제 걸음수 top3(캐싱 적용 x)");
         List<UserStep> topUsers = userStepRepository.findByTop3OrderByYesterdayStepDesc();
@@ -170,7 +170,7 @@ public class RankingService {
 
     // 그룹 랭킹 상위 10개 가져오기
     @Transactional(readOnly = true)
-//    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
+    @Cacheable(value="teamRankingTop10", key = "'teamTop10'")
     public TeamRankingResponse getTeamRankingTop10() {
         log.info("그룹 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<Team> teamTop10 = teamRepository.findTop10ByOrderByPointDesc();
@@ -218,7 +218,7 @@ public class RankingService {
     }
 
     // 배틀 랭킹 top 10
-//    @Cacheable(value="battleRankingTop10", key = "'battleTop10'")
+    @Cacheable(value="battleRankingTop10", key = "'battleTop10'")
     public BattleRankingResponse getBattleRankingTop10() {
         log.info("배틀 랭킹 상위 10개 Mysql 데이터(캐싱 적용 x)");
         List<UserDetail> top10 = userDetailRepository.findTop10ByOrderByBattleRatingDesc();
@@ -227,7 +227,7 @@ public class RankingService {
     }
 
     // 배틀 랭킹 top 3
-//    @Cacheable(value="battleRankingTop3", key = "'battleTop3'")
+    @Cacheable(value="battleRankingTop3", key = "'battleTop3'")
     public BattleRankingResponse getBattleRankingTop3() {
         log.info("배틀 랭킹 상위 3개 Mysql 데이터(캐싱 적용 x)");
         List<UserDetail> top3 = userDetailRepository.findByTop3OrderByBattleRatingDesc();
@@ -236,7 +236,7 @@ public class RankingService {
     }
 
     // 배틀 랭킹 나의 순위 조회
-//    @Cacheable(value = "battleMyRank", key = "#userId")
+    @Cacheable(value = "battleMyRank", key = "#userId")
     public BattleRankingList getBattleRankingMyRank(int userId) {
         log.info("배틀 랭킹 나의 순위 Mysql 데이터(캐싱 적용 x)");
         UserDetail userDetail = userDetailRepository.findUserAndUserCharacterByUserId(userId)
