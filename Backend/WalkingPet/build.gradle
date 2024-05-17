@@ -56,6 +56,9 @@ dependencies {
 
     //kakao map json
     implementation 'org.json:json:20240303'
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
