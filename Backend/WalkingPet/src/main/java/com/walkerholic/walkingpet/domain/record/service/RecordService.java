@@ -1,14 +1,16 @@
 package com.walkerholic.walkingpet.domain.record.service;
 
+import com.walkerholic.walkingpet.domain.record.dto.EventRecord;
+import com.walkerholic.walkingpet.domain.record.dto.SelectUserRecord;
 import com.walkerholic.walkingpet.domain.record.dto.MyRecordResponse;
 import com.walkerholic.walkingpet.domain.record.dto.response.AllUserRecordResponse;
+import com.walkerholic.walkingpet.domain.record.dto.response.CheckCloseRecordResponse;
+import com.walkerholic.walkingpet.domain.record.dto.response.EventRecordResponse;
 import com.walkerholic.walkingpet.domain.record.dto.response.UploadRecordResponse;
 import com.walkerholic.walkingpet.domain.record.entity.Record;
 import com.walkerholic.walkingpet.domain.record.repository.RecordRepository;
 import com.walkerholic.walkingpet.domain.users.address.AddressFunction;
-import com.walkerholic.walkingpet.domain.users.address.AddressService;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
-import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
@@ -88,6 +90,7 @@ public class RecordService {
      */
     private void saveRecord(Users user, UploadRecordResponse uploadRecordResponse, double latitude, double longitude) {
         String[] administrativeDistrict = addressFunction.getDistrictFromAddress(Double.toString(latitude),Double.toString(longitude));
+
         recordRepository.save(Record.builder()
                 .user(user)
                 .uploadRecordResponse(uploadRecordResponse)
@@ -97,6 +100,29 @@ public class RecordService {
                 .district(administrativeDistrict[1])
                 .region(administrativeDistrict[2])
                 .build());
+    }
+
+    /**
+     * Event Record 저장하기
+     * @param user 유저
+     * @param uploadRecordResponse upload 결과물
+     */
+    private void saveEventRecord(Users user, UploadRecordResponse uploadRecordResponse, double latitude, double longitude, String content) {
+        String[] administrativeDistrict = addressFunction.getDistrictFromAddress(Double.toString(latitude),Double.toString(longitude));
+
+        Record record = Record.builder()
+                .user(user)
+                .uploadRecordResponse(uploadRecordResponse)
+                .latitude(BigDecimal.valueOf(latitude))
+                .longitude(BigDecimal.valueOf(longitude))
+                .city(administrativeDistrict[0])
+                .district(administrativeDistrict[1])
+                .region(administrativeDistrict[2])
+                .build();
+        record.setIsEvent();
+        record.setContent(content);
+
+        recordRepository.save(record);
     }
 
     public boolean deleteImage(int userId, String fileName){
@@ -127,6 +153,126 @@ public class RecordService {
                 .build();
     }
 
+    public CheckCloseRecordResponse checkAnotherUserRecord(double latitude, double longitude, int recordId){
+        //선택한 기록
+        Record selectRecord = getRecordById(recordId);
+        //선택한 기록의 좌표
+        double selectLatitude = selectRecord.getLatitude().doubleValue();
+        double selectLongitude = selectRecord.getLongitude().doubleValue();
+
+        double distance = getDistance(latitude, longitude, selectLatitude, selectLongitude);
+
+        if(distance <= 50){
+            return CheckCloseRecordResponse.builder()
+                    .isClose(true)
+                    .distance(distance)
+                    .selectUserRecord(SelectUserRecord.from(selectRecord))
+                    .build();
+        }
+        else{
+            return CheckCloseRecordResponse.builder()
+                    .isClose(false)
+                    .distance(distance)
+                    .selectUserRecord(null)
+                    .build();
+        }
+    }
+
+    /**
+     * 전체 이벤트 기록 반환
+     * @return 이벤트 기록 리스트
+     */
+    public EventRecordResponse loadEventRecord(){
+        List<Record> recordList = getEventRecord();
+        List<EventRecord> eventRecordList = new ArrayList<>();
+
+        for(Record r : recordList){
+            eventRecordList.add(EventRecord.from(r));
+        }
+        return EventRecordResponse.builder()
+                .enventRecordList(eventRecordList)
+                .build();
+    }
+
+    /**
+     * 도시를 기준으로 이벤트 기록 반환
+     * @param latitude 현재 위도
+     * @param longitude 현재 경도
+     * @return 같은 도시에 있는 이벤트 리스트
+     */
+    public EventRecordResponse loadEventRecordByCity(double latitude, double longitude){
+        //현재 위치의 위도와 경도를 통해 현재 있는 곳이 어느 도시인지 알아내는 코드
+        String city = addressFunction.getDistrictFromAddress(Double.toString(latitude),Double.toString(longitude))[0];
+
+        List<Record> recordList = getEventRecordByCity(city);
+        List<EventRecord> eventRecordList = new ArrayList<>();
+
+        for(Record r : recordList){
+            eventRecordList.add(EventRecord.from(r));
+        }
+        return EventRecordResponse.builder()
+                .enventRecordList(eventRecordList)
+                .build();
+    }
+
+    /**
+     * 이벤트 기록을 등록하는 Service
+     * @param userId
+     * @param multipartFile
+     * @param characterId
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    public UploadRecordResponse uploadEventRecord(int userId, MultipartFile multipartFile, int characterId, double latitude, double longitude, String content){
+        if (multipartFile == null) {
+            throw new IllegalArgumentException("업로드하려는 파일이 존재하지 않습니다.");
+        }
+        try{
+            Users user = getUserById(userId);
+            //s3에 파일 업로드
+            S3FileUpload s3FileUpload = s3Service.saveFile(multipartFile);
+            //업로드 response 데이터
+            UploadRecordResponse uploadRecordResponse = setuploadRecordResponse(s3FileUpload, characterId);
+            //RecordEntity에 Record 저장
+            saveEventRecord(user, uploadRecordResponse, latitude, longitude, content);
+
+            return uploadRecordResponse;
+        }
+        catch (Exception e){
+            System.out.println("파일 업로드 실패" + e.getMessage());
+            throw new RuntimeException("Failed to upload record", e);
+        }
+    }
+
+    /**
+     * 위도 경도 두점 사이의 거리를 구하는 함수
+     */
+    public double getDistance(double myLatitude, double myLongitude, double yourLatitude, double yourLongitude){
+        double theta = myLongitude - yourLongitude;
+        double dist = Math.sin(deg2rad(myLatitude))* Math.sin(deg2rad(yourLatitude)) + Math.cos(deg2rad(myLatitude))*Math.cos(deg2rad(yourLatitude))*Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60*1.1515*1609.344;
+
+        return dist; //단위 meter
+    }
+
+    // 10진수를 radian(라디안)으로 변환
+    private double deg2rad(Double deg){
+        return (deg * Math.PI/180.0);
+    }
+    //radian(라디안)을 10진수로 변환
+    private double rad2deg(Double rad){
+        return (rad * 180 / Math.PI);
+    }
+
+
+    public Record getRecordById(int recordId){
+        return recordRepository.findById(recordId)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.RECORD_NOT_FOUND));
+    }
+
     public Users getUserById(int userId){
         return usersRepository.findById(userId)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.USER_NOT_FOUND));
@@ -134,6 +280,16 @@ public class RecordService {
 
     public Record getRecordByUserIdAndFileName(int userId, String fileName){
         return recordRepository.findByUserIdAndImageName(userId, fileName)
-                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.RECORD_NOT_FOUND));
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.DELETE_RECORD_NOT_FOUND));
+    }
+
+    public List<Record> getEventRecord(){
+        return recordRepository.findByIsEvent()
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.EVENT_NOT_FOUND));
+    }
+
+    public List<Record> getEventRecordByCity(String city){
+        return recordRepository.findByIsEventAndCity(city)
+                .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.EVENT_NOT_FOUND));
     }
 }
