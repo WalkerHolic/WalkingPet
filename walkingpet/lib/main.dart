@@ -49,7 +49,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await setFCM3();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await dotenv.load(fileName: ".env"); // .env 추가
   _scheduleDailyTask();

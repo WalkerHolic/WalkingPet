@@ -40,6 +40,7 @@ class StepCounter with ChangeNotifier {
     await _fetchInitialSteps();
     notificationService = NotificationService();
     await notificationService?.initialize();
+
     _stepCountStream.listen(_onStepCount);
   }
 
@@ -50,11 +51,7 @@ class StepCounter with ChangeNotifier {
     _baseSteps = _prefs?.getInt('baseSteps') ?? 0;
     _steps = event.steps - _baseSteps;
     notifyListeners();
-    if (_steps == 3000 ||
-        _steps == 5000 ||
-        _steps == 7000 ||
-        _steps == 10000 ||
-        _steps == 9650) {
+    if (_steps == 3000 || _steps == 5000 || _steps == 7000 || _steps == 10000) {
       notificationService?.showNotification('축하합니다! 걸음수 목표 달성 🎉',
           '$_steps 걸음을 달성했습니다! 지금 들어와서 보상을 확인해보세요!', 'Payload');
     }
