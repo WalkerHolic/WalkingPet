@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/character_exp.dart';
 import 'package:walkingpet/character/widgets/character_stat.dart';
+import 'package:walkingpet/character/widgets/stat_reset_modal.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
-import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/character/statpointreset.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -133,12 +131,6 @@ class _CharacterInfoState extends State<CharacterInfo> {
                     padding: const EdgeInsets.only(top: 15, bottom: 10),
                     child: InkWell(
                       onTap: () async {
-                        bool isFirstVisit = await checkFirstVisitToday();
-                        if (isFirstVisit) {
-                          Navigator.pushNamed(context, '/home');
-                          return;
-                        }
-
                         await show(context: context);
                       },
                       child: Row(
@@ -204,11 +196,6 @@ class _CharacterInfoState extends State<CharacterInfo> {
                   // 3. 캐릭터 변경 버튼
                   TextButton(
                     onPressed: () async {
-                      bool isFirstVisit = await checkFirstVisitToday();
-                      if (isFirstVisit) {
-                        Navigator.pushNamed(context, '/home');
-                        return;
-                      }
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -297,12 +284,6 @@ class _CharacterInfoState extends State<CharacterInfo> {
                             width: 30,
                             child: TextButton(
                               onPressed: () async {
-                                bool isFirstVisit =
-                                    await checkFirstVisitToday();
-                                if (isFirstVisit) {
-                                  Navigator.pushNamed(context, '/home');
-                                  return;
-                                }
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -388,61 +369,24 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 child: characterInfoData['initStatus'] == 0
                                     ? TextButton(
                                         onPressed: () async {
-                                          bool isFirstVisit =
-                                              await checkFirstVisitToday();
-                                          if (isFirstVisit) {
+                                          bool? confirmReset =
+                                              await StatResetModal
+                                                  .showStatResetModal(
+                                                      context: context);
+                                          if (confirmReset == true) {
+                                            await getStatReset();
                                             Navigator.pushNamed(
-                                                context, '/home');
-                                            return;
+                                                context, '/characterinfo');
                                           }
-
-                                          await getStatReset();
-                                          Navigator.pushNamed(
-                                              context, '/characterinfo');
                                         },
                                         child: Image.asset(
                                           'assets/buttons/character_reset_button.png',
                                           scale: 0.8,
                                         ),
                                       )
-                                    : TextButton(
-                                        onPressed: () async {
-                                          bool isFirstVisit =
-                                              await checkFirstVisitToday();
-                                          if (isFirstVisit) {
-                                            Navigator.pushNamed(
-                                                context, '/home');
-                                            return;
-                                          }
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Center(
-                                                    child: Text('안내')),
-                                                content: const Text(
-                                                  '능력치 초기화는\n하루에 한번만 가능합니다.',
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child: const Text('확인'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Image.asset(
-                                          'assets/buttons/character_reset_button_pushed.png',
-                                          scale: 0.8,
-                                        ),
+                                    : Image.asset(
+                                        'assets/buttons/character_reset_button_pushed.png',
+                                        scale: 0.8,
                                       ),
                               ),
                             ],

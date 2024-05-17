@@ -154,10 +154,10 @@ class _BattleSideState extends State<BattleSide> {
                     child: Transform.translate(
                       offset: widget.isLeft
                           ? Offset(screenWidth * -0.04, 0)
-                          : Offset(screenWidth * -0.045, 0),
+                          : Offset(screenWidth * -0.04, 0),
                       child: LinearPercentIndicator(
                         backgroundColor: Colors.transparent,
-                        width: screenWidth * 0.357,
+                        width: screenWidth * 0.352,
                         percent: _currentPercent,
                         animation: true,
                         lineHeight: screenHeight * 0.0083,

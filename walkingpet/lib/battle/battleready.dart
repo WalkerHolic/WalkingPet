@@ -124,13 +124,7 @@ class _BattleReadyState extends State<BattleReady> {
                         ),
 
                         TextButton(
-                          onPressed: () async {
-                            bool isFirstVisit = await checkFirstVisitToday();
-                            if (isFirstVisit) {
-                              Navigator.pushNamed(context, '/home');
-                              return;
-                            }
-
+                          onPressed: () {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -160,13 +154,7 @@ class _BattleReadyState extends State<BattleReady> {
                         ),
 
                         InkWell(
-                            onTap: () async {
-                              bool isFirstVisit = await checkFirstVisitToday();
-                              if (isFirstVisit) {
-                                Navigator.pushNamed(context, '/home');
-                                return;
-                              }
-
+                            onTap: () {
                               if (characterData['battleCount'] > 0) {
                                 Navigator.pushReplacement(
                                   context,

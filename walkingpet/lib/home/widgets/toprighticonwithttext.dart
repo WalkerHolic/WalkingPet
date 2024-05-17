@@ -23,13 +23,8 @@ class TopRightIconWithText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: () async {
-            bool isFirstVisit = await checkFirstVisitToday();
-            if (isFirstVisit) {
-              Navigator.pushReplacementNamed(context, '/home');
-            } else {
-              Navigator.pushNamed(context, '/$icon');
-            }
+          onPressed: () {
+            Navigator.pushNamed(context, '/$icon');
           },
           icon: Image.asset(
             'assets/icons/$icon.png',

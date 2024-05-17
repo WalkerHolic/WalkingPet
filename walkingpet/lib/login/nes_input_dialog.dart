@@ -202,11 +202,7 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
                   _signUp(context, _controller.text);
                 } else {
                   // 닉네임 변경 요청
-                  bool isFirstVisit = await checkFirstVisitToday();
-                  if (isFirstVisit) {
-                    Navigator.pushNamed(context, '/home');
-                    return;
-                  }
+
                   _changeNickname(context, _controller.text);
                 }
                 //Navigator.of(context).pop(_controller.text);

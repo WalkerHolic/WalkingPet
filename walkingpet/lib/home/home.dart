@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
                 child: Center(
                   child: MainFontStyle(
                     size: screenWidth * 0.033,
-                    text: "걸음수는 하루 첫 접속 기준으로 계산됩니다",
+                    text: "걸음수는 자정에 초기화됩니다",
                     color: Colors.yellow,
                   ),
                 ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:walkingpet/character/widgets/levelup.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
-import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterexpitem.dart';
 
 // 캐릭터 경험치 아이템 사용 페이지
@@ -123,10 +122,10 @@ class _CharacterExpState extends State<CharacterExp> {
           // 2. 투명 레이어 (특정 영역만)
           Positioned(
             left: screenWidth * 0.05,
-            top: screenHeight * 0.1,
+            top: screenHeight * 0.085,
             child: Container(
               width: screenWidth * 0.9,
-              height: screenHeight * 0.75,
+              height: screenHeight * 0.77,
               decoration: BoxDecoration(
                 color:
                     const Color.fromARGB(255, 255, 243, 212).withOpacity(0.75),
@@ -435,22 +434,15 @@ class _CharacterExpState extends State<CharacterExp> {
                       // 4-8-2. '사용' 버튼 => 5. API 요청
                       TextButton(
                         onPressed: () async {
-                          bool isFirstVisit = await checkFirstVisitToday();
-                          if (isFirstVisit) {
-                            Navigator.pushNamed(context, '/home');
-                            return;
-                          }
                           if (expitemCount == 0) {
                             return;
                           }
 
                           // 5-1. API 요청 및 데이터 처리
                           var responseExpitem = await getExpitem(expitemCount);
-                          print(responseExpitem);
                           var expitemData = responseExpitem['data'];
                           var isLevelUp = expitemData['isLevelUp'];
                           var levelUpInfo = expitemData['levelUpInfo'];
-                          print(levelUpInfo);
 
                           // 5-2. 레벨업 : O => 레벨업 모달 이동 / X => 캐릭터 정보 페이지 이동
                           if (isLevelUp) {

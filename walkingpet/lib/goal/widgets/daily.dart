@@ -34,11 +34,6 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
   }
 
   void _toggleButton() async {
-    bool isFirstVisit = await checkFirstVisitToday();
-    if (isFirstVisit) {
-      Navigator.pop(context);
-      return;
-    }
     // 버튼이 이미 완료된 상태라면 요청을 보내지 않음
     if (_isPressed || widget.isCompleted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
