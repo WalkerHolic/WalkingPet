@@ -7,14 +7,13 @@ import com.walkerholic.walkingpet.domain.character.entity.UserCharacter;
 import com.walkerholic.walkingpet.domain.character.repository.UserCharacterRepository;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
-import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
-import com.walkerholic.walkingpet.domain.levelup.service.LevelUpService;
 import com.walkerholic.walkingpet.domain.users.entity.UserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.domain.users.repository.UserDetailRepository;
 import com.walkerholic.walkingpet.domain.users.repository.UsersRepository;
 import com.walkerholic.walkingpet.global.error.GlobalBaseException;
 import com.walkerholic.walkingpet.global.error.GlobalErrorCode;
+import com.walkerholic.walkingpet.global.redis.service.BattleRankingRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +35,7 @@ public class BattleService {
     private final UserItemRepository userItemRepository;
 
     private final BattleFunction battleFunction;
+    private final BattleRankingRedisService battleRankingRedisService;
 
     /**
      * 사용자의 배틀 정보 반환
@@ -160,9 +160,14 @@ public class BattleService {
     }
 
     public void saveBattleResult(UserDetail userDetail, BattleResultInfo battleResultInfo){
+        // 배틀 점수 mysql 저장
         userDetail.updateBattleRating(battleResultInfo.getRewardRating());
         userDetailRepository.save(userDetail);
 
+        // 배틀 점수 redis 저장
+        battleRankingRedisService.saveUserBattleScore(userDetail.getUser().getUserId(), battleResultInfo.getRewardRating());
+
+        // TODO: 이 코드의 용도는....?
         UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
         userCharacterRepository.save(selectUserCharacter);
 
