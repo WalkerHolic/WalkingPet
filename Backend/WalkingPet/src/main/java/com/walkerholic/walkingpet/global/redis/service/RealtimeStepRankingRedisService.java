@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -28,21 +29,19 @@ public class RealtimeStepRankingRedisService {
     private final UserInfoRedisService userInfoRedisService;
 
     // redis에 모든 사용자들의 실시간 걸음수 정보 저장
+    @Transactional(readOnly = false)
     public void saveAllUserDailyStepList(ReailtimeStepRankingInfo rankingInfo) {
         //TODO: 한번에 저장하는 방식으로 변경
         rankigRedisTemplate.opsForZSet().add(STEP_KEY, rankingInfo.getUserId(), rankingInfo.getRealtimeStep());
     }
 
-    // redis에 특정 사용자들의 실시간 걸음수 정보 저장
-    public void saveUserDailyStep(RealtimeStepRequest realtimeStepRequest) {
-        rankigRedisTemplate.opsForZSet().add(STEP_KEY, realtimeStepRequest.getUserId(), realtimeStepRequest.getRealtimeStep());
-    }
-
+    @Transactional(readOnly = false)
     public void saveUserDailyStep(int userId, int realtimeStep) {
         rankigRedisTemplate.opsForZSet().add(STEP_KEY, userId, realtimeStep);
     }
 
-    // 실시간 걸음수 기준 상위 랭킹 래스트 가져오기
+    // 실시간 걸음수 기준 상위 랭킹 리스트 가져오기
+    @Transactional(readOnly = true)
     public RedisStepRankingResponse getRedisRealtimeStepRankingList(int startRanking, int endRanking) {
         System.out.println("실시간 걸음수 redis 접근");
         List<StepRankingList> accStepRankingList = new ArrayList<>();
@@ -75,6 +74,7 @@ public class RealtimeStepRankingRedisService {
     }
 
     // 실시간 걸음수를 기준으로 특정 유저의 순위를 가져오기
+    @Transactional(readOnly = true)
     public StepRankingList getUserRealtimeStepRanking(int userId) {
         UserRedisDto user = userInfoRedisService.getUser(userId);
 //        AccStepRankingAndUserInfo userStepInfo = getUser(userId);
@@ -86,31 +86,23 @@ public class RealtimeStepRankingRedisService {
         return StepRankingList.from(user, step, userRanking);
     }
 
-//    public AccStepRankingAndUserInfo getUser(int userId) {
-//        HashOperations<String, Integer, AccStepRankingAndUserInfo> hashOperations = rankigRedisTemplate.opsForHash();
-//
-//        return hashOperations.get(RANKING_KEY, userId);
-//    }
-
-
     // 사용자의 실시간 걸음수 가져오기
+    @Transactional(readOnly = true)
     public int getUserDailyStep(int userId) {
         Double dStep = rankigRedisTemplate.opsForZSet().score(STEP_KEY, userId);
         int step = dStep != null ? dStep.intValue() : 0;
         return step;
     }
 
+    @Transactional(readOnly = true)
     public int getUserRanking(int userId) {
         Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(STEP_KEY, userId);
 
         return (userRanking != null) ? userRanking.intValue() + 1 : -1;
     }
 
+    @Transactional(readOnly = false)
     public void updateUserStepInfo() {
-//        ValueOperations<String, Integer> dailySteps = rankigRedisTemplate.opsForValue();
-//        ZSetOperations<String, Integer> dailySteps = rankigRedisTemplate.opsForZSet();
-//        Set<Integer> integers = rankigRedisTemplate.opsForZSet().rangeByScore(USERS_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-
         Set<ZSetOperations.TypedTuple<Integer>> rankingData = rankigRedisTemplate.opsForZSet()
                 .rangeByScoreWithScores(STEP_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
@@ -126,6 +118,7 @@ public class RealtimeStepRankingRedisService {
         }
     }
 
+    @Transactional(readOnly = false)
     public void saveUserDailyStep() {
         Set<ZSetOperations.TypedTuple<Integer>> rankingData = rankigRedisTemplate.opsForZSet()
                 .rangeByScoreWithScores(STEP_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
@@ -142,6 +135,7 @@ public class RealtimeStepRankingRedisService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Map<String, String> getDailyStepAndUser(int userId) {
         Map<String, String> result = new HashMap<>();
 
