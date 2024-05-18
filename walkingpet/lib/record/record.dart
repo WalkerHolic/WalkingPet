@@ -6,8 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
+import 'package:walkingpet/services/record/eventmarkers.dart';
+import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:walkingpet/main.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class Record extends StatefulWidget {
@@ -20,8 +21,39 @@ class Record extends StatefulWidget {
 class _RecordState extends State<Record> {
   late Future<Position> _currentPositionFuture;
   late WebViewController _mapController;
-  final double _lat = 33.450701;
-  final double _lng = 126.570667;
+  // final double _lat = 33.450701;
+  // final double _lng = 126.570667;
+
+  final lat = 36.355387454337716;
+  final lng = 127.29839622974396;
+
+  // 이벤트 마커 담을 변수
+  List<dynamic> eventmarkers = [];
+  // 사용자의 마커 담을 변수
+  List<dynamic> usermarkers = [];
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    initInfo();
+  }
+
+  // API 요청으로 데이터 불러오기
+  Future<void> initInfo() async {
+    try {
+      var responseEvents = await getEventMarkers();
+      var responseUsers = await getUserMarkers();
+      setState(() {
+        eventmarkers = responseEvents['data']['enventRecordList'];
+        usermarkers = responseUsers['data']['enventRecordList'];
+        isLoading = false;
+      });
+    } catch (e) {
+      isLoading = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +61,9 @@ class _RecordState extends State<Record> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    Size size = MediaQuery.of(context).size;
-
     final String? kakaoMapKey = dotenv.env['MAP_APP_KEY'];
+
+    print(eventmarkers[0]['latitude']);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -70,42 +102,42 @@ class _RecordState extends State<Record> {
           // ),
 
           // 3. 내용
-          // if (isLoading)
-          //   const Center(
-          //       child: Text(
-          //     '캐릭터 정보 로딩중..',
-          //     style: TextStyle(
-          //       color: Colors.black,
-          //     ),
-          //   ))
-          // else
+          if (isLoading)
+            const Center(
+                child: Text(
+              '기록 떠올리는 중..',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ))
+          else
 
-          // 3-1. 기록 & 'X' 버튼
-          Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('       '),
-                const MainFontStyle(size: 40, text: '기록'),
-                TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    // Navigator.pushReplacementNamed(
-                    //     context, '/home'); // 현재 경로를 '/home'으로 교체
-                  },
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                        EdgeInsets.zero), // 버튼의 내부 패딩 제거
-                  ),
-                  child: const Text(
-                    'X',
-                    style: TextStyle(fontSize: 30, color: Colors.black),
-                  ),
-                )
-              ],
+            // 3-1. 기록 & 'X' 버튼
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('       '),
+                  const MainFontStyle(size: 40, text: '기록'),
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      // Navigator.pushReplacementNamed(
+                      //     context, '/home'); // 현재 경로를 '/home'으로 교체
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                          EdgeInsets.zero), // 버튼의 내부 패딩 제거
+                    ),
+                    child: const Text(
+                      'X',
+                      style: TextStyle(fontSize: 30, color: Colors.black),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
 
           // 앱 업로드를 위한 임시 코드
           // Positioned(
@@ -144,32 +176,60 @@ class _RecordState extends State<Record> {
 
               customScript: '''
                 // 이벤트 마커 담을 변수
-                var eventmarkers = [];
+                var eventMarkers = ${jsonEncode(eventmarkers)};
 
                 // 마커 이미지 => 이벤트 팻말
-                var imageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
-                    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                // var eventImageSrc = 'https://ifh.cc/g/po7J27.png', // 마커이미지의 주소입니다
+                var eventImageSrc = 'https://ifh.cc/g/0kW3Od.png', // 마커이미지의 주소입니다
+                    eventImageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
+                    eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-                    markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
-
+                var eventMarkerImage = new kakao.maps.MarkerImage(eventImageSrc, eventImageSize, eventImageOption);
+                
                 // 마커 추가할 함수
-                function addMarker(position) {
-                  var marker = new kakao.maps.Marker({position: position, image: markerImage});
+                function addEventMarker(position) {
+                  var marker = new kakao.maps.Marker({position: position, image: eventMarkerImage});
                   marker.setMap(map);
-                  eventmarkers.push(marker);
+                  return marker;
                 }
-
+                
                 // 마커 표시하기 (반복문 활용)
-                for(var i = 0 ; i < 3 ; i++){
-                  addMarker(new kakao.maps.LatLng(36.355387454337716 + 0.0003 * i, 127.29839622974396 + 0.0003 * i));
-                  kakao.maps.event.addListener(eventmarkers[i], 'click', (function(i) {
+                for(var i = 0 ; i < eventMarkers.length ; i++){
+                  var marker = addEventMarker(new kakao.maps.LatLng(eventMarkers[i].latitude, eventMarkers[i].longitude));
+                  kakao.maps.event.addListener(marker, 'click', (function(i) {
                     return function(){
-                      onTapMarker.postMessage('marker ' + i + ' is tapped');
+                      onTapMarker.postMessage('marker ' + eventMarkers[i].title + ' is tapped');
                     };
                   })(i));
                 }
+                
+                // 사용자 마커 담을 변수
+                var userMarkers = ${jsonEncode(usermarkers)};
+
+                // 마커 이미지 => 사용자 팻말
+                var userImageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
+                    userImageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
+                    userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                var userMarkerImage = new kakao.maps.MarkerImage(userImageSrc, userImageSize, userImageOption);
+                
+                // 사용자 마커 추가할 함수
+                function addUserMarker(position) {
+                  var marker = new kakao.maps.Marker({position: position, image: userMarkerImage});
+                  marker.setMap(map);
+                  return marker;
+                }
+                
+                // 사용자 마커 표시하기 (반복문 활용)
+                for(var i = 0 ; i < userMarkers.length ; i++){
+                  var marker = addUserMarker(new kakao.maps.LatLng(userMarkers[i].latitude, userMarkers[i].longitude));
+                  kakao.maps.event.addListener(marker, 'click', (function(i) {
+                    return function(){
+                      onTapMarker.postMessage('marker ' + userMarkers[i].title + ' is tapped');
+                    };
+                  })(i));
+                }
+                    
               ''',
 
               onTapMarker: (message) {
@@ -226,19 +286,6 @@ class _RecordState extends State<Record> {
           //     },
           //   ),
           // ),
-
-          // 3-3. 내 기록 / 기록 생성
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: screenHeight * 0.1,
-            child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text('내 기록'),
-                  Text('기록하기'),
-                ]),
-          ),
         ],
       ),
     );
