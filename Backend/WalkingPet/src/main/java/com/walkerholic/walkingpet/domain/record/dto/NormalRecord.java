@@ -9,22 +9,18 @@ import java.time.LocalDateTime;
 @Getter
 @Slf4j
 @Builder
-public class EventRecord {
-    private int recordId;
-    private Boolean isCheck;
+public class NormalRecord {
     private String imageUrl;
-    private String content;
+    private int recordId;
     private int characterId;
     private double latitude;
     private double longitude;
     private LocalDateTime regDate;
 
-    public static EventRecord from(Record record, Boolean isCheck){
-        return EventRecord.builder()
-                .recordId(record.getRecordId())
-                .isCheck(isCheck)
+    public static NormalRecord from(Record record){
+        return NormalRecord.builder()
                 .imageUrl(record.getImageUrl())
-                .content(record.getContent())
+                .recordId(record.getRecordId())
                 .characterId(record.getCharacterId())
                 .latitude(record.getLatitude().doubleValue())
                 .longitude(record.getLongitude().doubleValue())

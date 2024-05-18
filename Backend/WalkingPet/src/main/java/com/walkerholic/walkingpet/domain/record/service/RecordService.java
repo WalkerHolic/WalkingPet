@@ -3,12 +3,10 @@ package com.walkerholic.walkingpet.domain.record.service;
 import com.walkerholic.walkingpet.domain.item.entity.UserItem;
 import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.record.dto.EventRecord;
+import com.walkerholic.walkingpet.domain.record.dto.NormalRecord;
 import com.walkerholic.walkingpet.domain.record.dto.SelectUserRecord;
 import com.walkerholic.walkingpet.domain.record.dto.MyRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.AllUserRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.CheckCloseRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.EventRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.UploadRecordResponse;
+import com.walkerholic.walkingpet.domain.record.dto.response.*;
 import com.walkerholic.walkingpet.domain.record.entity.Record;
 import com.walkerholic.walkingpet.domain.record.entity.RecordCheck;
 import com.walkerholic.walkingpet.domain.record.repository.RecordCheckRepository;
@@ -217,6 +215,23 @@ public class RecordService {
                     .build();
         }
     }
+    /**
+     * 전체 일반기록 반환
+     * @return 이벤트 기록 리스트
+     */
+    public NormalRecordResponse loadNormalRecord(int userId){
+        List<Record> recordList = recordRepository.findAll();
+        List<NormalRecord> normalRecordList = new ArrayList<>();
+
+        for(Record r : recordList){
+            if(r.getIsEvent() == 0){
+                normalRecordList.add(NormalRecord.from(r));
+            }
+        }
+        return NormalRecordResponse.builder()
+                .enventRecordList(normalRecordList)
+                .build();
+    }
 
     /**
      * 전체 이벤트 기록 반환
@@ -227,12 +242,15 @@ public class RecordService {
         List<EventRecord> eventRecordList = new ArrayList<>();
 
         for(Record r : recordList){
-            int recordId = r.getRecordId();
-            if(!recordCheckRepository.getRecordCheckByUserIdAndRecordId(userId,recordId).isPresent()){
-                eventRecordList.add(EventRecord.from(r, false));
-            }
-            else{
-                eventRecordList.add(EventRecord.from(r, true));
+            //이벤트에 대해서만 진행
+            if(r.getIsEvent() == 1){
+                int recordId = r.getRecordId();
+                if(!recordCheckRepository.getRecordCheckByUserIdAndRecordId(userId,recordId).isPresent()){
+                    eventRecordList.add(EventRecord.from(r, false));
+                }
+                else{
+                    eventRecordList.add(EventRecord.from(r, true));
+                }
             }
         }
         return EventRecordResponse.builder()

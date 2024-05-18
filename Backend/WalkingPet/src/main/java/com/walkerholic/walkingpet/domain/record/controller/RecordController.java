@@ -1,9 +1,6 @@
 package com.walkerholic.walkingpet.domain.record.controller;
 
-import com.walkerholic.walkingpet.domain.record.dto.response.AllUserRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.CheckCloseRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.EventRecordResponse;
-import com.walkerholic.walkingpet.domain.record.dto.response.UploadRecordResponse;
+import com.walkerholic.walkingpet.domain.record.dto.response.*;
 import com.walkerholic.walkingpet.domain.record.service.RecordService;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -37,7 +34,8 @@ public class RecordController {
                                                              @RequestParam("characterId") int characterId,
                                                              @RequestParam("latitude") double latitude,
                                                              @RequestParam("longitude") double longitude) {
-        int userId = userDetail.getUsers().getUserId();
+//        int userId = userDetail.getUsers().getUserId();
+        int userId = 47;
         log.info("유저의 기록 등록하기 - userId: {}", userId);
 
         UploadRecordResponse uploadRecordResponse = recordService.uploadRecord(userId, multipartFile, characterId, latitude, longitude);
@@ -71,7 +69,21 @@ public class RecordController {
     }
 
     //4. 내 주변에 있는 유저의 기록 목록 가져오기
+    /**
+     *  맨 처음 로드할때 행정구역을 기준으로 로드 하게끔
+     */
+    @GetMapping("/normal")
+    @Operation(summary = "일반 기록을 로드하는 api", description = "일반 기록 로드하기")
+    @ApiResponse(responseCode = "200", description = "S200 - 기록 조회 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
+    @ApiResponse(responseCode = "404", description = "R400 - 기록 조회 실패")
+    public ResponseEntity<CommonResponseEntity> loadNormalRecordByCity(@AuthenticationPrincipal CustomUserDetail userDetail){
+//        int userId = userDetail.getUsers().getUserId();
+        int userId = 47;
+        log.info("선택한 기록이 가까운지 멀리 있는지 확인 - userId: {}", userId);
+        NormalRecordResponse normalRecordResponse = recordService.loadNormalRecord(userId);
 
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, normalRecordResponse);
+    }
 
     //5. 선택한 기록이 가까운지 멀리 있는지 확인하는 api
     @GetMapping("/check-record")
@@ -82,9 +94,10 @@ public class RecordController {
                                                                        @RequestParam("latitude")double latitude,
                                                                        @RequestParam("longitude")double longitude,
                                                                        @RequestParam("recordId")int recordId){
-        int userId = userDetail.getUsers().getUserId();
+//        int userId = userDetail.getUsers().getUserId();
+        int userId = 47;
         log.info("선택한 기록이 가까운지 멀리 있는지 확인 - userId: {}", userId);
-        CheckCloseRecordResponse checkAnotherUserRecord = recordService.checkAnotherUserRecord(latitude, longitude, recordId);
+        CheckCloseRecordResponse checkAnotherUserRecord = recordService.checkAnotherUserRecord(userId, latitude, longitude, recordId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, checkAnotherUserRecord);
     }
@@ -98,9 +111,10 @@ public class RecordController {
     @ApiResponse(responseCode = "200", description = "S200 - 기록 조회 성공", content = @Content(schema = @Schema(implementation = CommonResponseEntity.class)))
     @ApiResponse(responseCode = "404", description = "R400 - 기록 조회 실패")
     public ResponseEntity<CommonResponseEntity> loadEventRecord(@AuthenticationPrincipal CustomUserDetail userDetail){
-        int userId = userDetail.getUsers().getUserId();
+//        int userId = userDetail.getUsers().getUserId();
+        int userId = 47;
         log.info("선택한 기록이 가까운지 멀리 있는지 확인 - userId: {}", userId);
-        EventRecordResponse eventRecordResponse = recordService.loadEventRecord();
+        EventRecordResponse eventRecordResponse = recordService.loadEventRecord(userId);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, eventRecordResponse);
     }
@@ -116,9 +130,10 @@ public class RecordController {
     public ResponseEntity<CommonResponseEntity> loadEventRecordByCity(@AuthenticationPrincipal CustomUserDetail userDetail,
                                                                 @RequestParam("latitude")double latitude,
                                                                 @RequestParam("longitude")double longitude){
-        int userId = userDetail.getUsers().getUserId();
+//        int userId = userDetail.getUsers().getUserId();
+        int userId = 47;
         log.info("선택한 기록이 가까운지 멀리 있는지 확인 - userId: {}", userId);
-        EventRecordResponse eventRecordResponse = recordService.loadEventRecordByCity(latitude, longitude);
+        EventRecordResponse eventRecordResponse = recordService.loadEventRecordByCity(userId, latitude, longitude);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, eventRecordResponse);
     }
@@ -131,8 +146,9 @@ public class RecordController {
                                                              @RequestParam("latitude") double latitude,
                                                              @RequestParam("longitude") double longitude,
                                                              @RequestParam("content") String content) {
-        int userId = userDetail.getUsers().getUserId();
-        log.info("유저의 기록 등록하기 - userId: {}", userId);
+//        int userId = userDetail.getUsers().getUserId();
+        int userId = 47;
+        log.info("이벤트 기록 등록하기 - userId: {}", userId);
 
         UploadRecordResponse uploadRecordResponse = recordService.uploadEventRecord(userId, multipartFile, characterId, latitude, longitude, content);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, uploadRecordResponse);
