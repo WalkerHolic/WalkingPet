@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pedometer/pedometer.dart';
 import 'package:walkingpet/goal/widgets/daily.dart';
+import 'package:walkingpet/goal/widgets/goal_discription_modal.dart';
 import 'package:walkingpet/goal/widgets/weekly.dart';
-import 'package:walkingpet/main.dart';
 // 페이지 로드 시 목표 달성 여부를 로드
 import 'package:walkingpet/services/goal/get_goal_info.dart';
 import 'package:walkingpet/providers/step_counter.dart';
 import 'package:provider/provider.dart';
+import 'package:pixelarticons/pixelarticons.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Goal extends StatefulWidget {
   const Goal({super.key});
@@ -107,6 +108,19 @@ class _GoalState extends State<Goal> {
                     color: const Color(0xfffff3dc).withOpacity(0.8),
                   ),
                 ),
+                Transform.translate(
+                  offset: Offset(screenWidth * 0.08, screenHeight * 0.06),
+                  child: InkWell(
+                    onTap: () async {
+                      await GoalDiscriptionModal.showDiscription(
+                          context: context);
+                    },
+                    child: SvgPicture.asset(
+                      'assets/icons/question_mark.svg',
+                      width: screenWidth * 0.1,
+                    ),
+                  ),
+                ),
                 // 닫기 버튼
                 Positioned(
                   top: screenHeight * 0.05, // 원하는 만큼 더 내리기
@@ -122,10 +136,12 @@ class _GoalState extends State<Goal> {
                       padding: MaterialStateProperty.all(
                           EdgeInsets.zero), // 버튼의 내부 패딩 제거
                     ),
-                    child: const Text(
-                      'X',
-                      style: TextStyle(fontSize: 50, color: Colors.black),
-                    ),
+                    child: const Icon(Pixel.close),
+                    // child: Text(
+                    //   'X',
+                    //   style: TextStyle(
+                    //       fontSize: screenWidth * 0.10, color: Colors.black),
+                    // ),
                   ),
                 ),
                 Column(
