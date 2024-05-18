@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Builder
 public class EventRecord {
+    private int recordId;
     private Boolean isCheck;
     private String imageUrl;
     private String content;
@@ -20,6 +21,7 @@ public class EventRecord {
 
     public static EventRecord from(Record record, Boolean isCheck){
         return EventRecord.builder()
+                .recordId(record.getRecordId())
                 .isCheck(isCheck)
                 .imageUrl(record.getImageUrl())
                 .content(record.getContent())
