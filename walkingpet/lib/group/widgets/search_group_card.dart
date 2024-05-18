@@ -34,6 +34,7 @@ class SearchGroupCard extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => GroupDetail(groupId: groupId),
+          settings: const RouteSettings(name: '/groupdetail'),
         ),
       );
     }

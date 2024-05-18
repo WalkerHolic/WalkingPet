@@ -98,6 +98,8 @@ class GroupCard extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) =>
                                   GroupDetail(groupId: groupId),
+                              settings:
+                                  const RouteSettings(name: '/groupdetail'),
                             ),
                           );
                         },

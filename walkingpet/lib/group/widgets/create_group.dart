@@ -40,8 +40,10 @@ class _CreateGroupState extends State<CreateGroup> {
       return;
     }
     await createGroupService(teamName, explanation, password); //그룹 생성이 완료되면
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Group()));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const Group(),
+      settings: const RouteSettings(name: '/groupdetail'),
+    ));
   }
 
   @override

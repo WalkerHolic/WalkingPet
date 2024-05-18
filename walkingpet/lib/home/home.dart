@@ -10,6 +10,7 @@ import 'package:walkingpet/providers/step_counter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/home/widgets/toprighticonwithttext.dart';
 import 'package:provider/provider.dart';
+import 'package:walkingpet/services/audio/audio_manager.dart';
 import 'package:walkingpet/services/home/gethomecharacter.dart';
 
 class Home extends StatefulWidget {
