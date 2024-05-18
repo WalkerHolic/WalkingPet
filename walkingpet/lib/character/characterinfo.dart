@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:walkingpet/character/character_change.dart';
 import 'package:walkingpet/character/character_exp.dart';
@@ -7,6 +8,7 @@ import 'package:walkingpet/character/widgets/stat_reset_modal.dart';
 import 'package:walkingpet/common/bottom_nav_bar.dart';
 import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
+import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/main.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/character/statpointreset.dart';
@@ -28,6 +30,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
   String animal = "";
   int sp = 0;
   int statPoint = 0;
+  int upgrade = 0;
   bool isLoading = true;
 
   // statPoint 값을 업데이트하는 메서드
@@ -58,7 +61,7 @@ class _CharacterInfoState extends State<CharacterInfo> {
         int characterId = characterInfoData['characterId'] as int;
         animal = CharacterMap.idToAnimal[characterId] ?? "bunny";
         statPoint = characterInfoData['statPoint'] as int;
-
+        upgrade = characterInfoData['upgrade'];
         isLoading = false;
       });
 
@@ -180,6 +183,18 @@ class _CharacterInfoState extends State<CharacterInfo> {
                   // 2. 캐릭터 이미지
                   Stack(
                     children: [
+                      Transform.translate(
+                        offset: const Offset(0, 25),
+                        child: Center(
+                          child: MainFontStyle(
+                            size: screenWidth * 0.07,
+                            text: "+$upgrade",
+                            color: Colors.redAccent,
+                            whiteOffset: true,
+                          ),
+                        ),
+                      ),
+
                       Center(
                         child: Image.asset(
                           'assets/animals/$animal/${animal}_idle.gif',

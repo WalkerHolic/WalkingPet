@@ -4,12 +4,14 @@ class MainFontStyle extends StatelessWidget {
   final double size;
   final String text;
   final Color color;
+  final bool whiteOffset;
 
   const MainFontStyle({
     super.key,
     required this.size,
     required this.text,
     this.color = Colors.white,
+    this.whiteOffset = false,
   });
 
   @override
@@ -19,26 +21,26 @@ class MainFontStyle extends StatelessWidget {
       style: TextStyle(
         fontSize: size,
         color: color,
-        shadows: const [
+        shadows: [
           Shadow(
             // 외곽선 색상 및 오프셋 설정
-            offset: Offset(-1.5, -1.5),
-            color: Colors.black,
+            offset: const Offset(-1.5, -1.5),
+            color: whiteOffset ? Colors.white : Colors.black,
             blurRadius: 1,
           ),
           Shadow(
-            offset: Offset(1.5, -1.5),
-            color: Colors.black,
+            offset: const Offset(1.5, -1.5),
+            color: whiteOffset ? Colors.white : Colors.black,
             blurRadius: 1,
           ),
           Shadow(
-            offset: Offset(1.5, 1.5),
-            color: Colors.black,
+            offset: const Offset(1.5, 1.5),
+            color: whiteOffset ? Colors.white : Colors.black,
             blurRadius: 1,
           ),
           Shadow(
-            offset: Offset(-1.5, 1.5),
-            color: Colors.black,
+            offset: const Offset(-1.5, 1.5),
+            color: whiteOffset ? Colors.white : Colors.black,
             blurRadius: 1,
           ),
         ],
