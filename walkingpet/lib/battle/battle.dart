@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -15,14 +16,43 @@ class Battle extends StatefulWidget {
   State<Battle> createState() => _BattleState();
 }
 
-class _BattleState extends State<Battle> {
+class _BattleState extends State<Battle> with WidgetsBindingObserver {
   Map<String, dynamic> battleData = {};
   bool isLoading = true;
+  late AudioPlayer _audioPlayer;
 
   @override
   void initState() {
     super.initState();
     initBattleInfo(); // 위젯이 로드될 때 fetchData 호출
+    WidgetsBinding.instance.addObserver(this);
+    _audioPlayer = AudioPlayer();
+    _playMusic();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _stopMusic();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _playMusic();
+    } else if (state == AppLifecycleState.paused) {
+      _stopMusic();
+    }
+  }
+
+  void _playMusic() async {
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    await _audioPlayer.play(AssetSource('audio/battle.mp3'));
+  }
+
+  void _stopMusic() async {
+    await _audioPlayer.stop();
   }
 
   Future<void> initBattleInfo() async {

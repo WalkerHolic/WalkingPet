@@ -74,8 +74,11 @@ class _GroupDetailState extends State<GroupDetail> {
   Future<void> _leaveGroupAndNavigate() async {
     try {
       await leaveGroup(widget.groupId);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Group()),
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const Group(),
+          settings: const RouteSettings(name: '/groupdetail'),
+        ),
       );
     } catch (e) {
       // 오류 처리
@@ -87,8 +90,11 @@ class _GroupDetailState extends State<GroupDetail> {
   Future<void> joinGroupAndNavigate() async {
     try {
       await joinGroup(widget.groupId);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Group()),
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const Group(),
+          settings: const RouteSettings(name: '/groupdetail'),
+        ),
       );
     } catch (e) {
       // 오류 처리
