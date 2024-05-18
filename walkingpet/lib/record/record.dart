@@ -46,14 +46,16 @@ class _RecordState extends State<Record> {
       var responseEvents = await getEventMarkers();
       var responseUsers = await getUserMarkers();
       setState(() {
-        eventmarkers = responseEvents['data']['enventRecordList'];
-        usermarkers = responseUsers['data']['enventRecordList'];
+        eventmarkers = responseEvents['data']['eventRecordList'];
+        usermarkers = responseUsers['data']['normalRecordList'];
         isLoading = false;
       });
     } catch (e) {
       isLoading = false;
     }
   }
+
+  // 현재 위치 가져오기
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +64,6 @@ class _RecordState extends State<Record> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     final String? kakaoMapKey = dotenv.env['MAP_APP_KEY'];
-
-    print(eventmarkers[0]['latitude']);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -102,42 +102,32 @@ class _RecordState extends State<Record> {
           // ),
 
           // 3. 내용
-          if (isLoading)
-            const Center(
-                child: Text(
-              '기록 떠올리는 중..',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ))
-          else
-
-            // 3-1. 기록 & 'X' 버튼
-            Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('       '),
-                  const MainFontStyle(size: 40, text: '기록'),
-                  TextButton(
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      // Navigator.pushReplacementNamed(
-                      //     context, '/home'); // 현재 경로를 '/home'으로 교체
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                          EdgeInsets.zero), // 버튼의 내부 패딩 제거
-                    ),
-                    child: const Text(
-                      'X',
-                      style: TextStyle(fontSize: 30, color: Colors.black),
-                    ),
-                  )
-                ],
-              ),
+          // 3-1. 기록 & 'X' 버튼
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('       '),
+                const MainFontStyle(size: 40, text: '기록'),
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    // Navigator.pushReplacementNamed(
+                    //     context, '/home'); // 현재 경로를 '/home'으로 교체
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.zero), // 버튼의 내부 패딩 제거
+                  ),
+                  child: const Text(
+                    'X',
+                    style: TextStyle(fontSize: 30, color: Colors.black),
+                  ),
+                )
+              ],
             ),
+          ),
 
           // 앱 업로드를 위한 임시 코드
           // Positioned(
@@ -163,18 +153,27 @@ class _RecordState extends State<Record> {
           // ),
 
           // 3-2. 지도 KakaoMapView
-          Positioned(
-            left: screenWidth * 0.05,
-            top: screenHeight * 0.15,
-            child: KakaoMapView(
-              width: screenWidth * 0.9,
-              height: screenHeight * 0.7,
-              kakaoMapKey: kakaoMapKey!,
-              lat: 36.355387454337716, // 위도
-              lng: 127.29839622974396, // 경도
-              zoomLevel: 3, // 초기 줌 레벨
+          if (isLoading)
+            const Center(
+                child: Text(
+              '기록 떠올리는 중..',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ))
+          else
+            Positioned(
+              left: screenWidth * 0.05,
+              top: screenHeight * 0.15,
+              child: KakaoMapView(
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.7,
+                kakaoMapKey: kakaoMapKey!,
+                lat: 36.355387454337716, // 위도
+                lng: 127.29839622974396, // 경도
+                zoomLevel: 3, // 초기 줌 레벨
 
-              customScript: '''
+                customScript: '''
                 // 이벤트 마커 담을 변수
                 var eventMarkers = ${jsonEncode(eventmarkers)};
 
@@ -232,12 +231,12 @@ class _RecordState extends State<Record> {
                     
               ''',
 
-              onTapMarker: (message) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(message.message)));
-              },
+                onTapMarker: (message) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(message.message)));
+                },
+              ),
             ),
-          ),
 
           // 참고하려고 써둔 코드
           // Positioned(
@@ -286,6 +285,56 @@ class _RecordState extends State<Record> {
           //     },
           //   ),
           // ),
+
+          // 3-3. 내 기록 / 기록 생성
+          Positioned(
+            left: screenWidth * 0.1,
+            right: screenWidth * 0.1,
+            bottom: screenHeight * 0.05,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // GestureDetector(
+                //   onTap: () {
+                //     print('내 기록 보기 버튼 클릭');
+                //   },
+                //   child: Stack(
+                //     alignment: Alignment.center,
+                //     children: [
+                //       Image.asset(
+                //         'assets/buttons/green_short_button.png',
+                //         height: screenHeight * 0.06,
+                //         fit: BoxFit.cover,
+                //       ),
+                //       const Text(
+                //         '내 기록',
+                //         style: TextStyle(fontSize: 20),
+                //       )
+                //     ],
+                //   ),
+                // ),
+                GestureDetector(
+                  onTap: () {
+                    print('기록하기 버튼 클릭');
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/buttons/green_short_button.png',
+                        height: screenHeight * 0.06,
+                        fit: BoxFit.cover,
+                      ),
+                      const Text(
+                        '기록하기',
+                        style: TextStyle(fontSize: 20),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
