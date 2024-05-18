@@ -8,6 +8,8 @@ import 'package:walkingpet/services/record/clickmarker.dart';
 import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class Record extends StatefulWidget {
   const Record({super.key});
@@ -390,4 +392,14 @@ class _RecordState extends State<Record> {
       ),
     );
   }
+}
+
+Future<String> _pickImage() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  if (pickedFile != null) {
+    File? image = File(pickedFile.path);
+    return image.path;
+  }
+  return "";
 }
