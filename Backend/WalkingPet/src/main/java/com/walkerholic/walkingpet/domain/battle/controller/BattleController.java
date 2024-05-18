@@ -31,7 +31,6 @@ public class BattleController {
         log.info("나의 배틀 정보 확인하기 BattleController getUserBattleInfo - userId: {}", userId);
         UserBattleInfoDTO userBattleInfoDTO = battleService.getUserBattleInfo(userId);
 
-
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userBattleInfoDTO);
     }
 
