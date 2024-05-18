@@ -107,7 +107,7 @@ public class RedisController {
         int step = 1114;
         log.info("redis 실시간 걸음수 저장 테스트 - redis test saveRedisRealtimeStep userId: {}", userId);
 
-        realtimeStepRankingRedisService.saveUserDailyStep(RealtimeStepRequest.builder().userId(userId).realtimeStep(step).build());
+        realtimeStepRankingRedisService.saveUserDailyStep(userId, step);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS);
     }
