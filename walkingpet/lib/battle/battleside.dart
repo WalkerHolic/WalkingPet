@@ -72,15 +72,15 @@ class _BattleSideState extends State<BattleSide> {
             _timer?.cancel();
             Timer(const Duration(seconds: 1), () {
               if (widget.isLeft) {
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => BattleResult(
-                //       battleResult: widget.battleResult,
-                //       animal: animal,
-                //     ),
-                //   ),
-                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BattleResult(
+                      battleResult: widget.battleResult,
+                      animal: animal,
+                    ),
+                  ),
+                );
               }
             });
           }
