@@ -10,6 +10,7 @@ import 'package:walkingpet/common/character_map.dart';
 import 'package:walkingpet/common/exit_alert_modal.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/main.dart';
+import 'package:walkingpet/services/audio/audio_manager.dart';
 import 'package:walkingpet/services/character/characterinfo.dart';
 import 'package:walkingpet/services/character/statpointreset.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -312,8 +313,10 @@ class _CharacterInfoState extends State<CharacterInfo> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CharacterExp()),
+                                    builder: (context) => const CharacterExp(),
+                                    settings: const RouteSettings(
+                                        name: '/characterexp'),
+                                  ),
                                 );
                               },
                               style: TextButton.styleFrom(

@@ -55,7 +55,10 @@ class _MyGroupState extends State<MyGroup> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const CreateGroup()));
+                              builder: (context) => const CreateGroup(),
+                              settings:
+                                  const RouteSettings(name: '/creategroup'),
+                            ));
                       },
                       child: SvgPicture.asset(
                         'assets/buttons/new_create_group.svg',

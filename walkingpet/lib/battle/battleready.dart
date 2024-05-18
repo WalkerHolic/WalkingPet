@@ -7,6 +7,7 @@ import 'package:walkingpet/common/exit_alert_modal.dart';
 // import 'package:walkingpet/common/star.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'package:walkingpet/main.dart';
+import 'package:walkingpet/services/audio/audio_manager.dart';
 import 'package:walkingpet/services/battle/getmyinfo.dart';
 
 class BattleReady extends StatefulWidget {
@@ -26,6 +27,13 @@ class _BattleReadyState extends State<BattleReady> {
   void initState() {
     super.initState();
     initMyInfo(); // 위젯이 로드될 때 fetchData 호출
+    AudioManager().play('audio/battleReady.mp3');
+  }
+
+  @override
+  void dispose() {
+    AudioManager().stop();
+    super.dispose();
   }
 
   Future<void> initMyInfo() async {

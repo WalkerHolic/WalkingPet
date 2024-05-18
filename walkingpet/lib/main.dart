@@ -23,6 +23,8 @@ import 'package:walkingpet/record/record.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // env 관련 코드
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:walkingpet/services/audio/audio_manager.dart';
+import 'package:walkingpet/services/audio/music_navigator_observer.dart';
 import 'package:walkingpet/services/fcm/fcm.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -92,10 +94,38 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final String startRoute;
 
   const MyApp({super.key, required this.startRoute});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      AudioManager().stop();
+    } else if (state == AppLifecycleState.resumed) {
+      // 현재 라우트에 따라 음악 재생
+      handleRouteChange(ModalRoute.of(context)?.settings.name);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +171,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waking Pet',
       theme: newTheme,
-      initialRoute: startRoute,
+      initialRoute: widget.startRoute,
+      navigatorObservers: [MusicNavigatorObserver()],
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const Home(),
@@ -198,4 +229,26 @@ void _scheduleDailyTask() async {
       }
     });
   });
+}
+
+void handleRouteChange(String? routeName) {
+  if (routeName == '/home') {
+    AudioManager().play('audio/home.mp3');
+  } else if (routeName == '/goal') {
+    AudioManager().play('audio/goal.mp3');
+  } else if (routeName == '/ranking') {
+    AudioManager().play('audio/ranking.mp3');
+  } else if (routeName == '/characterinfo') {
+    AudioManager().play('audio/character.mp3');
+  } else if (routeName == '/gacha') {
+    AudioManager().play('audio/gacha.mp3');
+  } else if (routeName == '/battleready') {
+    AudioManager().play('audio/battleready.mp3');
+  } else if (routeName == '/group') {
+    AudioManager().play('audio/group.mp3');
+  } else if (routeName == '/record') {
+    AudioManager().play('audio/record.mp3');
+  } else {
+    AudioManager().stop();
+  }
 }
