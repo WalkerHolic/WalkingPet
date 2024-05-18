@@ -13,6 +13,8 @@ import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'dart:io';
+//모달창
+import 'package:walkingpet/record/show_record.dart';
 
 class Record extends StatefulWidget {
   const Record({super.key});
@@ -324,10 +326,10 @@ class _RecordState extends State<Record> {
                       var data = jsonDecode(message.message);
                       var recordId = data['recordId'];
 
-                      getClickMarker(currentLat, currentLng, recordId);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              '${data['type']} 클릭! (recordId 는 $recordId)')));
+                      // getClickMarker(currentLat, currentLng, recordId);
+                      // 얘 오류나서 잠깐 주석함
+
+                      showRecord(context);
                     },
 
                     // onTapMarker: (message) {
