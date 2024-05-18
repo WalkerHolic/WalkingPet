@@ -20,6 +20,7 @@ class _BattleReadyState extends State<BattleReady> {
   Map<String, dynamic> characterData = {};
   String animal = "";
   bool isLoading = true;
+  int upgrade = 0;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _BattleReadyState extends State<BattleReady> {
             as int; // API에서 characterId가 int 타입이라고 가정
         animal = CharacterMap.idToAnimal[characterId] ??
             "unKnown"; // characterId에 해당하는 동물이 없을 경우 "unKnown"을 사용
-
+        upgrade = characterData['upgrade'];
         isLoading = false;
       });
     } catch (e) {
@@ -97,7 +98,7 @@ class _BattleReadyState extends State<BattleReady> {
                             size: screenWidth * 0.08,
                             text: "점수: ${characterData['rating']}"),
                         SizedBox(
-                          height: screenHeight * 0.06,
+                          height: screenHeight * 0.02,
                         ),
 
                         // 캐릭터 등급(별)
@@ -110,6 +111,18 @@ class _BattleReadyState extends State<BattleReady> {
                               width: screenWidth * 0.08,
                             );
                           }),
+                        ),
+
+                        SizedBox(
+                          height: screenHeight * 0.01,
+                        ),
+                        Center(
+                          child: MainFontStyle(
+                            size: screenWidth * 0.07,
+                            text: "+$upgrade",
+                            color: Colors.redAccent,
+                            whiteOffset: true,
+                          ),
                         ),
 
                         Image.asset(
