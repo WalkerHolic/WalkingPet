@@ -296,7 +296,6 @@ public class RankingService {
                 sameRankCount++;
             }
 
-
             StepRankingList.add(PersonalStepRankingInfo.entityFrom(userDetailInfo, userStepInfo, userStepInfo.getYesterdayStep(), rank));
             previousStep = userStepInfo.getYesterdayStep();
         }

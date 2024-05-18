@@ -112,9 +112,7 @@ public class RankingController {
     public ResponseEntity<CommonResponseEntity> getTeamRankingTop10() {
         log.info("그룹 랭킹 top 10 조회 getTeamRankingTop10 ");
 
-        TeamRankingResponse teamRankingTop10 = rankingService.getTeamRankingTop10();
-
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, teamRankingTop10);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getTeamRankingTop10());
     }
 
     @GetMapping("/myGroup")
@@ -124,9 +122,7 @@ public class RankingController {
         Integer userId = userDetail.getUsers().getUserId();
         log.info("나의 그룹 랭킹 조회 getMyTeamRanking userId: {}", userId);
 
-        TeamRankingResponse myTeamRanking = rankingService.getMyTeamRanking(userId);
-
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, myTeamRanking);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getMyTeamRanking(userId));
     }
 
     @GetMapping("/group/count")
@@ -136,8 +132,7 @@ public class RankingController {
         Integer userId = userDetail.getUsers().getUserId();
         log.info("나의 그룹 수 조회 getMyGroupCount userId: {}", userId);
 
-        GroupCountResponse groupCount = rankingService.getMyGroupCount(userId);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, groupCount);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getMyGroupCount(userId));
     }
 
     @GetMapping("/battle/top10")
@@ -153,7 +148,6 @@ public class RankingController {
     @Operation(summary = "배틀 랭킹 top 3 조회", description = "배틀 랭킹 정보를 top 3 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 배틀 랭킹 top 3 조회 조회 성공", content = @Content(schema = @Schema(implementation = BattleRankingResponse.class)))
     public ResponseEntity<CommonResponseEntity> getBattleRankingTop3() {
-
             log.info("배틀 걸음수 랭킹 top 3 조회 getBattleRankingTop3");
 
             return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getBattleRankingTop3());
