@@ -20,12 +20,8 @@ class Record extends StatefulWidget {
 
 class _RecordState extends State<Record> {
   late Future<Position> _currentPositionFuture;
-  late WebViewController _mapController;
-  // final double _lat = 33.450701;
-  // final double _lng = 126.570667;
-
-  final lat = 36.355387454337716;
-  final lng = 127.29839622974396;
+  double currentLat = 36.355387454337716;
+  double currentLng = 127.29839622974396;
 
   // 이벤트 마커 담을 변수
   List<dynamic> eventmarkers = [];
@@ -38,6 +34,45 @@ class _RecordState extends State<Record> {
   void initState() {
     super.initState();
     initInfo();
+    _currentPositionFuture = _getCurrentLocation();
+  }
+
+  // 현재 위치 가져오기
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // 위치 서비스가 활성화되어 있는지 확인
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // 위치 서비스가 비활성화되어 있으면, 사용자에게 위치 서비스를 활성화하도록 요청
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    // 위치 권한 상태 확인
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // 권한이 거부된 경우, 오류 반환
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // 권한이 영구적으로 거부된 경우, 오류 반환
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // 현재 위치 가져오기
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() {
+      currentLat = position.latitude;
+      currentLng = position.longitude;
+    });
+    return position;
   }
 
   // API 요청으로 데이터 불러오기
@@ -48,10 +83,10 @@ class _RecordState extends State<Record> {
       setState(() {
         eventmarkers = responseEvents['data']['eventRecordList'];
         usermarkers = responseUsers['data']['normalRecordList'];
-        isLoading = false;
+        // isLoading = false;
       });
     } catch (e) {
-      isLoading = false;
+      // isLoading = false;
     }
   }
 
@@ -153,188 +188,175 @@ class _RecordState extends State<Record> {
           // ),
 
           // 3-2. 지도 KakaoMapView
-          if (isLoading)
-            const Center(
-                child: Text(
-              '기록 떠올리는 중..',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ))
-          else
-            Positioned(
-              left: screenWidth * 0.05,
-              top: screenHeight * 0.15,
-              child: KakaoMapView(
-                width: screenWidth * 0.9,
-                height: screenHeight * 0.7,
-                kakaoMapKey: kakaoMapKey!,
-                lat: 36.355387454337716, // 위도
-                lng: 127.29839622974396, // 경도
-                zoomLevel: 3, // 초기 줌 레벨
-
-                customScript: '''
-                // 이벤트 마커 담을 변수
-                var eventMarkers = ${jsonEncode(eventmarkers)};
-
-                // 마커 이미지 => 이벤트 팻말
-                // var eventImageSrc = 'https://ifh.cc/g/po7J27.png', // 마커이미지의 주소입니다
-                var eventImageSrc = 'https://ifh.cc/g/0kW3Od.png', // 마커이미지의 주소입니다
-                    eventImageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
-                    eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-                var eventMarkerImage = new kakao.maps.MarkerImage(eventImageSrc, eventImageSize, eventImageOption);
-                
-                // 마커 추가할 함수
-                function addEventMarker(position) {
-                  var marker = new kakao.maps.Marker({position: position, image: eventMarkerImage});
-                  marker.setMap(map);
-                  return marker;
-                }
-                
-                // 마커 표시하기 (반복문 활용)
-                for(var i = 0 ; i < eventMarkers.length ; i++){
-                  var marker = addEventMarker(new kakao.maps.LatLng(eventMarkers[i].latitude, eventMarkers[i].longitude));
-                  kakao.maps.event.addListener(marker, 'click', (function(i) {
-                    return function(){
-                      onTapMarker.postMessage('marker ' + eventMarkers[i].title + ' is tapped');
-                    };
-                  })(i));
-                }
-                
-                // 사용자 마커 담을 변수
-                var userMarkers = ${jsonEncode(usermarkers)};
-
-                // 마커 이미지 => 사용자 팻말
-                var userImageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
-                    userImageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
-                    userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-                var userMarkerImage = new kakao.maps.MarkerImage(userImageSrc, userImageSize, userImageOption);
-                
-                // 사용자 마커 추가할 함수
-                function addUserMarker(position) {
-                  var marker = new kakao.maps.Marker({position: position, image: userMarkerImage});
-                  marker.setMap(map);
-                  return marker;
-                }
-                
-                // 사용자 마커 표시하기 (반복문 활용)
-                for(var i = 0 ; i < userMarkers.length ; i++){
-                  var marker = addUserMarker(new kakao.maps.LatLng(userMarkers[i].latitude, userMarkers[i].longitude));
-                  kakao.maps.event.addListener(marker, 'click', (function(i) {
-                    return function(){
-                      onTapMarker.postMessage('marker ' + userMarkers[i].title + ' is tapped');
-                    };
-                  })(i));
-                }
-                    
-              ''',
-
-                onTapMarker: (message) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(message.message)));
-                },
-              ),
-            ),
-
-          // 참고하려고 써둔 코드
-          // Positioned(
-          //   left: screenWidth * 0.05,
-          //   top: screenHeight * 0.15,
-          //   child: KakaoMapView(
-          //     width: screenWidth * 0.9,
-          //     height: screenHeight * 0.7,
-          //     kakaoMapKey: kakaoMapKey!,
-          //     lat: 36.355387454337716, // 위도
-          //     lng: 127.29839622974396, // 경도
-          //     // lat: _lat,
-          //     // lng: _lng,
-          //     zoomLevel: 3, // 초기 줌 레벨
-
-          //     // 오버레이: '구경하기',
-          //     // customOverlayStyle: '''<style>
-          //     //   .customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
-          //     //   .customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-          //     //   .customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-          //     //   .customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
-          //     //   .customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-          //     //                 </style>''',
-          //     // customOverlay: '''
-          //     //   const content = '<div class="customoverlay">' +
-          //     //       '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
-          //     //       '    <span class="title">userId</span>' +
-          //     //       '  </a>' +
-          //     //       '</div>';
-
-          //     //   const position = new kakao.maps.LatLng($_lat, $_lng);
-
-          //     //   const customOverlay = new kakao.maps.CustomOverlay({
-          //     //       map: map,
-          //     //       position: position,
-          //     //       content: content,
-          //     //       yAnchor: 1
-          //     //   });
-          //     //   ''',
-
-          //     markerImageURL: 'https://ifh.cc/g/6FTDpn.png',
-
-          //     onTapMarker: (message) {
-          //       ScaffoldMessenger.of(context)
-          //           .showSnackBar(SnackBar(content: Text(message.message)));
-          //     },
-          //   ),
-          // ),
-
-          // 3-3. 내 기록 / 기록 생성
-          Positioned(
-            left: screenWidth * 0.1,
-            right: screenWidth * 0.1,
-            bottom: screenHeight * 0.05,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // GestureDetector(
-                //   onTap: () {
-                //     print('내 기록 보기 버튼 클릭');
-                //   },
-                //   child: Stack(
-                //     alignment: Alignment.center,
-                //     children: [
-                //       Image.asset(
-                //         'assets/buttons/green_short_button.png',
-                //         height: screenHeight * 0.06,
-                //         fit: BoxFit.cover,
-                //       ),
-                //       const Text(
-                //         '내 기록',
-                //         style: TextStyle(fontSize: 20),
-                //       )
-                //     ],
-                //   ),
-                // ),
-                GestureDetector(
-                  onTap: () {
-                    print('기록하기 버튼 클릭');
-                  },
-                  child: Stack(
-                    alignment: Alignment.center,
+          FutureBuilder<Position>(
+            future: _currentPositionFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/buttons/green_short_button.png',
-                        height: screenHeight * 0.06,
-                        fit: BoxFit.cover,
+                      const MainFontStyle(
+                        size: 20,
+                        text: '... 로딩중 ...',
                       ),
-                      const Text(
-                        '기록하기',
-                        style: TextStyle(fontSize: 20),
-                      )
+                      SizedBox(
+                        height: screenHeight * 0.05,
+                      ),
+                      const CircularProgressIndicator(),
                     ],
                   ),
-                ),
-              ],
-            ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('위치를 불러오는 중 오류가 발생했습니다: ${snapshot.error}'),
+                );
+              } else {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
+
+                return Positioned(
+                  left: screenWidth * 0.05,
+                  top: screenHeight * 0.15,
+                  child: KakaoMapView(
+                    width: screenWidth * 0.9,
+                    height: screenHeight * 0.7,
+                    kakaoMapKey: kakaoMapKey!,
+                    lat: currentLat, // 현재 위도
+                    lng: currentLng, // 현재 경도
+                    zoomLevel: 3, // 초기 줌 레벨
+
+                    customScript: '''
+                    // 현재 위치 마커
+                    var currentMarkerImageSrc = 'https://ifh.cc/g/po7J27.png',
+                        currentMarkerImageSize = new kakao.maps.Size(31, 42),
+                        currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
+
+                    var currentMarkerImage = new kakao.maps.MarkerImage(currentMarkerImageSrc, currentMarkerImageSize, currentMarkerImageOption);
+
+                    var currentMarkerPosition = new kakao.maps.LatLng($currentLat, $currentLng);
+                    var currentMarker = new kakao.maps.Marker({position: currentMarkerPosition, image: currentMarkerImage});
+                    currentMarker.setMap(map);  
+
+                    // 이벤트 마커 담을 변수
+                    var eventMarkers = ${jsonEncode(eventmarkers)};
+
+                    // 마커 이미지 => 이벤트 팻말
+                    var eventImageSrc = 'https://ifh.cc/g/0kW3Od.png', // 마커이미지의 주소입니다
+                        eventImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
+                        eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                    var eventMarkerImage = new kakao.maps.MarkerImage(eventImageSrc, eventImageSize, eventImageOption);
+                    
+                    // 마커 추가할 함수
+                    function addEventMarker(position) {
+                      var marker = new kakao.maps.Marker({position: position, image: eventMarkerImage});
+                      marker.setMap(map);
+                      return marker;
+                    }
+                    
+                    // 마커 표시하기 (반복문 활용)
+                    for(var i = 0 ; i < eventMarkers.length ; i++){
+                      var marker = addEventMarker(new kakao.maps.LatLng(eventMarkers[i].latitude, eventMarkers[i].longitude));
+                      kakao.maps.event.addListener(marker, 'click', (function(i) {
+                        return function(){
+                          onTapMarker.postMessage('marker ' + eventMarkers[i].title + ' is tapped');
+                        };
+                      })(i));
+                    }
+                    
+                    // 사용자 마커 담을 변수
+                    var userMarkers = ${jsonEncode(usermarkers)};
+
+                    // 마커 이미지 => 사용자 팻말
+                    var userImageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
+                        userImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
+                        userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                    var userMarkerImage = new kakao.maps.MarkerImage(userImageSrc, userImageSize, userImageOption);
+                    
+                    // 사용자 마커 추가할 함수
+                    function addUserMarker(position) {
+                      var marker = new kakao.maps.Marker({position: position, image: userMarkerImage});
+                      marker.setMap(map);
+                      return marker;
+                    }
+                    
+                    // 사용자 마커 표시하기 (반복문 활용)
+                    for(var i = 0 ; i < userMarkers.length ; i++){
+                      var marker = addUserMarker(new kakao.maps.LatLng(userMarkers[i].latitude, userMarkers[i].longitude));
+                      kakao.maps.event.addListener(marker, 'click', (function(i) {
+                        return function(){
+                          onTapMarker.postMessage('marker ' + userMarkers[i].title + ' is tapped');
+                        };
+                      })(i));
+                    }
+            
+                  ''',
+
+                    onTapMarker: (message) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(message.message)));
+                    },
+                  ),
+                );
+              }
+            },
           ),
+
+          // 3-3. 내 기록 / 기록 생성
+          if (!isLoading)
+            Positioned(
+              left: screenWidth * 0.1,
+              right: screenWidth * 0.1,
+              bottom: screenHeight * 0.05,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     print('내 기록 보기 버튼 클릭');
+                  //   },
+                  //   child: Stack(
+                  //     alignment: Alignment.center,
+                  //     children: [
+                  //       Image.asset(
+                  //         'assets/buttons/green_short_button.png',
+                  //         height: screenHeight * 0.06,
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //       const Text(
+                  //         '내 기록',
+                  //         style: TextStyle(fontSize: 20),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                  GestureDetector(
+                    onTap: () {
+                      print('기록하기 버튼 클릭');
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/buttons/green_short_button.png',
+                          height: screenHeight * 0.06,
+                          fit: BoxFit.cover,
+                        ),
+                        const Text(
+                          '기록하기',
+                          style: TextStyle(fontSize: 20),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
