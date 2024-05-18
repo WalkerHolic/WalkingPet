@@ -22,12 +22,22 @@ public class BattleRankingList {
         this.battleRating = battleRating;
     }
 
-    public static BattleRankingList from(UserDetail userDetail, int ranking) {
+    public static BattleRankingList mysqlFrom(UserDetail userDetail, int ranking) {
         return BattleRankingList.builder()
                 .userId(userDetail.getUser().getUserId())
                 .nickname(userDetail.getUser().getNickname())
                 .battleRating(userDetail.getBattleRating())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
+                .ranking(ranking)
+                .build();
+    }
+
+    public static BattleRankingList redisFrom(UserRedisDto userRedisDto,int battleRating ,int ranking) {
+        return BattleRankingList.builder()
+                .userId(userRedisDto.getUserId())
+                .nickname(userRedisDto.getNickname())
+                .battleRating(battleRating)
+                .characterId(userRedisDto.getCharacterId())
                 .ranking(ranking)
                 .build();
     }

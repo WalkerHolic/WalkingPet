@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -250,7 +249,7 @@ public class RankingService {
 
         int myRank = userDetailRepository.findBattleRankingMyRankByBattleRating(userId);
 
-        return BattleRankingList.from(userDetail, myRank);
+        return BattleRankingList.mysqlFrom(userDetail, myRank);
     }
 
     // 누적 걸음수 랭킹 동점 계산
@@ -319,7 +318,7 @@ public class RankingService {
                 sameRankCount++;
             }
 
-            battleRankingList.add(BattleRankingList.from(userInfo, rank));
+            battleRankingList.add(BattleRankingList.mysqlFrom(userInfo, rank));
             previousRating = userInfo.getBattleRating();
         }
 
