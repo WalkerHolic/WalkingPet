@@ -1,5 +1,7 @@
 package com.walkerholic.walkingpet.domain.record.service;
 
+import com.walkerholic.walkingpet.domain.item.entity.UserItem;
+import com.walkerholic.walkingpet.domain.item.repository.UserItemRepository;
 import com.walkerholic.walkingpet.domain.record.dto.EventRecord;
 import com.walkerholic.walkingpet.domain.record.dto.SelectUserRecord;
 import com.walkerholic.walkingpet.domain.record.dto.MyRecordResponse;
@@ -8,6 +10,8 @@ import com.walkerholic.walkingpet.domain.record.dto.response.CheckCloseRecordRes
 import com.walkerholic.walkingpet.domain.record.dto.response.EventRecordResponse;
 import com.walkerholic.walkingpet.domain.record.dto.response.UploadRecordResponse;
 import com.walkerholic.walkingpet.domain.record.entity.Record;
+import com.walkerholic.walkingpet.domain.record.entity.RecordCheck;
+import com.walkerholic.walkingpet.domain.record.repository.RecordCheckRepository;
 import com.walkerholic.walkingpet.domain.record.repository.RecordRepository;
 import com.walkerholic.walkingpet.domain.users.address.AddressFunction;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
@@ -34,6 +38,11 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final S3Service s3Service;
     private final AddressFunction addressFunction;
+    private final RecordCheckRepository recordCheckRepository;
+    private final UserItemRepository userItemRepository;
+
+    private final String REWARD = "Luxury Box";
+    private final int REWARD_QUANTITY = 1;
 
     /**
      * 기록 등록하기
@@ -54,7 +63,8 @@ public class RecordService {
             S3FileUpload s3FileUpload = s3Service.saveFile(multipartFile);
             //업로드 response 데이터
             UploadRecordResponse uploadRecordResponse = setuploadRecordResponse(s3FileUpload, characterId);
-            //RecordEntity에 Record 저장
+            //RecordEntity에 Record 저장(고급 상자 1개)
+
             saveRecord(user, uploadRecordResponse, latitude, longitude);
 
             return uploadRecordResponse;
@@ -153,7 +163,7 @@ public class RecordService {
                 .build();
     }
 
-    public CheckCloseRecordResponse checkAnotherUserRecord(double latitude, double longitude, int recordId){
+    public CheckCloseRecordResponse checkAnotherUserRecord(int userId, double latitude, double longitude, int recordId){
         //선택한 기록
         Record selectRecord = getRecordById(recordId);
         //선택한 기록의 좌표
@@ -162,13 +172,43 @@ public class RecordService {
 
         double distance = getDistance(latitude, longitude, selectLatitude, selectLongitude);
 
+        //1. 가까운가?
         if(distance <= 50){
+            //2. 이벤트인가?
+            if(selectRecord.getIsEvent() == 1){
+                //3. 처음 방문한 기록인가
+                if(!recordCheckRepository.getRecordCheckByUserIdAndRecordId(userId,recordId).isPresent()){
+                    //1. 해당 기록에 체크했다고 저장
+                    recordCheckRepository.save(RecordCheck.builder()
+                            .user(getUserById(userId))
+                            .record(selectRecord)
+                            .build());
+                    //2. 보상 저장
+                    UserItem userItem = getUserItemByUser(userId,REWARD);
+                    userItem.addItemQuantity(REWARD_QUANTITY);
+                    userItemRepository.save(userItem);
+
+                    return CheckCloseRecordResponse.builder()
+                            .isClose(true)
+                            .isCheck(false)
+                            .distance(distance)
+                            .selectUserRecord(SelectUserRecord.from(selectRecord))
+                            .build();
+                }
+                return CheckCloseRecordResponse.builder()
+                        .isClose(true)
+                        .isCheck(true)
+                        .distance(distance)
+                        .selectUserRecord(SelectUserRecord.from(selectRecord))
+                        .build();
+            }//end of event record
             return CheckCloseRecordResponse.builder()
                     .isClose(true)
-                    .distance(distance)
+                        .distance(distance)
                     .selectUserRecord(SelectUserRecord.from(selectRecord))
                     .build();
-        }
+            //처음 방문한 기록이라면
+        }//end of distance
         else{
             return CheckCloseRecordResponse.builder()
                     .isClose(false)
@@ -182,12 +222,18 @@ public class RecordService {
      * 전체 이벤트 기록 반환
      * @return 이벤트 기록 리스트
      */
-    public EventRecordResponse loadEventRecord(){
+    public EventRecordResponse loadEventRecord(int userId){
         List<Record> recordList = getEventRecord();
         List<EventRecord> eventRecordList = new ArrayList<>();
 
         for(Record r : recordList){
-            eventRecordList.add(EventRecord.from(r));
+            int recordId = r.getRecordId();
+            if(!recordCheckRepository.getRecordCheckByUserIdAndRecordId(userId,recordId).isPresent()){
+                eventRecordList.add(EventRecord.from(r, false));
+            }
+            else{
+                eventRecordList.add(EventRecord.from(r, true));
+            }
         }
         return EventRecordResponse.builder()
                 .enventRecordList(eventRecordList)
@@ -200,7 +246,7 @@ public class RecordService {
      * @param longitude 현재 경도
      * @return 같은 도시에 있는 이벤트 리스트
      */
-    public EventRecordResponse loadEventRecordByCity(double latitude, double longitude){
+    public EventRecordResponse loadEventRecordByCity(int userId, double latitude, double longitude){
         //현재 위치의 위도와 경도를 통해 현재 있는 곳이 어느 도시인지 알아내는 코드
         String city = addressFunction.getDistrictFromAddress(Double.toString(latitude),Double.toString(longitude))[0];
 
@@ -208,12 +254,21 @@ public class RecordService {
         List<EventRecord> eventRecordList = new ArrayList<>();
 
         for(Record r : recordList){
-            eventRecordList.add(EventRecord.from(r));
+            int recordId = r.getRecordId();
+            //RecordCheck가 null이라면 방문하지 않은 이벤트 기록이라는 뜻.
+            if(!recordCheckRepository.getRecordCheckByUserIdAndRecordId(userId,recordId).isPresent()){
+                eventRecordList.add(EventRecord.from(r, false));
+            }
+            else{
+                eventRecordList.add(EventRecord.from(r, true));
+            }
         }
         return EventRecordResponse.builder()
                 .enventRecordList(eventRecordList)
                 .build();
     }
+
+
 
     /**
      * 이벤트 기록을 등록하는 Service
@@ -291,5 +346,10 @@ public class RecordService {
     public List<Record> getEventRecordByCity(String city){
         return recordRepository.findByIsEventAndCity(city)
                 .orElseThrow(()-> new GlobalBaseException(GlobalErrorCode.EVENT_NOT_FOUND));
+    }
+
+    public UserItem getUserItemByUser(int userId, String box){
+        return userItemRepository.findByUserItemWithUserAndItemFetch(userId,box)
+                .orElseThrow(() -> new GlobalBaseException(GlobalErrorCode.USER_ITEM_NOT_EXIST));
     }
 }
