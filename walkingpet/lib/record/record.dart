@@ -107,76 +107,77 @@ class _RecordState extends State<Record> {
             ),
           ),
 
+          // 앱 업로드를 위한 임시 코드
+          // Positioned(
+          //   left: screenWidth * 0.05,
+          //   top: screenHeight * 0.15,
+          //   child: Container(
+          //     width: screenWidth * 0.9,
+          //     height: screenHeight * 0.8,
+          //     decoration: BoxDecoration(
+          //       color:
+          //           const Color.fromARGB(255, 255, 243, 212).withOpacity(0.75),
+          //       borderRadius: BorderRadius.circular(10),
+          //     ),
+          //   ),
+          // ),
+
+          // const Center(
+          //   child: Text(
+          //     '캐릭터와 함께 걸은\n나만의 장소를 기록하세요\n\n(준비중)',
+          //     style: TextStyle(fontSize: 20, color: Colors.black),
+          //     textAlign: TextAlign.center,
+          //   ),
+          // ),
+
           // 3-2. 지도 KakaoMapView
           Positioned(
             left: screenWidth * 0.05,
             top: screenHeight * 0.15,
-            child: Container(
+            child: KakaoMapView(
               width: screenWidth * 0.9,
-              height: screenHeight * 0.8,
-              decoration: BoxDecoration(
-                color:
-                    const Color.fromARGB(255, 255, 243, 212).withOpacity(0.75),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              height: screenHeight * 0.7,
+              kakaoMapKey: kakaoMapKey!,
+              lat: 36.355387454337716, // 위도
+              lng: 127.29839622974396, // 경도
+              zoomLevel: 3, // 초기 줌 레벨
+
+              customScript: '''
+                // 이벤트 마커 담을 변수
+                var eventmarkers = [];
+
+                // 마커 이미지 => 이벤트 팻말
+                var imageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
+                    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                    markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+
+                // 마커 추가할 함수
+                function addMarker(position) {
+                  var marker = new kakao.maps.Marker({position: position, image: markerImage});
+                  marker.setMap(map);
+                  eventmarkers.push(marker);
+                }
+
+                // 마커 표시하기 (반복문 활용)
+                for(var i = 0 ; i < 3 ; i++){
+                  addMarker(new kakao.maps.LatLng(36.355387454337716 + 0.0003 * i, 127.29839622974396 + 0.0003 * i));
+                  kakao.maps.event.addListener(eventmarkers[i], 'click', (function(i) {
+                    return function(){
+                      onTapMarker.postMessage('marker ' + i + ' is tapped');
+                    };
+                  })(i));
+                }
+              ''',
+
+              onTapMarker: (message) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(message.message)));
+              },
             ),
           ),
-
-          const Center(
-            child: Text(
-              '캐릭터와 함께 걸은\n나만의 장소를 기록하세요\n\n(준비중)',
-              style: TextStyle(fontSize: 20, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-          ),
-
-          // Positioned(
-          //   left: screenWidth * 0.05,
-          //   top: screenHeight * 0.15,
-          //   child: KakaoMapView(
-          //     width: screenWidth * 0.9,
-          //     height: screenHeight * 0.7,
-          //     kakaoMapKey: kakaoMapKey!,
-          //     lat: 36.355387454337716, // 위도
-          //     lng: 127.29839622974396, // 경도
-          //     zoomLevel: 3, // 초기 줌 레벨
-
-          //     customScript: '''
-          //       // 이벤트 마커 담을 변수
-          //       var eventmarkers = [];
-
-          //       // 마커 이미지 => 이벤트 팻말
-          //       var imageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
-          //           imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-          //           imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-          //       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-          //           markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
-
-          //       // 마커 추가할 함수
-          //       function addMarker(position) {
-          //         var marker = new kakao.maps.Marker({position: position, image: markerImage});
-          //         marker.setMap(map);
-          //         eventmarkers.push(marker);
-          //       }
-
-          //       // 마커 표시하기 (반복문 활용)
-          //       for(var i = 0 ; i < 3 ; i++){
-          //         addMarker(new kakao.maps.LatLng(36.355387454337716 + 0.0003 * i, 127.29839622974396 + 0.0003 * i));
-          //         kakao.maps.event.addListener(eventmarkers[i], 'click', (function(i) {
-          //           return function(){
-          //             onTapMarker.postMessage('marker ' + i + ' is tapped');
-          //           };
-          //         })(i));
-          //       }
-          //     ''',
-
-          //     onTapMarker: (message) {
-          //       ScaffoldMessenger.of(context)
-          //           .showSnackBar(SnackBar(content: Text(message.message)));
-          //     },
-          //   ),
-          // ),
 
           // 참고하려고 써둔 코드
           // Positioned(
@@ -227,17 +228,17 @@ class _RecordState extends State<Record> {
           // ),
 
           // 3-3. 내 기록 / 기록 생성
-          // Positioned(
-          //   left: 0,
-          //   right: 0,
-          //   bottom: screenHeight * 0.1,
-          //   child: const Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //       children: [
-          //         Text('내 기록'),
-          //         Text('기록하기'),
-          //       ]),
-          // ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: screenHeight * 0.1,
+            child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('내 기록'),
+                  Text('기록하기'),
+                ]),
+          ),
         ],
       ),
     );
