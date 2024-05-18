@@ -72,15 +72,15 @@ class _BattleSideState extends State<BattleSide> {
             _timer?.cancel();
             Timer(const Duration(seconds: 1), () {
               if (widget.isLeft) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BattleResult(
-                      battleResult: widget.battleResult,
-                      animal: animal,
-                    ),
-                  ),
-                );
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => BattleResult(
+                //       battleResult: widget.battleResult,
+                //       animal: animal,
+                //     ),
+                //   ),
+                // );
               }
             });
           }
@@ -126,12 +126,6 @@ class _BattleSideState extends State<BattleSide> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset(
-                    widget.isLeft
-                        ? 'assets/images/health_bar_left.png'
-                        : 'assets/images/health_bar_right.png',
-                    scale: 1.1,
-                  ),
                   Transform.translate(
                     offset: widget.isLeft
                         ? Offset(screenWidth * 0.04, 0)
@@ -142,7 +136,7 @@ class _BattleSideState extends State<BattleSide> {
                       width: screenWidth * 0.352,
                       percent: 1,
                       animation: true,
-                      lineHeight: screenHeight * 0.0083,
+                      lineHeight: screenHeight * 0.0095,
                       barRadius: const Radius.circular(2),
                     ),
                   ),
@@ -160,12 +154,18 @@ class _BattleSideState extends State<BattleSide> {
                         width: screenWidth * 0.352,
                         percent: _currentPercent,
                         animation: true,
-                        lineHeight: screenHeight * 0.0083,
+                        lineHeight: screenHeight * 0.0095,
                         barRadius: const Radius.circular(2),
                         animateFromLastPercent: true,
                         animationDuration: 500,
                       ),
                     ),
+                  ),
+                  Image.asset(
+                    widget.isLeft
+                        ? 'assets/images/health_bar_left.png'
+                        : 'assets/images/health_bar_right.png',
+                    scale: 5,
                   ),
                 ],
               ),
