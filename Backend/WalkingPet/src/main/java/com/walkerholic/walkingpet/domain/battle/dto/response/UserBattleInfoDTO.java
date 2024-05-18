@@ -24,7 +24,6 @@ public class UserBattleInfoDTO {
                 .nickname(userDetail.getUser().getNickname())
                 .rating(userDetail.getBattleRating())
                 .level(userDetail.getSelectUserCharacter().getLevel())
-                .level(userDetail.getSelectUserCharacter().getLevel())
                 .characterGrade(userDetail.getSelectUserCharacter().getCharacter().getGrade())
                 .characterId(userDetail.getSelectUserCharacter().getCharacter().getCharacterId())
                 .health(userDetail.getSelectUserCharacter().getHealth())

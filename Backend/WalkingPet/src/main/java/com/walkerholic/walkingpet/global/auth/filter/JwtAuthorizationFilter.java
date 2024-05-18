@@ -78,12 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // 헤더에 있는 step의 값을 redis 에 저장
     private void saveRedisStep(String socialId, String step) {
-        realtimeStepRankingRedisService.saveUserDailyStep(
-                RealtimeStepRequest.builder()
-                        .userId(Integer.parseInt(socialId))
-                        .realtimeStep(Integer.parseInt(step))
-                        .build()
-        );
+        realtimeStepRankingRedisService.saveUserDailyStep(Integer.parseInt(socialId), Integer.parseInt(step));
     }
 
     /*
