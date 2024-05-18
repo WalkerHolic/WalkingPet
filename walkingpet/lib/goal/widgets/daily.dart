@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:walkingpet/services/goal/get_daily_reward.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 class DailyGoalItem extends StatefulWidget {
   final String title;
@@ -56,28 +57,35 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
     });
   }
 
-  void _showSnackBar(String message) {
+  Future<void> _showSnackBar(String message) async {
     setState(() {
       _isSnackBarVisible = true;
     });
 
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    scaffoldMessenger
+    await scaffoldMessenger
         .showSnackBar(
           SnackBar(
-            content: Text(message),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            content: SizedBox(
+              width: double.infinity,
+              child: NesSnackbar(
+                text: message,
+                type: NesSnackbarType.normal,
+              ),
+            ),
             duration: const Duration(seconds: 2),
           ),
         )
-        .closed
-        .then((_) {
-      if (mounted) {
-        setState(() {
-          _isSnackBarVisible = false;
-        });
-      }
-    });
+        .closed;
+
+    if (mounted) {
+      setState(() {
+        _isSnackBarVisible = false;
+      });
+    }
   }
 
   String getButtonAsset() {
@@ -106,6 +114,7 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
               style: TextStyle(
                 fontSize: screenHeight * 0.024,
               ),
+              textAlign: TextAlign.center, // 텍스트를 가운데 정렬
             ),
             GestureDetector(
               onTap: _toggleButton,
@@ -119,4 +128,24 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
       ),
     );
   }
+}
+
+void show(
+  BuildContext context, {
+  required String text,
+  NesSnackbarType type = NesSnackbarType.warning,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: SizedBox(
+        width: double.infinity,
+        child: NesSnackbar(
+          text: text,
+          type: type,
+        ),
+      ),
+    ),
+  );
 }
