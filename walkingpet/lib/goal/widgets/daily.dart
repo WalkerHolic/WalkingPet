@@ -22,6 +22,7 @@ class DailyGoalItem extends StatefulWidget {
 
 class _DailyGoalItemState extends State<DailyGoalItem> {
   late bool _isPressed;
+  bool _isSnackBarVisible = false;
 
   @override
   void initState() {
@@ -30,6 +31,8 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
   }
 
   void _toggleButton() async {
+    if (_isSnackBarVisible) return;
+
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     // 현재 표시된 스낵바가 있다면 숨김
@@ -54,17 +57,27 @@ class _DailyGoalItemState extends State<DailyGoalItem> {
   }
 
   void _showSnackBar(String message) {
+    setState(() {
+      _isSnackBarVisible = true;
+    });
+
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    // 현재 표시된 스낵바가 있다면 숨김
-    scaffoldMessenger.hideCurrentSnackBar();
-
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    scaffoldMessenger
+        .showSnackBar(
+          SnackBar(
+            content: Text(message),
+            duration: const Duration(seconds: 2),
+          ),
+        )
+        .closed
+        .then((_) {
+      if (mounted) {
+        setState(() {
+          _isSnackBarVisible = false;
+        });
+      }
+    });
   }
 
   String getButtonAsset() {
