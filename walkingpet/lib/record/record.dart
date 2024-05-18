@@ -1,15 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:walkingpet/services/record/clickmarker.dart';
 import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 
 class Record extends StatefulWidget {
@@ -20,9 +17,10 @@ class Record extends StatefulWidget {
 }
 
 class _RecordState extends State<Record> {
-  late Future<Position> _currentPositionFuture;
   // 지도 업로드에 필요한 변수
   // 현 위치
+  late Future<Position> _currentPositionFuture;
+  late Stream<Position> positionStream; // 실시간 위치 파악 위함
   double currentLat = 36.355387454337716;
   double currentLng = 127.29839622974396;
   // 마커
@@ -38,6 +36,7 @@ class _RecordState extends State<Record> {
     super.initState();
     initInfo();
     _currentPositionFuture = _getCurrentLocation();
+    _startLocationUpdates(); // 실시간 위치 파악 위함
   }
 
   // 현재 위치 가져오기
@@ -78,6 +77,25 @@ class _RecordState extends State<Record> {
     return position;
   }
 
+  // 실시간 위치 업데이트 설정
+  void _startLocationUpdates() {
+    // 추가된 부분
+    const locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    );
+
+    positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings);
+
+    positionStream.listen((Position position) {
+      setState(() {
+        currentLat = position.latitude;
+        currentLng = position.longitude;
+      });
+    });
+  }
+
   // API 요청으로 데이터 불러오기
   Future<void> initInfo() async {
     try {
@@ -92,8 +110,6 @@ class _RecordState extends State<Record> {
       // isLoading = false;
     }
   }
-
-  // 현재 위치 가져오기
 
   @override
   Widget build(BuildContext context) {
