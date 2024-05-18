@@ -60,4 +60,27 @@ public class BattleRankingRedisService {
         return BattleRankingResponse.from(battleRankingList);
     }
 
+    // 배틀 점수 기준 특정 유저 순위 가져오기
+    @Transactional(readOnly = true)
+    public BattleRankingList getUserRealtimeStepRanking(int userId) {
+        UserRedisDto user = userInfoRedisService.getUser(userId);
+
+        Double dBattleRating = rankigRedisTemplate.opsForZSet().score(RANKING_KEY, userId);
+        int battleRating = dBattleRating != null ? dBattleRating.intValue() : 0;
+
+        int userRanking = getUserRanking(userId, battleRating);
+        return BattleRankingList.redisFrom(user, battleRating, userRanking);
+    }
+
+    @Transactional(readOnly = true)
+    public int getUserRanking(int userId, int battleRating) {
+        // 해당 사용자 점수보다 높은 점수를 가진 사용자 수를 계산
+        Long rank = rankigRedisTemplate.opsForZSet().count(RANKING_KEY, (double) battleRating + 1, Double.MAX_VALUE);
+
+        if (rank == null) {
+            return -1;
+        }
+
+        return rank.intValue() + 1;
+    }
 }
