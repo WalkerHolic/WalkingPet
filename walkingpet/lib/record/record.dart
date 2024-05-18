@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
+import 'package:walkingpet/services/record/clickmarker.dart';
 import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -20,15 +21,17 @@ class Record extends StatefulWidget {
 
 class _RecordState extends State<Record> {
   late Future<Position> _currentPositionFuture;
+  // 지도 업로드에 필요한 변수
+  // 현 위치
   double currentLat = 36.355387454337716;
   double currentLng = 127.29839622974396;
-
-  // 이벤트 마커 담을 변수
-  List<dynamic> eventmarkers = [];
-  // 사용자의 마커 담을 변수
-  List<dynamic> usermarkers = [];
-
+  // 마커
+  List<dynamic> eventmarkers = []; // 이벤트 마커
+  List<dynamic> usermarkers = []; // 사용자 마커
   bool isLoading = true;
+
+  // 마커 클릭 후를 위해 필요한 변수
+  int recordId = 0;
 
   @override
   void initState() {
@@ -230,77 +233,87 @@ class _RecordState extends State<Record> {
                     zoomLevel: 3, // 초기 줌 레벨
 
                     customScript: '''
-                    // 현재 위치 마커
-                    var currentMarkerImageSrc = 'https://ifh.cc/g/po7J27.png',
-                        currentMarkerImageSize = new kakao.maps.Size(31, 42),
-                        currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
+                      // 현재 위치 마커
+                      var currentMarkerImageSrc = 'https://ifh.cc/g/po7J27.png',
+                          currentMarkerImageSize = new kakao.maps.Size(31, 42),
+                          currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
 
-                    var currentMarkerImage = new kakao.maps.MarkerImage(currentMarkerImageSrc, currentMarkerImageSize, currentMarkerImageOption);
+                      var currentMarkerImage = new kakao.maps.MarkerImage(currentMarkerImageSrc, currentMarkerImageSize, currentMarkerImageOption);
 
-                    var currentMarkerPosition = new kakao.maps.LatLng($currentLat, $currentLng);
-                    var currentMarker = new kakao.maps.Marker({position: currentMarkerPosition, image: currentMarkerImage});
-                    currentMarker.setMap(map);  
+                      var currentMarkerPosition = new kakao.maps.LatLng($currentLat, $currentLng);
+                      var currentMarker = new kakao.maps.Marker({position: currentMarkerPosition, image: currentMarkerImage});
+                      currentMarker.setMap(map);  
 
-                    // 이벤트 마커 담을 변수
-                    var eventMarkers = ${jsonEncode(eventmarkers)};
+                      // 이벤트 마커 담을 변수
+                      var eventMarkers = ${jsonEncode(eventmarkers)};
 
-                    // 마커 이미지 => 이벤트 팻말
-                    var eventImageSrc = 'https://ifh.cc/g/0kW3Od.png', // 마커이미지의 주소입니다
-                        eventImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
-                        eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                      // 마커 이미지 => 이벤트 팻말
+                      var eventImageSrc = 'https://ifh.cc/g/0kW3Od.png', // 마커이미지의 주소입니다
+                          eventImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
+                          eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-                    var eventMarkerImage = new kakao.maps.MarkerImage(eventImageSrc, eventImageSize, eventImageOption);
-                    
-                    // 마커 추가할 함수
-                    function addEventMarker(position) {
-                      var marker = new kakao.maps.Marker({position: position, image: eventMarkerImage});
-                      marker.setMap(map);
-                      return marker;
-                    }
-                    
-                    // 마커 표시하기 (반복문 활용)
-                    for(var i = 0 ; i < eventMarkers.length ; i++){
-                      var marker = addEventMarker(new kakao.maps.LatLng(eventMarkers[i].latitude, eventMarkers[i].longitude));
-                      kakao.maps.event.addListener(marker, 'click', (function(i) {
-                        return function(){
-                          onTapMarker.postMessage('marker ' + eventMarkers[i].title + ' is tapped');
-                        };
-                      })(i));
-                    }
-                    
-                    // 사용자 마커 담을 변수
-                    var userMarkers = ${jsonEncode(usermarkers)};
+                      var eventMarkerImage = new kakao.maps.MarkerImage(eventImageSrc, eventImageSize, eventImageOption);
+                      
+                      // 이벤트 마커 추가할 함수
+                      function addEventMarker(position, recordId) {
+                        var marker = new kakao.maps.Marker({position: position, image: eventMarkerImage});
+                        marker.setMap(map);
+                        return marker;
+                      }
+                      
+                      // 이벤트 마커 표시하기 (반복문 활용)
+                      for(var i = 0 ; i < eventMarkers.length ; i++){
+                        var marker = addEventMarker(new kakao.maps.LatLng(eventMarkers[i].latitude, eventMarkers[i].longitude), eventMarkers[i].recordId);
+                        kakao.maps.event.addListener(marker, 'click', (function(i) {
+                          return function(){
+                            onTapMarker.postMessage(JSON.stringify({type: '이벤트', recordId: eventMarkers[i].recordId}));
+                          };
+                        })(i));
+                      }
+                      
+                      // 사용자 마커 담을 변수
+                      var userMarkers = ${jsonEncode(usermarkers)};
 
-                    // 마커 이미지 => 사용자 팻말
-                    var userImageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
-                        userImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
-                        userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                      // 마커 이미지 => 사용자 팻말
+                      var userImageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
+                          userImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
+                          userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-                    var userMarkerImage = new kakao.maps.MarkerImage(userImageSrc, userImageSize, userImageOption);
-                    
-                    // 사용자 마커 추가할 함수
-                    function addUserMarker(position) {
-                      var marker = new kakao.maps.Marker({position: position, image: userMarkerImage});
-                      marker.setMap(map);
-                      return marker;
-                    }
-                    
-                    // 사용자 마커 표시하기 (반복문 활용)
-                    for(var i = 0 ; i < userMarkers.length ; i++){
-                      var marker = addUserMarker(new kakao.maps.LatLng(userMarkers[i].latitude, userMarkers[i].longitude));
-                      kakao.maps.event.addListener(marker, 'click', (function(i) {
-                        return function(){
-                          onTapMarker.postMessage('marker ' + userMarkers[i].title + ' is tapped');
-                        };
-                      })(i));
-                    }
-            
-                  ''',
+                      var userMarkerImage = new kakao.maps.MarkerImage(userImageSrc, userImageSize, userImageOption);
+                      
+                      // 사용자 마커 추가할 함수
+                      function addUserMarker(position, recordId) {
+                        var marker = new kakao.maps.Marker({position: position, image: userMarkerImage});
+                        marker.setMap(map);
+                        return marker;
+                      }
+
+                      // 사용자 마커 표시하기 (반복문 활용)
+                      for(var i = 0 ; i < userMarkers.length ; i++){
+                        var marker = addUserMarker(new kakao.maps.LatLng(userMarkers[i].latitude, userMarkers[i].longitude), userMarkers[i].recordId);
+                        kakao.maps.event.addListener(marker, 'click', (function(i) {
+                          return function(){
+                            onTapMarker.postMessage(JSON.stringify({type: '다른 유저의 기록', recordId: userMarkers[i].recordId}));
+                          };
+                        })(i));
+                      }
+                    ''',
 
                     onTapMarker: (message) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(message.message)));
+                      var data = jsonDecode(message.message);
+                      var recordId = data['recordId'];
+
+                      getClickMarker(currentLat, currentLng, recordId);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              '${data['type']} 클릭! (recordId 는 $recordId)')));
                     },
+
+                    // onTapMarker: (message) {
+                    //   getClickMarker(currentLat, currentLng, recordId);
+                    //   // ScaffoldMessenger.of(context).showSnackBar(
+                    //   //     SnackBar(content: Text(message.message)));
+                    // },
                   ),
                 );
               }
