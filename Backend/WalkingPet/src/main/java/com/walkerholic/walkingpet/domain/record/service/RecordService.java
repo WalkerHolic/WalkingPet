@@ -229,7 +229,7 @@ public class RecordService {
             }
         }
         return NormalRecordResponse.builder()
-                .enventRecordList(normalRecordList)
+                .normalRecordList(normalRecordList)
                 .build();
     }
 
@@ -254,7 +254,7 @@ public class RecordService {
             }
         }
         return EventRecordResponse.builder()
-                .enventRecordList(eventRecordList)
+                .eventRecordList(eventRecordList)
                 .build();
     }
 
@@ -282,7 +282,7 @@ public class RecordService {
             }
         }
         return EventRecordResponse.builder()
-                .enventRecordList(eventRecordList)
+                .eventRecordList(eventRecordList)
                 .build();
     }
 
