@@ -68,9 +68,9 @@ class Ranking extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         '랭킹',
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(fontSize: screenWidth * 0.08),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -82,9 +82,11 @@ class Ranking extends StatelessWidget {
                           padding: MaterialStateProperty.all(
                               EdgeInsets.zero), // 버튼의 내부 패딩 제거
                         ),
-                        child: const Text(
+                        child: Text(
                           'X',
-                          style: TextStyle(fontSize: 30, color: Colors.black),
+                          style: TextStyle(
+                              fontSize: screenWidth * 0.08,
+                              color: Colors.black),
                         ),
                       )
                     ],
