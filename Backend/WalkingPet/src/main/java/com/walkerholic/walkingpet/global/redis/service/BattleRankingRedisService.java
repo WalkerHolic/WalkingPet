@@ -62,7 +62,7 @@ public class BattleRankingRedisService {
 
     // 배틀 점수 기준 특정 유저 순위 가져오기
     @Transactional(readOnly = true)
-    public BattleRankingList getUserRealtimeStepRanking(int userId) {
+    public BattleRankingList getUserBattleRanking(int userId) {
         UserRedisDto user = userInfoRedisService.getUser(userId);
 
         Double dBattleRating = rankigRedisTemplate.opsForZSet().score(RANKING_KEY, userId);
