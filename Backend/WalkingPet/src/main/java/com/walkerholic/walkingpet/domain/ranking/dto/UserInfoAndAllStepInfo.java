@@ -14,6 +14,7 @@ public class UserInfoAndAllStepInfo {
     private int accStep;
     private int dailyStep;
     private int yesterdayStep;
+    private int battleRating;
 
     public static UserInfoAndAllStepInfo from(UserDetail userDetail, UserStep userStep) {
         return UserInfoAndAllStepInfo.builder()
@@ -23,6 +24,7 @@ public class UserInfoAndAllStepInfo {
                 .accStep(userStep.getAccumulationStep())
                 .dailyStep(userStep.getDailyStep())
                 .yesterdayStep(userStep.getYesterdayStep())
+                .battleRating(userDetail.getBattleRating())
                 .build();
     }
 }

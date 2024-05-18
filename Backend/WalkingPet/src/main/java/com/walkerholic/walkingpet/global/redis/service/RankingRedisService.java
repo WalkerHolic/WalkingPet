@@ -17,11 +17,12 @@ public class RankingRedisService {
     private final AccStepRankingRedisService accStepRankingRedisService;
     private final YesterdayStepRankingRedisService yesterdayStepRankingRedisService;
     private final RealtimeStepRankingRedisService realtimeStepRankingRedisService;
+    private final BattleRankingRedisService battleRankingRedisService;
 
     /*
         redis 모든 랭킹 및 사용자 정보 저장
     */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public void saveRedisUserAndAllRanking() {
 
         List<UserInfoAndAllStepInfo> userAccStepAndInfoList = userService.getUserAccStepAndInfoList();
@@ -42,6 +43,9 @@ public class RankingRedisService {
 
             // 어제 걸음수 저장
             yesterdayStepRankingRedisService.saveYesterdayStep(info.getUserId(), info.getYesterdayStep());
+
+            // 배틀 점수 저장
+            battleRankingRedisService.saveUserBattleScore(info.getUserId(), info.getBattleRating());
         }
 
 //        // 사용자 정보 저장
@@ -73,7 +77,7 @@ public class RankingRedisService {
 //        }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public void saveRedisAllRanking() {
 
         List<UserInfoAndAllStepInfo> userAccStepAndInfoList = userService.getUserAccStepAndInfoList();
