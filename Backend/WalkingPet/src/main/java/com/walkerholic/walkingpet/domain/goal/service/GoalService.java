@@ -45,8 +45,8 @@ public class GoalService {
     //보상으로 주어지는 박스의 갯수
     public final int GOAL_REWARD_BOX_QUANTITY = 1;
 
-    public final int GOAL_REWARD_EXP_ATTENDANCE = 3;
-    public final int GOAL_REWARD_EXP_NORMAL = 5;
+    public final String WEEKLY_GOAL_REWARD = "Luxury Box";
+
 
     /**
      * Controller - 유저의 목표 정보를 보여주는 service
@@ -217,9 +217,6 @@ public class GoalService {
         LocalDate today = LocalDate.now();
         DayOfWeek dayOfWeek = today.getDayOfWeek();
 
-        //그러면 일단 weekly 값을 가져오고 이 친구를 boolean형 배열로 바꾸고 그리고 해당 인덱스-1에 해당하는 부분을 true로 바꿔주고
-        //바꾼애를 다시 정수로 바꾸고, 그 친구를 다시 save해야겠네.
-
         int weeklyGoalValue = goal.getWeeklyGoal();
         boolean[] weeklyGoalStatus = getWeeklyGoalStatus(weeklyGoalValue);
         weeklyGoalStatus[dayOfWeek.getValue()-1] = true;
@@ -230,6 +227,34 @@ public class GoalService {
         //어짜피 데일리 목표를 업데이트 하면서 주간 목표를 업데이트 하는거임!
         //골에는 데일리와 주간 동시에 가지고 있으므로 어짜피 데일리 마지막에서 save해줄거라면 굳이 여기서 안해줘도 될것 같다는 생각.
         //goalRepository.save(goal);
+    }
+
+    //주간 목표 보상 저장
+    public void saveWeeklyReward(Goal goal){
+        int userId = goal.getUser().getUserId();
+        boolean[] weeklyStatus = getWeeklyGoalStatus(goal.getWeeklyGoal());
+        int weeklyCount = 0;
+
+        int rewardQuantity = 0;
+
+        for(int i = 0; i < 7 ; i++){
+            if (weeklyStatus[i])
+                weeklyCount++;
+        }
+
+        if(weeklyCount == 7){
+            rewardQuantity = 5;
+        }
+        else if(weeklyCount >= 5)
+            rewardQuantity = 3;
+        else if(weeklyCount >= 1)
+            rewardQuantity = 1;
+        System.out.println(Arrays.toString(weeklyStatus));
+        System.out.println("userId = " + userId + " rewardQuantity = " + rewardQuantity);
+
+        UserItem userItem = getUserItemByUserIdAndItemName(userId, WEEKLY_GOAL_REWARD);
+        userItem.addItemQuantity(rewardQuantity);
+        userItemRepository.save(userItem);
     }
 
     /**
