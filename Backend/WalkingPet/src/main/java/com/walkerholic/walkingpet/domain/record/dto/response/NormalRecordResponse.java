@@ -14,5 +14,5 @@ import java.util.List;
 @Getter
 public class NormalRecordResponse {
     @Builder.Default
-    List<NormalRecord> enventRecordList = new ArrayList<>();
+    List<NormalRecord> normalRecordList = new ArrayList<>();
 }

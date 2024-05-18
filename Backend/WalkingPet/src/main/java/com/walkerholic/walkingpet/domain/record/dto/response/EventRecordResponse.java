@@ -13,5 +13,5 @@ import java.util.List;
 @Getter
 public class EventRecordResponse {
     @Builder.Default
-    List<EventRecord> enventRecordList = new ArrayList<>();
+    List<EventRecord> eventRecordList = new ArrayList<>();
 }
