@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
+import 'package:provider/provider.dart';
+import 'package:walkingpet/providers/character_info.dart';
+import 'package:walkingpet/services/Interceptor.dart';
+import 'package:walkingpet/services/record/camera.dart';
 import 'package:walkingpet/services/record/clickmarker.dart';
 import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
+import 'dart:io';
 
 class Record extends StatefulWidget {
   const Record({super.key});
@@ -365,8 +370,16 @@ class _RecordState extends State<Record> {
                   //   ),
                   // ),
                   GestureDetector(
-                    onTap: () {
-                      print('기록하기 버튼 클릭');
+                    onTap: () async {
+                      File result = await pickImage();
+                      final res = await uploadImage(
+                          imageFile: result,
+                          characterId: Provider.of<CharacterProvider>(context,
+                                  listen: false)
+                              .characterId,
+                          latitude: currentLat,
+                          longitude: currentLng);
+                      print(res); // 여깄는 res가 바로 이미지 업로드의 응답
                     },
                     child: Stack(
                       alignment: Alignment.center,
