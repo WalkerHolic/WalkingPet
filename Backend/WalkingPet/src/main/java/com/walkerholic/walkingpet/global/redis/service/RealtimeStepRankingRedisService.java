@@ -82,7 +82,7 @@ public class RealtimeStepRankingRedisService {
         Double dStep = rankigRedisTemplate.opsForZSet().score(STEP_KEY, userId);
         int step = dStep != null ? dStep.intValue() : 0;
 
-        int userRanking = getUserRanking(userId);
+        int userRanking = getUserRanking(userId, step);
         return StepRankingList.from(user, step, userRanking);
     }
 
@@ -94,11 +94,22 @@ public class RealtimeStepRankingRedisService {
         return step;
     }
 
+//    @Transactional(readOnly = true)
+//    public int getUserRanking(int userId) {
+//        Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(STEP_KEY, userId);
+//
+//        return (userRanking != null) ? userRanking.intValue() + 1 : -1;
+//    }
     @Transactional(readOnly = true)
-    public int getUserRanking(int userId) {
-        Long userRanking = rankigRedisTemplate.opsForZSet().reverseRank(STEP_KEY, userId);
+    public int getUserRanking(int userId, int step) {
+        // 해당 사용자 점수보다 높은 점수를 가진 사용자 수를 계산
+        Long rank = rankigRedisTemplate.opsForZSet().count(STEP_KEY, (double) step + 1, Double.MAX_VALUE);
 
-        return (userRanking != null) ? userRanking.intValue() + 1 : -1;
+        if (rank == null) {
+            return -1;
+        }
+
+        return rank.intValue() + 1;
     }
 
     @Transactional(readOnly = false)
