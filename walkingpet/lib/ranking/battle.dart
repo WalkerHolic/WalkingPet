@@ -114,12 +114,12 @@ class _BattleRankingState extends State<BattleRanking> {
                       // 4-2. Top 10 텍스트
                       const Text(
                         'Top 10',
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(fontSize: 24),
                       ),
 
                       // 4-3. 내용 (스크롤 가능)
                       SizedBox(
-                        height: 230,
+                        height: 220,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Column(
