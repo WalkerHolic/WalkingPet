@@ -185,19 +185,21 @@ class _PersonalRankingState extends State<PersonalRanking> {
                         .withOpacity(0.8),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 7),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                  ),
 
                   child: Column(
                     children: [
                       // 4-2. Top 10 텍스트
                       const Text(
                         'Top 10',
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(fontSize: 24),
                       ),
 
                       // 4-3. 내용 (스크롤 가능)
                       SizedBox(
-                        height: 230,
+                        height: 220,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Column(
