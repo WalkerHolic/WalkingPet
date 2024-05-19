@@ -10,6 +10,7 @@ import 'package:walkingpet/services/group/leave_group.dart';
 import 'package:walkingpet/services/group/get_member_info.dart';
 import 'package:walkingpet/services/group/join_group.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart'; //메인폰트스타일
+import 'package:pixelarticons/pixelarticons.dart';
 
 class GroupDetail extends StatefulWidget {
   final int groupId; //팀 이름
@@ -247,11 +248,24 @@ class _GroupDetailState extends State<GroupDetail> {
             ),
           ),
           Positioned(
-            left: screenWidth * 0.5 - (screenWidth * 0.3 / 2),
+            left: screenWidth * 0.5 - (screenWidth * 0.2 / 2),
             top: screenHeight * 0.36,
             child: Image.asset(
               'assets/images/three_star.png',
-              width: screenWidth * 0.3,
+              width: screenWidth * 0.2,
+            ),
+          ),
+          Positioned(
+            top: screenHeight * 0.07,
+            right: screenWidth * 0.05,
+            child: TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero),
+              ),
+              child: const Icon(Pixel.close),
             ),
           ),
         ],
