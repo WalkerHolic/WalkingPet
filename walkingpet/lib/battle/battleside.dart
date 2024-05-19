@@ -128,8 +128,8 @@ class _BattleSideState extends State<BattleSide> {
                 children: [
                   Transform.translate(
                     offset: widget.isLeft
-                        ? Offset(screenWidth * 0.04, 0)
-                        : Offset(screenWidth * -0.04, 0),
+                        ? Offset(screenWidth * 0.02, 0)
+                        : Offset(screenWidth * -0.02, 0),
                     child: LinearPercentIndicator(
                       backgroundColor: Colors.grey,
                       progressColor: Colors.green,
@@ -147,8 +147,8 @@ class _BattleSideState extends State<BattleSide> {
                         : Matrix4.identity(),
                     child: Transform.translate(
                       offset: widget.isLeft
-                          ? Offset(screenWidth * -0.04, 0)
-                          : Offset(screenWidth * -0.04, 0),
+                          ? Offset(screenWidth * -0.02, 0)
+                          : Offset(screenWidth * -0.02, 0),
                       child: LinearPercentIndicator(
                         backgroundColor: Colors.transparent,
                         width: screenWidth * 0.352,
