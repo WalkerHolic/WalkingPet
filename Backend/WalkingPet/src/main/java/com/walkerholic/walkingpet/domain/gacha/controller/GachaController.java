@@ -4,6 +4,7 @@ import com.walkerholic.walkingpet.domain.gacha.dto.response.GachaCountResponse;
 import com.walkerholic.walkingpet.domain.gacha.dto.response.GachaResultResponse;
 import com.walkerholic.walkingpet.domain.gacha.service.GachaService;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamUsersResponse;
+import com.walkerholic.walkingpet.domain.util.TestUser;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -30,7 +31,8 @@ public class GachaController {
     @ApiResponse(responseCode = "404", description = "C400 - 뽑기 가능 횟수 조회 실패")
     @GetMapping("/count")
     public ResponseEntity<CommonResponseEntity> getGachaCount(@AuthenticationPrincipal CustomUserDetail userDetail){
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
         GachaCountResponse gachaCount = gachaService.getGachaCount(userId);
         log.info("뽑기 가능 횟수 조회 getGachaCount - userId: {}", userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, gachaCount);
@@ -41,7 +43,8 @@ public class GachaController {
     @ApiResponse(responseCode = "404", description = "C400 - 뽑기 결과 조회 실패")
     @GetMapping("/result")
     public ResponseEntity<CommonResponseEntity> getGachaResult(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("box") String boxType){
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
         GachaResultResponse gachaResult = gachaService.getGachaResult(boxType, userId);
         log.info("뽑기 결과 조회 getGachaResult - boxType: {}, userId: {}", boxType, userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS,gachaResult);

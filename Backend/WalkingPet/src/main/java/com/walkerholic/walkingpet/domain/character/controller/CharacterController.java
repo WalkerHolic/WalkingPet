@@ -6,6 +6,7 @@ import com.walkerholic.walkingpet.domain.character.service.UserCharacterService;
 import com.walkerholic.walkingpet.domain.item.service.ItemService;
 import com.walkerholic.walkingpet.domain.levelup.dto.response.LevelUpResponse;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
+import com.walkerholic.walkingpet.domain.util.TestUser;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
@@ -38,12 +39,14 @@ public class CharacterController {
     @Operation(summary = "캐릭터 정보 확인", description = "유저의 userCharacterId로  캐릭터 정보 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
-    public ResponseEntity<CommonResponseEntity> getUserCharacterInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
+    public ResponseEntity<CommonResponseEntity> getUserCharacterInfo() {
+//    public ResponseEntity<CommonResponseEntity> getUserCharacterInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
+//        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
         log.info("캐릭터 정보 확인 getUserCharacterInfo - userId: {}", userId);
 
-        UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userId);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, userCharacterInfo);
+//        UserCharacterInfoResponse userCharacterInfo = userCharacterService.getUserCharacterInfo(userId);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "test");
     }
 
     @GetMapping("/exp")
@@ -51,7 +54,8 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 해당 캐릭터의 경험치 정보를 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterExpInfoResponse.class)))
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터의 경험치 정보를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> getUserCharacterExpInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
         log.info("캐릭터 경험치 정보 확인 getUserCharacterExpInfo - userId: {}", userId);
 
         UserCharacterExpInfoResponse userCharacterExpInfo = userCharacterService.getUserCharacterExpInfo(userId);
@@ -62,7 +66,8 @@ public class CharacterController {
     @Operation(summary = "유저의 캐릭터 목록 정보 가져오기", description = "유저가 보유한 캐릭터와 보유하지 않은 캐릭터 목록 가져오기")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 정보 찾기 성공", content = @Content(schema = @Schema(implementation = UserCharacterInfoResponse.class)))
     public ResponseEntity<CommonResponseEntity> getUserCharacterListInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
         log.info("유저의 캐릭터 목록 정보 가져오기 getUserCharacterListInfo - userId: {}", userId);
 
         UserCharacterListInfoResponse userCharacterInfoList = userCharacterService.getUserCharacterInfoList(userId);
@@ -76,7 +81,8 @@ public class CharacterController {
     @ApiResponse(responseCode = "403", description = "C400 - 유저의 해당 캐릭터 스탯 포인트가 부족")
     @ApiResponse(responseCode = "404", description = "C400 - 유저의 해당 캐릭터를 찾기 실패")
     public ResponseEntity<CommonResponseEntity> statDistribution(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestParam("value") String value) {
-        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
         log.info("스탯 분배 statDistribution - userId: {}, value: {}", userId, value);
 
         UserCharacterStatResponse userCharacterStatInfo = userCharacterService.addStatPoint(userId, value);
@@ -89,7 +95,8 @@ public class CharacterController {
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 스탯 분배 초기화 성공", content = @Content(schema = @Schema(implementation = ResetStatResponse.class)))
     @ApiResponse(responseCode = "400", description = "C400 - 이미 스탯 초기화 버튼 누름")
     public ResponseEntity<CommonResponseEntity> resetStatDistribution(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
         log.info("스탯 분배 초기화 resetStatDistribution - userIdv: {}", userId);
 
         ResetStatResponse resetStatResponse = userCharacterService.resetInitStatus(userId);
@@ -100,7 +107,8 @@ public class CharacterController {
     @Operation(summary = "캐릭터 변경", description = "유저의 현재 캐릭터 변경")
     @ApiResponse(responseCode = "200", description = "S200 - 유저의 캐릭터 변경 성공")
     public ResponseEntity<CommonResponseEntity> changeUserCharacter(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody ChangeUserCharacterIdRequest changeUserCharacterIdRequest) {
-        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
         log.info("캐릭터 변경 changeUserCharacter - userId: {}, userCharacterId: {}", userId, changeUserCharacterIdRequest.getSelectCharacterId());
         ChangeCharacterIdResponse changeCharacter = userCharacterService.changeUserCharacter(userId, changeUserCharacterIdRequest);
 
@@ -111,7 +119,8 @@ public class CharacterController {
     @Operation(summary = "통신 테스트", description = "통신 테스트")
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CommonResponseEntity> test() {
-        log.info("통신 테스트");
+        Integer userId = TestUser.getUserId();
+        log.info("통신 테스트: " + userId);
 
         TimeZone serverTimeZone = TimeZone.getDefault();
         System.out.println("스프링 서버의 현재 시간대: " + serverTimeZone.getID());
@@ -131,6 +140,7 @@ public class CharacterController {
         // 현재 시간을 지정된 형식으로 출력
         String formattedDateTime = localDateTime.format(formatter);
         System.out.println("스프링 서버의 현재 시간: " + formattedDateTime);
+        System.out.println("서버야....미얀해...");
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "통신 테스트2 - " + serverTimeZone.getID() + " , " + formattedDateTime);
     }
 

@@ -1,5 +1,6 @@
 package com.walkerholic.walkingpet.global.auth.controller;
 
+import com.walkerholic.walkingpet.domain.util.TestUser;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import com.walkerholic.walkingpet.domain.users.entity.Users;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
@@ -27,7 +28,8 @@ public class CloseController {
     @ApiResponse(responseCode = "200", description = "S200 - 통신 테스트 성공", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CommonResponseEntity> test(@AuthenticationPrincipal CustomUserDetail userDetail) {
         log.info("토큰 테스트 입장 성공");
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
         System.out.println("user: " + userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, "토큰 테스트 입장 성공 userId: " + userId);
     }

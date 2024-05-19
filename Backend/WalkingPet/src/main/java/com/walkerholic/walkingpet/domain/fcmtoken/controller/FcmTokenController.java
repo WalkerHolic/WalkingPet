@@ -3,6 +3,7 @@ package com.walkerholic.walkingpet.domain.fcmtoken.controller;
 import com.walkerholic.walkingpet.domain.fcmtoken.dto.request.SaveFcmTokenRequest;
 import com.walkerholic.walkingpet.domain.fcmtoken.service.FcmTokenService;
 import com.walkerholic.walkingpet.domain.team.dto.response.TeamResponse;
+import com.walkerholic.walkingpet.domain.util.TestUser;
 import com.walkerholic.walkingpet.global.auth.dto.CustomUserDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +29,8 @@ public class FcmTokenController {
     @ApiResponse(responseCode = "404", description = "C400 - FCM 토큰 저장 실패")
     @PostMapping("/saveToken")
     public void saveFcmToken(@AuthenticationPrincipal CustomUserDetail userDetail,@RequestBody SaveFcmTokenRequest saveFcmTokenRequest) {
-        Integer userId = userDetail.getUsers().getUserId();
+//        Integer userId = userDetail.getUsers().getUserId();
+        Integer userId = TestUser.getUserId();
         String token = saveFcmTokenRequest.getToken();
         fcmTokenService.saveToken(userId,token);
         log.info("FCM 토큰 저장 saveToken - userId:{}, token:{}", userId,token);
