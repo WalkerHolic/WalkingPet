@@ -49,7 +49,7 @@ class MusicNavigatorObserver extends NavigatorObserver {
     } else if (routeName == '/gacha') {
       AudioManager().play('audio/gacha.mp3');
     } else if (routeName == '/battleready') {
-      AudioManager().play('audio/battleready.mp3');
+      AudioManager().play('audio/battleReady.mp3');
     } else if (routeName == '/group') {
       AudioManager().play('audio/group.mp3');
     } else if (routeName == '/record') {
