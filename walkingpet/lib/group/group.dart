@@ -125,6 +125,7 @@ class _GroupState extends State<Group> {
                           ),
                           label: "그룹 탐색",
                         ),
+                       
                       ],
                     ),
                   ),
