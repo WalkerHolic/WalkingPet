@@ -165,11 +165,7 @@ public class BattleService {
         userDetailRepository.save(userDetail);
 
         // 배틀 점수 redis 저장
-        battleRankingRedisService.saveUserBattleScore(userDetail.getUser().getUserId(), battleResultInfo.getRewardRating());
-
-        // TODO: 이 코드의 용도는....?
-        UserCharacter selectUserCharacter = userDetail.getSelectUserCharacter();
-        userCharacterRepository.save(selectUserCharacter);
+        battleRankingRedisService.saveUserBattleScore(userDetail.getUser().getUserId(), userDetail.getBattleRating());
 
         System.out.println("보상을 저장합니다.");
         HashMap<String, Integer> reward = battleResultInfo.getRewardItem().getReward();
