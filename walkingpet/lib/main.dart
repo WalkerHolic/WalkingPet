@@ -28,6 +28,7 @@ import 'package:walkingpet/services/audio/music_navigator_observer.dart';
 import 'package:walkingpet/services/fcm/fcm.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // 백그라운드에서 FCM을 수신했을 때의 동작 (아마 사용 안할듯)
@@ -193,6 +194,43 @@ Future<void> _requestPermissions() async {
   // ACTIVITY_RECOGNITION 권한 요청
   var status = await Permission.activityRecognition.request();
   var notificationStatus = await Permission.notification.request();
+
+  // 위치 서비스가 활성화되어 있는지 확인
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // 위치 서비스가 비활성화되어 있으면, 사용자에게 위치 서비스를 활성화하도록 요청
+    await Geolocator.openLocationSettings();
+    // 위치 권한 상태 확인
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // 권한이 거부된 경우, 오류 반환
+        SystemNavigator.pop();
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // 권한이 영구적으로 거부된 경우, 오류 반환
+      SystemNavigator.pop();
+    }
+  }
+
+  // 위치 권한 상태 확인
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // 권한이 거부된 경우, 오류 반환
+      SystemNavigator.pop();
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // 권한이 영구적으로 거부된 경우, 오류 반환
+    SystemNavigator.pop();
+  }
+
   if (status.isGranted && notificationStatus.isGranted) {
     return;
   } else {

@@ -10,9 +10,8 @@ Future<Map<String, dynamic>> getClickMarker(
     double latitude, double longitude, int recordId) async {
   final client = AuthInterceptor();
   final url = Uri.parse(
-      '$baseUrl/$checkRecordUrl?latitude=$latitude&longtitude=$longitude&recordId=$recordId');
+      '$baseUrl/$checkRecordUrl?latitude=$latitude&longitude=$longitude&recordId=$recordId');
   final response = await client.get(url);
-
   try {
     if (response.statusCode == 200) {
       var data = utf8.decode(response.bodyBytes);

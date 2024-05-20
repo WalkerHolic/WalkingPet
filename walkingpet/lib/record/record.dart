@@ -42,39 +42,11 @@ class _RecordState extends State<Record> {
   void initState() {
     super.initState();
     initInfo();
-    _currentPositionFuture = _getCurrentLocation();
-    _startLocationUpdates(); // 실시간 위치 파악 위함
+    // 실시간 위치 파악 위함
   }
 
   // 현재 위치 가져오기
   Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // 위치 서비스가 활성화되어 있는지 확인
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // 위치 서비스가 비활성화되어 있으면, 사용자에게 위치 서비스를 활성화하도록 요청
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
-
-    // 위치 권한 상태 확인
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // 권한이 거부된 경우, 오류 반환
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // 권한이 영구적으로 거부된 경우, 오류 반환
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
     // 현재 위치 가져오기
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
@@ -113,6 +85,8 @@ class _RecordState extends State<Record> {
         usermarkers = responseUsers['data']['normalRecordList'];
         // isLoading = false;
       });
+      _currentPositionFuture = _getCurrentLocation();
+      _startLocationUpdates();
     } catch (e) {
       // isLoading = false;
     }
@@ -257,7 +231,7 @@ class _RecordState extends State<Record> {
 
                     customScript: '''
                       // 현재 위치 마커
-                      var currentMarkerImageSrc = 'https://ifh.cc/g/po7J27.png',
+                      var currentMarkerImageSrc = 'https://ifh.cc/g/hFVWjs.png',
                           currentMarkerImageSize = new kakao.maps.Size(31, 42),
                           currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
 
@@ -322,14 +296,25 @@ class _RecordState extends State<Record> {
                       }
                     ''',
 
-                    onTapMarker: (message) {
+                    onTapMarker: (message) async {
                       var data = jsonDecode(message.message);
                       var recordId = data['recordId'];
 
-                      // getClickMarker(currentLat, currentLng, recordId);
-                      // 얘 오류나서 잠깐 주석함
+                      var res = await getClickMarker(
+                          currentLat, currentLng, recordId);
+                      //얘 오류나서 잠깐 주석함
+                      print(res);
 
-                      showRecord(context);
+                      var record = res['data']['selectUserRecord'];
+                      if (record != null) {
+                        String nickname = record['nickname'];
+                        int characterId = record['characterId'];
+                        String imageUrl = record['imageUrl'];
+                        String regDate = record['regDate'];
+
+                        showRecord(
+                            context, nickname, characterId, imageUrl, regDate);
+                      }
                     },
 
                     // onTapMarker: (message) {
@@ -381,7 +366,7 @@ class _RecordState extends State<Record> {
                               .characterId,
                           latitude: currentLat,
                           longitude: currentLng);
-                      print(res); // 여깄는 res가 바로 이미지 업로드의 응답
+                      Navigator.pushReplacementNamed(context, '/record');
                     },
                     child: Stack(
                       alignment: Alignment.center,
