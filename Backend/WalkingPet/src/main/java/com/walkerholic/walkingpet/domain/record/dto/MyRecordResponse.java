@@ -17,8 +17,11 @@ public class MyRecordResponse {
     private LocalDateTime regDate;
 
     public static MyRecordResponse from(Record record){
+        String imageUrl = record.getImageUrl();
+        String httpImageUrl = imageUrl.replace("https://", "http://");
+
         return MyRecordResponse.builder()
-                .imageUrl(record.getImageUrl())
+                .imageUrl(httpImageUrl)
                 .content(record.getContent())
                 .characterId(record.getCharacterId())
                 .regDate(record.getRecordRegDate())
