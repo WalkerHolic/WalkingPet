@@ -21,11 +21,14 @@ public class SelectUserRecord {
     LocalDateTime regDate;
 
     public static SelectUserRecord from(Record record){
+        String imageUrl = record.getImageUrl();
+        String httpImageUrl = imageUrl.replace("https://", "http://");
+
         return SelectUserRecord.builder()
                 .nickname(record.getUser().getNickname())
                 .characterId(record.getCharacterId())
                 .content(record.getContent())
-                .imageUrl(record.getImageUrl())
+                .imageUrl(httpImageUrl)
                 .regDate(record.getRecordRegDate())
                 .build();
     }
