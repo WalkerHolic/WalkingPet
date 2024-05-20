@@ -20,10 +20,14 @@ public class EventRecord {
     private LocalDateTime regDate;
 
     public static EventRecord from(Record record, Boolean isCheck){
+        String imageUrl = record.getImageUrl();
+        String httpImageUrl = imageUrl.replace("https://", "http://");
+
         return EventRecord.builder()
+
                 .recordId(record.getRecordId())
                 .isCheck(isCheck)
-                .imageUrl(record.getImageUrl())
+                .imageUrl(httpImageUrl)
                 .content(record.getContent())
                 .characterId(record.getCharacterId())
                 .latitude(record.getLatitude().doubleValue())

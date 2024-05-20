@@ -18,8 +18,11 @@ public class NormalRecord {
     private LocalDateTime regDate;
 
     public static NormalRecord from(Record record){
+        String imageUrl = record.getImageUrl();
+        String httpImageUrl = imageUrl.replace("https://", "http://");
+
         return NormalRecord.builder()
-                .imageUrl(record.getImageUrl())
+                .imageUrl(httpImageUrl)
                 .recordId(record.getRecordId())
                 .characterId(record.getCharacterId())
                 .latitude(record.getLatitude().doubleValue())
