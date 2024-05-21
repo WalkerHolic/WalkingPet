@@ -16,10 +16,8 @@ Future<Map<String, dynamic>> getExpitemInfo() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("캐릭터 정보 받아오기 오류 : ${response.statusCode}");
     throw Error();
   }
 }
@@ -33,10 +31,8 @@ Future<Map<String, dynamic>> getExpitem(int quantity) async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("캐릭터별 경험치 아이템 사용 오류 : ${response.statusCode}");
     throw Error();
   }
 }

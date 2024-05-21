@@ -136,17 +136,13 @@ Future<void> _handleKakaoLogin(BuildContext context) async {
       try {
         await UserApi.instance.loginWithKakaoAccount();
         _checkIfUserIsRegistered(context);
-      } catch (error) {
-        print(error);
-      }
+      } catch (error) {}
     }
   } else {
     try {
       await UserApi.instance.loginWithKakaoAccount();
       _checkIfUserIsRegistered(context);
-    } catch (error) {
-      print(error);
-    }
+    } catch (error) {}
   }
 }
 

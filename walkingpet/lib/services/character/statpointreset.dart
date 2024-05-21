@@ -13,13 +13,8 @@ Future<Map<String, dynamic>> getStatReset() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    print(jsonData);
     return jsonData;
   } else {
-    var data = utf8.decode(response.bodyBytes);
-    var jsonData = jsonDecode(data);
-    print(jsonData);
-    print("캐릭터 스탯 리셋 오류 : ${response.statusCode}");
     throw Error();
   }
 }

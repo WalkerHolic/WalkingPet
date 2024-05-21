@@ -63,7 +63,6 @@ class _CharacterExpState extends State<CharacterExp> {
 
         quantity = characterInfoData['quantity'];
 
-        // print(characterInfoData);
         isLoading = false;
       });
     } catch (e) {

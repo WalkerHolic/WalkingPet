@@ -37,7 +37,6 @@ class _CreateGroupState extends State<CreateGroup> {
     final password = isPrivate ? _passwordController.text : '';
 
     if (isPrivate && password != _confirmPasswordController.text) {
-      print("비밀번호가 일치하지 않습니다.");
       return;
     }
     await createGroupService(teamName, explanation, password); //그룹 생성이 완료되면

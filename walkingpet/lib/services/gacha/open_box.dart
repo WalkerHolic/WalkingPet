@@ -11,7 +11,6 @@ Future<Map<String, dynamic>> openLuxuryBox() async {
     var data = utf8.decode(response.bodyBytes);
     // 디코딩된 문자열을 JSON으로 파싱
     var jsonData = jsonDecode(data);
-    print(jsonData['data']);
     return jsonData['data'];
   } else if (response.statusCode == 403) {
     // 열 수 있는 상자가 없으면
@@ -19,7 +18,6 @@ Future<Map<String, dynamic>> openLuxuryBox() async {
   } else {
     //상태 코드와 함께 에러 메세지 출력
     //상자 없어도 에러남
-    print("에러남 : ${response.statusCode}");
     throw Error();
   }
 }
@@ -34,7 +32,6 @@ Future<Map<String, dynamic>> openNormalBox() async {
     var data = utf8.decode(response.bodyBytes);
     // 디코딩된 문자열을 JSON으로 파싱
     var jsonData = jsonDecode(data);
-    print(jsonData['data']);
     return jsonData['data'];
   } else if (response.statusCode == 403) {
     // 열 수 있는 상자가 없으면
@@ -42,7 +39,6 @@ Future<Map<String, dynamic>> openNormalBox() async {
   } else {
     //상태 코드와 함께 에러 메세지 출력
     //상자 없어도 에러남
-    print("에러남 : ${response.statusCode}");
     throw Error();
   }
 }
