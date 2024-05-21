@@ -141,9 +141,6 @@ class _CharacterInfoStatState extends State<CharacterInfoStat> {
         widget.addpoint = addpoint;
         widget.updateStatPoint(statnameEn, point, addpoint, statPoint);
       });
-      print(data);
-    } catch (e) {
-      print('캐릭터 능력치 Update, 페이지 내 오류: $e');
-    }
+    } catch (e) {}
   }
 }

@@ -21,7 +21,6 @@ Future<Map<String, dynamic>> updateStat(
       return _handleError(response);
     }
   } catch (e) {
-    print("API 요청 중 에러 발생: $e");
     throw Exception("API 요청 실패");
   }
 }

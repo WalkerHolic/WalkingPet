@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:walkingpet/battle/battleready.dart';
 import 'package:walkingpet/character/characterinfo.dart';
 import 'package:walkingpet/providers/character_info.dart';
@@ -28,20 +29,14 @@ import 'package:walkingpet/services/audio/music_navigator_observer.dart';
 import 'package:walkingpet/services/fcm/fcm.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // 백그라운드에서 FCM을 수신했을 때의 동작 (아마 사용 안할듯)
-  //print('A background message just showed up :  ${message.messageId}');
-  //print("백그라운드 FCM 수신 완료!");
-}
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 
 Future<void> setFCM3() async {
   String token = await FirebaseMessaging.instance.getToken() ?? '';
-  debugPrint("fcmToken : $token");
   await sendTokenToServer(token);
-
-  // 해당 토큰을 서버에 저장하는 api를 만들어서 요청 보내자
-  //print("fcmToken : $token");
 }
 
 void main() async {
@@ -104,6 +99,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
@@ -113,16 +110,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
       AudioManager().stop();
+      _timer?.cancel();
     } else if (state == AppLifecycleState.resumed) {
       // 현재 라우트에 따라 음악 재생
       handleRouteChange(ModalRoute.of(context)?.settings.name);
+      await checkFirstVisitToday();
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -193,6 +193,43 @@ Future<void> _requestPermissions() async {
   // ACTIVITY_RECOGNITION 권한 요청
   var status = await Permission.activityRecognition.request();
   var notificationStatus = await Permission.notification.request();
+
+  // 위치 서비스가 활성화되어 있는지 확인
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // 위치 서비스가 비활성화되어 있으면, 사용자에게 위치 서비스를 활성화하도록 요청
+    await Geolocator.openLocationSettings();
+    // 위치 권한 상태 확인
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // 권한이 거부된 경우, 오류 반환
+        SystemNavigator.pop();
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // 권한이 영구적으로 거부된 경우, 오류 반환
+      SystemNavigator.pop();
+    }
+  }
+
+  // 위치 권한 상태 확인
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // 권한이 거부된 경우, 오류 반환
+      SystemNavigator.pop();
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // 권한이 영구적으로 거부된 경우, 오류 반환
+    SystemNavigator.pop();
+  }
+
   if (status.isGranted && notificationStatus.isGranted) {
     return;
   } else {
@@ -250,5 +287,23 @@ void handleRouteChange(String? routeName) {
     AudioManager().play('audio/record.mp3');
   } else {
     AudioManager().stop();
+  }
+}
+
+Future<bool> checkFirstVisitToday() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.reload();
+  String? lastVisit = prefs.getString('lastVisit');
+
+  if (lastVisit != DateFormat('yyyy-MM-dd').format(DateTime.now())) {
+    await prefs.setString(
+        'lastVisit',
+        DateFormat('yyyy-MM-dd')
+            .format(DateTime.now())); // 오늘 날짜로 마지막 접속 날짜를 업데이트
+    await StepCounter().resetStep();
+    return true;
+  } else {
+    // 이미 오늘 접속한 경우 실행할 로직 추가 (아무것도 하지 않음)
+    return false;
   }
 }

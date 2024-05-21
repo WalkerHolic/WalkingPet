@@ -32,7 +32,6 @@ class _SearchGroupState extends State<SearchGroup> {
   //서치중인지 여부 확인 후 디스플레이 설정
   void handleSearch(String keyword) async {
     if (keyword.isEmpty) {
-      print("키워드가 비었습니다. 모든 그룹을 표시합니다");
       setState(() {
         displayedGroups = widget.incommingAllGroups;
         isSearchActive = false;
@@ -41,14 +40,11 @@ class _SearchGroupState extends State<SearchGroup> {
     }
     try {
       final results = await getSearchResult(keyword);
-      print("서치 결과 출력 : $results");
       setState(() {
         displayedGroups = results;
         isSearchActive = true;
       });
-    } catch (e) {
-      print("서치 결과 받아오기 실패");
-    }
+    } catch (e) {}
   }
 
   @override

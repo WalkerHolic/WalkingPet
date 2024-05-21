@@ -28,7 +28,6 @@ class NotificationService {
   Future<void> onSelectNotification(String? payload) async {
     // 사용자가 알림을 클릭했을 때 호출되는 콜백
     if (payload != null) {
-      debugPrint('notification payload: $payload');
       // 예: 특정 페이지로 이동
       // Navigator.push(
       //   context,

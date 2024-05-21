@@ -31,7 +31,6 @@ class _CharacterChangeState extends State<BattleCharacterChange> {
         isLoading = false;
       });
     } catch (e) {
-      print('캐릭터 변경 모달 에러 발생! ${e.toString()}');
       isLoading = false;
     }
   }

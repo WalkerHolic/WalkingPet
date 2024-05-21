@@ -13,10 +13,8 @@ Future<Map<String, dynamic>> getMyGroupCount() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("그룹랭킹 가입한 그룹 수 오류: ${response.statusCode}");
     throw Error();
   }
 }
@@ -30,10 +28,8 @@ Future<Map<String, dynamic>> getMyGroup() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("그룹랭킹 가입한 그룹들 순위 조회 오류: ${response.statusCode}");
     throw Error();
   }
 }
@@ -47,10 +43,8 @@ Future<Map<String, dynamic>> getGroup() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("모든 그룹 랭킹 조회 오류: ${response.statusCode}");
     throw Error();
   }
 }

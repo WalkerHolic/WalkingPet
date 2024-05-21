@@ -10,9 +10,8 @@ Future<Map<String, dynamic>> getClickMarker(
     double latitude, double longitude, int recordId) async {
   final client = AuthInterceptor();
   final url = Uri.parse(
-      '$baseUrl/$checkRecordUrl?latitude=$latitude&longtitude=$longitude&recordId=$recordId');
+      '$baseUrl/$checkRecordUrl?latitude=$latitude&longitude=$longitude&recordId=$recordId');
   final response = await client.get(url);
-
   try {
     if (response.statusCode == 200) {
       var data = utf8.decode(response.bodyBytes);
@@ -21,7 +20,6 @@ Future<Map<String, dynamic>> getClickMarker(
       return _handleError(response);
     }
   } catch (e) {
-    print("API 요청 중 에러 발생: $e");
     throw Exception("API 요청 실패");
   }
 }

@@ -19,10 +19,8 @@ Future<Map<String, dynamic>> getCharacterChange() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("캐릭터 정보 받아오기 오류 : ${response.statusCode}");
     throw Error();
   }
 }
@@ -39,8 +37,6 @@ Future<void> postCharacterChange(
       headers: {"Content-Type": "application/json"}, // 콘텐트 타입 헤더 추가
       body: jsonEncode({"selectCharacterId": selectCharacterId}),
     );
-    print(selectCharacterId);
-    // print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
       var data = utf8.decode(response.bodyBytes);
@@ -48,8 +44,6 @@ Future<void> postCharacterChange(
       final characterProvider =
           Provider.of<CharacterProvider>(context, listen: false);
       characterProvider.characterId = jsonData['data']['changeCharacterId'];
-
-      print('캐릭터 변경 성공: ${response.body}');
     } else {
       print('캐릭터 변경 실패: ${response.statusCode}');
     }

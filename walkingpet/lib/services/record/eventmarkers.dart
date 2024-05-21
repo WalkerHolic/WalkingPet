@@ -12,10 +12,8 @@ Future<Map<String, dynamic>> getEventMarkers() async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    // print(jsonData);
     return jsonData;
   } else {
-    print("이벤트 마커 정보 불러오기 오류 : ${response.statusCode}");
     throw Error();
   }
 }

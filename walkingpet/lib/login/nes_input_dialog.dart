@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:nes_ui/nes_ui.dart';
@@ -136,7 +134,6 @@ class CustomNesInputDialogState extends State<CustomNesInputDialog> {
         var jsonData = jsonDecode(data);
         Map<String, dynamic> res = jsonData;
         var success = res['data']['status'];
-        print(jsonData['data']);
         if (success) {
           final characterProvider =
               Provider.of<CharacterProvider>(context, listen: false);
@@ -248,11 +245,9 @@ Future<bool> _checkNickname(String nickname) async {
         return true;
       }
     } else {
-      print('서버로부터 오류 응답을 받았습니다. 상태 코드: ${response.statusCode}');
       return false;
     }
   } catch (error) {
-    print("네트워크 문제: $error");
     return false;
   }
 }

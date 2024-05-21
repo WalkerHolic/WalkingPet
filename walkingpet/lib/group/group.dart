@@ -42,7 +42,6 @@ class _GroupState extends State<Group> {
       setState(() {
         isLoding = false;
         // 에러 처리
-        print('에러: $e');
       });
     }
   }
@@ -53,11 +52,8 @@ class _GroupState extends State<Group> {
       final allGroups = await getAllGroup(); //search(all)group 페이지로 인자 넘겨줘야 함
       setState(() {
         searchGroups = allGroups;
-        print("api요청으로 받아온 groups : $searchGroups"); //여기서는 받아진다.
       });
-    } catch (e) {
-      print("에러");
-    }
+    } catch (e) {}
   }
 
   @override
@@ -125,7 +121,6 @@ class _GroupState extends State<Group> {
                           ),
                           label: "그룹 탐색",
                         ),
-                       
                       ],
                     ),
                   ),

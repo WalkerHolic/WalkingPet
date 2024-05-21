@@ -51,7 +51,6 @@ class _GroupDetailState extends State<GroupDetail> {
       setState(() {
         isDetailLoading = false; // 에러 발생 시 로딩 중지
       });
-      print("데이터 가져오기 에러 : $e");
     }
   }
 
@@ -67,7 +66,6 @@ class _GroupDetailState extends State<GroupDetail> {
       setState(() {
         isMemberLoading = false; // 에러 발생 시 로딩 중지
       });
-      print("멤버 데이터 가져오기 에러 : $e");
     }
   }
 
@@ -83,7 +81,6 @@ class _GroupDetailState extends State<GroupDetail> {
       );
     } catch (e) {
       // 오류 처리
-      print("에러발생 : $e");
     }
   }
 
@@ -99,7 +96,6 @@ class _GroupDetailState extends State<GroupDetail> {
       );
     } catch (e) {
       // 오류 처리
-      print("에러발생 : $e");
     }
   }
 

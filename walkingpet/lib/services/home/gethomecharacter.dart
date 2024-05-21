@@ -23,7 +23,6 @@ Future<Map<String, dynamic>> getHomeCharacter() async {
       throw Exception("API 요청 실패");
     }
   } catch (e) {
-    print("API 요청 중 에러 발생: $e");
     throw Exception("API 요청 실패");
   }
 }

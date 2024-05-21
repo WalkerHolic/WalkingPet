@@ -9,10 +9,8 @@ Future<Map<String, dynamic>> getGroupDetail(groupId) async {
   if (response.statusCode == 200) {
     var data = utf8.decode(response.bodyBytes);
     var jsonData = jsonDecode(data);
-    print(jsonData['data']);
     return jsonData['data'];
   } else {
-    print(response.statusCode);
     throw Error();
   }
 }

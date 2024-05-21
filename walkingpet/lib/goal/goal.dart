@@ -44,7 +44,6 @@ class _GoalState extends State<Goal> {
             // steps = data['step'];
             dailyGoals = List<bool>.from(data['dailyGoal']);
             weeklyGoals = List<bool>.from(data['weeklyGoal']);
-            print('받아서 새로 저장한 데이터: $weeklyGoals');
             // Map 업데이트
             stampedDays = {
               '월요일': weeklyGoals[0],
