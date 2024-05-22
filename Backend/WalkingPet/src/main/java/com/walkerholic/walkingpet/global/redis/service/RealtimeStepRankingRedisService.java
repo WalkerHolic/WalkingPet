@@ -134,6 +134,8 @@ public class RealtimeStepRankingRedisService {
         Set<ZSetOperations.TypedTuple<Integer>> rankingData = rankigRedisTemplate.opsForZSet()
                 .rangeByScoreWithScores(STEP_KEY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
+        System.out.println("redis 실시간 걸음수 rankingData : " + rankingData);
+
         for (ZSetOperations.TypedTuple<Integer> tuple : rankingData) {
             String userId = String.valueOf(tuple.getValue()); // userId 가져오기
             double dailyStep = tuple.getScore() == null ? 0 : tuple.getScore(); // step 가져오기
