@@ -7,7 +7,6 @@ import com.walkerholic.walkingpet.domain.ranking.dto.request.RealtimeStepRequest
 import com.walkerholic.walkingpet.domain.ranking.dto.response.RedisStepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.dto.response.StepRankingResponse;
 import com.walkerholic.walkingpet.domain.ranking.service.RankingService;
-import com.walkerholic.walkingpet.domain.users.dto.UserRedisDto;
 import com.walkerholic.walkingpet.global.error.GlobalSuccessCode;
 import com.walkerholic.walkingpet.global.error.response.CommonResponseEntity;
 import com.walkerholic.walkingpet.global.redis.service.*;
@@ -118,7 +117,7 @@ public class RedisController {
         log.info("redis 사용자 순위 조회 테스트 - redis test getRedisAccRankingInfo");
 
         System.out.println("redis controller 테스트");
-        int rank = accStepRankingRedisService.getUserRanking(1);
+        int rank = accStepRankingRedisService.getUserRanking(userId);
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rank);
     }
 
@@ -127,7 +126,6 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> getRedisAccRankingTop10() {
         log.info("redis 누적 랭킹 Top 10 출력 테스트 - redis test getRedisAccRankingTop10");
 
-        System.out.println("테스트");
         RedisStepRankingResponse accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
 
         return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
@@ -139,20 +137,15 @@ public class RedisController {
     public ResponseEntity<CommonResponseEntity> getPersonalRankingTop10(@RequestParam("value") String value, @RequestParam("start") Integer start, @RequestParam("end") Integer end) {
         log.info("개인 걸음수 랭킹 top 10 조회 getPersonalRankingTop10 - value: {}", value);
 
-//        RedisStepRankingResponse accStepRankingList;
-        StepRankingResponse accStepRankingList;
         if (value.equals("yesterday")) {
-            accStepRankingList = rankingService.getYesterdayStepRankingTop10();
-//            accStepRankingList = yesterdayStepRankingRedisService.getRedisYesterdayStepRankingList(0, 9);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getYesterdayStepRankingTop10());
         } else if (value.equals("accumulation")) {
-            accStepRankingList = rankingService.getAccStepRankingTop10();
-//            accStepRankingList = accStepRankingRedisService.getRedisAccStepRankingList(0, 9);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, rankingService.getAccStepRankingTop10());
         } else {
-            RedisStepRankingResponse redisRealtimeStepRankingList = realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(start, end);
-            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, redisRealtimeStepRankingList);
+            return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, realtimeStepRankingRedisService.getRedisRealtimeStepRankingList(start, end));
         }
 
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, accStepRankingList);
+
     }
 
     // 해당 사용자 redis에서 step 값 원하는 값으로 변경
@@ -167,7 +160,13 @@ public class RedisController {
     @GetMapping("/getUser")
     public ResponseEntity<CommonResponseEntity> getUserInfo(@RequestParam("userId") int userId) {
         log.info("해당 사용자 redis에서 userId에 대한 값 가져오기 userId: {}", userId);
-        Map<String, String> dailyStepAndUser = realtimeStepRankingRedisService.getDailyStepAndUser(userId);
-        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, dailyStepAndUser);
+        return CommonResponseEntity.toResponseEntity(GlobalSuccessCode.SUCCESS, realtimeStepRankingRedisService.getDailyStepAndUser(userId));
+    }
+
+    //redis에 있는 실시간 걸음수 mysql로 이동 테스트
+    @GetMapping("/saveTest/realtimeStep/redisToMysql")
+    public void saveRealtimeStepRedisToMysql() {
+        log.info("saveRealtimeStepRedisToMysql - redis에 있는 실시간 걸음수 mysql로 이동 테스트");
+        realtimeStepRankingRedisService.saveUserDailyStep();
     }
 }
