@@ -1,20 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/character_info.dart';
-import 'package:walkingpet/services/Interceptor.dart';
 import 'package:walkingpet/services/record/camera.dart';
 import 'package:walkingpet/services/record/clickmarker.dart';
 import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'dart:io';
-//모달창
-import 'package:walkingpet/record/show_record.dart';
+import 'package:walkingpet/record/show_record.dart'; //모달창
 
 class Record extends StatefulWidget {
   const Record({super.key});
@@ -164,29 +161,6 @@ class _RecordState extends State<Record> {
             ),
           ),
 
-          // 앱 업로드를 위한 임시 코드
-          // Positioned(
-          //   left: screenWidth * 0.05,
-          //   top: screenHeight * 0.15,
-          //   child: Container(
-          //     width: screenWidth * 0.9,
-          //     height: screenHeight * 0.8,
-          //     decoration: BoxDecoration(
-          //       color:
-          //           const Color.fromARGB(255, 255, 243, 212).withOpacity(0.75),
-          //       borderRadius: BorderRadius.circular(10),
-          //     ),
-          //   ),
-          // ),
-
-          // const Center(
-          //   child: Text(
-          //     '캐릭터와 함께 걸은\n나만의 장소를 기록하세요\n\n(준비중)',
-          //     style: TextStyle(fontSize: 20, color: Colors.black),
-          //     textAlign: TextAlign.center,
-          //   ),
-          // ),
-
           // 3-2. 지도 KakaoMapView
           FutureBuilder<Position>(
             future: _currentPositionFuture,
@@ -314,12 +288,6 @@ class _RecordState extends State<Record> {
                             context, nickname, characterId, imageUrl, regDate);
                       }
                     },
-
-                    // onTapMarker: (message) {
-                    //   getClickMarker(currentLat, currentLng, recordId);
-                    //   // ScaffoldMessenger.of(context).showSnackBar(
-                    //   //     SnackBar(content: Text(message.message)));
-                    // },
                   ),
                 );
               }
