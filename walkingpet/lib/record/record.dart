@@ -1,20 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:provider/provider.dart';
 import 'package:walkingpet/providers/character_info.dart';
-import 'package:walkingpet/services/Interceptor.dart';
 import 'package:walkingpet/services/record/camera.dart';
 import 'package:walkingpet/services/record/clickmarker.dart';
 import 'package:walkingpet/services/record/eventmarkers.dart';
 import 'package:walkingpet/services/record/usermarkers.dart';
 import 'package:walkingpet/home/widgets/mainfontstyle.dart';
 import 'dart:io';
-//모달창
-import 'package:walkingpet/record/show_record.dart';
+import 'package:walkingpet/record/show_record.dart'; //모달창
 
 class Record extends StatefulWidget {
   const Record({super.key});
@@ -164,29 +161,6 @@ class _RecordState extends State<Record> {
             ),
           ),
 
-          // 앱 업로드를 위한 임시 코드
-          // Positioned(
-          //   left: screenWidth * 0.05,
-          //   top: screenHeight * 0.15,
-          //   child: Container(
-          //     width: screenWidth * 0.9,
-          //     height: screenHeight * 0.8,
-          //     decoration: BoxDecoration(
-          //       color:
-          //           const Color.fromARGB(255, 255, 243, 212).withOpacity(0.75),
-          //       borderRadius: BorderRadius.circular(10),
-          //     ),
-          //   ),
-          // ),
-
-          // const Center(
-          //   child: Text(
-          //     '캐릭터와 함께 걸은\n나만의 장소를 기록하세요\n\n(준비중)',
-          //     style: TextStyle(fontSize: 20, color: Colors.black),
-          //     textAlign: TextAlign.center,
-          //   ),
-          // ),
-
           // 3-2. 지도 KakaoMapView
           FutureBuilder<Position>(
             future: _currentPositionFuture,
@@ -231,7 +205,7 @@ class _RecordState extends State<Record> {
 
                     customScript: '''
                       // 현재 위치 마커
-                      var currentMarkerImageSrc = 'https://ifh.cc/g/hFVWjs.png',
+                      var currentMarkerImageSrc = 'https://private-user-images.githubusercontent.com/139518247/332626001-790f8ecd-2250-4d84-916a-bb34889ce79a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzNDIzNDYsIm5iZiI6MTcxNjM0MjA0NiwicGF0aCI6Ii8xMzk1MTgyNDcvMzMyNjI2MDAxLTc5MGY4ZWNkLTIyNTAtNGQ4NC05MTZhLWJiMzQ4ODljZTc5YS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMlQwMTQwNDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0xMmNmODRiYzRjMGEzNzg2OGMyYjg3ZTllMjNiODE0NzYxZTEzMGI2NDMyODFlMGU5MzllN2VjOWQ1NDBmOGU3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.DYh9BCFJwiJGTP2paZX9x_TTXDwIdulghNldm49k8Nc',
                           currentMarkerImageSize = new kakao.maps.Size(31, 42),
                           currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
 
@@ -245,7 +219,7 @@ class _RecordState extends State<Record> {
                       var eventMarkers = ${jsonEncode(eventmarkers)};
 
                       // 마커 이미지 => 이벤트 팻말
-                      var eventImageSrc = 'https://ifh.cc/g/0kW3Od.png', // 마커이미지의 주소입니다
+                      var eventImageSrc = 'https://private-user-images.githubusercontent.com/139518247/332627326-856b1e99-153c-405a-a112-8fc1ad8983c4.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzNDI0NDgsIm5iZiI6MTcxNjM0MjE0OCwicGF0aCI6Ii8xMzk1MTgyNDcvMzMyNjI3MzI2LTg1NmIxZTk5LTE1M2MtNDA1YS1hMTEyLThmYzFhZDg5ODNjNC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMlQwMTQyMjhaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03OTc2NGVjZjZhOGNjYWQyMDhlZWI0YTQ1ZWE3ZTIwNmE1NWRhMTU4OTQ1YTRiZDVhMDI2MzY5YWQ2ZTVlZmI3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.Jq3fzxIRQ7ufaUMTW2_chmP0n9L2Pzc1x0cB9-UTy4M', // 마커이미지의 주소입니다
                           eventImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
                           eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
@@ -272,7 +246,7 @@ class _RecordState extends State<Record> {
                       var userMarkers = ${jsonEncode(usermarkers)};
 
                       // 마커 이미지 => 사용자 팻말
-                      var userImageSrc = 'https://ifh.cc/g/CqdgWa.png', // 마커이미지의 주소입니다
+                      var userImageSrc = 'https://private-user-images.githubusercontent.com/139518247/332627351-5d6a9cf8-2be9-4272-b612-bd1cb78fae31.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzNDI0MjAsIm5iZiI6MTcxNjM0MjEyMCwicGF0aCI6Ii8xMzk1MTgyNDcvMzMyNjI3MzUxLTVkNmE5Y2Y4LTJiZTktNDI3Mi1iNjEyLWJkMWNiNzhmYWUzMS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMlQwMTQyMDBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05NDJkYWMyZjY5NWZiZTZkNWRjMmE3Y2YxMTAwZjQ3NjVmZDkwMjM1MTk1MGM2NWZlODNkY2I4ZmU0NGJjNjVmJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.VUa20euNIs1m1Lf2qPgkoX3lR_HsfQvwJPngh6KZNFg', // 마커이미지의 주소입니다
                           userImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
                           userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
@@ -314,12 +288,6 @@ class _RecordState extends State<Record> {
                             context, nickname, characterId, imageUrl, regDate);
                       }
                     },
-
-                    // onTapMarker: (message) {
-                    //   getClickMarker(currentLat, currentLng, recordId);
-                    //   // ScaffoldMessenger.of(context).showSnackBar(
-                    //   //     SnackBar(content: Text(message.message)));
-                    // },
                   ),
                 );
               }
