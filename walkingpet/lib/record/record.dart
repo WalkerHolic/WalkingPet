@@ -114,7 +114,7 @@ class _RecordState extends State<Record> {
             child: Container(
               width: screenWidth,
               height: screenHeight,
-              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.4),
+              color: Colors.white.withOpacity(0.4),
             ),
           ),
 
@@ -205,7 +205,7 @@ class _RecordState extends State<Record> {
 
                     customScript: '''
                       // 현재 위치 마커
-                      var currentMarkerImageSrc = 'https://private-user-images.githubusercontent.com/139518247/332626001-790f8ecd-2250-4d84-916a-bb34889ce79a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzNDIzNDYsIm5iZiI6MTcxNjM0MjA0NiwicGF0aCI6Ii8xMzk1MTgyNDcvMzMyNjI2MDAxLTc5MGY4ZWNkLTIyNTAtNGQ4NC05MTZhLWJiMzQ4ODljZTc5YS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMlQwMTQwNDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0xMmNmODRiYzRjMGEzNzg2OGMyYjg3ZTllMjNiODE0NzYxZTEzMGI2NDMyODFlMGU5MzllN2VjOWQ1NDBmOGU3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.DYh9BCFJwiJGTP2paZX9x_TTXDwIdulghNldm49k8Nc',
+                      var currentMarkerImageSrc = 'https://private-user-images.githubusercontent.com/139518247/333061216-67576e95-7d4f-4335-accb-d1a70c4fac1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTY0NDUzODMsIm5iZiI6MTcxNjQ0NTA4MywicGF0aCI6Ii8xMzk1MTgyNDcvMzMzMDYxMjE2LTY3NTc2ZTk1LTdkNGYtNDMzNS1hY2NiLWQxYTcwYzRmYWMxYy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyM1QwNjE4MDNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04YzUwNTgzOTI2MDYwZDI0MmZhNWM0MDE1ZDRiMDBlYWU1Njk0ZTI0YjE5OWQzYzdhMTBmODk4NzIwYjM0OWI5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.nizVvbVcEJx0vQ3WKpCL8yAGpq90AqgHGrIBJfawlPc',
                           currentMarkerImageSize = new kakao.maps.Size(31, 42),
                           currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
 
@@ -219,7 +219,7 @@ class _RecordState extends State<Record> {
                       var eventMarkers = ${jsonEncode(eventmarkers)};
 
                       // 마커 이미지 => 이벤트 팻말
-                      var eventImageSrc = 'https://private-user-images.githubusercontent.com/139518247/332627326-856b1e99-153c-405a-a112-8fc1ad8983c4.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzNDI0NDgsIm5iZiI6MTcxNjM0MjE0OCwicGF0aCI6Ii8xMzk1MTgyNDcvMzMyNjI3MzI2LTg1NmIxZTk5LTE1M2MtNDA1YS1hMTEyLThmYzFhZDg5ODNjNC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMlQwMTQyMjhaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03OTc2NGVjZjZhOGNjYWQyMDhlZWI0YTQ1ZWE3ZTIwNmE1NWRhMTU4OTQ1YTRiZDVhMDI2MzY5YWQ2ZTVlZmI3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.Jq3fzxIRQ7ufaUMTW2_chmP0n9L2Pzc1x0cB9-UTy4M', // 마커이미지의 주소입니다
+                      var eventImageSrc = 'https://private-user-images.githubusercontent.com/139518247/333060981-ab0a7863-a0bb-4c60-bf8f-ffa563298df0.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTY0NDUzMjksIm5iZiI6MTcxNjQ0NTAyOSwicGF0aCI6Ii8xMzk1MTgyNDcvMzMzMDYwOTgxLWFiMGE3ODYzLWEwYmItNGM2MC1iZjhmLWZmYTU2MzI5OGRmMC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyM1QwNjE3MDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00YzIxN2I0OGQ3ZjI2MGFhNGQzZjgzZDEzMTllMTNlNTM0ZjMxOTcwMjE4YTAzMzZkNjUyOGY0ZDgzM2U0YjZhJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.xiOKi0C_6aKrCy4m6uKM9-_ANn7zDRII8Gtnn6rjnsA', // 마커이미지의 주소입니다
                           eventImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
                           eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
@@ -246,7 +246,7 @@ class _RecordState extends State<Record> {
                       var userMarkers = ${jsonEncode(usermarkers)};
 
                       // 마커 이미지 => 사용자 팻말
-                      var userImageSrc = 'https://private-user-images.githubusercontent.com/139518247/332627351-5d6a9cf8-2be9-4272-b612-bd1cb78fae31.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzNDI0MjAsIm5iZiI6MTcxNjM0MjEyMCwicGF0aCI6Ii8xMzk1MTgyNDcvMzMyNjI3MzUxLTVkNmE5Y2Y4LTJiZTktNDI3Mi1iNjEyLWJkMWNiNzhmYWUzMS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMlQwMTQyMDBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05NDJkYWMyZjY5NWZiZTZkNWRjMmE3Y2YxMTAwZjQ3NjVmZDkwMjM1MTk1MGM2NWZlODNkY2I4ZmU0NGJjNjVmJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.VUa20euNIs1m1Lf2qPgkoX3lR_HsfQvwJPngh6KZNFg', // 마커이미지의 주소입니다
+                      var userImageSrc = 'https://private-user-images.githubusercontent.com/139518247/333060480-75127650-a6ab-488f-8967-893af1f303ea.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTY0NDUyMDgsIm5iZiI6MTcxNjQ0NDkwOCwicGF0aCI6Ii8xMzk1MTgyNDcvMzMzMDYwNDgwLTc1MTI3NjUwLWE2YWItNDg4Zi04OTY3LTg5M2FmMWYzMDNlYS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyM1QwNjE1MDhaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01ZmJmNTVhNmNhMTI2OWQ2NWNmM2ViMmQ5NmIyY2M0YzhhNDY5NzA4YzExZDNhYzdmMzUzZDA5YjIxOTU1OWIwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.KM-HKZ2AyUW8Kq2pGOg4SVc_Yax9jPupN42x02jDwZU', // 마커이미지의 주소입니다
                           userImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
                           userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
