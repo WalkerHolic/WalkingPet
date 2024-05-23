@@ -78,8 +78,10 @@
 
 유저는 걸음수 관련 목표를 확인할 수있다.
 
-  <img src="etc/Goal.jpg" style="width: 150px; height: 333px;">
+<img src="etc/Goal.jpg" style="width: 150px; height: 333px;"><br>
+
 - #### 개인 목표<br>
+
   사용자는 현재 걸은 걸음 수를 통해 일일 목표를 달성할 수 있다. <br>목표에는 0/3000/5000/7000/10000보 달성이 있다. 각 목표에 따라 획득할 수 있는 보상이 다르다<br><br>
 
 - #### 주간 목표 <br>
@@ -157,7 +159,7 @@
 
   다른 유저가 남긴 기록을 지도를 통해 확인할 수 있고, 유저의 위치와 50m 이내의 기록이라면 선택해서 확인할 수 있다.
 
-  <img src="etc/RecordMap.jpg" style="width: 150px; height: 333px;">
+  <img src="etc/RecordMap.gif" style="width: 150px; height: 333px;">
   <br><br>
 
 - #### 이벤트 기록
