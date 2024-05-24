@@ -252,6 +252,8 @@
 
 ### 시스템 아키텍처
 
+<img src="etc/Architecture.png" style="width: 100%; height: auto;">
+
 <br>
 
 ## 6. 기술 스택
