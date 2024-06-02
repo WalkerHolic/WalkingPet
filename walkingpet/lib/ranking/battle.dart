@@ -42,16 +42,33 @@ class _BattleRankingState extends State<BattleRanking> {
       });
     } catch (e) {
       setState(() {
-        isLoading = false;
+        isLoading = true;
+        // isLoading = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // 현재 화면의 크기 가져오기
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Center(
       child: isLoading
-          ? const CircularProgressIndicator() // 로딩 중 인디케이터 추가
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '배틀랭킹 불러오는 중..',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.03,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.05),
+                const CircularProgressIndicator(),
+              ],
+            )
           : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
