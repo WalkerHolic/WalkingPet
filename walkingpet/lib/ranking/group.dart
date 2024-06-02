@@ -78,15 +78,19 @@ class _GroupRankingState extends State<GroupRanking> {
 
     return Center(
       child: isLoading
-          ? const Column(
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '그룹 랭킹 불러오는 중..',
-                  style: TextStyle(color: Colors.white),
+                  '그룹랭킹 불러오는 중..',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.03,
+                  ),
                 ),
-                CircularProgressIndicator(),
+                SizedBox(height: screenHeight * 0.05),
+                const CircularProgressIndicator(),
               ],
-            ) // 로딩 중 인디케이터 추가
+            )
           : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
