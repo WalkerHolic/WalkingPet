@@ -40,7 +40,8 @@ class _GroupRankingState extends State<GroupRanking> {
       });
     } catch (e) {
       setState(() {
-        isLoading = false;
+        isLoading = true;
+        // isLoading = false;
       });
     }
   }
@@ -77,7 +78,15 @@ class _GroupRankingState extends State<GroupRanking> {
 
     return Center(
       child: isLoading
-          ? const CircularProgressIndicator() // 로딩 중 인디케이터 추가
+          ? const Column(
+              children: [
+                Text(
+                  '그룹 랭킹 불러오는 중..',
+                  style: TextStyle(color: Colors.white),
+                ),
+                CircularProgressIndicator(),
+              ],
+            ) // 로딩 중 인디케이터 추가
           : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,

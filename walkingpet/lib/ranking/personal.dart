@@ -42,7 +42,8 @@ class _PersonalRankingState extends State<PersonalRanking> {
       });
     } catch (e) {
       setState(() {
-        isLoading = false;
+        isLoading = true;
+        // isLoading = false;
       });
     }
   }
@@ -51,7 +52,15 @@ class _PersonalRankingState extends State<PersonalRanking> {
   Widget build(BuildContext context) {
     return Center(
       child: isLoading
-          ? const CircularProgressIndicator() // 로딩 중 인디케이터 추가
+          ? const Column(
+              children: [
+                Text(
+                  '개인랭킹 불러오는 중..',
+                  style: TextStyle(color: Colors.white),
+                ),
+                CircularProgressIndicator(),
+              ],
+            ) // 로딩 중 인디케이터 추가
           : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
