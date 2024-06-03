@@ -205,7 +205,7 @@ class _RecordState extends State<Record> {
 
                     customScript: '''
                       // 현재 위치 마커
-                      var currentMarkerImageSrc = 'https://private-user-images.githubusercontent.com/139518247/333061216-67576e95-7d4f-4335-accb-d1a70c4fac1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTY0NDUzODMsIm5iZiI6MTcxNjQ0NTA4MywicGF0aCI6Ii8xMzk1MTgyNDcvMzMzMDYxMjE2LTY3NTc2ZTk1LTdkNGYtNDMzNS1hY2NiLWQxYTcwYzRmYWMxYy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyM1QwNjE4MDNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04YzUwNTgzOTI2MDYwZDI0MmZhNWM0MDE1ZDRiMDBlYWU1Njk0ZTI0YjE5OWQzYzdhMTBmODk4NzIwYjM0OWI5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.nizVvbVcEJx0vQ3WKpCL8yAGpq90AqgHGrIBJfawlPc',
+                      var currentMarkerImageSrc = 'https://drive.google.com/file/d/10TF-sQzaeESiiwHWjzCzKuagVL6An4GL/view?usp=drive_link',
                           currentMarkerImageSize = new kakao.maps.Size(31, 42),
                           currentMarkerImageOption = {offset: new kakao.maps.Point(0, 0)};
 
@@ -219,7 +219,7 @@ class _RecordState extends State<Record> {
                       var eventMarkers = ${jsonEncode(eventmarkers)};
 
                       // 마커 이미지 => 이벤트 팻말
-                      var eventImageSrc = 'https://private-user-images.githubusercontent.com/139518247/333060981-ab0a7863-a0bb-4c60-bf8f-ffa563298df0.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTY0NDUzMjksIm5iZiI6MTcxNjQ0NTAyOSwicGF0aCI6Ii8xMzk1MTgyNDcvMzMzMDYwOTgxLWFiMGE3ODYzLWEwYmItNGM2MC1iZjhmLWZmYTU2MzI5OGRmMC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyM1QwNjE3MDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00YzIxN2I0OGQ3ZjI2MGFhNGQzZjgzZDEzMTllMTNlNTM0ZjMxOTcwMjE4YTAzMzZkNjUyOGY0ZDgzM2U0YjZhJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.xiOKi0C_6aKrCy4m6uKM9-_ANn7zDRII8Gtnn6rjnsA', // 마커이미지의 주소입니다
+                      var eventImageSrc = 'https://drive.google.com/file/d/1tIY8nbucp_a3ZMTFUqDDlAPVxZFb8u5V/view?usp=drive_link', // 마커이미지의 주소입니다
                           eventImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
                           eventImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
@@ -246,7 +246,7 @@ class _RecordState extends State<Record> {
                       var userMarkers = ${jsonEncode(usermarkers)};
 
                       // 마커 이미지 => 사용자 팻말
-                      var userImageSrc = 'https://private-user-images.githubusercontent.com/139518247/333060480-75127650-a6ab-488f-8967-893af1f303ea.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTY0NDUyMDgsIm5iZiI6MTcxNjQ0NDkwOCwicGF0aCI6Ii8xMzk1MTgyNDcvMzMzMDYwNDgwLTc1MTI3NjUwLWE2YWItNDg4Zi04OTY3LTg5M2FmMWYzMDNlYS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyM1QwNjE1MDhaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01ZmJmNTVhNmNhMTI2OWQ2NWNmM2ViMmQ5NmIyY2M0YzhhNDY5NzA4YzExZDNhYzdmMzUzZDA5YjIxOTU1OWIwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.KM-HKZ2AyUW8Kq2pGOg4SVc_Yax9jPupN42x02jDwZU', // 마커이미지의 주소입니다
+                      var userImageSrc = 'https://drive.google.com/file/d/1eXPJNDBx0IR9B62GHziB2DfhHJ7gqJfW/view?usp=drive_link', // 마커이미지의 주소입니다
                           userImageSize = new kakao.maps.Size(40, 40), // 마커이미지의 크기입니다
                           userImageOption = {offset: new kakao.maps.Point(0, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
